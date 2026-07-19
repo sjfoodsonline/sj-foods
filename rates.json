@@ -81,7 +81,7 @@
         "name": "کھیرا",
         "unit": "کلو",
         "rate": 110,
-        "available": true
+        "available": false
       },
       {
         "name": "گاجر",

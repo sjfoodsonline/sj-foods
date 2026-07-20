@@ -1,0 +1,116 @@
+[
+  {
+    "name": "انبر باسمتی چاول",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 450
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 2250
+      },
+      {
+        "label": "بوری (40 کلو)",
+        "rate": 18000
+      }
+    ]
+  },
+  {
+    "name": "چینی",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 280
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 1400
+      },
+      {
+        "label": "بوری (40 کلو)",
+        "rate": 11200
+      }
+    ]
+  },
+  {
+    "name": "دال مونگ (دھلی)",
+    "unit": "کلو",
+    "rate": 250,
+    "available": true
+  },
+  {
+    "name": "دال چنا",
+    "unit": "کلو",
+    "rate": 220,
+    "available": true
+  },
+  {
+    "name": "دال ماش",
+    "unit": "کلو",
+    "rate": 260,
+    "available": true
+  },
+  {
+    "name": "آٹا",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 140
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 700
+      },
+      {
+        "label": "بوری (20 کلو)",
+        "rate": 2800
+      }
+    ]
+  },
+  {
+    "name": "کوکنگ آئل",
+    "unit": "بوتل (1 لیٹر)",
+    "rate": 550,
+    "available": true
+  },
+  {
+    "name": "گھی",
+    "unit": "ڈبہ (1 کلو)",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "نمک",
+    "unit": "کلو",
+    "rate": 50,
+    "available": true
+  },
+  {
+    "name": "چائے پتی",
+    "unit": "پیکٹ",
+    "rate": 350,
+    "available": true
+  },
+  {
+    "name": "لال مرچ پاؤڈر",
+    "unit": "کلو",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "ہلدی پاؤڈر",
+    "unit": "کلو",
+    "rate": 500,
+    "available": true
+  },
+  {
+    "name": "گرم مصالحہ",
+    "unit": "پیکٹ",
+    "rate": 200,
+    "available": true
+  }
+]

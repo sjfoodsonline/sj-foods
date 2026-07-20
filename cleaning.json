@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ڈش واش لیکوڈ",
+    "unit": "بوتل",
+    "rate": 250,
+    "available": true
+  },
+  {
+    "name": "نہانے کا صابن",
+    "unit": "عدد",
+    "rate": 90,
+    "available": true
+  },
+  {
+    "name": "سرف/واشنگ پاؤڈر",
+    "unit": "کلو",
+    "rate": 300,
+    "available": true
+  }
+]

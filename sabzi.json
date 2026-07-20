@@ -1,0 +1,188 @@
+[
+  {
+    "name": "آلو",
+    "unit": "کلو",
+    "rate": 50,
+    "available": true
+  },
+  {
+    "name": "پیاز",
+    "unit": "کلو",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "ٹماٹر",
+    "unit": "کلو",
+    "rate": 300,
+    "available": true
+  },
+  {
+    "name": "کچالو",
+    "unit": "کلو",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "بھنڈی",
+    "unit": "کلو",
+    "rate": 180,
+    "available": true
+  },
+  {
+    "name": "مٹر",
+    "unit": "کلو",
+    "rate": 500,
+    "available": true
+  },
+  {
+    "name": "توری",
+    "unit": "کلو",
+    "rate": 300,
+    "available": true
+  },
+  {
+    "name": "کدو",
+    "unit": "کلو",
+    "rate": 200,
+    "available": true
+  },
+  {
+    "name": "کریلا",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "بینگن",
+    "unit": "کلو",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "شملہ مرچ",
+    "unit": "کلو",
+    "rate": 300,
+    "available": true
+  },
+  {
+    "name": "بند گوبھی",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "گاجر",
+    "unit": "کلو",
+    "rate": 250,
+    "available": true
+  },
+  {
+    "name": "کھیرا",
+    "unit": "کلو",
+    "rate": 250,
+    "available": true
+  },
+  {
+    "name": "پھول گوبھی",
+    "unit": "کلو",
+    "rate": 200,
+    "available": true
+  },
+  {
+    "name": "شلغم",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "فراش بین",
+    "unit": "کلو",
+    "rate": 250,
+    "available": true
+  },
+  {
+    "name": "پمنکے",
+    "unit": "کلو",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "ہری مرچ",
+    "unit": "کلو",
+    "rate": 50,
+    "available": true
+  },
+  {
+    "name": "ادرک",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "لہسن",
+    "unit": "کلو",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "لیموں",
+    "unit": "کلو",
+    "rate": 200,
+    "available": true
+  },
+  {
+    "name": "گول ٹینڈے",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "چقندر",
+    "unit": "کلو",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "سبز دھنیا",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "پودینہ",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "سلاد پتی",
+    "unit": "کلو",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "مولی",
+    "unit": "کلو",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "لمبے ٹینڈے",
+    "unit": "کلو",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "ساگ",
+    "unit": "کلو",
+    "rate": 0,
+    "available": false
+  },
+  {
+    "name": "ہری پیاز",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": false
+  }
+]

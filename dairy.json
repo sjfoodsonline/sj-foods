@@ -1,0 +1,26 @@
+[
+  {
+    "name": "دودھ (تازہ)",
+    "unit": "لیٹر",
+    "rate": 200,
+    "available": true
+  },
+  {
+    "name": "دہی",
+    "unit": "کلو",
+    "rate": 180,
+    "available": true
+  },
+  {
+    "name": "پنیر",
+    "unit": "کلو",
+    "rate": 900,
+    "available": true
+  },
+  {
+    "name": "مکھن",
+    "unit": "پیکٹ",
+    "rate": 350,
+    "available": true
+  }
+]

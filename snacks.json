@@ -1,0 +1,14 @@
+[
+  {
+    "name": "چپس",
+    "unit": "پیکٹ",
+    "rate": 60,
+    "available": true
+  },
+  {
+    "name": "بسکٹ (چھوٹا پیک)",
+    "unit": "پیکٹ",
+    "rate": 40,
+    "available": true
+  }
+]

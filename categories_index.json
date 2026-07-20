@@ -1,0 +1,56 @@
+[
+  {
+    "file": "sabzi.json",
+    "category": "سبزیاں",
+    "icon": "🥦",
+    "image": ""
+  },
+  {
+    "file": "phal.json",
+    "category": "پھل",
+    "icon": "🍎",
+    "image": ""
+  },
+  {
+    "file": "kirana.json",
+    "category": "کریانہ",
+    "icon": "🌾",
+    "image": ""
+  },
+  {
+    "file": "bakery.json",
+    "category": "بیکری",
+    "icon": "🍞",
+    "image": ""
+  },
+  {
+    "file": "dairy.json",
+    "category": "دودھ و ڈیری",
+    "icon": "🥛",
+    "image": ""
+  },
+  {
+    "file": "poultry.json",
+    "category": "پولٹری و مچھلی",
+    "icon": "🍗",
+    "image": ""
+  },
+  {
+    "file": "drinks.json",
+    "category": "مشروبات",
+    "icon": "🥤",
+    "image": ""
+  },
+  {
+    "file": "snacks.json",
+    "category": "نمکین و اسنیکس",
+    "icon": "🍟",
+    "image": ""
+  },
+  {
+    "file": "cleaning.json",
+    "category": "صفائی و گھریلو اشیاء",
+    "icon": "🧼",
+    "image": ""
+  }
+]

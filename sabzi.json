@@ -347,19 +347,19 @@
     "name": "سبز دھنیا",
     "unit": "گڈی",
     "rate": 0,
-    "available": false
+    "available": true
   },
   {
     "name": "پودینہ",
     "unit": "گڈی",
     "rate": 0,
-    "available": false
+    "available": true
   },
   {
     "name": "سلاد پتی",
     "unit": "کلو",
     "rate": 0,
-    "available": false
+    "available": true
   },
   {
     "name": "مولی",

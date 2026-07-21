@@ -1,6 +1,138 @@
 [
   {
-    "name": "آلو",
+    "name": "انبر باسمتی چاول",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 450
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 2250
+      },
+      {
+        "label": "بوری (40 کلو)",
+        "rate": 18000
+      }
+    ]
+  },
+  {
+    "name": "چینی",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 280
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 1400
+      },
+      {
+        "label": "بوری (40 کلو)",
+        "rate": 11200
+      }
+    ]
+  },
+  {
+    "name": "دال مونگ (دھلی)",
+    "available": true,
+    "units": [
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 60
+      },
+      {
+        "label": "آدھا کلو",
+        "rate": 125
+      },
+      {
+        "label": "کلو",
+        "rate": 250
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 1250
+      }
+    ]
+  },
+  {
+    "name": "دال چنا",
+    "available": true,
+    "units": [
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 55
+      },
+      {
+        "label": "آدھا کلو",
+        "rate": 110
+      },
+      {
+        "label": "کلو",
+        "rate": 220
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 1100
+      }
+    ]
+  },
+  {
+    "name": "دال ماش",
+    "available": true,
+    "units": [
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 65
+      },
+      {
+        "label": "آدھا کلو",
+        "rate": 130
+      },
+      {
+        "label": "کلو",
+        "rate": 260
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 1300
+      }
+    ]
+  },
+  {
+    "name": "آٹا",
+    "available": true,
+    "units": [
+      {
+        "label": "کلو",
+        "rate": 140
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 700
+      },
+      {
+        "label": "بوری (20 کلو)",
+        "rate": 2800
+      }
+    ]
+  },
+  {
+    "name": "کوکنگ آئل",
+    "unit": "بوتل (1 لیٹر)",
+    "rate": 550,
+    "available": true
+  },
+  {
+    "name": "گھی",
+    "unit": "ڈبہ (1 کلو)",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "نمک",
     "available": true,
     "units": [
       {
@@ -14,83 +146,43 @@
       {
         "label": "کلو",
         "rate": 50
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 250
       }
     ]
   },
   {
-    "name": "پیاز",
+    "name": "چائے پتی",
+    "unit": "پیکٹ",
+    "rate": 350,
+    "available": true
+  },
+  {
+    "name": "لال مرچ پاؤڈر",
     "available": true,
     "units": [
       {
         "label": "پاؤ (250 گرام)",
-        "rate": 30
+        "rate": 175
       },
       {
         "label": "آدھا کلو",
-        "rate": 60
+        "rate": 350
       },
       {
         "label": "کلو",
-        "rate": 120
+        "rate": 700
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 3500
       }
     ]
   },
   {
-    "name": "ٹماٹر",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 75
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 150
-      },
-      {
-        "label": "کلو",
-        "rate": 300
-      }
-    ]
-  },
-  {
-    "name": "کچالو",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 30
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 60
-      },
-      {
-        "label": "کلو",
-        "rate": 120
-      }
-    ]
-  },
-  {
-    "name": "بھنڈی",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 45
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 90
-      },
-      {
-        "label": "کلو",
-        "rate": 180
-      }
-    ]
-  },
-  {
-    "name": "مٹر",
+    "name": "ہلدی پاؤڈر",
     "available": true,
     "units": [
       {
@@ -104,373 +196,17 @@
       {
         "label": "کلو",
         "rate": 500
+      },
+      {
+        "label": "دڑی (5 کلو)",
+        "rate": 2500
       }
     ]
   },
   {
-    "name": "توری",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 75
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 150
-      },
-      {
-        "label": "کلو",
-        "rate": 300
-      }
-    ]
-  },
-  {
-    "name": "کدو",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 50
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 100
-      },
-      {
-        "label": "کلو",
-        "rate": 200
-      }
-    ]
-  },
-  {
-    "name": "کریلا",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "بینگن",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 30
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 60
-      },
-      {
-        "label": "کلو",
-        "rate": 120
-      }
-    ]
-  },
-  {
-    "name": "شملہ مرچ",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 75
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 150
-      },
-      {
-        "label": "کلو",
-        "rate": 300
-      }
-    ]
-  },
-  {
-    "name": "بند گوبھی",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "گاجر",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 60
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 125
-      },
-      {
-        "label": "کلو",
-        "rate": 250
-      }
-    ]
-  },
-  {
-    "name": "کھیرا",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 60
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 125
-      },
-      {
-        "label": "کلو",
-        "rate": 250
-      }
-    ]
-  },
-  {
-    "name": "پھول گوبھی",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 50
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 100
-      },
-      {
-        "label": "کلو",
-        "rate": 200
-      }
-    ]
-  },
-  {
-    "name": "شلغم",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "فراش بین",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 60
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 125
-      },
-      {
-        "label": "کلو",
-        "rate": 250
-      }
-    ]
-  },
-  {
-    "name": "پمنکے",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 250
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 500
-      },
-      {
-        "label": "کلو",
-        "rate": 1000
-      }
-    ]
-  },
-  {
-    "name": "ہری مرچ",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 10
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 25
-      },
-      {
-        "label": "کلو",
-        "rate": 50
-      }
-    ]
-  },
-  {
-    "name": "ادرک",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "لہسن",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 30
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 60
-      },
-      {
-        "label": "کلو",
-        "rate": 120
-      }
-    ]
-  },
-  {
-    "name": "لیموں",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 50
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 100
-      },
-      {
-        "label": "کلو",
-        "rate": 200
-      }
-    ]
-  },
-  {
-    "name": "گول ٹینڈے",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "چقندر",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 40
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 75
-      },
-      {
-        "label": "کلو",
-        "rate": 150
-      }
-    ]
-  },
-  {
-    "name": "سبز دھنیا",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "پودینہ",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "سلاد پتی",
-    "unit": "کلو",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "مولی",
-    "unit": "کلو",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "لمبے ٹینڈے",
-    "unit": "کلو",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "ساگ",
-    "unit": "کلو",
-    "rate": 0,
-    "available": false
-  },
-  {
-    "name": "ہری پیاز",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": false
+    "name": "گرم مصالحہ",
+    "unit": "پیکٹ",
+    "rate": 200,
+    "available": true
   }
 ]

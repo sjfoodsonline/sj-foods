@@ -133,25 +133,9 @@
   },
   {
     "name": "نمک",
-    "available": true,
-    "units": [
-      {
-        "label": "پاؤ (250 گرام)",
-        "rate": 10
-      },
-      {
-        "label": "آدھا کلو",
-        "rate": 25
-      },
-      {
-        "label": "کلو",
-        "rate": 50
-      },
-      {
-        "label": "دڑی (5 کلو)",
-        "rate": 250
-      }
-    ]
+    "unit": "پیکٹ (1 کلو)",
+    "rate": 50,
+    "available": true
   },
   {
     "name": "چائے پتی",

@@ -95,10 +95,9 @@
 
 <div class="wrap">
 
-  <!-- ============ SETUP CARD (shown until token saved) ============ -->
   <div class="card" id="setupCard">
     <h3>🔑 ایک بار سیٹ اپ کریں</h3>
-    <p>یہ صرف پہلی بار کرنا ہے۔ آپ کا ٹوکن صرف اسی فون کے براؤزر میں محفوظ رہے گا، کہیں اور نہیں جاتا۔</p>
+    <p>یہ صرف پہلی بار کرنا ہے۔ آپ کا ٹوکن صرف اسی لیپ ٹاپ کے براؤزر میں محفوظ رہے گا، کہیں اور نہیں جاتا۔</p>
 
     <label>GitHub یوزر نیم (Owner)</label>
     <input type="text" id="cfgOwner" value="sjfoodsonline">
@@ -116,16 +115,14 @@
       4) <b>Personal access tokens → Fine-grained tokens → Generate new token</b><br>
       5) نام کچھ بھی دیں، <b>Repository access</b> میں "Only select repositories" چن کر صرف <b>sj-foods</b> منتخب کریں<br>
       6) <b>Permissions → Contents → Read and write</b> کریں<br>
-      7) <b>Generate token</b> دبائیں، جو کوڈ (ghp_... سے شروع) ملے وہ یہاں پیسٹ کریں
+      7) <b>Generate token</b> دبائیں، جو کوڈ ملے وہ یہاں پیسٹ کریں
     </div>
 
     <br>
     <button class="btn-primary" id="saveConfigBtn">محفوظ کریں اور شروع کریں</button>
   </div>
 
-  <!-- ============ MAIN PANEL (shown after setup) ============ -->
   <div id="mainPanel" style="display:none;">
-
     <div class="card">
       <div class="cat-select">
         <select id="categoryPicker"></select>
@@ -133,9 +130,7 @@
       </div>
       <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔ ہر پروڈکٹ میں ایک یا زیادہ سائز/قیمت شامل کر سکتے ہیں۔</div>
     </div>
-
     <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-
     <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
   </div>
 
@@ -150,11 +145,11 @@
 
 <script>
 const CATEGORIES_INDEX_FILE = "categories_index.json";
-let CFG = null;                 // {owner, repo, token}
-let CATEGORIES_INDEX = [];      // from categories_index.json
+let CFG = null;
+let CATEGORIES_INDEX = [];
 let currentCategoryFile = null;
-let currentItems = [];          // array of product objects for the selected category
-let currentSha = null;          // sha of the currently loaded category file (for saving)
+let currentItems = [];
+let currentSha = null;
 let dirty = false;
 
 function showToast(msg, isErr){
@@ -173,7 +168,6 @@ function markClean(){
   document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
 }
 
-// ---------------- base64 / utf8 helpers ----------------
 function utf8ToBase64(str){
   const bytes = new TextEncoder().encode(str);
   let bin = "";
@@ -186,7 +180,6 @@ function base64ToUtf8(b64){
   return new TextDecoder("utf-8").decode(bytes);
 }
 
-// ---------------- GitHub API ----------------
 async function ghRequest(path, options){
   const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
   const res = await fetch(url, Object.assign({
@@ -213,19 +206,17 @@ async function ghPutJson(path, obj, sha, message){
   });
 }
 async function ghPutBinary(path, base64Content, message){
-  // for new images we don't know sha yet — try without, GitHub creates the file
   let sha;
   try{
     const existing = await ghRequest(path);
     sha = existing.sha;
-  }catch(e){ /* file doesn't exist yet — fine */ }
+  }catch(e){}
   return ghRequest(path, {
     method: "PUT",
     body: JSON.stringify({ message, content: base64Content, sha, branch: "main" })
   });
 }
 
-// ---------------- Config / setup ----------------
 function loadConfig(){
   const raw = localStorage.getItem("sjfoods-admin-config");
   if(!raw) return null;
@@ -245,7 +236,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
   }
   CFG = { owner, repo, token };
   try{
-    await ghRequest(CATEGORIES_INDEX_FILE); // test call
+    await ghRequest(CATEGORIES_INDEX_FILE);
     saveConfig(CFG);
     showToast("✅ کنکشن کامیاب!");
     startMainPanel();
@@ -260,7 +251,6 @@ document.getElementById("changeAccountBtn").onclick = ()=>{
   location.reload();
 };
 
-// ---------------- Main panel ----------------
 async function startMainPanel(){
   document.getElementById("setupCard").style.display = "none";
   document.getElementById("mainPanel").style.display = "block";
@@ -276,7 +266,7 @@ async function startMainPanel(){
 }
 
 async function loadCategory(file){
-  if(dirty && !confirm("موجودہ کیٹگری میں غیر محفوظ تبدیلیاں ہیں۔ آگے بڑھیں (تبدیلیاں ضائع ہو جائیں گی)؟")) {
+  if(dirty && !confirm("موجودہ کیٹگری میں غیر محفوظ تبدیلیاں ہیں۔ آگے بڑھیں؟")) {
     document.getElementById("categoryPicker").value = currentCategoryFile;
     return;
   }
@@ -297,7 +287,6 @@ async function loadCategory(file){
 }
 
 function normalizeItem(it){
-  // always work with a "units" array internally, regardless of stored shape
   const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "کلو", rate: it.rate || 0}];
   return {
     name: it.name || "",
@@ -400,7 +389,6 @@ function buildRow(it, idx){
     showToast("⏳ تصویر اپ لوڈ ہو رہی ہے...");
     try{
       const base64 = await fileToBase64(file);
-      const safeName = (it.name || "product").replace(/[^a-zA-Z0-9\u0600-\u06FF]/g, "_");
       const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}.jpg`;
       await ghPutBinary(path, base64, `Upload image for ${it.name}`);
       it.image = path;
@@ -412,9 +400,8 @@ function buildRow(it, idx){
     }
   };
 
-  row._item = it; // direct reference so we can rebuild order reliably after dragging
+  row._item = it;
 
-  // ---- touch/mouse-friendly reordering via Pointer Events (works on phones) ----
   const handle = row.querySelector(".drag-handle");
   handle.addEventListener("pointerdown", (e)=>{
     e.preventDefault();
@@ -435,13 +422,11 @@ function buildRow(it, idx){
       handle.releasePointerCapture(e.pointerId);
       handle.removeEventListener("pointermove", onMove);
       handle.removeEventListener("pointerup", onUp);
-      handle.removeEventListener("pointercancel", onUp);
       syncOrderFromDom();
       markDirty();
     }
     handle.addEventListener("pointermove", onMove);
     handle.addEventListener("pointerup", onUp);
-    handle.addEventListener("pointercancel", onUp);
   });
 
   return row;
@@ -472,7 +457,6 @@ document.getElementById("saveBtn").onclick = async ()=>{
   syncOrderFromDom();
   document.getElementById("saveStatus").textContent = "⏳ محفوظ ہو رہا ہے...";
   try{
-    // re-fetch sha to avoid conflicts if file changed elsewhere
     const fresh = await ghRequest(currentCategoryFile);
     const payload = currentItems.map(it => ({
       name: it.name,
@@ -490,7 +474,6 @@ document.getElementById("saveBtn").onclick = async ()=>{
   }
 };
 
-// ---------------- init ----------------
 (function init(){
   CFG = loadConfig();
   if(CFG){

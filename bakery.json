@@ -1,0 +1,242 @@
+[
+  {
+    "name": "گلاب جامن",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "رسگلے",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "نمک پارے",
+    "unit": "KG",
+    "rate": 750,
+    "available": true
+  },
+  {
+    "name": "سپیشل برفی",
+    "unit": "KG",
+    "rate": 1400,
+    "available": true
+  },
+  {
+    "name": "برفی سادہ",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "چیری کیک",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "گاجر حلوہ",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "کیک رس",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "کراس پف",
+    "unit": "KG",
+    "rate": 900,
+    "available": true
+  },
+  {
+    "name": "کوکونٹ بسکٹ",
+    "unit": "KG",
+    "rate": 1500,
+    "available": true
+  },
+  {
+    "name": "پھینیاں",
+    "unit": "KG",
+    "rate": 750,
+    "available": true
+  },
+  {
+    "name": "کھیر",
+    "unit": "KG",
+    "rate": 800,
+    "available": true
+  },
+  {
+    "name": "دودھ کی بوتل",
+    "unit": "عدد",
+    "rate": 100,
+    "available": true
+  },
+  {
+    "name": "چکن رول",
+    "unit": "عدد",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "ڈرائی بسکٹ",
+    "unit": "KG",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "ڈبل روٹی (350 گرام)",
+    "unit": "عدد",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "ڈبل روٹی (700 گرام)",
+    "unit": "عدد",
+    "rate": 220,
+    "available": true
+  },
+  {
+    "name": "شیرمال (200 گرام)",
+    "unit": "عدد",
+    "rate": 120,
+    "available": true
+  },
+  {
+    "name": "ڈرائی کیک",
+    "unit": "پونڈ",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "آئس کریم کیک",
+    "unit": "پونڈ",
+    "rate": 1000,
+    "available": true
+  },
+  {
+    "name": "فریش کریم کیک",
+    "unit": "پونڈ",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "سادہ کیک (200 گرام)",
+    "unit": "عدد",
+    "rate": 170,
+    "available": true
+  },
+  {
+    "name": "فروٹ کیک (200 گرام)",
+    "unit": "عدد",
+    "rate": 200,
+    "available": true
+  },
+  {
+    "name": "آلو سموسہ",
+    "unit": "عدد",
+    "rate": 30,
+    "available": true
+  },
+  {
+    "name": "قیمہ سموسہ",
+    "unit": "عدد",
+    "rate": 60,
+    "available": true
+  },
+  {
+    "name": "قیمہ کچوری",
+    "unit": "عدد",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "چکن پیٹیز",
+    "unit": "عدد",
+    "rate": 100,
+    "available": true
+  },
+  {
+    "name": "سینڈوچ",
+    "unit": "عدد",
+    "rate": 100,
+    "available": true
+  },
+  {
+    "name": "سینڈوچ فرائی",
+    "unit": "عدد",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "کوکونٹ",
+    "unit": "KG",
+    "rate": 1500,
+    "available": true
+  },
+  {
+    "name": "میرنگ",
+    "unit": "KG",
+    "rate": 1500,
+    "available": true
+  },
+  {
+    "name": "رس ملائی",
+    "unit": "عدد",
+    "rate": 150,
+    "available": true
+  },
+  {
+    "name": "فریش کریم پیسٹری",
+    "unit": "عدد",
+    "rate": 100,
+    "available": true
+  },
+  {
+    "name": "سادہ رس (پاپے)",
+    "unit": "KG",
+    "rate": 600,
+    "available": true
+  },
+  {
+    "name": "بناسپتی رول",
+    "unit": "عدد",
+    "rate": 80,
+    "available": true
+  },
+  {
+    "name": "نمکو",
+    "unit": "KG",
+    "rate": 750,
+    "available": true
+  },
+  {
+    "name": "بقلاوا",
+    "unit": "KG",
+    "rate": 1500,
+    "available": true
+  },
+  {
+    "name": "کلاس مکس مٹھائی",
+    "unit": "KG",
+    "rate": 850,
+    "available": true
+  },
+  {
+    "name": "کلاس مکس بسکٹ",
+    "unit": "KG",
+    "rate": 850,
+    "available": true
+  },
+  {
+    "name": "پکوڑے",
+    "unit": "KG",
+    "rate": 550,
+    "available": true
+  }
+]

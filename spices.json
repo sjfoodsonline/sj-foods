@@ -1,0 +1,236 @@
+[
+  {
+    "name": "سالن مصالحہ سپیشل",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ]
+  },
+  {
+    "name": "گرم مصالحہ نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 700
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 350
+      }
+    ]
+  },
+  {
+    "name": "زیرہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ]
+  },
+  {
+    "name": "ہانڈی مصالحہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ]
+  },
+  {
+    "name": "دھنیا ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ]
+  },
+  {
+    "name": "دھنیا پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ]
+  },
+  {
+    "name": "کالی مرچ ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ]
+  },
+  {
+    "name": "کالی مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ]
+  },
+  {
+    "name": "دار چینی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ]
+  },
+  {
+    "name": "ہلدی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ]
+  },
+  {
+    "name": "سرخ مرچ دانے دار",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ]
+  },
+  {
+    "name": "سرخ مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 425
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 210
+      }
+    ]
+  },
+  {
+    "name": "سرخ مرچ گول",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1100
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 550
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 275
+      }
+    ]
+  }
+]

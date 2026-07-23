@@ -1,7 +1,7 @@
 {
     "name": "آلو",
     "available": true,
-    "image": "images/sabzi/alo.jpg",
+   "image": "images/sabzi/alo.jpg",
     "units": [
       { "label": "KG", "rate": 50 },
       { "label": "آدھا KG", "rate": 25 },

@@ -1,7 +1,6 @@
 [
   {
     "name": "آلو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -15,11 +14,13 @@
         "label": "دڑی (5 KG)",
         "rate": 250
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/sabzi-0-1784809561463.jpg",
+    "featured": false
   },
   {
     "name": "پیاز",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -33,11 +34,13 @@
         "label": "دڑی (5 KG)",
         "rate": 600
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ٹماٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -47,11 +50,13 @@
         "label": "آدھا KG",
         "rate": 150
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کچالو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -61,11 +66,13 @@
         "label": "آدھا KG",
         "rate": 60
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "بھنڈی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -75,11 +82,13 @@
         "label": "آدھا KG",
         "rate": 90
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "مٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -89,11 +98,13 @@
         "label": "آدھا KG",
         "rate": 250
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "توری",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -103,11 +114,13 @@
         "label": "آدھا KG",
         "rate": 150
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کدو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -117,11 +130,13 @@
         "label": "آدھا KG",
         "rate": 100
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کریلا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -131,11 +146,13 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "بینگن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -145,11 +162,13 @@
         "label": "آدھا KG",
         "rate": 60
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "شملہ مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -159,11 +178,13 @@
         "label": "آدھا KG",
         "rate": 150
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "بند گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -173,11 +194,13 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "گاجر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -187,11 +210,13 @@
         "label": "آدھا KG",
         "rate": 125
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کھیرا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -201,11 +226,13 @@
         "label": "آدھا KG",
         "rate": 125
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "پھول گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -215,11 +242,13 @@
         "label": "آدھا KG",
         "rate": 100
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "شلغم",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -229,11 +258,13 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "فراش بین",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -243,11 +274,13 @@
         "label": "آدھا KG",
         "rate": 125
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "پمنکے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -257,11 +290,13 @@
         "label": "آدھا KG",
         "rate": 500
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ہری مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -271,11 +306,13 @@
         "label": "آدھا KG",
         "rate": 25
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ادرک",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -289,11 +326,13 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "لہسن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -307,11 +346,13 @@
         "label": "آدھا KG",
         "rate": 60
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "لیموں",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -321,11 +362,13 @@
         "label": "آدھا KG",
         "rate": 100
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "گول ٹینڈے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -335,11 +378,13 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "چقندر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -349,48 +394,93 @@
         "label": "آدھا KG",
         "rate": 75
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "سبز دھنیا",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": true
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "پودینہ",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": true
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "سلاد پتی",
-    "unit": "KG",
-    "rate": 0,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "مولی",
-    "unit": "KG",
-    "rate": 0,
-    "available": false
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   },
   {
     "name": "لمبے ٹینڈے",
-    "unit": "KG",
-    "rate": 0,
-    "available": false
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ساگ",
-    "unit": "KG",
-    "rate": 0,
-    "available": false
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ہری پیاز",
-    "unit": "گڈی",
-    "rate": 0,
-    "available": false
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   }
 ]

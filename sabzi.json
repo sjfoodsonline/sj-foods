@@ -1,13 +1,13 @@
-[
-  {
+{
     "name": "آلو",
     "available": true,
-    "image": "images/aloo.webp",
+    "image": "images/sabzi/alo.jpg",
     "units": [
       { "label": "KG", "rate": 50 },
       { "label": "آدھا KG", "rate": 25 },
       { "label": "دڑی (5 KG)", "rate": 250 }
     ]
+  }
   },
   {
     "name": "پیاز",

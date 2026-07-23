@@ -1,0 +1,198 @@
+[
+  {
+    "name": "چنا (چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ]
+  },
+  {
+    "name": "کالا چنا (کالا چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ]
+  },
+  {
+    "name": "دال چنہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ]
+  },
+  {
+    "name": "دال ماش کرمی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 450
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 225
+      }
+    ]
+  },
+  {
+    "name": "دال مونگ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ]
+  },
+  {
+    "name": "دال مسور",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ]
+  },
+  {
+    "name": "دال نسکان",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ]
+  },
+  {
+    "name": "کالا ماش (تورے مہے)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ]
+  },
+  {
+    "name": "سبز مونگ (شنے می)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ]
+  },
+  {
+    "name": "لوبیا تاجک",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 470
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 235
+      }
+    ]
+  },
+  {
+    "name": "لوبیا وطنی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ]
+  },
+  {
+    "name": "سفید لوبیا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ]
+  },
+  {
+    "name": "نوڈلز کھلا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 370
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 185
+      }
+    ]
+  },
+  {
+    "name": "میکرونی نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ]
+  }
+]

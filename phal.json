@@ -1,9 +1,6 @@
 [
   {
-    "name": "سیب",
-    "unit": "KG",
-    "rate": 350,
-    "available": true
+    "image": "images/apple.jpg"
   },
   {
     "name": "کیلا",

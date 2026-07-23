@@ -1,7 +1,8 @@
 [
-  {
+ {
     "name": "آلو",
     "available": true,
+    "image": "images/alo.jpg",
     "units": [
       {
         "label": "KG",

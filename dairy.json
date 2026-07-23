@@ -7,13 +7,13 @@
   },
   {
     "name": "دہی",
-    "unit": "کلو",
+    "unit": "KG",
     "rate": 180,
     "available": true
   },
   {
     "name": "پنیر",
-    "unit": "کلو",
+    "unit": "KG",
     "rate": 900,
     "available": true
   },
@@ -22,5 +22,19 @@
     "unit": "پیکٹ",
     "rate": 350,
     "available": true
+  },
+  {
+    "name": "دودھ پیکٹ (چھوٹا پیک)",
+    "available": false,
+    "units": [
+      {
+        "label": "ایک پیکٹ",
+        "rate": 0
+      },
+      {
+        "label": "ایک کارٹن (24 پیکٹ)",
+        "rate": 0
+      }
+    ]
   }
 ]

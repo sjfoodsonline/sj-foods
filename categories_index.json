@@ -12,9 +12,27 @@
     "image": ""
   },
   {
-    "file": "kirana.json",
-    "category": "کریانہ",
-    "icon": "🌾",
+    "file": "oil_ghee.json",
+    "category": "تیل و گھی",
+    "icon": "🛢️",
+    "image": ""
+  },
+  {
+    "file": "rice.json",
+    "category": "چاول",
+    "icon": "🍚",
+    "image": ""
+  },
+  {
+    "file": "pulses.json",
+    "category": "دالیں و اجناس",
+    "icon": "🫘",
+    "image": ""
+  },
+  {
+    "file": "spices.json",
+    "category": "مصالحہ جات",
+    "icon": "🌶️",
     "image": ""
   },
   {

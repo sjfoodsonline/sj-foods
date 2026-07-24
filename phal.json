@@ -7,9 +7,9 @@
         "rate": 350
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-0-1784856042361.jpg",
-    "featured": false
+    "featured": true
   },
   {
     "name": "کیلا",
@@ -23,9 +23,9 @@
         "rate": 95
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-1-1784856047097.jpg",
-    "featured": false
+    "featured": true
   },
   {
     "name": "انگور",
@@ -35,7 +35,7 @@
         "rate": 400
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-2-1784856053948.jpg",
     "featured": false
   },
@@ -47,7 +47,7 @@
         "rate": 100
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-3-1784856059856.jpg",
     "featured": false
   },
@@ -59,7 +59,7 @@
         "rate": 120
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-4-1784856065255.jpg",
     "featured": false
   },
@@ -71,8 +71,8 @@
         "rate": 300
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-5-1784856725610.jpg",
-    "featured": false
+    "featured": true
   }
 ]

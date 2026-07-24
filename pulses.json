@@ -1,7 +1,6 @@
 [
   {
     "name": "چنا (چولہ)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -11,11 +10,13 @@
         "label": "آدھا KG",
         "rate": 165
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-0-1784859892471.jpg",
+    "featured": false
   },
   {
     "name": "کالا چنا (کالا چولہ)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -25,11 +26,13 @@
         "label": "آدھا KG",
         "rate": 190
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-1-1784859940100.jpg",
+    "featured": false
   },
   {
-    "name": "دال چنہ",
-    "available": true,
+    "name": "دال چنا",
     "units": [
       {
         "label": "KG",
@@ -39,11 +42,13 @@
         "label": "آدھا KG",
         "rate": 125
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-2-1784859978932.jpg",
+    "featured": false
   },
   {
     "name": "دال ماش کرمی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -53,11 +58,13 @@
         "label": "آدھا KG",
         "rate": 225
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-3-1784860024637.jpg",
+    "featured": false
   },
   {
     "name": "دال مونگ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -67,11 +74,13 @@
         "label": "آدھا KG",
         "rate": 190
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-4-1784860055297.jpg",
+    "featured": false
   },
   {
     "name": "دال مسور",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -81,11 +90,13 @@
         "label": "آدھا KG",
         "rate": 135
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-5-1784860131882.jpg",
+    "featured": false
   },
   {
     "name": "دال نسکان",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -95,11 +106,13 @@
         "label": "آدھا KG",
         "rate": 135
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/pulses-6-1784860553182.jpg",
+    "featured": false
   },
   {
     "name": "کالا ماش (تورے مہے)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -109,11 +122,13 @@
         "label": "آدھا KG",
         "rate": 175
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "سبز مونگ (شنے می)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -123,11 +138,13 @@
         "label": "آدھا KG",
         "rate": 175
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "لوبیا تاجک",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -137,11 +154,13 @@
         "label": "آدھا KG",
         "rate": 235
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "لوبیا وطنی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -151,11 +170,13 @@
         "label": "آدھا KG",
         "rate": 200
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "سفید لوبیا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -165,11 +186,13 @@
         "label": "آدھا KG",
         "rate": 165
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "نوڈلز کھلا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -179,11 +202,13 @@
         "label": "آدھا KG",
         "rate": 185
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "میکرونی نمبر 1",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -193,6 +218,9 @@
         "label": "آدھا KG",
         "rate": 125
       }
-    ]
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   }
 ]

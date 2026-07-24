@@ -1,170 +1,338 @@
 [
   {
     "name": "شمع ٹیم گھی (16 KG)",
-    "unit": "ٹیم",
-    "rate": 9400,
-    "available": true
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 9400
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-0-1784857848010.jpg",
+    "featured": false
   },
   {
     "name": "شمع آئل ٹیم (16 لیٹر)",
-    "unit": "ٹیم",
-    "rate": 9500,
-    "available": true
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 9500
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-1-1784857852488.jpg",
+    "featured": false
   },
   {
     "name": "شمع بالٹی گھی (16 KG)",
-    "unit": "بالٹی",
-    "rate": 9600,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 9600
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-2-1784857861280.jpg",
+    "featured": false
   },
   {
     "name": "شمع بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 6000,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 6000
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-3-1784857870006.jpg",
+    "featured": false
   },
   {
     "name": "شمع بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 3150,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 3150
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-4-1784857904246.jpg",
+    "featured": false
   },
   {
     "name": "شمع بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1670,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1670
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-5-1784857910414.jpg",
+    "featured": false
   },
   {
     "name": "شمع ٹیم پیک گھی (5 KG)",
-    "unit": "ٹیم پیک",
-    "rate": 3100,
-    "available": true
+    "units": [
+      {
+        "label": "ٹیم پیک",
+        "rate": 3100
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-6-1784857915585.jpg",
+    "featured": false
   },
   {
     "name": "شمع ٹیم پیک گھی (2.5 KG)",
-    "unit": "ٹیم پیک",
-    "rate": 1670,
-    "available": true
+    "units": [
+      {
+        "label": "ٹیم پیک",
+        "rate": 1670
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-7-1784857922181.jpg",
+    "featured": false
   },
   {
     "name": "شمع آئل کین (5 لیٹر)",
-    "unit": "کین",
-    "rate": 3200,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 3200
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-8-1784857931784.jpg",
+    "featured": false
   },
   {
     "name": "شمع آئل کین (3 لیٹر)",
-    "unit": "کین",
-    "rate": 1950,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 1950
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-9-1784857936936.jpg",
+    "featured": false
   },
   {
     "name": "شمع آئل بوتل (1 لیٹر)",
-    "unit": "بوتل",
-    "rate": 670,
-    "available": true
+    "units": [
+      {
+        "label": "بوتل",
+        "rate": 670
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-10-1784857948703.jpg",
+    "featured": false
   },
   {
     "name": "زیتون آٹا",
-    "unit": "ڈبہ",
-    "rate": 3100,
-    "available": true
+    "units": [
+      {
+        "label": "بوری",
+        "rate": 3100
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-11-1784858038386.jpg",
+    "featured": false
   },
   {
     "name": "انجیر آٹا",
-    "unit": "ڈبہ",
-    "rate": 3150,
-    "available": true
+    "units": [
+      {
+        "label": "بوری",
+        "rate": 3150
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-12-1784858125277.jpg",
+    "featured": false
   },
   {
     "name": "زیگ فین آٹا",
-    "unit": "ڈبہ",
-    "rate": 3150,
-    "available": true
+    "units": [
+      {
+        "label": "بوری",
+        "rate": 3150
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-13-1784858278283.jpg",
+    "featured": false
   },
   {
     "name": "کاروان ٹیم گھی (16 KG)",
-    "unit": "ٹیم",
-    "rate": 7550,
-    "available": true
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 7550
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-14-1784858399726.jpg",
+    "featured": false
   },
   {
     "name": "فیملی آئل کارٹن (5 لیٹر)",
-    "unit": "کارٹن",
-    "rate": 2250,
-    "available": true
+    "units": [
+      {
+        "label": "کارٹن",
+        "rate": 2250
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "جی سی پی بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 2450,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 2450
+      }
+    ],
+    "available": true,
+    "image": "products/oil_ghee-16-1784858581416.jpg",
+    "featured": false
   },
   {
     "name": "ادیبا بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1230,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1230
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "ادیبا بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 4900,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 4900
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر آئل کین (16 لیٹر)",
-    "unit": "کین",
-    "rate": 9350,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 9350
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر آئل کین (10 لیٹر)",
-    "unit": "کین",
-    "rate": 5700,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 5700
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر بالٹی گھی (16 KG)",
-    "unit": "بالٹی",
-    "rate": 9300,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 9300
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 5700,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 5700
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 2900,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 2900
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1500,
-    "available": true
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1500
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر آئل کین (5 لیٹر)",
-    "unit": "کین",
-    "rate": 2950,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 2950
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر آئل کین (3 لیٹر)",
-    "unit": "کین",
-    "rate": 1850,
-    "available": true
+    "units": [
+      {
+        "label": "کین",
+        "rate": 1850
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "کوثر پاؤچ کارٹن (1 لیٹر)",
-    "unit": "کارٹن",
-    "rate": 2850,
-    "available": true
+    "units": [
+      {
+        "label": "کارٹن",
+        "rate": 2850
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   }
 ]

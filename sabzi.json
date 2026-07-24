@@ -455,7 +455,7 @@
         "rate": 0
       }
     ],
-    "available": false,
+    "available": true,
     "image": "",
     "featured": false
   },
@@ -479,7 +479,7 @@
         "rate": 0
       }
     ],
-    "available": false,
+    "available": true,
     "image": "products/sabzi-30-1784814530475.jpg",
     "featured": false
   }

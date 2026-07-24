@@ -1,13 +1,18 @@
 [
   {
     "name": "سیب",
-    "unit": "KG",
-    "rate": 350,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      }
+    ],
+    "available": true,
+    "image": "products/phal-0-1784856042361.jpg",
+    "featured": false
   },
   {
     "name": "کیلا",
-    "available": true,
     "units": [
       {
         "label": "درجن (12 عدد)",
@@ -17,30 +22,57 @@
         "label": "آدھی درجن (6 عدد)",
         "rate": 95
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/phal-1-1784856047097.jpg",
+    "featured": false
   },
   {
     "name": "انگور",
-    "unit": "KG",
-    "rate": 400,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      }
+    ],
+    "available": true,
+    "image": "products/phal-2-1784856053948.jpg",
+    "featured": false
   },
   {
     "name": "تربوز",
-    "unit": "عدد",
-    "rate": 100,
-    "available": true
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
+    "available": true,
+    "image": "products/phal-3-1784856059856.jpg",
+    "featured": false
   },
   {
     "name": "خربوزہ",
-    "unit": "KG",
-    "rate": 120,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      }
+    ],
+    "available": true,
+    "image": "products/phal-4-1784856065255.jpg",
+    "featured": false
   },
   {
     "name": "آم (سیزنل)",
-    "unit": "KG",
-    "rate": 300,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   }
 ]

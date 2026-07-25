@@ -76,23 +76,6 @@
     "name_en": "Taro (Arbi)"
   },
   {
-    "name": "بھنڈی",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 180
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 90
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-4-1784996773058.jpg",
-    "featured": false,
-    "name_en": "Okra"
-  },
-  {
     "name": "مٹر",
     "units": [
       {
@@ -108,6 +91,23 @@
     "image": "products/sabzi-5-1784996792190.jpg",
     "featured": false,
     "name_en": "Green Peas"
+  },
+  {
+    "name": "بھنڈی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 90
+      }
+    ],
+    "available": true,
+    "image": "products/sabzi-4-1784996773058.jpg",
+    "featured": false,
+    "name_en": "Okra"
   },
   {
     "name": "توری",

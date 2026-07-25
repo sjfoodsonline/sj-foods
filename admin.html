@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SJ Foods — ایڈمن پینل</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:90px;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
+  header h1{margin:0; font-size:18px; font-family:"Noto Nastaliq Urdu",serif;}
+  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
+
+  .wrap{padding:14px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
+  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
+  input[type=text], input[type=password], input[type=number], select{
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
+    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+  }
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
+  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
+  .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
+  a.hint-link{color:var(--mid); font-weight:700;}
+
+  .cat-select{display:flex; gap:8px; margin-bottom:10px;}
+  .cat-select select{flex:1; margin-bottom:0;}
+
+  .product-row{
+    background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .product-row.dragging{opacity:.4;}
+  .row-top{display:flex; align-items:center; gap:8px;}
+  .drag-handle{cursor:grab; font-size:22px; color:var(--muted); flex:0 0 34px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; touch-action:none; user-select:none; -webkit-user-select:none;}
+  .thumb-box{
+    flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; cursor:pointer;
+  }
+  .thumb-box img{width:100%; height:100%; object-fit:cover;}
+  .thumb-box .ic{font-size:24px;}
+  .thumb-box input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
+  .thumb-actions{display:flex; gap:4px; flex:0 0 auto;}
+  .thumb-actions button{font-size:10px; padding:4px 6px; border-radius:6px;}
+  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
+  .row-fields input{margin-bottom:0;}
+  .row-flags{display:flex; align-items:center; gap:10px; font-size:11.5px;}
+  .row-flags label{display:flex; align-items:center; gap:4px; margin:0; color:var(--ink);}
+
+  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
+  .unit-row input{margin-bottom:0;}
+  .unit-row input.u-label{flex:2;}
+  .unit-row input.u-rate{flex:1;}
+  .unit-row button{flex:0 0 auto; font-size:14px; background:none; color:var(--price); padding:2px 6px;}
+  .add-unit-btn{font-size:11px; background:none; color:var(--mid); font-weight:700; padding:2px 4px;}
+
+  .row-bottom{display:flex; justify-content:space-between; align-items:center;}
+
+  #addProductBtn{margin:6px 0 16px;}
+
+  .savebar{
+    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
+    padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08);
+  }
+  .savebar .status{flex:1; font-size:11.5px; color:var(--muted);}
+  .savebar button{flex:0 0 auto; border-radius:10px; padding:11px 18px; font-size:13px; font-weight:700;}
+
+  .toast{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
+    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:80;
+  }
+  .toast.show{opacity:1; top:26px;}
+  .toast.err{background:#B71C1C;}
+
+  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
+  <p>یہاں سے پروڈکٹس، قیمتیں اور تصویریں بغیر کوڈ کے بدلیں</p>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ SETUP CARD (shown until token saved) ============ -->
+  <div class="card" id="setupCard">
+    <h3>🔑 ایک بار سیٹ اپ کریں</h3>
+    <p>یہ صرف پہلی بار کرنا ہے۔ آپ کا ٹوکن صرف اسی فون کے براؤزر میں محفوظ رہے گا، کہیں اور نہیں جاتا۔</p>
+
+    <label>GitHub یوزر نیم (Owner)</label>
+    <input type="text" id="cfgOwner" value="sjfoodsonline">
+
+    <label>ریپازٹری کا نام (Repository)</label>
+    <input type="text" id="cfgRepo" value="sj-foods">
+
+    <label>Personal Access Token</label>
+    <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <div class="hint">
+      ٹوکن بنانے کا طریقہ:<br>
+      1) github.com پر لاگ اِن کریں<br>
+      2) اوپر دائیں پروفائل تصویر → <b>Settings</b><br>
+      3) سب سے نیچے بائیں <b>Developer settings</b><br>
+      4) <b>Personal access tokens → Fine-grained tokens → Generate new token</b><br>
+      5) نام کچھ بھی دیں، <b>Repository access</b> میں "Only select repositories" چن کر صرف <b>sj-foods</b> منتخب کریں<br>
+      6) <b>Permissions → Contents → Read and write</b> کریں<br>
+      7) <b>Generate token</b> دبائیں، جو کوڈ (ghp_... سے شروع) ملے وہ یہاں پیسٹ کریں
+    </div>
+
+    <br>
+    <button class="btn-primary" id="saveConfigBtn">محفوظ کریں اور شروع کریں</button>
+  </div>
+
+  <!-- ============ MAIN PANEL (shown after setup) ============ -->
+  <div id="mainPanel" style="display:none;">
+
+    <div class="card">
+      <div class="cat-select">
+        <select id="categoryPicker"></select>
+        <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
+      </div>
+      <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔ ہر پروڈکٹ میں ایک یا زیادہ سائز/قیمت شامل کر سکتے ہیں۔</div>
+    </div>
+
+    <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
+
+    <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
+  </div>
+
+</div>
+
+<div class="savebar" id="saveBar" style="display:none;">
+  <div class="status" id="saveStatus">تبدیلیاں محفوظ نہیں ہوئیں</div>
+  <button class="btn-primary" id="saveBtn" style="width:auto;">💾 محفوظ کریں</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATEGORIES_INDEX_FILE = "categories_index.json";
+let CFG = null;                 // {owner, repo, token}
+let CATEGORIES_INDEX = [];      // from categories_index.json
+let currentCategoryFile = null;
+let currentItems = [];          // array of product objects for the selected category
+let currentSha = null;          // sha of the currently loaded category file (for saving)
+let dirty = false;
+
+function showToast(msg, isErr){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  setTimeout(()=> t.className = "toast", 2600);
+}
+function markDirty(){
+  dirty = true;
+  document.getElementById("saveBar").style.display = "flex";
+  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہوئیں — نیچے 'محفوظ کریں' دبائیں";
+}
+function markClean(){
+  dirty = false;
+  document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
+}
+
+// ---------------- base64 / utf8 helpers ----------------
+function utf8ToBase64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function base64ToUtf8(b64){
+  const bin = atob(b64.replace(/\n/g, ""));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
+// ---------------- GitHub API ----------------
+async function ghRequest(path, options){
+  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
+  const res = await fetch(url, Object.assign({
+    headers: {
+      "Authorization": "token " + CFG.token,
+      "Accept": "application/vnd.github+json"
+    }
+  }, options || {}));
+  if(!res.ok){
+    const errText = await res.text().catch(()=> "");
+    throw new Error(`GitHub API error (${res.status}): ${errText.slice(0,200)}`);
+  }
+  return res.json();
+}
+async function ghGetJson(path){
+  const data = await ghRequest(path);
+  return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
+}
+async function ghPutJson(path, obj, sha, message){
+  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
+  return ghRequest(path, {
+    method: "PUT",
+    body: JSON.stringify({ message, content, sha, branch: "main" })
+  });
+}
+async function ghPutBinary(path, base64Content, message){
+  // for new images we don't know sha yet — try without, GitHub creates the file
+  let sha;
+  try{
+    const existing = await ghRequest(path);
+    sha = existing.sha;
+  }catch(e){ /* file doesn't exist yet — fine */ }
+  return ghRequest(path, {
+    method: "PUT",
+    body: JSON.stringify({ message, content: base64Content, sha, branch: "main" })
+  });
+}
+
+// ---------------- Config / setup ----------------
+function loadConfig(){
+  const raw = localStorage.getItem("sjfoods-admin-config");
+  if(!raw) return null;
+  try{ return JSON.parse(raw); }catch(e){ return null; }
+}
+function saveConfig(cfg){
+  localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg));
+}
+
+document.getElementById("saveConfigBtn").onclick = async ()=>{
+  const owner = document.getElementById("cfgOwner").value.trim();
+  const repo = document.getElementById("cfgRepo").value.trim();
+  const token = document.getElementById("cfgToken").value.trim();
+  if(!owner || !repo || !token){
+    showToast("براہ کرم تینوں خانے پُر کریں", true);
+    return;
+  }
+  CFG = { owner, repo, token };
+  try{
+    await ghRequest(CATEGORIES_INDEX_FILE); // test call
+    saveConfig(CFG);
+    showToast("✅ کنکشن کامیاب!");
+    startMainPanel();
+  }catch(e){
+    showToast("❌ ٹوکن یا نام غلط ہے، دوبارہ چیک کریں", true);
+  }
+};
+
+document.getElementById("changeAccountBtn").onclick = ()=>{
+  if(!confirm("اکاؤنٹ کی معلومات صاف کر کے دوبارہ سیٹ اپ کریں؟")) return;
+  localStorage.removeItem("sjfoods-admin-config");
+  location.reload();
+};
+
+// ---------------- Vendor restriction (edit this list for each vendor's panel) ----------------
+const ALLOWED_FILES = null; // null = show all categories (used by main admin.html)
+
+// ---------------- Main panel ----------------
+async function startMainPanel(){
+  document.getElementById("setupCard").style.display = "none";
+  document.getElementById("mainPanel").style.display = "block";
+
+  const { json } = await ghGetJson(CATEGORIES_INDEX_FILE);
+  CATEGORIES_INDEX = ALLOWED_FILES ? json.filter(c => ALLOWED_FILES.includes(c.file)) : json;
+
+  if(CATEGORIES_INDEX.length === 0){
+    document.getElementById("productsArea").innerHTML = `<div class="loading">⚠️ اس پینل کے لیے کوئی کیٹگری مقرر نہیں</div>`;
+    return;
+  }
+
+  const picker = document.getElementById("categoryPicker");
+  picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
+  picker.onchange = ()=> loadCategory(picker.value);
+
+  await loadCategory(CATEGORIES_INDEX[0].file);
+}
+
+async function loadCategory(file){
+  if(dirty && !confirm("موجودہ کیٹگری میں غیر محفوظ تبدیلیاں ہیں۔ آگے بڑھیں (تبدیلیاں ضائع ہو جائیں گی)؟")) {
+    document.getElementById("categoryPicker").value = currentCategoryFile;
+    return;
+  }
+  currentCategoryFile = file;
+  document.getElementById("productsArea").innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
+  document.getElementById("addProductBtn").style.display = "none";
+  try{
+    const { json, sha } = await ghGetJson(file);
+    currentItems = json.map(normalizeItem);
+    currentSha = sha;
+    renderProducts();
+    markClean();
+    document.getElementById("saveBar").style.display = "flex";
+    document.getElementById("addProductBtn").style.display = "block";
+  }catch(e){
+    document.getElementById("productsArea").innerHTML = `<div class="loading">❌ لوڈ نہیں ہو سکا: ${e.message}</div>`;
+  }
+}
+
+// ---------------- auto-link helpers: KG rate drives other unit rates ----------------
+function isBaseKgLabel(label){
+  const t = (label||"").trim();
+  return t === "KG" || t === "کلو";
+}
+function parseUnitMultiplier(label){
+  const t = (label||"").trim();
+  if(isBaseKgLabel(t)) return 1;
+  if(t.includes("آدھا")) return 0.5;
+  if(t.includes("پاؤ")) return 0.25;
+  // matches things like "دڑی (5 KG)" or "بوری (40 کلو)" -> multiplier 5 or 40
+  const m = t.match(/\(?\s*(\d+(?:\.\d+)?)\s*(?:KG|کلو)\s*\)?/);
+  if(m) return parseFloat(m[1]);
+  return null; // independent unit (e.g. ٹین، بالٹی، بوتل) — not auto-calculated
+}
+function applyAutoLink(it, kgRate, currentRowEl){
+  const unitsBox = currentRowEl.parentElement;
+  const offset = unitsBox.querySelector(".auto-link-chk") ? 1 : 0;
+  it.units.forEach((u, ui) => {
+    if(isBaseKgLabel(u.label)) return; // that's the one just edited
+    const mult = parseUnitMultiplier(u.label);
+    if(mult === null) return; // independent container size — leave as-is
+    u.rate = Math.round((kgRate * mult) / 5) * 5; // round to nearest 5, matches site convention
+    const rowEl = unitsBox.children[offset + ui];
+    if(rowEl){
+      const rateInput = rowEl.querySelector(".u-rate");
+      if(rateInput) rateInput.value = u.rate;
+    }
+  });
+}
+
+function normalizeItem(it){
+  // always work with a "units" array internally, regardless of stored shape
+  const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "کلو", rate: it.rate || 0}];
+  return {
+    name: it.name || "",
+    name_en: it.name_en || undefined,
+    available: it.available !== false,
+    image: it.image || "",
+    featured: it.featured === true,
+    units
+  };
+}
+
+function renderProducts(){
+  const area = document.getElementById("productsArea");
+  area.innerHTML = "";
+  currentItems.forEach((it, idx) => area.appendChild(buildRow(it, idx)));
+}
+
+function buildRow(it, idx){
+  const row = document.createElement("div");
+  row.className = "product-row";
+  row.draggable = false;
+  row.dataset.idx = idx;
+
+  const thumbHtml = it.image
+    ? `<img src="${it.image}" alt="${it.name}">`
+    : `<span class="ic">🛒</span>`;
+
+  row.innerHTML = `
+    <div class="row-top">
+      <span class="drag-handle">↕️</span>
+      <div class="thumb-box" title="تصویر بدلنے کے لیے دبائیں">
+        ${thumbHtml}
+        <input type="file" accept="image/*" class="img-input">
+      </div>
+      <div class="row-fields">
+        <input type="text" class="f-name" placeholder="پروڈکٹ کا نام (اردو)" value="${it.name}">
+        <input type="text" class="f-name-en" placeholder="English name (optional)" value="${it.name_en && it.name_en !== it.name ? it.name_en : ''}" style="direction:ltr; text-align:left; margin-top:6px;">
+      </div>
+    </div>
+    <div class="thumb-actions" style="justify-content:flex-end;">
+      ${it.image ? `<button class="btn-danger remove-img-btn">🗑️ تصویر ہٹائیں</button>` : ""}
+    </div>
+    <div class="units-box"></div>
+    <button class="add-unit-btn">➕ سائز/قیمت شامل کریں</button>
+    <div class="row-bottom">
+      <div class="row-flags">
+        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
+        <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
+      </div>
+      <button class="btn-danger remove-row-btn">🗑️ حذف کریں</button>
+    </div>
+  `;
+
+  const unitsBox = row.querySelector(".units-box");
+  function renderUnits(){
+    unitsBox.innerHTML = "";
+
+    // auto-link toggle (only meaningful when there's more than one unit)
+    if(it.units.length > 1){
+      const linkRow = document.createElement("div");
+      linkRow.style.cssText = "display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); margin-bottom:6px;";
+      linkRow.innerHTML = `<label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" class="auto-link-chk" ${it._autoLink !== false ? "checked" : ""}> 🔗 KG بدلنے پر باقی سائز خودکار حساب ہوں</label>`;
+      linkRow.querySelector(".auto-link-chk").onchange = (e)=>{ it._autoLink = e.target.checked; };
+      unitsBox.appendChild(linkRow);
+    }
+
+    it.units.forEach((u, ui) => {
+      const ur = document.createElement("div");
+      ur.className = "unit-row";
+      ur.innerHTML = `
+        <input type="text" class="u-label" placeholder="یونٹ (مثلاً KG)" value="${u.label}">
+        <input type="number" class="u-rate" placeholder="قیمت" value="${u.rate}">
+        ${it.units.length > 1 ? `<button class="remove-unit-btn">✕</button>` : ""}
+      `;
+      ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
+      ur.querySelector(".u-rate").oninput = (e)=>{
+        u.rate = parseFloat(e.target.value)||0;
+        markDirty();
+        if(it._autoLink !== false && isBaseKgLabel(u.label)){
+          applyAutoLink(it, u.rate, ur);
+        }
+      };
+      const rmBtn = ur.querySelector(".remove-unit-btn");
+      if(rmBtn) rmBtn.onclick = ()=>{ it.units.splice(ui,1); renderUnits(); markDirty(); };
+      unitsBox.appendChild(ur);
+    });
+  }
+  renderUnits();
+
+  row.querySelector(".add-unit-btn").onclick = ()=>{
+    it.units.push({label:"", rate:0});
+    renderUnits();
+    markDirty();
+  };
+
+  row.querySelector(".f-name").oninput = (e)=>{ it.name = e.target.value; markDirty(); };
+  row.querySelector(".f-name-en").oninput = (e)=>{ it.name_en = e.target.value.trim() || undefined; markDirty(); };
+  row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
+  row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
+
+  row.querySelector(".remove-row-btn").onclick = ()=>{
+    if(!confirm(`"${it.name}" حذف کر دیں؟`)) return;
+    const i = currentItems.indexOf(it);
+    currentItems.splice(i,1);
+    renderProducts();
+    markDirty();
+  };
+
+  const removeImgBtn = row.querySelector(".remove-img-btn");
+  if(removeImgBtn) removeImgBtn.onclick = ()=>{
+    it.image = "";
+    renderProducts();
+    markDirty();
+  };
+
+  row.querySelector(".img-input").onchange = async (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    showToast("⏳ تصویر اپ لوڈ ہو رہی ہے...");
+    try{
+      const base64 = await fileToBase64(file);
+      const safeName = (it.name || "product").replace(/[^a-zA-Z0-9\u0600-\u06FF]/g, "_");
+      const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}.jpg`;
+      await ghPutBinary(path, base64, `Upload image for ${it.name}`);
+      it.image = path;
+      renderProducts();
+      markDirty();
+      showToast("✅ تصویر اپ لوڈ ہو گئی — اب 'محفوظ کریں' دبائیں");
+    }catch(err){
+      showToast("❌ تصویر اپ لوڈ نہیں ہو سکی: " + err.message, true);
+    }
+  };
+
+  row._item = it; // direct reference so we can rebuild order reliably after dragging
+
+  // ---- touch/mouse-friendly reordering via Pointer Events (works on phones) ----
+  const handle = row.querySelector(".drag-handle");
+  handle.addEventListener("pointerdown", (e)=>{
+    e.preventDefault();
+    row.classList.add("dragging");
+    handle.setPointerCapture(e.pointerId);
+
+    function onMove(ev){
+      const area = document.getElementById("productsArea");
+      const after = [...area.querySelectorAll(".product-row:not(.dragging)")].find(el=>{
+        const box = el.getBoundingClientRect();
+        return ev.clientY < box.top + box.height/2;
+      });
+      if(after) area.insertBefore(row, after);
+      else area.appendChild(row);
+    }
+    function onUp(ev){
+      row.classList.remove("dragging");
+      handle.releasePointerCapture(e.pointerId);
+      handle.removeEventListener("pointermove", onMove);
+      handle.removeEventListener("pointerup", onUp);
+      handle.removeEventListener("pointercancel", onUp);
+      syncOrderFromDom();
+      markDirty();
+    }
+    handle.addEventListener("pointermove", onMove);
+    handle.addEventListener("pointerup", onUp);
+    handle.addEventListener("pointercancel", onUp);
+  });
+
+  return row;
+}
+
+function syncOrderFromDom(){
+  const rows = [...document.getElementById("productsArea").children];
+  currentItems = rows.map(r => r._item);
+}
+
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=> resolve(reader.result.split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("addProductBtn").onclick = ()=>{
+  currentItems.push({ name:"", available:true, image:"", featured:false, units:[{label:"KG", rate:0}] });
+  renderProducts();
+  markDirty();
+  window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"});
+};
+
+document.getElementById("saveBtn").onclick = async ()=>{
+  syncOrderFromDom();
+  document.getElementById("saveStatus").textContent = "⏳ محفوظ ہو رہا ہے...";
+  try{
+    // re-fetch sha to avoid conflicts if file changed elsewhere
+    const fresh = await ghRequest(currentCategoryFile);
+    const payload = currentItems.map(it => {
+      const obj = {
+        name: it.name,
+        units: it.units,
+        available: it.available,
+        image: it.image,
+        featured: it.featured
+      };
+      if(it.name_en) obj.name_en = it.name_en;
+      return obj;
+    });
+    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update ${currentCategoryFile} via admin panel`);
+    markClean();
+    showToast("✅ محفوظ ہو گیا — ویب سائٹ 1 منٹ میں اپڈیٹ ہو جائے گی");
+  }catch(e){
+    document.getElementById("saveStatus").textContent = "❌ محفوظ نہیں ہو سکا";
+    showToast("❌ خرابی: " + e.message, true);
+  }
+};
+
+// ---------------- init ----------------
+(function init(){
+  CFG = loadConfig();
+  if(CFG){
+    document.getElementById("cfgOwner").value = CFG.owner;
+    document.getElementById("cfgRepo").value = CFG.repo;
+    startMainPanel().catch(()=>{
+      showToast("❌ کنکشن ناکام، دوبارہ لاگ اِن کریں", true);
+      localStorage.removeItem("sjfoods-admin-config");
+    });
+  }
+})();
+</script>
+</body>
+</html>

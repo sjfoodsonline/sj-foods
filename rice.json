@@ -1,0 +1,122 @@
+[
+  {
+    "name": "سیلہ زعفران (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_en": "Zafran Sella Rice (Aged)"
+  },
+  {
+    "name": "سیلہ رائس گولڈ (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_en": "Rice Gold Sella (Aged)"
+  },
+  {
+    "name": "سیلہ گولڈن (پرانا، گفٹ پیک)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 370
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 185
+      }
+    ],
+    "name_en": "Golden Sella (Aged, Gift Pack)"
+  },
+  {
+    "name": "سیلہ ویلکم (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 360
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 180
+      }
+    ],
+    "name_en": "Welcome Sella (Aged)"
+  },
+  {
+    "name": "باسمتی وی آئی پی (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_en": "Basmati VIP (Aged)"
+  },
+  {
+    "name": "سیلہ ٹوٹا (پرانا) — بابا فرید",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 220
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 110
+      }
+    ],
+    "name_en": "Broken Sella (Aged) — Baba Farid"
+  },
+  {
+    "name": "سیلہ ٹوٹا (پرانا) — لذت",
+    "available": false,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 0
+      }
+    ],
+    "name_en": "Broken Sella (Aged) — Lazzat"
+  },
+  {
+    "name": "بیگمی چاول",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 90
+      }
+    ],
+    "name_en": "Begumi Rice"
+  }
+]

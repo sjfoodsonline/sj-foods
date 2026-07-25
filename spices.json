@@ -1,0 +1,249 @@
+[
+  {
+    "name": "سالن مصالحہ سپیشل",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_en": "Special Curry Masala"
+  },
+  {
+    "name": "گرم مصالحہ نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 700
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 350
+      }
+    ],
+    "name_en": "Garam Masala No. 1"
+  },
+  {
+    "name": "زیرہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "name_en": "Cumin (Zeera)"
+  },
+  {
+    "name": "ہانڈی مصالحہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "name_en": "Handi Masala"
+  },
+  {
+    "name": "دھنیا ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_en": "Whole Coriander"
+  },
+  {
+    "name": "دھنیا پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_en": "Coriander Powder"
+  },
+  {
+    "name": "کالی مرچ ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "name_en": "Whole Black Pepper"
+  },
+  {
+    "name": "کالی مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "name_en": "Black Pepper Powder"
+  },
+  {
+    "name": "دار چینی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "name_en": "Cinnamon"
+  },
+  {
+    "name": "ہلدی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "name_en": "Turmeric"
+  },
+  {
+    "name": "سرخ مرچ دانے دار",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_en": "Crushed Red Chili"
+  },
+  {
+    "name": "سرخ مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 425
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 210
+      }
+    ],
+    "name_en": "Red Chili Powder"
+  },
+  {
+    "name": "سرخ مرچ گول",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1100
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 550
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 275
+      }
+    ],
+    "name_en": "Whole Red Chili"
+  }
+]

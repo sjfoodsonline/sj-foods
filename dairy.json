@@ -1,31 +1,54 @@
 [
   {
     "name": "دودھ (تازہ)",
-    "unit": "لیٹر",
-    "rate": 200,
-    "available": true
+    "units": [
+      {
+        "label": "لیٹر",
+        "rate": 200
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "دہی",
-    "unit": "KG",
-    "rate": 180,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   },
   {
     "name": "پنیر",
-    "unit": "KG",
-    "rate": 900,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   },
   {
     "name": "مکھن",
-    "unit": "پیکٹ",
-    "rate": 350,
-    "available": true
+    "units": [
+      {
+        "label": "پیکٹ",
+        "rate": 350
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   },
   {
     "name": "دودھ پیکٹ (چھوٹا پیک)",
-    "available": false,
     "units": [
       {
         "label": "ایک پیکٹ",
@@ -35,6 +58,9 @@
         "label": "ایک کارٹن (24 پیکٹ)",
         "rate": 0
       }
-    ]
+    ],
+    "available": false,
+    "image": "",
+    "featured": false
   }
 ]

@@ -1,7 +1,6 @@
 [
   {
     "name": "سیلہ زعفران (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -12,11 +11,13 @@
         "rate": 190
       }
     ],
+    "available": true,
+    "image": "products/rice-0-1784994384925.jpg",
+    "featured": false,
     "name_en": "Zafran Sella Rice (Aged)"
   },
   {
     "name": "سیلہ رائس گولڈ (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -27,11 +28,13 @@
         "rate": 200
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Rice Gold Sella (Aged)"
   },
   {
     "name": "سیلہ گولڈن (پرانا، گفٹ پیک)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -42,11 +45,13 @@
         "rate": 185
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Golden Sella (Aged, Gift Pack)"
   },
   {
     "name": "سیلہ ویلکم (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -57,11 +62,13 @@
         "rate": 180
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Welcome Sella (Aged)"
   },
   {
     "name": "باسمتی وی آئی پی (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -72,11 +79,13 @@
         "rate": 200
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Basmati VIP (Aged)"
   },
   {
     "name": "سیلہ ٹوٹا (پرانا) — بابا فرید",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -87,11 +96,13 @@
         "rate": 110
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Broken Sella (Aged) — Baba Farid"
   },
   {
     "name": "سیلہ ٹوٹا (پرانا) — لذت",
-    "available": false,
     "units": [
       {
         "label": "KG",
@@ -102,11 +113,13 @@
         "rate": 0
       }
     ],
+    "available": false,
+    "image": "",
+    "featured": false,
     "name_en": "Broken Sella (Aged) — Lazzat"
   },
   {
     "name": "بیگمی چاول",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -117,6 +130,9 @@
         "rate": 90
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Begumi Rice"
   }
 ]

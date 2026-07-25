@@ -1,18 +1,14 @@
 [
   {
     "name": "سیب",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 350
-      }
-    ],
-    "available": false,
-    "image": "products/phal-0-1784856042361.jpg",
-    "featured": true
+    "unit": "KG",
+    "rate": 350,
+    "available": true,
+    "name_en": "Apple"
   },
   {
     "name": "کیلا",
+    "available": true,
     "units": [
       {
         "label": "درجن (12 عدد)",
@@ -23,56 +19,34 @@
         "rate": 95
       }
     ],
-    "available": false,
-    "image": "products/phal-1-1784856047097.jpg",
-    "featured": true
+    "name_en": "Banana"
   },
   {
     "name": "انگور",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 400
-      }
-    ],
-    "available": false,
-    "image": "products/phal-2-1784856053948.jpg",
-    "featured": false
+    "unit": "KG",
+    "rate": 400,
+    "available": true,
+    "name_en": "Grapes"
   },
   {
     "name": "تربوز",
-    "units": [
-      {
-        "label": "عدد",
-        "rate": 100
-      }
-    ],
-    "available": false,
-    "image": "products/phal-3-1784856059856.jpg",
-    "featured": false
+    "unit": "عدد",
+    "rate": 100,
+    "available": true,
+    "name_en": "Watermelon"
   },
   {
     "name": "خربوزہ",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 120
-      }
-    ],
-    "available": false,
-    "image": "products/phal-4-1784856065255.jpg",
-    "featured": false
+    "unit": "KG",
+    "rate": 120,
+    "available": true,
+    "name_en": "Muskmelon"
   },
   {
     "name": "آم (سیزنل)",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 300
-      }
-    ],
-    "available": false,
-    "image": "products/phal-5-1784856725610.jpg",
-    "featured": true
+    "unit": "KG",
+    "rate": 300,
+    "available": true,
+    "name_en": "Mango (Seasonal)"
   }
 ]

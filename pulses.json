@@ -1,0 +1,212 @@
+[
+  {
+    "name": "چنا (چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ],
+    "name_en": "Chickpeas (Chana)"
+  },
+  {
+    "name": "کالا چنا (کالا چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_en": "Black Chickpeas"
+  },
+  {
+    "name": "دال چنہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_en": "Chana Dal"
+  },
+  {
+    "name": "دال ماش کرمی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 450
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 225
+      }
+    ],
+    "name_en": "Karmi Mash Dal"
+  },
+  {
+    "name": "دال مونگ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_en": "Moong Dal"
+  },
+  {
+    "name": "دال مسور",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ],
+    "name_en": "Masoor Dal"
+  },
+  {
+    "name": "دال نسکان",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ],
+    "name_en": "Naskan Dal"
+  },
+  {
+    "name": "کالا ماش (تورے مہے)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ],
+    "name_en": "Black Mash (Tore Mahe)"
+  },
+  {
+    "name": "سبز مونگ (شنے می)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ],
+    "name_en": "Green Moong (Shne Me)"
+  },
+  {
+    "name": "لوبیا تاجک",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 470
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 235
+      }
+    ],
+    "name_en": "Tajik Beans"
+  },
+  {
+    "name": "لوبیا وطنی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_en": "Local Beans"
+  },
+  {
+    "name": "سفید لوبیا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ],
+    "name_en": "White Beans"
+  },
+  {
+    "name": "نوڈلز کھلا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 370
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 185
+      }
+    ],
+    "name_en": "Loose Noodles"
+  },
+  {
+    "name": "میکرونی نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_en": "Macaroni No. 1"
+  }
+]

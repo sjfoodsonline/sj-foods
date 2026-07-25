@@ -1,0 +1,86 @@
+[
+  {
+    "file": "sabzi.json",
+    "category": "سبزیاں",
+    "icon": "🥦",
+    "image": "",
+    "category_en": "Vegetables"
+  },
+  {
+    "file": "phal.json",
+    "category": "پھل",
+    "icon": "🍎",
+    "image": "",
+    "category_en": "Fruits"
+  },
+  {
+    "file": "oil_ghee.json",
+    "category": "تیل و گھی",
+    "icon": "🛢️",
+    "image": "",
+    "category_en": "Oil & Ghee"
+  },
+  {
+    "file": "rice.json",
+    "category": "چاول",
+    "icon": "🍚",
+    "image": "",
+    "category_en": "Rice"
+  },
+  {
+    "file": "pulses.json",
+    "category": "دالیں و اجناس",
+    "icon": "🫘",
+    "image": "",
+    "category_en": "Pulses & Grains"
+  },
+  {
+    "file": "spices.json",
+    "category": "مصالحہ جات",
+    "icon": "🌶️",
+    "image": "",
+    "category_en": "Spices"
+  },
+  {
+    "file": "bakery.json",
+    "category": "بیکری",
+    "icon": "🍞",
+    "image": "",
+    "category_en": "Bakery"
+  },
+  {
+    "file": "dairy.json",
+    "category": "دودھ و ڈیری",
+    "icon": "🥛",
+    "image": "",
+    "category_en": "Dairy"
+  },
+  {
+    "file": "poultry.json",
+    "category": "پولٹری و مچھلی",
+    "icon": "🍗",
+    "image": "",
+    "category_en": "Poultry & Fish"
+  },
+  {
+    "file": "drinks.json",
+    "category": "مشروبات",
+    "icon": "🥤",
+    "image": "",
+    "category_en": "Beverages"
+  },
+  {
+    "file": "snacks.json",
+    "category": "نمکین و اسنیکس",
+    "icon": "🍟",
+    "image": "",
+    "category_en": "Snacks"
+  },
+  {
+    "file": "cleaning.json",
+    "category": "صفائی و گھریلو اشیاء",
+    "icon": "🧼",
+    "image": "",
+    "category_en": "Cleaning & Household"
+  }
+]

@@ -1,26 +1,26 @@
 [
   {
     "name": "آلو",
+    "available": true,
     "units": [
       {
         "label": "KG",
-        "rate": 100
-      },
-      {
-        "label": "آدھا KG",
         "rate": 50
       },
       {
+        "label": "آدھا KG",
+        "rate": 25
+      },
+      {
         "label": "دڑی (5 KG)",
-        "rate": 500
+        "rate": 250
       }
     ],
-    "available": true,
-    "image": "products/sabzi-0-1784814172841.jpg",
-    "featured": false
+    "name_en": "Potato"
   },
   {
     "name": "پیاز",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -35,140 +35,11 @@
         "rate": 600
       }
     ],
-    "available": true,
-    "image": "products/sabzi-1-1784814184803.jpg",
-    "featured": true
+    "name_en": "Onion"
   },
   {
     "name": "ٹماٹر",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 350
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 175
-      }
-    ],
     "available": true,
-    "image": "products/sabzi-2-1784814194381.jpg",
-    "featured": true
-  },
-  {
-    "name": "کچالو",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 120
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 60
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-3-1784818090730.jpg",
-    "featured": false
-  },
-  {
-    "name": "بھنڈی",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 180
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 90
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-4-1784814219233.jpg",
-    "featured": true
-  },
-  {
-    "name": "مٹر",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 500
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 250
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-5-1784814236047.jpg",
-    "featured": false
-  },
-  {
-    "name": "توری",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 150
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 75
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-6-1784814244683.jpg",
-    "featured": false
-  },
-  {
-    "name": "کدو",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 150
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 75
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-7-1784814252469.jpg",
-    "featured": false
-  },
-  {
-    "name": "کریلا",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 150
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 75
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-8-1784814261577.jpg",
-    "featured": false
-  },
-  {
-    "name": "بینگن",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 120
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 60
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-9-1784814270931.jpg",
-    "featured": false
-  },
-  {
-    "name": "شملہ مرچ",
     "units": [
       {
         "label": "KG",
@@ -179,60 +50,71 @@
         "rate": 150
       }
     ],
-    "available": true,
-    "image": "products/sabzi-10-1784814280068.jpg",
-    "featured": false
+    "name_en": "Tomato"
   },
   {
-    "name": "بند گوبھی",
+    "name": "کچالو",
+    "available": true,
     "units": [
       {
         "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      }
+    ],
+    "name_en": "Taro (Arbi)"
+  },
+  {
+    "name": "بھنڈی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 90
+      }
+    ],
+    "name_en": "Okra"
+  },
+  {
+    "name": "مٹر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 250
+      }
+    ],
+    "name_en": "Green Peas"
+  },
+  {
+    "name": "توری",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      },
+      {
+        "label": "آدھا KG",
         "rate": 150
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 75
       }
     ],
-    "available": true,
-    "image": "products/sabzi-11-1784814299193.jpg",
-    "featured": false
+    "name_en": "Ridge Gourd"
   },
   {
-    "name": "گاجر",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 250
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 125
-      }
-    ],
+    "name": "کدو",
     "available": true,
-    "image": "products/sabzi-12-1784814305883.jpg",
-    "featured": false
-  },
-  {
-    "name": "کھیرا",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 250
-      },
-      {
-        "label": "آدھا KG",
-        "rate": 125
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-13-1784814312280.jpg",
-    "featured": false
-  },
-  {
-    "name": "پھول گوبھی",
     "units": [
       {
         "label": "KG",
@@ -243,12 +125,11 @@
         "rate": 100
       }
     ],
-    "available": true,
-    "image": "products/sabzi-14-1784814319463.jpg",
-    "featured": false
+    "name_en": "Pumpkin"
   },
   {
-    "name": "شلغم",
+    "name": "کریلا",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -259,12 +140,56 @@
         "rate": 75
       }
     ],
-    "available": true,
-    "image": "products/sabzi-15-1784814328350.jpg",
-    "featured": false
+    "name_en": "Bitter Gourd"
   },
   {
-    "name": "فراش بین",
+    "name": "بینگن",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      }
+    ],
+    "name_en": "Eggplant"
+  },
+  {
+    "name": "شملہ مرچ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 150
+      }
+    ],
+    "name_en": "Capsicum"
+  },
+  {
+    "name": "بند گوبھی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_en": "Cabbage"
+  },
+  {
+    "name": "گاجر",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -275,12 +200,71 @@
         "rate": 125
       }
     ],
+    "name_en": "Carrot"
+  },
+  {
+    "name": "کھیرا",
     "available": true,
-    "image": "products/sabzi-16-1784857003973.jpg",
-    "featured": false
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_en": "Cucumber"
+  },
+  {
+    "name": "پھول گوبھی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 100
+      }
+    ],
+    "name_en": "Cauliflower"
+  },
+  {
+    "name": "شلغم",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_en": "Turnip"
+  },
+  {
+    "name": "فراش بین",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_en": "French Beans"
   },
   {
     "name": "پمنکے",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -291,12 +275,11 @@
         "rate": 500
       }
     ],
-    "available": true,
-    "image": "products/sabzi-17-1784814341888.jpg",
-    "featured": false
+    "name_en": "Pumpkin (local)"
   },
   {
     "name": "ہری مرچ",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -307,12 +290,11 @@
         "rate": 25
       }
     ],
-    "available": true,
-    "image": "products/sabzi-18-1784814348381.jpg",
-    "featured": false
+    "name_en": "Green Chili"
   },
   {
     "name": "ادرک",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -327,12 +309,11 @@
         "rate": 75
       }
     ],
-    "available": true,
-    "image": "products/sabzi-19-1784814355903.jpg",
-    "featured": false
+    "name_en": "Ginger"
   },
   {
     "name": "لہسن",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -347,12 +328,11 @@
         "rate": 60
       }
     ],
-    "available": true,
-    "image": "products/sabzi-20-1784814362359.jpg",
-    "featured": false
+    "name_en": "Garlic"
   },
   {
     "name": "لیموں",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -363,12 +343,11 @@
         "rate": 100
       }
     ],
-    "available": true,
-    "image": "products/sabzi-21-1784814381378.jpg",
-    "featured": false
+    "name_en": "Lemon"
   },
   {
     "name": "گول ٹینڈے",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -379,12 +358,11 @@
         "rate": 75
       }
     ],
-    "available": true,
-    "image": "products/sabzi-22-1784814387142.jpg",
-    "featured": false
+    "name_en": "Round Gourd"
   },
   {
     "name": "چقندر",
+    "available": true,
     "units": [
       {
         "label": "KG",
@@ -395,92 +373,55 @@
         "rate": 75
       }
     ],
-    "available": true,
-    "image": "products/sabzi-23-1784814424966.jpg",
-    "featured": false
+    "name_en": "Beetroot"
   },
   {
     "name": "سبز دھنیا",
-    "units": [
-      {
-        "label": "گڈی",
-        "rate": 0
-      }
-    ],
+    "unit": "گڈی",
+    "rate": 0,
     "available": true,
-    "image": "products/sabzi-24-1784814431406.jpg",
-    "featured": false
+    "name_en": "Coriander Leaves"
   },
   {
     "name": "پودینہ",
-    "units": [
-      {
-        "label": "گڈی",
-        "rate": 0
-      }
-    ],
+    "unit": "گڈی",
+    "rate": 0,
     "available": true,
-    "image": "products/sabzi-25-1784814435113.jpg",
-    "featured": false
+    "name_en": "Mint"
   },
   {
     "name": "سلاد پتی",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 0
-      }
-    ],
+    "unit": "KG",
+    "rate": 0,
     "available": true,
-    "image": "products/sabzi-26-1784814452560.jpg",
-    "featured": false
+    "name_en": "Lettuce"
   },
   {
     "name": "مولی",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 0
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-27-1784814514112.jpg",
-    "featured": false
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_en": "Radish"
   },
   {
     "name": "لمبے ٹینڈے",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 0
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-28-1784857128612.jpg",
-    "featured": false
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_en": "Long Gourd"
   },
   {
     "name": "ساگ",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 0
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-29-1784814524518.jpg",
-    "featured": false
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_en": "Saag (Greens)"
   },
   {
     "name": "ہری پیاز",
-    "units": [
-      {
-        "label": "گڈی",
-        "rate": 0
-      }
-    ],
-    "available": true,
-    "image": "products/sabzi-30-1784814530475.jpg",
-    "featured": false
+    "unit": "گڈی",
+    "rate": 0,
+    "available": false,
+    "name_en": "Green Onion"
   }
 ]

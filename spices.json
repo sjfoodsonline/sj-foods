@@ -1,7 +1,6 @@
 [
   {
     "name": "سالن مصالحہ سپیشل",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -15,11 +14,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 225
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-0-1784949410668.jpg",
+    "featured": false
   },
   {
     "name": "گرم مصالحہ نمبر 1",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -33,11 +34,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 350
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-1-1784949479941.jpg",
+    "featured": false
   },
   {
     "name": "زیرہ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -51,11 +54,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 375
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-2-1784949525606.jpg",
+    "featured": false
   },
   {
     "name": "ہانڈی مصالحہ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -69,11 +74,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 375
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-3-1784949749708.jpg",
+    "featured": false
   },
   {
     "name": "دھنیا ثابت",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -87,11 +94,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 225
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-4-1784949790469.jpg",
+    "featured": false
   },
   {
     "name": "دھنیا پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -105,11 +114,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 225
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-5-1784949816926.jpg",
+    "featured": false
   },
   {
     "name": "کالی مرچ ثابت",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -123,11 +134,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 700
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-6-1784949878795.jpg",
+    "featured": false
   },
   {
     "name": "کالی مرچ پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -141,11 +154,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 700
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-7-1784949966941.jpg",
+    "featured": false
   },
   {
     "name": "دار چینی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -159,11 +174,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 300
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-8-1784950032815.jpg",
+    "featured": false
   },
   {
     "name": "ہلدی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -177,11 +194,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 300
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-9-1784950074299.jpg",
+    "featured": false
   },
   {
     "name": "سرخ مرچ دانے دار",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -195,11 +214,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 225
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-10-1784950178267.jpg",
+    "featured": false
   },
   {
     "name": "سرخ مرچ پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -213,11 +234,13 @@
         "label": "پاؤ (250 گرام)",
         "rate": 210
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-11-1784950213771.jpg",
+    "featured": false
   },
   {
     "name": "سرخ مرچ گول",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -231,6 +254,9 @@
         "label": "پاؤ (250 گرام)",
         "rate": 275
       }
-    ]
+    ],
+    "available": true,
+    "image": "products/spices-12-1784950272217.jpg",
+    "featured": false
   }
 ]

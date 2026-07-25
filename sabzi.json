@@ -1,7 +1,6 @@
 [
   {
     "name": "آلو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -16,11 +15,13 @@
         "rate": 250
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Potato"
   },
   {
     "name": "پیاز",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -35,11 +36,13 @@
         "rate": 600
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Onion"
   },
   {
     "name": "ٹماٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -50,11 +53,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Tomato"
   },
   {
     "name": "کچالو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -65,11 +70,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Taro (Arbi)"
   },
   {
     "name": "بھنڈی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -80,11 +87,13 @@
         "rate": 90
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Okra"
   },
   {
     "name": "مٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -95,11 +104,13 @@
         "rate": 250
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Green Peas"
   },
   {
     "name": "توری",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -110,11 +121,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Ridge Gourd"
   },
   {
     "name": "کدو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -125,11 +138,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Pumpkin"
   },
   {
     "name": "کریلا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -140,11 +155,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Bitter Gourd"
   },
   {
     "name": "بینگن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -155,11 +172,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Eggplant"
   },
   {
     "name": "شملہ مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -170,11 +189,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Capsicum"
   },
   {
     "name": "بند گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -185,11 +206,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Cabbage"
   },
   {
     "name": "گاجر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -200,11 +223,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Carrot"
   },
   {
     "name": "کھیرا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -215,11 +240,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Cucumber"
   },
   {
     "name": "پھول گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -230,11 +257,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Cauliflower"
   },
   {
     "name": "شلغم",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -245,11 +274,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Turnip"
   },
   {
     "name": "فراش بین",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -260,11 +291,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "French Beans"
   },
   {
     "name": "پمنکے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -275,11 +308,13 @@
         "rate": 500
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Pumpkin (local)"
   },
   {
     "name": "ہری مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -290,11 +325,13 @@
         "rate": 25
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Green Chili"
   },
   {
     "name": "ادرک",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -309,11 +346,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Ginger"
   },
   {
     "name": "لہسن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -328,11 +367,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Garlic"
   },
   {
     "name": "لیموں",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -343,11 +384,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Lemon"
   },
   {
     "name": "گول ٹینڈے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -358,11 +401,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Round Gourd"
   },
   {
     "name": "چقندر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -373,55 +418,100 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Beetroot"
   },
   {
     "name": "سبز دھنیا",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Coriander Leaves"
   },
   {
     "name": "پودینہ",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Mint"
   },
   {
     "name": "سلاد پتی",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_en": "Lettuce"
   },
   {
     "name": "مولی",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "",
+    "featured": false,
     "name_en": "Radish"
   },
   {
     "name": "لمبے ٹینڈے",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "",
+    "featured": false,
     "name_en": "Long Gourd"
   },
   {
     "name": "ساگ",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "",
+    "featured": false,
     "name_en": "Saag (Greens)"
   },
   {
     "name": "ہری پیاز",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "",
+    "featured": false,
     "name_en": "Green Onion"
   }
 ]

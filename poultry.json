@@ -1,0 +1,23 @@
+[
+  {
+    "name": "مرغی (فارمی، صاف شدہ) — فی کلو",
+    "unit": "KG",
+    "rate": 500,
+    "available": true,
+    "name_roman": "Murghi (Farmi) — Per KG"
+  },
+  {
+    "name": "مرغی (فارمی، صاف شدہ) — فی عدد",
+    "unit": "پوری مرغی",
+    "rate": 700,
+    "available": true,
+    "name_roman": "Murghi (Farmi) — Poori"
+  },
+  {
+    "name": "مچھلی",
+    "unit": "KG",
+    "rate": 600,
+    "available": true,
+    "name_roman": "Machli"
+  }
+]

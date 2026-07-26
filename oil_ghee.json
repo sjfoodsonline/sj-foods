@@ -1,198 +1,366 @@
 [
   {
     "name": "شمع ٹیم گھی (16 KG)",
-    "unit": "ٹیم",
-    "rate": 9400,
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 9400
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Team Ghee"
   },
   {
     "name": "شمع آئل ٹیم (16 لیٹر)",
-    "unit": "ٹیم",
-    "rate": 9500,
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 9500
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Oil Team"
   },
   {
     "name": "شمع بالٹی گھی (16 KG)",
-    "unit": "بالٹی",
-    "rate": 9600,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 9600
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
   {
     "name": "شمع بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 6000,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 6000
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
   {
     "name": "شمع بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 3150,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 3150
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
   {
     "name": "شمع بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1670,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1670
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
   {
     "name": "شمع ٹیم پیک گھی (5 KG)",
-    "unit": "ٹیم پیک",
-    "rate": 3100,
+    "units": [
+      {
+        "label": "ٹیم پیک",
+        "rate": 3100
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Team Pack Ghee"
   },
   {
     "name": "شمع ٹیم پیک گھی (2.5 KG)",
-    "unit": "ٹیم پیک",
-    "rate": 1670,
+    "units": [
+      {
+        "label": "ٹیم پیک",
+        "rate": 1670
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Team Pack Ghee"
   },
   {
     "name": "شمع آئل کین (5 لیٹر)",
-    "unit": "کین",
-    "rate": 3200,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 3200
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Oil Can"
   },
   {
     "name": "شمع آئل کین (3 لیٹر)",
-    "unit": "کین",
-    "rate": 1950,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 1950
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Oil Can"
   },
   {
     "name": "شمع آئل بوتل (1 لیٹر)",
-    "unit": "بوتل",
-    "rate": 670,
+    "units": [
+      {
+        "label": "بوتل",
+        "rate": 670
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Shama Oil Bottle"
   },
   {
     "name": "زیتون آٹا",
-    "unit": "ڈبہ",
-    "rate": 3100,
+    "units": [
+      {
+        "label": "ڈبہ",
+        "rate": 3100
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Zaitoon Atta"
   },
   {
     "name": "انجیر آٹا",
-    "unit": "ڈبہ",
-    "rate": 3150,
+    "units": [
+      {
+        "label": "ڈبہ",
+        "rate": 3150
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Anjeer Atta"
   },
   {
     "name": "زیگ فین آٹا",
-    "unit": "ڈبہ",
-    "rate": 3150,
+    "units": [
+      {
+        "label": "ڈبہ",
+        "rate": 3150
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Zig Fein Atta"
   },
   {
     "name": "کاروان ٹیم گھی (16 KG)",
-    "unit": "ٹیم",
-    "rate": 7550,
+    "units": [
+      {
+        "label": "ٹیم",
+        "rate": 7550
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Karwan Team Ghee"
   },
   {
     "name": "فیملی آئل کارٹن (5 لیٹر)",
-    "unit": "کارٹن",
-    "rate": 2250,
+    "units": [
+      {
+        "label": "کارٹن",
+        "rate": 2250
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Family Oil Carton"
   },
   {
     "name": "جی سی پی بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 2450,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 2450
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "GCP Balti Ghee"
   },
   {
     "name": "ادیبا بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1230,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1230
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Adiba Balti Ghee"
   },
   {
     "name": "ادیبا بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 4900,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 4900
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Adiba Balti Ghee"
   },
   {
     "name": "کوثر آئل کین (16 لیٹر)",
-    "unit": "کین",
-    "rate": 9350,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 9350
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Oil Can"
   },
   {
     "name": "کوثر آئل کین (10 لیٹر)",
-    "unit": "کین",
-    "rate": 5700,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 5700
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Oil Can"
   },
   {
     "name": "کوثر بالٹی گھی (16 KG)",
-    "unit": "بالٹی",
-    "rate": 9300,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 9300
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
   {
     "name": "کوثر بالٹی گھی (10 KG)",
-    "unit": "بالٹی",
-    "rate": 5700,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 5700
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
   {
     "name": "کوثر بالٹی گھی (5 KG)",
-    "unit": "بالٹی",
-    "rate": 2900,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 2900
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
   {
     "name": "کوثر بالٹی گھی (2.5 KG)",
-    "unit": "بالٹی",
-    "rate": 1500,
+    "units": [
+      {
+        "label": "بالٹی",
+        "rate": 1500
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
   {
     "name": "کوثر آئل کین (5 لیٹر)",
-    "unit": "کین",
-    "rate": 2950,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 2950
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Oil Can"
   },
   {
     "name": "کوثر آئل کین (3 لیٹر)",
-    "unit": "کین",
-    "rate": 1850,
+    "units": [
+      {
+        "label": "کین",
+        "rate": 1850
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Oil Can"
   },
   {
     "name": "کوثر پاؤچ کارٹن (1 لیٹر)",
-    "unit": "کارٹن",
-    "rate": 2850,
+    "units": [
+      {
+        "label": "کارٹن",
+        "rate": 2850
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kausar Pouch Carton"
   }
 ]

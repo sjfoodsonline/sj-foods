@@ -8,7 +8,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-0-1785058881558.jpg",
     "featured": false,
     "name_roman": "Shama Team Ghee (16 KG)"
   },
@@ -21,7 +21,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-1-1785059117477.jpg",
     "featured": false,
     "name_roman": "Shama Oil Team (16 Litre)"
   },
@@ -34,7 +34,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-2-1785059226235.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee (16 KG)"
   },
@@ -47,7 +47,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-3-1785059308517.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee (10 KG)"
   },
@@ -60,7 +60,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-4-1785059427536.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee (5 KG)"
   },
@@ -73,7 +73,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-5-1785059491606.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee (2.5 KG)"
   },
@@ -86,7 +86,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-6-1785059701583.jpg",
     "featured": false,
     "name_roman": "Shama Team Pack Ghee (5 KG)"
   },
@@ -99,7 +99,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-7-1785059750598.jpg",
     "featured": false,
     "name_roman": "Shama Team Pack Ghee (2.5 KG)"
   },
@@ -112,7 +112,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-8-1785059820897.jpg",
     "featured": false,
     "name_roman": "Shama Oil Can (5 Litre)"
   },
@@ -125,7 +125,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-9-1785059892837.jpg",
     "featured": false,
     "name_roman": "Shama Oil Can (3 Litre)"
   },
@@ -138,7 +138,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-10-1785059968418.jpg",
     "featured": false,
     "name_roman": "Shama Oil Bottle (1 Litre)"
   },
@@ -146,12 +146,12 @@
     "name": "زیتون آٹا",
     "units": [
       {
-        "label": "ڈبہ",
+        "label": "بوری 20 kg",
         "rate": 3100
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-11-1785060151584.jpg",
     "featured": false,
     "name_roman": "Zaitoon Atta"
   },
@@ -159,7 +159,7 @@
     "name": "انجیر آٹا",
     "units": [
       {
-        "label": "ڈبہ",
+        "label": "بوری 20kg",
         "rate": 3150
       }
     ],
@@ -172,12 +172,12 @@
     "name": "زیگ فین آٹا",
     "units": [
       {
-        "label": "ڈبہ",
+        "label": "بوری 20kg",
         "rate": 3150
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-13-1785060359176.jpg",
     "featured": false,
     "name_roman": "Zig Fein Atta"
   },
@@ -190,7 +190,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-14-1785060606681.jpg",
     "featured": false,
     "name_roman": "Karwan Team Ghee (16 KG)"
   },

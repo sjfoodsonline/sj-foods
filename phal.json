@@ -1,14 +1,19 @@
 [
   {
     "name": "سیب",
-    "unit": "KG",
-    "rate": 350,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      }
+    ],
     "available": true,
+    "image": "products/phal-0-1785051536493.jpg",
+    "featured": false,
     "name_roman": "Seb"
   },
   {
     "name": "کیلا",
-    "available": true,
     "units": [
       {
         "label": "درجن (12 عدد)",
@@ -19,34 +24,61 @@
         "rate": 95
       }
     ],
+    "available": true,
+    "image": "products/phal-1-1785051493221.jpg",
+    "featured": false,
     "name_roman": "Kela"
   },
   {
     "name": "انگور",
-    "unit": "KG",
-    "rate": 400,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      }
+    ],
     "available": true,
+    "image": "products/phal-2-1785051649475.jpg",
+    "featured": false,
     "name_roman": "Angoor"
   },
   {
     "name": "تربوز",
-    "unit": "عدد",
-    "rate": 100,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Tarbooz"
   },
   {
     "name": "خربوزہ",
-    "unit": "KG",
-    "rate": 120,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kharbooza"
   },
   {
     "name": "آم (سیزنل)",
-    "unit": "KG",
-    "rate": 300,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Aam (Seasonal)"
   }
 ]

@@ -5,10 +5,14 @@
       {
         "label": "ٹیم",
         "rate": 9400
+      },
+      {
+        "label": "",
+        "rate": 0
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-0-1785082190767.jpg",
     "featured": false,
     "name_roman": "Shama Team Ghee"
   },
@@ -21,7 +25,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-1-1785082204562.jpg",
     "featured": false,
     "name_roman": "Shama Oil Team"
   },
@@ -34,7 +38,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-2-1785082364360.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
@@ -73,7 +77,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-5-1785082481562.jpg",
     "featured": false,
     "name_roman": "Shama Balti Ghee"
   },
@@ -86,7 +90,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-6-1785082519868.jpg",
     "featured": false,
     "name_roman": "Shama Team Pack Ghee"
   },
@@ -99,7 +103,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-7-1785082544040.jpg",
     "featured": false,
     "name_roman": "Shama Team Pack Ghee"
   },
@@ -112,7 +116,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-8-1785082572624.jpg",
     "featured": false,
     "name_roman": "Shama Oil Can"
   },
@@ -125,7 +129,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-9-1785082604669.jpg",
     "featured": false,
     "name_roman": "Shama Oil Can"
   },
@@ -138,7 +142,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-10-1785082773028.jpg",
     "featured": false,
     "name_roman": "Shama Oil Bottle"
   },
@@ -151,7 +155,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-11-1785082845674.jpg",
     "featured": false,
     "name_roman": "Zaitoon Atta"
   },
@@ -164,7 +168,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-12-1785082916816.jpg",
     "featured": false,
     "name_roman": "Anjeer Atta"
   },
@@ -177,7 +181,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-13-1785082946673.jpg",
     "featured": false,
     "name_roman": "Zig Fein Atta"
   },
@@ -190,7 +194,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-14-1785083100904.jpg",
     "featured": false,
     "name_roman": "Karwan Team Ghee"
   },
@@ -203,7 +207,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-15-1785083076942.jpg",
     "featured": false,
     "name_roman": "Family Oil Carton"
   },
@@ -216,7 +220,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-16-1785083276062.jpg",
     "featured": false,
     "name_roman": "GCP Balti Ghee"
   },
@@ -229,7 +233,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-17-1785083331286.jpg",
     "featured": false,
     "name_roman": "Adiba Balti Ghee"
   },
@@ -242,7 +246,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-18-1785083370954.jpg",
     "featured": false,
     "name_roman": "Adiba Balti Ghee"
   },
@@ -255,7 +259,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-19-1785083395275.jpg",
     "featured": false,
     "name_roman": "Kausar Oil Can"
   },
@@ -268,7 +272,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-20-1785083421597.jpg",
     "featured": false,
     "name_roman": "Kausar Oil Can"
   },
@@ -281,7 +285,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-21-1785083444273.jpg",
     "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
@@ -294,7 +298,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-22-1785083478421.jpg",
     "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
@@ -307,7 +311,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-23-1785083540703.jpg",
     "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
@@ -320,7 +324,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-24-1785083609158.jpg",
     "featured": false,
     "name_roman": "Kausar Balti Ghee"
   },
@@ -333,7 +337,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-25-1785083633876.jpg",
     "featured": false,
     "name_roman": "Kausar Oil Can"
   },
@@ -346,7 +350,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-26-1785083663323.jpg",
     "featured": false,
     "name_roman": "Kausar Oil Can"
   },
@@ -359,7 +363,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/oil_ghee-27-1785083693883.jpg",
     "featured": false,
     "name_roman": "Kausar Pouch Carton"
   }

@@ -1,0 +1,427 @@
+[
+  {
+    "name": "آلو",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 50
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 25
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 250
+      }
+    ],
+    "name_roman": "Aloo"
+  },
+  {
+    "name": "پیاز",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 600
+      }
+    ],
+    "name_roman": "Pyaz"
+  },
+  {
+    "name": "ٹماٹر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 150
+      }
+    ],
+    "name_roman": "Tamatar"
+  },
+  {
+    "name": "کچالو",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      }
+    ],
+    "name_roman": "Kachalu"
+  },
+  {
+    "name": "بھنڈی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 90
+      }
+    ],
+    "name_roman": "Bhindi"
+  },
+  {
+    "name": "مٹر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 250
+      }
+    ],
+    "name_roman": "Matar"
+  },
+  {
+    "name": "توری",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 150
+      }
+    ],
+    "name_roman": "Tori"
+  },
+  {
+    "name": "کدو",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 100
+      }
+    ],
+    "name_roman": "Kaddu"
+  },
+  {
+    "name": "کریلا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Karela"
+  },
+  {
+    "name": "بینگن",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      }
+    ],
+    "name_roman": "Baingan"
+  },
+  {
+    "name": "شملہ مرچ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 150
+      }
+    ],
+    "name_roman": "Shimla Mirch"
+  },
+  {
+    "name": "بند گوبھی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Band Gobhi"
+  },
+  {
+    "name": "گاجر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_roman": "Gajar"
+  },
+  {
+    "name": "کھیرا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_roman": "Kheera"
+  },
+  {
+    "name": "پھول گوبھی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 100
+      }
+    ],
+    "name_roman": "Phool Gobhi"
+  },
+  {
+    "name": "شلغم",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Shalgham"
+  },
+  {
+    "name": "فراش بین",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_roman": "Farash Been"
+  },
+  {
+    "name": "پمنکے",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 500
+      }
+    ],
+    "name_roman": "Pamnkay"
+  },
+  {
+    "name": "ہری مرچ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 50
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 25
+      }
+    ],
+    "name_roman": "Hari Mirch"
+  },
+  {
+    "name": "ادرک",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 40
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Adrak"
+  },
+  {
+    "name": "لہسن",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 120
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 30
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 60
+      }
+    ],
+    "name_roman": "Lehsan"
+  },
+  {
+    "name": "لیموں",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 100
+      }
+    ],
+    "name_roman": "Lemon"
+  },
+  {
+    "name": "گول ٹینڈے",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Gol Tinday"
+  },
+  {
+    "name": "چقندر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 150
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 75
+      }
+    ],
+    "name_roman": "Chuqandar"
+  },
+  {
+    "name": "سبز دھنیا",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": true,
+    "name_roman": "Sabz Dhania"
+  },
+  {
+    "name": "پودینہ",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": true,
+    "name_roman": "Pudina"
+  },
+  {
+    "name": "سلاد پتی",
+    "unit": "KG",
+    "rate": 0,
+    "available": true,
+    "name_roman": "Salad Patti"
+  },
+  {
+    "name": "مولی",
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_roman": "Mooli"
+  },
+  {
+    "name": "لمبے ٹینڈے",
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_roman": "Lambay Tinday"
+  },
+  {
+    "name": "ساگ",
+    "unit": "KG",
+    "rate": 0,
+    "available": false,
+    "name_roman": "Saag"
+  },
+  {
+    "name": "ہری پیاز",
+    "unit": "گڈی",
+    "rate": 0,
+    "available": false,
+    "name_roman": "Hari Pyaz"
+  }
+]

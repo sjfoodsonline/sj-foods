@@ -1,7 +1,6 @@
 [
   {
     "name": "سیلہ زعفران (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -12,11 +11,13 @@
         "rate": 190
       }
     ],
+    "available": true,
+    "image": "products/rice-0-1785064481617.jpg",
+    "featured": false,
     "name_roman": "Sela Zafran (Purana)"
   },
   {
     "name": "سیلہ رائس گولڈ (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -27,11 +28,13 @@
         "rate": 200
       }
     ],
+    "available": true,
+    "image": "products/rice-1-1785064543571.jpg",
+    "featured": false,
     "name_roman": "Sela Rice Gold (Purana)"
   },
   {
     "name": "سیلہ گولڈن (پرانا، گفٹ پیک)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -42,11 +45,13 @@
         "rate": 185
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Sela Golden (Purana, Gift Pack)"
   },
   {
     "name": "سیلہ ویلکم (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -57,11 +62,13 @@
         "rate": 180
       }
     ],
+    "available": true,
+    "image": "products/rice-3-1785064268056.jpg",
+    "featured": false,
     "name_roman": "Sela Welcome (Purana)"
   },
   {
     "name": "باسمتی وی آئی پی (پرانا)",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -72,11 +79,13 @@
         "rate": 200
       }
     ],
+    "available": true,
+    "image": "products/rice-4-1785064297853.jpg",
+    "featured": false,
     "name_roman": "Basmati VIP (Purana)"
   },
   {
     "name": "سیلہ ٹوٹا (پرانا) — بابا فرید",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -87,11 +96,13 @@
         "rate": 110
       }
     ],
+    "available": true,
+    "image": "products/rice-5-1785064353535.jpg",
+    "featured": false,
     "name_roman": "Sela Tota (Purana) — Baba Fareed"
   },
   {
     "name": "سیلہ ٹوٹا (پرانا) — لذت",
-    "available": false,
     "units": [
       {
         "label": "KG",
@@ -102,11 +113,13 @@
         "rate": 0
       }
     ],
+    "available": false,
+    "image": "products/rice-6-1785064413602.jpg",
+    "featured": false,
     "name_roman": "Sela Tota (Purana) — Lazzat"
   },
   {
     "name": "بیگمی چاول",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -117,6 +130,9 @@
         "rate": 90
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Begumi Chawal"
   }
 ]

@@ -453,8 +453,8 @@
     "name": "سلاد پتی",
     "units": [
       {
-        "label": "KG",
-        "rate": 0
+        "label": "گیڈی",
+        "rate": 50
       }
     ],
     "available": true,

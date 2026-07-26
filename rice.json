@@ -1,0 +1,122 @@
+[
+  {
+    "name": "سیلہ زعفران (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_roman": "Sela Zafran (Purana)"
+  },
+  {
+    "name": "سیلہ رائس گولڈ (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_roman": "Sela Rice Gold (Purana)"
+  },
+  {
+    "name": "سیلہ گولڈن (پرانا، گفٹ پیک)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 370
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 185
+      }
+    ],
+    "name_roman": "Sela Golden (Purana, Gift Pack)"
+  },
+  {
+    "name": "سیلہ ویلکم (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 360
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 180
+      }
+    ],
+    "name_roman": "Sela Welcome (Purana)"
+  },
+  {
+    "name": "باسمتی وی آئی پی (پرانا)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_roman": "Basmati VIP (Purana)"
+  },
+  {
+    "name": "سیلہ ٹوٹا (پرانا) — بابا فرید",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 220
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 110
+      }
+    ],
+    "name_roman": "Sela Tota (Purana) — Baba Fareed"
+  },
+  {
+    "name": "سیلہ ٹوٹا (پرانا) — لذت",
+    "available": false,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 0
+      }
+    ],
+    "name_roman": "Sela Tota (Purana) — Lazzat"
+  },
+  {
+    "name": "بیگمی چاول",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 90
+      }
+    ],
+    "name_roman": "Begumi Chawal"
+  }
+]

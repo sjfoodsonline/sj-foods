@@ -236,5 +236,41 @@
     "image": "",
     "featured": false,
     "name_roman": "Macaroni No. 1"
+  },
+  {
+    "name": "پاپڑ گانڈیری ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 280
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
+  },
+  {
+    "name": "سلانٹی رنگدار ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2280
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
+  },
+  {
+    "name": "سلانٹی پاپڑ سفید ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 280
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false
   }
 ]

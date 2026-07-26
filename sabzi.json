@@ -428,7 +428,7 @@
     "units": [
       {
         "label": "گڈی",
-        "rate": 0
+        "rate": 30
       }
     ],
     "available": true,
@@ -441,7 +441,7 @@
     "units": [
       {
         "label": "گڈی",
-        "rate": 0
+        "rate": 20
       }
     ],
     "available": true,
@@ -467,7 +467,7 @@
     "units": [
       {
         "label": "KG",
-        "rate": 0
+        "rate": 50
       }
     ],
     "available": true,
@@ -480,7 +480,7 @@
     "units": [
       {
         "label": "KG",
-        "rate": 0
+        "rate": 80
       }
     ],
     "available": true,
@@ -492,8 +492,8 @@
     "name": "ساگ",
     "units": [
       {
-        "label": "KG",
-        "rate": 0
+        "label": "گڈی ",
+        "rate": 40
       }
     ],
     "available": true,
@@ -506,7 +506,7 @@
     "units": [
       {
         "label": "گڈی",
-        "rate": 0
+        "rate": 60
       }
     ],
     "available": true,

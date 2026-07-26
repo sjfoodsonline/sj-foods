@@ -1,0 +1,249 @@
+[
+  {
+    "name": "سالن مصالحہ سپیشل",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_roman": "Salan Masala Special"
+  },
+  {
+    "name": "گرم مصالحہ نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 700
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 350
+      }
+    ],
+    "name_roman": "Garam Masala No. 1"
+  },
+  {
+    "name": "زیرہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "name_roman": "Zeera"
+  },
+  {
+    "name": "ہانڈی مصالحہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "name_roman": "Handi Masala"
+  },
+  {
+    "name": "دھنیا ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_roman": "Dhania Sabut"
+  },
+  {
+    "name": "دھنیا پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_roman": "Dhania Powder"
+  },
+  {
+    "name": "کالی مرچ ثابت",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "name_roman": "Kali Mirch Sabut"
+  },
+  {
+    "name": "کالی مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "name_roman": "Kali Mirch Powder"
+  },
+  {
+    "name": "دار چینی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "name_roman": "Dar Cheeni"
+  },
+  {
+    "name": "ہلدی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "name_roman": "Haldi"
+  },
+  {
+    "name": "سرخ مرچ دانے دار",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "name_roman": "Surkh Mirch Dana Dar"
+  },
+  {
+    "name": "سرخ مرچ پاؤڈر",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 425
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 210
+      }
+    ],
+    "name_roman": "Surkh Mirch Powder"
+  },
+  {
+    "name": "سرخ مرچ گول",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1100
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 550
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 275
+      }
+    ],
+    "name_roman": "Surkh Mirch Gol"
+  }
+]

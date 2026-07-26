@@ -1,0 +1,212 @@
+[
+  {
+    "name": "چنا (چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ],
+    "name_roman": "Chana (Chola)"
+  },
+  {
+    "name": "کالا چنا (کالا چولہ)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_roman": "Kala Chana"
+  },
+  {
+    "name": "دال چنہ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_roman": "Daal Chana"
+  },
+  {
+    "name": "دال ماش کرمی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 450
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 225
+      }
+    ],
+    "name_roman": "Daal Maash Karmi"
+  },
+  {
+    "name": "دال مونگ",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 380
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 190
+      }
+    ],
+    "name_roman": "Daal Moong"
+  },
+  {
+    "name": "دال مسور",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ],
+    "name_roman": "Daal Masoor"
+  },
+  {
+    "name": "دال نسکان",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 270
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 135
+      }
+    ],
+    "name_roman": "Daal Naskan"
+  },
+  {
+    "name": "کالا ماش (تورے مہے)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ],
+    "name_roman": "Kala Maash (Tore Mahe)"
+  },
+  {
+    "name": "سبز مونگ (شنے می)",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 350
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 175
+      }
+    ],
+    "name_roman": "Sabz Moong (Shne Me)"
+  },
+  {
+    "name": "لوبیا تاجک",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 470
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 235
+      }
+    ],
+    "name_roman": "Lobia Tajik"
+  },
+  {
+    "name": "لوبیا وطنی",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 200
+      }
+    ],
+    "name_roman": "Lobia Watani"
+  },
+  {
+    "name": "سفید لوبیا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 330
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 165
+      }
+    ],
+    "name_roman": "Safaid Lobia"
+  },
+  {
+    "name": "نوڈلز کھلا",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 370
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 185
+      }
+    ],
+    "name_roman": "Noodles Khula"
+  },
+  {
+    "name": "میکرونی نمبر 1",
+    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 250
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 125
+      }
+    ],
+    "name_roman": "Macaroni No. 1"
+  }
+]

@@ -1,7 +1,6 @@
 [
   {
     "name": "سالن مصالحہ سپیشل",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -16,11 +15,13 @@
         "rate": 225
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Salan Masala Special"
   },
   {
     "name": "گرم مصالحہ نمبر 1",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -35,11 +36,13 @@
         "rate": 350
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Garam Masala No. 1"
   },
   {
     "name": "زیرہ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -54,11 +57,13 @@
         "rate": 375
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Zeera"
   },
   {
     "name": "ہانڈی مصالحہ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -73,11 +78,13 @@
         "rate": 375
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Handi Masala"
   },
   {
     "name": "دھنیا ثابت",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -92,11 +99,13 @@
         "rate": 225
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Dhania Sabut"
   },
   {
     "name": "دھنیا پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -111,11 +120,13 @@
         "rate": 225
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Dhania Powder"
   },
   {
     "name": "کالی مرچ ثابت",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -130,11 +141,13 @@
         "rate": 700
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kali Mirch Sabut"
   },
   {
     "name": "کالی مرچ پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -149,11 +162,13 @@
         "rate": 700
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Kali Mirch Powder"
   },
   {
     "name": "دار چینی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -168,11 +183,13 @@
         "rate": 300
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Dar Cheeni"
   },
   {
     "name": "ہلدی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -187,11 +204,13 @@
         "rate": 300
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Haldi"
   },
   {
     "name": "سرخ مرچ دانے دار",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -206,11 +225,13 @@
         "rate": 225
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Surkh Mirch Dana Dar"
   },
   {
     "name": "سرخ مرچ پاؤڈر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -225,11 +246,13 @@
         "rate": 210
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Surkh Mirch Powder"
   },
   {
     "name": "سرخ مرچ گول",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -244,6 +267,9 @@
         "rate": 275
       }
     ],
+    "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Surkh Mirch Gol"
   }
 ]

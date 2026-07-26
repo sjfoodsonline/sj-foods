@@ -1,7 +1,6 @@
 [
   {
     "name": "آلو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -16,11 +15,13 @@
         "rate": 250
       }
     ],
+    "available": true,
+    "image": "products/sabzi-0-1785050402688.jpg",
+    "featured": false,
     "name_roman": "Aloo"
   },
   {
     "name": "پیاز",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -35,11 +36,13 @@
         "rate": 600
       }
     ],
+    "available": true,
+    "image": "products/sabzi-1-1785050425531.jpg",
+    "featured": false,
     "name_roman": "Pyaz"
   },
   {
     "name": "ٹماٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -50,11 +53,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "products/sabzi-2-1785050436792.jpg",
+    "featured": false,
     "name_roman": "Tamatar"
   },
   {
     "name": "کچالو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -65,11 +70,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "products/sabzi-3-1785050447833.jpg",
+    "featured": false,
     "name_roman": "Kachalu"
   },
   {
     "name": "بھنڈی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -80,11 +87,13 @@
         "rate": 90
       }
     ],
+    "available": true,
+    "image": "products/sabzi-4-1785050455068.jpg",
+    "featured": false,
     "name_roman": "Bhindi"
   },
   {
     "name": "مٹر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -95,11 +104,13 @@
         "rate": 250
       }
     ],
+    "available": true,
+    "image": "products/sabzi-5-1785050475801.jpg",
+    "featured": false,
     "name_roman": "Matar"
   },
   {
     "name": "توری",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -110,11 +121,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "products/sabzi-6-1785050495152.jpg",
+    "featured": false,
     "name_roman": "Tori"
   },
   {
     "name": "کدو",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -125,11 +138,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "products/sabzi-7-1785050512053.jpg",
+    "featured": false,
     "name_roman": "Kaddu"
   },
   {
     "name": "کریلا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -140,11 +155,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-8-1785050521870.jpg",
+    "featured": false,
     "name_roman": "Karela"
   },
   {
     "name": "بینگن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -155,11 +172,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "products/sabzi-9-1785050533017.jpg",
+    "featured": false,
     "name_roman": "Baingan"
   },
   {
     "name": "شملہ مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -170,11 +189,13 @@
         "rate": 150
       }
     ],
+    "available": true,
+    "image": "products/sabzi-10-1785050552206.jpg",
+    "featured": false,
     "name_roman": "Shimla Mirch"
   },
   {
     "name": "بند گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -185,11 +206,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-11-1785050572304.jpg",
+    "featured": false,
     "name_roman": "Band Gobhi"
   },
   {
     "name": "گاجر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -200,11 +223,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "products/sabzi-12-1785050583569.jpg",
+    "featured": false,
     "name_roman": "Gajar"
   },
   {
     "name": "کھیرا",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -215,11 +240,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "products/sabzi-13-1785050617343.jpg",
+    "featured": false,
     "name_roman": "Kheera"
   },
   {
     "name": "پھول گوبھی",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -230,11 +257,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "products/sabzi-14-1785050633121.jpg",
+    "featured": false,
     "name_roman": "Phool Gobhi"
   },
   {
     "name": "شلغم",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -245,11 +274,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-15-1785050639904.jpg",
+    "featured": false,
     "name_roman": "Shalgham"
   },
   {
     "name": "فراش بین",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -260,11 +291,13 @@
         "rate": 125
       }
     ],
+    "available": true,
+    "image": "products/sabzi-16-1785050648180.jpg",
+    "featured": false,
     "name_roman": "Farash Been"
   },
   {
     "name": "پمنکے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -275,11 +308,13 @@
         "rate": 500
       }
     ],
+    "available": true,
+    "image": "products/sabzi-17-1785050682060.jpg",
+    "featured": false,
     "name_roman": "Pamnkay"
   },
   {
     "name": "ہری مرچ",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -290,11 +325,13 @@
         "rate": 25
       }
     ],
+    "available": true,
+    "image": "products/sabzi-18-1785050694950.jpg",
+    "featured": false,
     "name_roman": "Hari Mirch"
   },
   {
     "name": "ادرک",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -309,11 +346,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-19-1785050711978.jpg",
+    "featured": false,
     "name_roman": "Adrak"
   },
   {
     "name": "لہسن",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -328,11 +367,13 @@
         "rate": 60
       }
     ],
+    "available": true,
+    "image": "products/sabzi-20-1785050729762.jpg",
+    "featured": false,
     "name_roman": "Lehsan"
   },
   {
     "name": "لیموں",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -343,11 +384,13 @@
         "rate": 100
       }
     ],
+    "available": true,
+    "image": "products/sabzi-21-1785050769712.jpg",
+    "featured": false,
     "name_roman": "Lemon"
   },
   {
     "name": "گول ٹینڈے",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -358,11 +401,13 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-22-1785050788775.jpg",
+    "featured": false,
     "name_roman": "Gol Tinday"
   },
   {
     "name": "چقندر",
-    "available": true,
     "units": [
       {
         "label": "KG",
@@ -373,55 +418,100 @@
         "rate": 75
       }
     ],
+    "available": true,
+    "image": "products/sabzi-23-1785050808015.jpg",
+    "featured": false,
     "name_roman": "Chuqandar"
   },
   {
     "name": "سبز دھنیا",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "products/sabzi-24-1785050818856.jpg",
+    "featured": false,
     "name_roman": "Sabz Dhania"
   },
   {
     "name": "پودینہ",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "products/sabzi-25-1785050829478.jpg",
+    "featured": false,
     "name_roman": "Pudina"
   },
   {
     "name": "سلاد پتی",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "products/sabzi-26-1785050838827.jpg",
+    "featured": false,
     "name_roman": "Salad Patti"
   },
   {
     "name": "مولی",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "",
+    "featured": false,
     "name_roman": "Mooli"
   },
   {
     "name": "لمبے ٹینڈے",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "products/sabzi-28-1785050851049.jpg",
+    "featured": false,
     "name_roman": "Lambay Tinday"
   },
   {
     "name": "ساگ",
-    "unit": "KG",
-    "rate": 0,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "products/sabzi-29-1785050869980.jpg",
+    "featured": false,
     "name_roman": "Saag"
   },
   {
     "name": "ہری پیاز",
-    "unit": "گڈی",
-    "rate": 0,
+    "units": [
+      {
+        "label": "گڈی",
+        "rate": 0
+      }
+    ],
     "available": false,
+    "image": "products/sabzi-30-1785050885008.jpg",
+    "featured": false,
     "name_roman": "Hari Pyaz"
   }
 ]

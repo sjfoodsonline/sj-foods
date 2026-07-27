@@ -12,12 +12,12 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-0-1785161237422.jpg",
     "featured": false,
     "name_roman": "Chana (Chola)"
   },
   {
-    "name": "کالا چنا (کالا چولہ)",
+    "name": "کالا چنا (کالا چولا)",
     "units": [
       {
         "label": "KG",
@@ -29,7 +29,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-1-1785160788906.jpg",
     "featured": false,
     "name_roman": "Kala Chana"
   },
@@ -46,7 +46,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-2-1785161274826.jpg",
     "featured": false,
     "name_roman": "Daal Chana"
   },
@@ -63,7 +63,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-3-1785161466252.jpg",
     "featured": false,
     "name_roman": "Daal Maash Karmi"
   },
@@ -80,7 +80,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-4-1785161920006.jpg",
     "featured": false,
     "name_roman": "Daal Moong"
   },
@@ -97,7 +97,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-5-1785161785630.jpg",
     "featured": false,
     "name_roman": "Daal Masoor"
   },
@@ -114,7 +114,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-6-1785161647374.jpg",
     "featured": false,
     "name_roman": "Daal Naskan"
   },
@@ -131,7 +131,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-7-1785161857961.jpg",
     "featured": false,
     "name_roman": "Kala Maash (Tore Mahe)"
   },
@@ -148,7 +148,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-8-1785161959145.jpg",
     "featured": false,
     "name_roman": "Sabz Moong (Shne Me)"
   },
@@ -165,7 +165,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-9-1785162030801.jpg",
     "featured": false,
     "name_roman": "Lobia Tajik"
   },
@@ -182,7 +182,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-10-1785162123284.jpg",
     "featured": false,
     "name_roman": "Lobia Watani"
   },
@@ -199,7 +199,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-11-1785162221864.jpg",
     "featured": false,
     "name_roman": "Safaid Lobia"
   },
@@ -216,7 +216,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-12-1785162311775.jpg",
     "featured": false,
     "name_roman": "Noodles Khula"
   },
@@ -233,7 +233,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-13-1785162342782.jpg",
     "featured": false,
     "name_roman": "Macaroni No. 1"
   },
@@ -246,7 +246,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-14-1785162373864.jpg",
     "featured": false
   },
   {
@@ -258,7 +258,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-15-1785162401984.jpg",
     "featured": false
   },
   {
@@ -270,7 +270,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/pulses-16-1785162428261.jpg",
     "featured": false
   }
 ]

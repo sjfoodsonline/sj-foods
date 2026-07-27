@@ -1,282 +1,522 @@
 [
   {
     "name": "گلاب جامن",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-0-1785163115765.jpg",
+    "featured": false,
     "name_roman": "Gulab Jamun"
   },
   {
-    "name": "رسگلے",
-    "unit": "KG",
-    "rate": 1000,
+    "name": "رس گلے",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-1-1785163169322.jpg",
+    "featured": false,
     "name_roman": "Rasgulay"
   },
   {
     "name": "نمک پارے",
-    "unit": "KG",
-    "rate": 750,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 750
+      }
+    ],
     "available": true,
+    "image": "products/bakery-2-1785163211855.jpg",
+    "featured": false,
     "name_roman": "Namak Paray"
   },
   {
     "name": "سپیشل برفی",
-    "unit": "KG",
-    "rate": 1400,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1400
+      }
+    ],
     "available": true,
+    "image": "products/bakery-3-1785163270607.jpg",
+    "featured": false,
     "name_roman": "Special Barfi"
   },
   {
     "name": "برفی سادہ",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-4-1785163273654.jpg",
+    "featured": false,
     "name_roman": "Barfi Sada"
   },
   {
     "name": "چیری کیک",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-5-1785163305822.jpg",
+    "featured": false,
     "name_roman": "Cherry Cake"
   },
   {
     "name": "گاجر حلوہ",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-6-1785163376142.jpg",
+    "featured": false,
     "name_roman": "Gajar Halwa"
   },
   {
     "name": "کیک رس",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-7-1785163402041.jpg",
+    "featured": false,
     "name_roman": "Cake Ras"
   },
   {
     "name": "کراس پف",
-    "unit": "KG",
-    "rate": 900,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false,
     "name_roman": "Cross Puff"
   },
   {
     "name": "کوکونٹ بسکٹ",
-    "unit": "KG",
-    "rate": 1500,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      }
+    ],
     "available": true,
+    "image": "products/bakery-9-1785163488359.jpg",
+    "featured": false,
     "name_roman": "Coconut Biscuit"
   },
   {
     "name": "پھینیاں",
-    "unit": "KG",
-    "rate": 750,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 750
+      }
+    ],
+    "available": false,
+    "image": "products/bakery-10-1785163511784.jpg",
+    "featured": false,
     "name_roman": "Pheniyan"
   },
   {
     "name": "کھیر",
-    "unit": "KG",
-    "rate": 800,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 800
+      }
+    ],
+    "available": false,
+    "image": "products/bakery-11-1785163558826.jpg",
+    "featured": false,
     "name_roman": "Kheer"
   },
   {
     "name": "دودھ کی بوتل",
-    "unit": "عدد",
-    "rate": 100,
-    "available": true,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
+    "available": false,
+    "image": "products/bakery-12-1785163593944.jpg",
+    "featured": false,
     "name_roman": "Doodh ki Bottle"
   },
   {
     "name": "چکن رول",
-    "unit": "عدد",
-    "rate": 150,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 150
+      }
+    ],
     "available": true,
+    "image": "products/bakery-13-1785163638094.jpg",
+    "featured": false,
     "name_roman": "Chicken Roll"
   },
   {
     "name": "ڈرائی بسکٹ",
-    "unit": "KG",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-14-1785163671194.jpg",
+    "featured": false,
     "name_roman": "Dry Biscuit"
   },
   {
     "name": "ڈبل روٹی (350 گرام)",
-    "unit": "عدد",
-    "rate": 120,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 120
+      }
+    ],
     "available": true,
+    "image": "products/bakery-15-1785163696778.jpg",
+    "featured": false,
     "name_roman": "Double Roti (350g)"
   },
   {
     "name": "ڈبل روٹی (700 گرام)",
-    "unit": "عدد",
-    "rate": 220,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 220
+      }
+    ],
     "available": true,
+    "image": "products/bakery-16-1785163722021.jpg",
+    "featured": false,
     "name_roman": "Double Roti (700g)"
   },
   {
     "name": "شیرمال (200 گرام)",
-    "unit": "عدد",
-    "rate": 120,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 120
+      }
+    ],
     "available": true,
+    "image": "products/bakery-17-1785163750161.jpg",
+    "featured": false,
     "name_roman": "Sheermal (200g)"
   },
   {
     "name": "ڈرائی کیک",
-    "unit": "پونڈ",
-    "rate": 700,
+    "units": [
+      {
+        "label": "پونڈ",
+        "rate": 700
+      }
+    ],
     "available": true,
+    "image": "products/bakery-18-1785163810579.jpg",
+    "featured": false,
     "name_roman": "Dry Cake"
   },
   {
     "name": "آئس کریم کیک",
-    "unit": "پونڈ",
-    "rate": 1000,
+    "units": [
+      {
+        "label": "پونڈ",
+        "rate": 1000
+      }
+    ],
     "available": true,
+    "image": "products/bakery-19-1785163870687.jpg",
+    "featured": false,
     "name_roman": "Ice Cream Cake"
   },
   {
     "name": "فریش کریم کیک",
-    "unit": "پونڈ",
-    "rate": 700,
+    "units": [
+      {
+        "label": "پونڈ",
+        "rate": 700
+      }
+    ],
     "available": true,
+    "image": "products/bakery-20-1785163909662.jpg",
+    "featured": false,
     "name_roman": "Fresh Cream Cake"
   },
   {
     "name": "سادہ کیک (200 گرام)",
-    "unit": "عدد",
-    "rate": 170,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 170
+      }
+    ],
     "available": true,
+    "image": "products/bakery-21-1785163975483.jpg",
+    "featured": false,
     "name_roman": "Sada Cake (200g)"
   },
   {
     "name": "فروٹ کیک (200 گرام)",
-    "unit": "عدد",
-    "rate": 200,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 200
+      }
+    ],
     "available": true,
+    "image": "products/bakery-22-1785164020989.jpg",
+    "featured": false,
     "name_roman": "Fruit Cake (200g)"
   },
   {
     "name": "آلو سموسہ",
-    "unit": "عدد",
-    "rate": 30,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 30
+      }
+    ],
     "available": true,
+    "image": "products/bakery-23-1785164077041.jpg",
+    "featured": false,
     "name_roman": "Aloo Samosa"
   },
   {
     "name": "قیمہ سموسہ",
-    "unit": "عدد",
-    "rate": 60,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 60
+      }
+    ],
     "available": true,
+    "image": "products/bakery-24-1785164101116.jpg",
+    "featured": false,
     "name_roman": "Qeema Samosa"
   },
   {
     "name": "قیمہ کچوری",
-    "unit": "عدد",
-    "rate": 150,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 150
+      }
+    ],
     "available": true,
+    "image": "products/bakery-25-1785164129185.jpg",
+    "featured": false,
     "name_roman": "Qeema Kachori"
   },
   {
     "name": "چکن پیٹیز",
-    "unit": "عدد",
-    "rate": 100,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
     "available": true,
+    "image": "products/bakery-26-1785164188666.jpg",
+    "featured": false,
     "name_roman": "Chicken Patties"
   },
   {
     "name": "سینڈوچ",
-    "unit": "عدد",
-    "rate": 100,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
     "available": true,
+    "image": "products/bakery-27-1785164241744.jpg",
+    "featured": false,
     "name_roman": "Sandwich"
   },
   {
     "name": "سینڈوچ فرائی",
-    "unit": "عدد",
-    "rate": 150,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 150
+      }
+    ],
     "available": true,
+    "image": "products/bakery-28-1785164284718.jpg",
+    "featured": false,
     "name_roman": "Sandwich Fry"
   },
   {
     "name": "کوکونٹ",
-    "unit": "KG",
-    "rate": 1500,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false,
     "name_roman": "Coconut"
   },
   {
     "name": "میرنگ",
-    "unit": "KG",
-    "rate": 1500,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false,
     "name_roman": "Meringue"
   },
   {
     "name": "رس ملائی",
-    "unit": "عدد",
-    "rate": 150,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 150
+      }
+    ],
     "available": true,
+    "image": "products/bakery-31-1785164354224.jpg",
+    "featured": false,
     "name_roman": "Ras Malai"
   },
   {
     "name": "فریش کریم پیسٹری",
-    "unit": "عدد",
-    "rate": 100,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 100
+      }
+    ],
     "available": true,
+    "image": "products/bakery-32-1785164450327.jpg",
+    "featured": false,
     "name_roman": "Fresh Cream Pastry"
   },
   {
     "name": "سادہ رس (پاپے)",
-    "unit": "KG",
-    "rate": 600,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 600
+      }
+    ],
     "available": true,
+    "image": "products/bakery-33-1785164479057.jpg",
+    "featured": false,
     "name_roman": "Sada Ras (Pape)"
   },
   {
     "name": "بناسپتی رول",
-    "unit": "عدد",
-    "rate": 80,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 80
+      }
+    ],
     "available": true,
+    "image": "products/bakery-34-1785164528445.jpg",
+    "featured": false,
     "name_roman": "Banaspati Roll"
   },
   {
     "name": "نمکو",
-    "unit": "KG",
-    "rate": 750,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 750
+      }
+    ],
     "available": true,
+    "image": "products/bakery-35-1785164558724.jpg",
+    "featured": false,
     "name_roman": "Namkoo"
   },
   {
     "name": "بقلاوا",
-    "unit": "KG",
-    "rate": 1500,
-    "available": true,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      }
+    ],
+    "available": false,
+    "image": "products/bakery-36-1785164606087.jpg",
+    "featured": false,
     "name_roman": "Baqlawa"
   },
   {
     "name": "کلاس مکس مٹھائی",
-    "unit": "KG",
-    "rate": 850,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      }
+    ],
     "available": true,
+    "image": "products/bakery-37-1785164643807.jpg",
+    "featured": false,
     "name_roman": "Class Mix Mithai"
   },
   {
     "name": "کلاس مکس بسکٹ",
-    "unit": "KG",
-    "rate": 850,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
     "name_roman": "Class Mix Biscuit"
   },
   {
     "name": "پکوڑے",
-    "unit": "KG",
-    "rate": 550,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 550
+      }
+    ],
     "available": true,
+    "image": "products/bakery-39-1785164690264.jpg",
+    "featured": false,
     "name_roman": "Pakoray"
   }
 ]

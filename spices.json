@@ -16,7 +16,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-0-1785162498368.jpg",
     "featured": false,
     "name_roman": "Salan Masala Special"
   },
@@ -37,7 +37,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-1-1785162522466.jpg",
     "featured": false,
     "name_roman": "Garam Masala No. 1"
   },
@@ -58,12 +58,12 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-2-1785162556076.jpg",
     "featured": false,
     "name_roman": "Zeera"
   },
   {
-    "name": "ہانڈی مصالحہ",
+    "name": "ہانڈی مصالحہ ہانڈی مصالحہ",
     "units": [
       {
         "label": "KG",
@@ -79,7 +79,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-3-1785162605971.jpg",
     "featured": false,
     "name_roman": "Handi Masala"
   },
@@ -100,7 +100,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-4-1785162652380.jpg",
     "featured": false,
     "name_roman": "Dhania Sabut"
   },
@@ -121,7 +121,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-5-1785162671936.jpg",
     "featured": false,
     "name_roman": "Dhania Powder"
   },
@@ -142,7 +142,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-6-1785162760586.jpg",
     "featured": false,
     "name_roman": "Kali Mirch Sabut"
   },
@@ -163,7 +163,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-7-1785162787189.jpg",
     "featured": false,
     "name_roman": "Kali Mirch Powder"
   },
@@ -184,7 +184,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-8-1785162807203.jpg",
     "featured": false,
     "name_roman": "Dar Cheeni"
   },
@@ -205,7 +205,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-9-1785162846243.jpg",
     "featured": false,
     "name_roman": "Haldi"
   },
@@ -226,7 +226,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-10-1785162910707.jpg",
     "featured": false,
     "name_roman": "Surkh Mirch Dana Dar"
   },
@@ -247,7 +247,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-11-1785162937350.jpg",
     "featured": false,
     "name_roman": "Surkh Mirch Powder"
   },
@@ -268,7 +268,7 @@
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/spices-12-1785162977032.jpg",
     "featured": false,
     "name_roman": "Surkh Mirch Gol"
   }

@@ -63,7 +63,7 @@
     #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
     .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
     .toast{ left:50%; }
-    .search-wrap, .chips{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .search-wrap, .chips-wrapper{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
     .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
     .install-card, .policy-sheet{ max-width:420px; }
   }
@@ -85,16 +85,16 @@
   header h1{margin:0 0 4px; font-size:22px; font-weight:700; position:relative;}
   header p{margin:0; font-size:12.5px; opacity:.92; position:relative;}
 
-  /* ---- 1. اردو کے مطابق درست ٹاپ بینر (RTL Scrolling) ---- */
+  /* ---- اردو ٹاپ بینر (RTL Ticker) ---- */
   .top-ticker {
     width: 100%; overflow: hidden; white-space: nowrap;
     background: #2e7d32; color: white; padding: 6px 0; font-size: 12.5px; font-weight: bold;
-    direction: ltr; /* ٹیکسٹ کی صحیح سمت کے لیے */
+    direction: ltr;
   }
   .top-ticker-content {
     display: inline-block;
     padding-right: 100%;
-    animation: urduTicker 25s linear infinite;
+    animation: urduTicker 35s linear infinite;
     direction: rtl;
   }
   @keyframes urduTicker {
@@ -111,35 +111,34 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- 2. کیٹیگریز: مناسب رفتار کے ساتھ سموتھ اینیمیشن ---- */
-  .chips {
-    overflow: hidden; padding: 10px 0; position: sticky; top: 52px;
-    background: var(--paper); z-index: 19; white-space: nowrap;
+  /* ---- کیٹیگریز: بہت سلو اور کنٹرولڈ سکولنگ ---- */
+  .chips-wrapper {
+    position: sticky; top: 52px; background: var(--paper); z-index: 19;
     border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 8px 0; overflow: hidden;
   }
-  .chips-track {
-    display: flex; gap: 10px; width: max-content;
-    animation: smoothCatScroll 28s linear infinite; /* سموتھ اور مناسب سلو رفتار */
+  
+  .chips-container {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 16px;
+    scrollbar-width: none; scroll-behavior: smooth;
   }
-  .chips:hover .chips-track {
-    animation-play-state: paused;
-  }
-  @keyframes smoothCatScroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(50%); }
-  }
+  .chips-container::-webkit-scrollbar { display: none; }
 
   .chip {
     flex: 0 0 auto; background: var(--leaf); color: var(--dark);
     border: 1px solid #cfe8d1; border-radius: 20px; padding: 7px 16px;
-    font-size: 12.5px; font-weight: 700; white-space: nowrap; cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease;
+    font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer;
+    transition: all 0.2s ease; user-select: none;
   }
   .chip:hover {
-    background: var(--mid); color: #fff; transform: scale(1.05);
+    background: #c8e6c9; transform: translateY(-1px);
+  }
+  .chip.active {
+    background: var(--dark) !important; color: #fff !important; border-color: var(--dark) !important;
+    box-shadow: 0 3px 8px rgba(21,58,32,0.25);
   }
 
-  /* ---- 3. نمایاں اشیاء (Featured Shuffle Animation) ---- */
+  /* ---- نمایاں اشیاء (Shuffle Animation) ---- */
   .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
   .featured-scroll {
     display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none;
@@ -148,21 +147,19 @@
   
   .featured-track {
     display: flex; gap: 10px; width: max-content;
-    animation: shuffleWave 18s ease-in-out infinite; /* دو آگے ایک پیچھے ہلاؤ اینیمیشن */
+    animation: shuffleWave 25s ease-in-out infinite;
   }
   .featured-scroll:hover .featured-track {
     animation-play-state: paused;
   }
 
-  /* آگے اور پیچھے شفل ہونے والی اینیمیشن (Shuffle Style) */
   @keyframes shuffleWave {
     0%   { transform: translateX(0); }
-    20%  { transform: translateX(180px); }  /* 2 آئٹمز آگے */
-    30%  { transform: translateX(90px); }   /* 1 آئٹم پیچھے */
-    50%  { transform: translateX(360px); }  /* مزید 2 آئٹمز آگے */
-    60%  { transform: translateX(270px); }  /* 1 آئٹم پیچھے */
-    80%  { transform: translateX(500px); }  /* آگے */
-    100% { transform: translateX(0); }      /* دوبارہ پہلی حالت میں */
+    25%  { transform: translateX(120px); }
+    40%  { transform: translateX(60px); }
+    65%  { transform: translateX(240px); }
+    80%  { transform: translateX(180px); }
+    100% { transform: translateX(0); }
   }
 
   .featured-card{
@@ -176,7 +173,7 @@
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark);
     margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    scroll-margin-top:100px;
+    scroll-margin-top:110px;
   }
   .item{
     display:flex; flex-direction:column; gap:8px;
@@ -190,7 +187,6 @@
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
   .item .info{min-width:0; flex:1;}
   .item .name{font-size:15.5px; font-weight:600; line-height:1.3;}
-  .item .name .tick-badge{display:none;}
   .avail-badge{
     flex:0 0 30px; width:30px; height:30px; border-radius:9px;
     display:flex; align-items:center; justify-content:center;
@@ -330,11 +326,7 @@
     padding:8px 8px; cursor:pointer;
   }
   .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
-  .pay-method label.disabled{opacity:.4; cursor:not-allowed;}
   .pay-method input{width:15px; height:15px; flex:0 0 auto;}
-  .area-note{font-size:11.5px; border-radius:10px; padding:8px 10px; margin-bottom:8px; line-height:1.6; display:none;}
-  .area-note.warn{background:#FFEBEE; color:#B71C1C; display:block;}
-  .area-note.ok{background:#E8F5E9; color:#1B5E20; display:block;}
 
   .actions{display:flex; gap:8px; margin-top:10px;}
   .actions button{
@@ -427,7 +419,7 @@
 </div>
 
 <header>
-  <button class="theme-toggle" id="themeToggle" title="تھیم" style="left:0;">🌙</button>
+  <button class="theme-toggle" id="themeToggle" title="تھیم">🌙</button>
   <h1>🟢 ایس جے فوڈز مینگورہ سوات</h1>
   <p style="opacity:.85; font-size:11px; margin:2px 0 4px;">SJ Foods Mingora Swat — Fresh Groceries, Delivered Fast</p>
   <p>تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء — اپنی پسند کی چیزیں منتخب کریں، کارٹ میں ڈالیں، اور آرڈر بھیج دیں</p>
@@ -470,8 +462,10 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- Smooth Category Chips Bar -->
-<div class="chips" id="chips"></div>
+<!-- Category Chips Wrapper -->
+<div class="chips-wrapper">
+  <div class="chips-container" id="chipsContainer"></div>
+</div>
 
 <main id="list"></main>
 
@@ -520,7 +514,6 @@
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈیلیوری</label>
         <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ ایڈوانس</label>
       </div>
-      <div class="area-note" id="areaNote"></div>
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
       <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>📌 SJ Foods Online Store, Main Bazar, Mingora, Swat</div>
@@ -571,6 +564,7 @@ let cart = {};
 let config = {};
 let activeCat = "ALL";
 let deferredPrompt = null;
+let autoScrollTimer = null;
 
 const PHONE_NUMBER = "923349353799";
 const DISPLAY_PHONE = "0334-9353799";
@@ -591,6 +585,7 @@ async function loadData() {
     renderChips();
     renderList();
     bindHeaderAndFooterInfo();
+    startCatAutoScroll();
   } catch(e) {
     $('loadingMsg').innerText = '❌ ریٹ لسٹ لوڈ نہ ہو سکی، صفحہ ریفریش کریں۔';
   }
@@ -617,7 +612,6 @@ function renderFeatured(){
   $('featuredTitle').classList.remove('hidden');
   $('featuredScroll').classList.remove('hidden');
   
-  // شفل وِیو اینیمیشن کے لیے ٹریک
   let html = '<div class="featured-track">';
   feat.forEach(i => {
     const unitObj = (i.units && i.units.length) ? i.units[0] : null;
@@ -635,22 +629,54 @@ function renderFeatured(){
   $('featuredScroll').innerHTML = html;
 }
 
-/* سموتھ کیٹیگریز رینڈرنگ (دوبارہ نان اسٹاپ لوپ کے لیے ڈپلیکیٹ کی گئی ہیں) */
+/* کیٹیگریز رینڈرنگ */
 function renderChips(){
   const cats = ["ALL", ...new Set(items.map(i => i.category_ur))];
-  let chipsMarkup = '';
-  
+  const container = $('chipsContainer');
+  container.innerHTML = '';
+
   cats.forEach(c => {
     const label = c === "ALL" ? "سب اشیاء" : c;
-    chipsMarkup += `<div class="chip" onclick="filterCat('${c}')">${label}</div>`;
+    const chip = document.createElement('div');
+    chip.className = `chip ${activeCat === c ? 'active' : ''}`;
+    chip.innerText = label;
+    chip.onclick = () => selectCategory(c, chip);
+    container.appendChild(chip);
   });
-
-  // بغیر وقفے کے سموتھ گھومنے کے لیے ڈپلیکیٹ آئٹمز ایڈ کیے گئے ہیں
-  $('chips').innerHTML = `<div class="chips-track">${chipsMarkup}${chipsMarkup}</div>`;
 }
 
-function filterCat(c){
-  activeCat = c;
+/* سلو اور سموتھ خودکار سکرولنگ (Auto Scroll) */
+function startCatAutoScroll(){
+  const container = $('chipsContainer');
+  if(!container) return;
+  
+  let scrollAmount = 0;
+  let direction = 1;
+
+  if(autoScrollTimer) clearInterval(autoScrollTimer);
+
+  autoScrollTimer = setInterval(() => {
+    if(container.matches(':hover')) return; // ماؤس پر روک لیں
+    
+    container.scrollLeft += direction * 1;
+    scrollAmount += 1;
+
+    if (container.scrollLeft >= (container.scrollWidth - container.clientWidth) || container.scrollLeft <= 0) {
+      direction *= -1;
+    }
+  }, 40); // بہت سلو اور آرام دہ رفتار
+}
+
+function selectCategory(catName, chipEl){
+  activeCat = catName;
+  
+  // تمام چپس کا ایکٹو کلاس ختم کریں
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  if(chipEl) chipEl.classList.add('active');
+
+  // منتخب شدہ کیٹیگری کو سکرول کر کے سامنے لائیں
+  chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
   renderList();
 }
 
@@ -862,29 +888,24 @@ $('waBtn').onclick = () => {
 
   let text = `🛍️ *نیا آرڈر — SJ Foods Mingora*\n`;
   text += `👤 *نام:* ${name}\n📞 *فون:* ${phone}\n📍 *پتہ:* ${addr}\n`;
-  text += `🌆 *علاقہ:* ${area === 'inside' ? 'مینگورہ شہر کے اندر' : 'مینگورہ سے باہر / سائیڈ ایریا'}\n`;
+  text += `🗺️ *علاقہ:* ${area === 'inside' ? 'مینگورہ شہر کے اندر' : 'مینگورہ سے باہر / سائیڈ ایریا'}\n`;
   text += `💳 *ادائیگی کا طریقہ:* ${payM === 'easypaisa' ? 'ایزی پیسہ (ایڈوانس)' : 'کیش آن ڈیلیوری'}\n\n`;
-  text += `📋 *سامان کی لسٹ:*\n`;
+  text += `📦 *آئٹمز:* \n`;
 
-  let sum = 0;
-  keys.forEach((k, i) => {
+  let total = 0;
+  keys.forEach(k => {
     const c = cart[k];
-    const t = c.price * c.qty;
-    sum += t;
-    text += `${i+1}. ${c.name} (${c.unit}) — ${c.qty} عدد = Rs. ${t}\n`;
+    const sub = c.price * c.qty;
+    total += sub;
+    text += `• ${c.name} (${c.unit}) — ${c.qty} x ${c.price} = Rs. ${sub}\n`;
   });
 
-  text += `\n💰 *کل رقم:* Rs. ${sum}\n`;
-  text += `🚚 *ڈیلیوری چارج:* (راستے کے حساب سے موقع پر ادا)\n\n`;
-  if(payM === 'easypaisa'){
-    text += `📲 *نوٹ:* میں ایزی پیسہ سے ادائیگی کرنا چاہتا ہوں۔ براہ کرم تصدیق کریں تاکہ میں رقم بھیج سکوں۔\n`;
-  }
-  text += `شکریہ!`;
+  text += `\n💰 *کل رقم:* Rs. ${total}\n`;
+  text += `🚚 *ڈیلیوری چارج:* راستے کے حساب سے (موقع پر ادا)\n\n`;
+  text += `شاندار اور تازہ سروس کا انتخاب کرنے کا شکریہ! 🌿`;
 
   window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
 };
-
-$('search').oninput = renderList;
 
 function showToast(msg){
   const t = $('toast');
@@ -901,27 +922,21 @@ function openLightbox(src){
 $('lightboxClose').onclick = () => $('lightbox').classList.add('hidden');
 $('lightbox').onclick = (e) => { if(e.target === $('lightbox')) $('lightbox').classList.add('hidden'); };
 
-// Dark Mode Toggle
-$('themeToggle').onclick = () => {
-  document.body.classList.toggle('dark');
-  const isDark = document.body.classList.contains('dark');
-  $('themeToggle').innerText = isDark ? '☀️' : '🌙';
-};
-
-// PWA Install Prompt
+/* PWA Install Button setup */
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   $('installBtn').style.display = 'flex';
 });
 
-$('installBtn').onclick = () => {
+$('installBtn').onclick = async () => {
   if(deferredPrompt){
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
+    const { outcome } = await deferredPrompt.userChoice;
+    if(outcome === 'accepted'){
       $('installBtn').style.display = 'none';
-    });
+    }
+    deferredPrompt = null;
   } else {
     showInstallInstructions();
   }
@@ -929,44 +944,49 @@ $('installBtn').onclick = () => {
 
 function showInstallInstructions(){
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  $('installTitle').innerText = isIOS ? '📲 iPhone پر انسٹال کریں' : '📲 اینڈرائیڈ پر انسٹال کریں';
-  $('installSteps').innerHTML = isIOS ? `
-    <div class="install-step"><span class="num">1</span> نیچے شیئر (Share) کا بٹن دبائیں۔</div>
-    <div class="install-step"><span class="num">2</span> "Add to Home Screen" کا انتخاب کریں۔</div>
-  ` : `
-    <div class="install-step"><span class="num">1</span> اوپر کونے میں تین نقطوں (⋮) پر کلک کریں۔</div>
-    <div class="install-step"><span class="num">2</span> "Install app" یا "Add to Home screen" منتخب کریں۔</div>
-  `;
+  let html = '';
+  if(isIOS){
+    html = `
+      <div class="install-step"><div class="num">1</div><span>سفاری براؤزر کے نیچے <b>Share</b> (تیر کا نشان) بٹن دبائیں۔</span></div>
+      <div class="install-step"><div class="num">2</div><span>نیچے سکرول کر کے <b>'Add to Home Screen'</b> منتخب کریں۔</span></div>
+      <div class="install-step"><div class="num">3</div><span>اوپر <b>Add</b> پر کلک کریں، ایپ ہوم سکرین پر آ جائے گی۔</span></div>
+    `;
+  } else {
+    html = `
+      <div class="install-step"><div class="num">1</div><span>براؤزر کے اوپر تین ڈاٹس <b>(⋮)</b> پر کلک کریں۔</span></div>
+      <div class="install-step"><div class="num">2</div><span><b>'Install App'</b> یا <b>'Add to Home screen'</b> منتخب کریں۔</span></div>
+    `;
+  }
+  $('installSteps').innerHTML = html;
   $('installOverlay').classList.remove('hidden');
 }
 $('closeInstallOverlay').onclick = () => $('installOverlay').classList.add('hidden');
 
-// Privacy & Terms
-$('openPrivacy').onclick = () => {
-  $('policyTitle').innerText = 'پرائیویسی پالیسی (Privacy Policy)';
-  $('policyBody').innerHTML = `
-    <p>ایس جے فوڈز آپ کی پرائیویسی اور معلومات کی حفاظت کو مقدم رکھتا ہے۔</p>
-    <p>1. <b>معلومات کا استعمال:</b> آرڈر مکمل کرنے کے لیے ہم صرف آپ کا نام، رابطہ نمبر اور پتہ لیتے ہیں۔ یہ معلومات صرف آرڈر ڈیلیوری کے لیے استعمال ہوتی ہیں۔</p>
-    <p>2. <b>ڈیٹا کا تحفظ:</b> ہم آپ کا ڈیٹا کسی تیسرے فرد کو نہیں بیچتے۔</p>
-    <p>3. <b>رابطہ:</b> سوالات کے لیے sjfoodsonline@outlook.com یا 0334-9353799 پر رابطہ کریں۔</p>
-  `;
-  $('policyOverlay').classList.remove('hidden');
+/* Theme Toggle */
+$('themeToggle').onclick = () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  $('themeToggle').innerText = isDark ? '☀️' : '🌙';
 };
 
+/* Search listener */
+$('search').addEventListener('input', renderList);
+
+/* Privacy and Terms Overlay */
+$('openPrivacy').onclick = () => {
+  $('policyTitle').innerText = 'پرائیویسی پالیسی';
+  $('policyBody').innerHTML = `<p>ایس جے فوڈز مینگورہ سوات میں آپ کی پرائیویسی ہمارے لیے انتہائی اہم ہے۔ ہم آپ کا نام، فون نمبر اور پتہ صرف آپ کے آرڈر کو درست جگہ پہنچانے کے لیے استعمال کرتے ہیں۔ ہم آپ کا ڈیٹا کسی تیسرے فریق کے ساتھ شیئر نہیں کرتے۔</p>`;
+  $('policyOverlay').classList.remove('hidden');
+};
 $('openTerms').onclick = () => {
-  $('policyTitle').innerText = 'شرائط و ضوابط (Terms & Conditions)';
-  $('policyBody').innerHTML = `
-    <p>ایس جے فوڈز آن لائن استعمال کرنے کی شرائط:</p>
-    <p>1. <b>قیمتیں:</b> تمام سبزیاں و پھل روزانہ مارکیٹ کے مطابق اپ ڈیٹ ہوتے ہیں۔</p>
-    <p>2. <b>ڈیلیوری:</b> سامان 30-45 منٹ میں پہنچایا جائے گا۔ ڈیلیوری چارجز علاقے کے مطابق ہوں گے۔</p>
-    <p>3. <b>واپسی/تبدیلی:</b> اگر سامان معیار کے مطابق نہ ہو تو موقع پر ہی واپس کر سکتے ہیں۔</p>
-  `;
+  $('policyTitle').innerText = 'قواعد و ضوابط';
+  $('policyBody').innerHTML = `<p>1. آرڈر کی ڈیلیوری مینگورہ شہر اور گردونواح کے لیے دستیاب ہے۔<br>2. قیمتیں روزانہ کے منڈی ریٹ کے مطابق اپ ڈیٹ کی جاتی ہیں۔<br>3. سامان کی وصولی پر چیک کر لیں، کسی بھی خرابی کی صورت میں موقع پر ہی آگاہ کریں۔</p>`;
   $('policyOverlay').classList.remove('hidden');
 };
 $('closePolicy').onclick = () => $('policyOverlay').classList.add('hidden');
 
-loadData();
+// Init
+window.onload = loadData;
 </script>
-
 </body>
 </html>

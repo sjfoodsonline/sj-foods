@@ -1117,5 +1117,95 @@ async function loadOffers(){
 }
 loadOffers();
 </script>
-</body>
-</html>
+</body> 
+</html> /* 1. Category Bar Drag and Wheel Smooth Styling */
+.categories-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    cursor: grab;
+    user-select: none;
+    scrollbar-width: none; /* Hide Scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide Scrollbar IE */
+    padding: 10px 0;
+}
+
+.categories-container::-webkit-scrollbar {
+    display: none; /* Hide Scrollbar Chrome/Safari */
+}
+
+.categories-container:active {
+    cursor: grabbing;
+}
+
+/* Category Card Smooth Hover */
+.category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex: 0 0 auto;
+}
+
+.category-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* 2. Top Banner Smooth Moving Text */
+.top-ticker {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    background: #2e7d32;
+    color: white;
+    padding: 8px 0;
+}
+
+.top-ticker-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker 18s linear infinite;
+}
+
+@keyframes ticker {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+} 
+<script>
+// Mouse Wheel Scroll (ماؤس کے ویل سے دائیں بائیں اسکرول کرنا)
+const catContainer = document.querySelector('.categories-container');
+
+if (catContainer) {
+    // Wheel Scroll Conversion
+    catContainer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        catContainer.scrollLeft += e.deltaY * 1.5;
+    });
+
+    // Mouse Drag Scroll (ماؤس سے پکڑ کر کھینچنا)
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    catContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        catContainer.classList.add('active');
+        startX = e.pageX - catContainer.offsetLeft;
+        scrollLeft = catContainer.scrollLeft;
+    });
+
+    catContainer.addEventListener('mouseleave', () => {
+        isDown = false;
+    });
+
+    catContainer.addEventListener('mouseup', () => {
+        isDown = false;
+    });
+
+    catContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - catContainer.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll Speed
+        catContainer.scrollLeft = scrollLeft - walk;
+    });
+}
+</script>

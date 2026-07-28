@@ -13,7 +13,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-0-1785082190767.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Shama Team Ghee"
   },
   {
@@ -104,7 +104,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-7-1785082544040.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Shama Team Pack Ghee"
   },
   {
@@ -117,7 +117,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-8-1785082572624.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Shama Oil Can"
   },
   {
@@ -156,7 +156,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-11-1785082845674.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Zaitoon Atta"
   },
   {
@@ -260,7 +260,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-19-1785083395275.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Kausar Oil Can"
   },
   {

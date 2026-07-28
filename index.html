@@ -63,7 +63,7 @@
     #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
     .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
     .toast{ left:50%; }
-    .search-wrap, .chips{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .search-wrap, .categories-container{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
     .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
     .install-card, .policy-sheet{ max-width:420px; }
   }
@@ -115,11 +115,12 @@
   }
   #search:focus{border-color:var(--mid); box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);}
 
+  /* Category Chips Bar with Visual Peek Hint */
   .categories-container {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
-    padding: 12px 16px 8px;
+    padding: 12px 16px 12px;
     scroll-behavior: smooth;
     cursor: grab;
     user-select: none;
@@ -151,16 +152,23 @@
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark);
     margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    scroll-margin-top:100px;
+    scroll-margin-top:110px;
   }
   .item{
     display:flex; flex-direction:column; gap:8px;
     background:#fff; border:1px solid var(--line); border-radius:14px;
     padding:10px 12px; margin-bottom:8px;
-    transition:border-color .2s, box-shadow .2s, transform .2s;
+    transition:border-color .3s, box-shadow .3s, transform .2s, background-color .3s;
+    scroll-margin-top:120px;
   }
   .item:hover{ transform: translateY(-2px); }
   .item.active{border-color:var(--mid); box-shadow:0 2px 10px rgba(46,125,50,0.12);}
+  .item.highlighted{
+    border-color: var(--accent) !important;
+    background-color: #FFF8E1 !important;
+    box-shadow: 0 0 14px rgba(255, 111, 0, 0.4) !important;
+    transform: scale(1.02);
+  }
   .item.unavailable{opacity:.55;}
   .item-row-top{display:flex; align-items:center; gap:10px;}
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
@@ -206,6 +214,7 @@
     max-height:82vh;
     display:flex; flex-direction:column;
     transition: transform 0.3s ease;
+    z-index: 30;
   }
   #billbar.collapsed{ padding:16px 18px 20px; }
   #billbar.collapsed .cart-details{display:none;}
@@ -360,28 +369,31 @@
   }
   .section-title.hidden{ display: none; }
 
-  .featured-scroll{
-    display:flex; gap:12px; overflow-x:auto; padding:4px 16px 12px; scrollbar-width:none;
-    scroll-behavior: smooth;
+  /* Smooth Infinite Carousel Container */
+  .featured-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 6px 0 14px;
   }
-  .featured-scroll::-webkit-scrollbar{display:none;}
-  .featured-scroll.hidden{ display: none; }
+  .featured-track {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    will-change: transform;
+  }
+  .featured-container.hidden { display: none; }
 
   .featured-card{
-    flex:0 0 140px; background:var(--card); border:1px solid var(--line);
+    flex:0 0 135px; background:var(--card); border:1px solid var(--line);
     border-radius:16px; padding:10px; text-align:center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
   }
   .featured-card:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.12); }
   .featured-card img{width:100%; height:85px; object-fit:cover; border-radius:12px; background:var(--leaf);}
   .featured-card .fname{font-size:13px; font-weight:700; margin-top:6px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .featured-card .frate{font-size:12px; color:var(--price); font-weight:700; margin-top:4px;}
-  .featured-card .add-btn {
-    margin-top:8px; width:100%; background:var(--leaf); color:var(--dark);
-    border:1px solid #cfe8d1; border-radius:8px; padding:5px 0; font-size:12px; font-weight:700; cursor:pointer;
-  }
-  .featured-card .add-btn:hover { background:var(--dark); color:#fff; }
 
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
@@ -456,9 +468,11 @@
   <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
 </div>
 
-<!-- Featured Items Section -->
-<div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء (Featured Products)</div>
-<div class="featured-scroll hidden" id="featuredScroll"></div>
+<!-- Featured Items Carousel Section -->
+<div class="section-title hidden" id="featuredTitle">⭐ نمائیاں اشیاء (Featured Products)</div>
+<div class="featured-container hidden" id="featuredContainer">
+  <div class="featured-track" id="featuredTrack"></div>
+</div>
 
 <button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
 
@@ -667,37 +681,89 @@ function renderChips(){
   });
 }
 
+/* Feature Slider Animation Logic */
+let carouselAnimId = null;
+
+function scrollToOriginalItem(itemId) {
+  // Clear any existing search filter to ensure item is visible
+  const searchInput = document.getElementById("search");
+  if(searchInput.value !== "") {
+    searchInput.value = "";
+    renderList("");
+  }
+
+  const targetRow = document.getElementById("row-" + itemId);
+  if(targetRow) {
+    targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+    targetRow.classList.add("highlighted");
+    setTimeout(() => {
+      targetRow.classList.remove("highlighted");
+    }, 2000);
+  }
+}
+
 function renderFeatured(){
-  const featuredScroll = document.getElementById("featuredScroll");
-  const featuredTitle = document.getElementById("featuredTitle");
-  featuredScroll.innerHTML = "";
+  const track = document.getElementById("featuredTrack");
+  const container = document.getElementById("featuredContainer");
+  const title = document.getElementById("featuredTitle");
+  track.innerHTML = "";
   
   const featuredItems = ITEMS.filter(it => it.featured && it.available);
   if(featuredItems.length === 0){
-    featuredTitle.classList.add("hidden");
-    featuredScroll.classList.add("hidden");
+    title.classList.add("hidden");
+    container.classList.add("hidden");
     return;
   }
   
-  featuredTitle.classList.remove("hidden");
-  featuredScroll.classList.remove("hidden");
+  title.classList.remove("hidden");
+  container.classList.remove("hidden");
 
-  featuredItems.forEach(it => {
+  // Duplicate items for infinite seamless scroll effect
+  const displayItems = [...featuredItems, ...featuredItems, ...featuredItems];
+
+  displayItems.forEach(it => {
     const card = document.createElement("div");
     card.className = "featured-card";
     card.innerHTML = `
       ${it.image ? `<img src="${it.image}" alt="${dispName(it)}">` : `<div style="font-size:40px; height:85px; display:flex; align-items:center; justify-content:center; background:var(--leaf); border-radius:12px;">${it.icon||'🛒'}</div>`}
       <div class="fname">${dispName(it)}</div>
       <div class="frate">${fmt(currentRate(it))} / ${currentLabel(it)}</div>
-      <button class="add-btn" data-id="${it.id}">+ شامل کریں</button>
     `;
-    card.querySelector(".add-btn").onclick = (e) => {
-      e.stopPropagation();
-      changeQty(it.id, 1);
-      showToast(`✅ ${dispName(it)} کارٹ میں شامل ہو گیا`);
-    };
-    featuredScroll.appendChild(card);
+    card.onclick = () => scrollToOriginalItem(it.id);
+    track.appendChild(card);
   });
+
+  startCarousel();
+}
+
+function startCarousel() {
+  const track = document.getElementById("featuredTrack");
+  const container = document.getElementById("featuredContainer");
+  if(!track || !container) return;
+
+  let pos = 0;
+  let isHovered = false;
+  const speed = 0.6; // Speed of smooth scrolling
+
+  container.addEventListener("mouseenter", () => isHovered = true);
+  container.addEventListener("mouseleave", () => isHovered = false);
+  container.addEventListener("touchstart", () => isHovered = true);
+  container.addEventListener("touchend", () => isHovered = false);
+
+  if (carouselAnimId) cancelAnimationFrame(carouselAnimId);
+
+  function animate() {
+    if (!isHovered) {
+      pos += speed;
+      const singleSetWidth = track.scrollWidth / 3;
+      if (pos >= singleSetWidth) {
+        pos = 0; // Reset smoothly without jump
+      }
+      track.style.transform = `translateX(${pos}px)`;
+    }
+    carouselAnimId = requestAnimationFrame(animate);
+  }
+  animate();
 }
 
 function renderList(filter){

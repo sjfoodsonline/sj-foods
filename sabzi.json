@@ -55,7 +55,7 @@
     ],
     "available": true,
     "image": "products/sabzi-2-1785053017749.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Tamatar"
   },
   {
@@ -72,7 +72,7 @@
     ],
     "available": true,
     "image": "products/sabzi-3-1785053762180.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Kachalu"
   },
   {
@@ -89,7 +89,7 @@
     ],
     "available": true,
     "image": "products/sabzi-4-1785050455068.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Bhindi"
   },
   {
@@ -390,7 +390,7 @@
     ],
     "available": true,
     "image": "products/sabzi-21-1785050769712.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Lemon"
   },
   {
@@ -450,7 +450,7 @@
     ],
     "available": true,
     "image": "products/sabzi-25-1785050829478.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Pudina"
   },
   {

@@ -7,7 +7,7 @@
         "rate": 350
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-0-1785055522637.jpg",
     "featured": false,
     "name_roman": "Seb"
@@ -24,7 +24,7 @@
         "rate": 95
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-1-1785055677136.jpg",
     "featured": false,
     "name_roman": "Kela"
@@ -37,7 +37,7 @@
         "rate": 400
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-2-1785051649475.jpg",
     "featured": false,
     "name_roman": "Angoor"
@@ -50,7 +50,7 @@
         "rate": 100
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-3-1785056181452.jpg",
     "featured": false,
     "name_roman": "Tarbooz"
@@ -63,7 +63,7 @@
         "rate": 120
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-4-1785055980855.jpg",
     "featured": false,
     "name_roman": "Kharbooza"
@@ -76,7 +76,7 @@
         "rate": 300
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/phal-5-1785056161890.jpg",
     "featured": false,
     "name_roman": "Aam (Seasonal)"

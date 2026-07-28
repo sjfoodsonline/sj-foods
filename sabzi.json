@@ -4,15 +4,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 100
-      },
-      {
-        "label": "آدھا KG",
         "rate": 50
       },
       {
+        "label": "آدھا KG",
+        "rate": 25
+      },
+      {
         "label": "دڑی (5 KG)",
-        "rate": 500
+        "rate": 250
       }
     ],
     "available": true,
@@ -25,15 +25,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 250
+        "rate": 120
       },
       {
         "label": "آدھا KG",
-        "rate": 125
+        "rate": 60
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 1250
+        "rate": 600
       }
     ],
     "available": true,
@@ -63,11 +63,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 130
+        "rate": 120
       },
       {
         "label": "آدھا KG",
-        "rate": 65
+        "rate": 60
       }
     ],
     "available": true,
@@ -80,11 +80,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 150
       },
       {
         "label": "آدھا KG",
-        "rate": 100
+        "rate": 75
       }
     ],
     "available": true,
@@ -114,11 +114,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 300
+        "rate": 200
       },
       {
         "label": "آدھا KG",
-        "rate": 150
+        "rate": 100
       }
     ],
     "available": true,
@@ -182,11 +182,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 300
+        "rate": 280
       },
       {
         "label": "آدھا KG",
-        "rate": 150
+        "rate": 140
       }
     ],
     "available": true,
@@ -216,11 +216,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 250
+        "rate": 200
       },
       {
         "label": "آدھا KG",
-        "rate": 125
+        "rate": 100
       }
     ],
     "available": true,
@@ -233,11 +233,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 250
+        "rate": 200
       },
       {
         "label": "آدھا KG",
-        "rate": 125
+        "rate": 100
       }
     ],
     "available": true,
@@ -250,11 +250,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 180
       },
       {
         "label": "آدھا KG",
-        "rate": 100
+        "rate": 90
       }
     ],
     "available": true,
@@ -318,11 +318,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 50
+        "rate": 180
       },
       {
         "label": "آدھا KG",
-        "rate": 25
+        "rate": 90
       }
     ],
     "available": true,
@@ -335,15 +335,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 150
+        "rate": 600
       },
       {
         "label": "پاؤ (250 گرام)",
-        "rate": 40
+        "rate": 150
       },
       {
         "label": "آدھا KG",
-        "rate": 75
+        "rate": 300
       }
     ],
     "available": true,
@@ -356,15 +356,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 120
+        "rate": 320
       },
       {
         "label": "پاؤ (250 گرام)",
-        "rate": 30
+        "rate": 80
       },
       {
         "label": "آدھا KG",
-        "rate": 60
+        "rate": 160
       }
     ],
     "available": true,
@@ -378,6 +378,10 @@
       {
         "label": "KG",
         "rate": 200
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 50
       },
       {
         "label": "آدھا KG",
@@ -441,7 +445,7 @@
     "units": [
       {
         "label": "گڈی",
-        "rate": 20
+        "rate": 10
       }
     ],
     "available": true,
@@ -454,7 +458,7 @@
     "units": [
       {
         "label": "گیڈی",
-        "rate": 50
+        "rate": 20
       }
     ],
     "available": true,
@@ -470,7 +474,7 @@
         "rate": 50
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/sabzi-27-1785051065277.jpg",
     "featured": false,
     "name_roman": "Mooli"
@@ -480,7 +484,7 @@
     "units": [
       {
         "label": "KG",
-        "rate": 80
+        "rate": 150
       }
     ],
     "available": true,
@@ -493,7 +497,7 @@
     "units": [
       {
         "label": "گڈی ",
-        "rate": 40
+        "rate": 50
       }
     ],
     "available": true,

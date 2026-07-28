@@ -94,7 +94,7 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- Auto-Sliding Loop Category Bar (Chips) ---- */
+  /* ---- 1. کیٹیگریز: ایک ایک کر کے رک رک کر چلنے والی اینیمیشن ---- */
   .chips {
     overflow: hidden; padding: 10px 0; position: sticky; top: 52px;
     background: var(--paper); z-index: 19; white-space: nowrap;
@@ -102,14 +102,18 @@
   }
   .chips-track {
     display: flex; gap: 10px; width: max-content;
-    animation: autoSlideChips 28s linear infinite;
+    animation: stepPauseSlide 16s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   }
   .chips:hover .chips-track {
-    animation-play-state: paused; /* ماؤس لانے پر سلائیڈنگ رک جائے گی */
+    animation-play-state: paused; /* ماؤس یا لمس پر رک جائے گا */
   }
-  @keyframes autoSlideChips {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(50%); }
+  @keyframes stepPauseSlide {
+    0%, 15%   { transform: translateX(0); }
+    20%, 35%  { transform: translateX(20%); }
+    40%, 55%  { transform: translateX(40%); }
+    60%, 75%  { transform: translateX(60%); }
+    80%, 95%  { transform: translateX(80%); }
+    100%      { transform: translateX(100%); }
   }
 
   .chip {
@@ -135,6 +139,32 @@
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-100%, 0, 0); }
   }
+
+  /* ---- 2. نمایاں اشیاء (Featured Scroll): مخالف سمت میں سموتھ اینیمیشن ---- */
+  .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
+  .featured-scroll {
+    display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none;
+  }
+  .featured-scroll::-webkit-scrollbar { display: none; }
+  
+  .featured-track {
+    display: flex; gap: 10px; width: max-content;
+    animation: autoSlideFeatured 30s linear infinite reverse; /* مخالف سمت میں ہلکی سلائیڈنگ */
+  }
+  .featured-scroll:hover .featured-track {
+    animation-play-state: paused;
+  }
+  @keyframes autoSlideFeatured {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
+
+  .featured-card{
+    flex:0 0 130px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:8px; text-align:center;
+  }
+  .featured-card img{width:100%; height:80px; object-fit:cover; border-radius:10px; background:var(--leaf);}
+  .featured-card .fname{font-size:12px; font-weight:700; margin-top:6px; color:var(--ink);}
+  .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:700; margin-top:2px;}
 
   main{padding:6px 16px 10px;}
   .cat-title{
@@ -341,16 +371,6 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
-  .featured-scroll{display:flex; gap:10px; overflow-x:auto; padding:0 16px 4px; scrollbar-width:none;}
-  .featured-scroll::-webkit-scrollbar{display:none;}
-  .featured-card{
-    flex:0 0 130px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:8px; text-align:center;
-  }
-  .featured-card img{width:100%; height:80px; object-fit:cover; border-radius:10px; background:var(--leaf);}
-  .featured-card .fname{font-size:12px; font-weight:700; margin-top:6px; color:var(--ink);}
-  .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:700; margin-top:2px;}
-
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
     display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:30px; cursor:pointer;
@@ -426,6 +446,7 @@
   <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
 </div>
 
+<!-- Featured Items Auto-Slide -->
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
 <div class="featured-scroll hidden" id="featuredScroll"></div>
 
@@ -443,7 +464,7 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- Category chips container for infinite loop -->
+<!-- Step-Pause Category Bar -->
 <div class="chips" id="chips"></div>
 
 <main id="list"></main>
@@ -622,14 +643,13 @@ async function loadSettings(){
   }catch(e){}
 }
 
-/* مسلسل لوپ (Auto Infinite Loop) بنانے کا فنکشن */
+/* رک رک کر آگے بڑھنے والا کیٹیگری بار (Chips) */
 function renderChips(){
   chipsEl.innerHTML = "";
   
   const track = document.createElement("div");
   track.className = "chips-track";
 
-  // فہرست کو ڈپلیکیٹ کرتے ہیں تاکہ بغیر بریک کے لوپ بن جائے
   const doubleCategories = [...CATEGORIES_META, ...CATEGORIES_META];
 
   doubleCategories.forEach(cat => {
@@ -648,6 +668,40 @@ function renderChips(){
   });
 
   chipsEl.appendChild(track);
+}
+
+/* نمایاں اشیاء (Featured Items) جو مخالف سمت میں سلائیڈ ہوں گی */
+function renderFeatured(){
+  const fItems = ITEMS.filter(i=> i.featured);
+  if(!fItems.length) return;
+  
+  document.getElementById("featuredTitle").classList.remove("hidden");
+  const wrap = document.getElementById("featuredScroll");
+  wrap.classList.remove("hidden");
+  wrap.innerHTML = "";
+
+  const track = document.createElement("div");
+  track.className = "featured-track";
+
+  const doubleFeatured = [...fItems, ...fItems];
+
+  doubleFeatured.forEach(it=>{
+    const card = document.createElement("div");
+    card.className = "featured-card";
+    card.innerHTML = `
+      <img src="${it.image || 'cover.png'}" alt="${dispName(it)}" loading="lazy">
+      <div class="fname">${dispName(it)}</div>
+      <div class="frate">${fmt(currentRate(it))}</div>`;
+      
+    card.onclick = ()=>{
+      const el = document.getElementById("row-"+it.id);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    };
+    
+    track.appendChild(card);
+  });
+
+  wrap.appendChild(track);
 }
 
 function renderList(filter){
@@ -961,28 +1015,6 @@ function refreshHeroLinks(){
   document.getElementById("heroWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
   document.getElementById("heroCallBtn").href = "tel:" + SHOP_PAY_NUMBER.replace(/-/g,"");
   document.getElementById("floatingWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
-}
-
-function renderFeatured(){
-  const fItems = ITEMS.filter(i=> i.featured);
-  if(!fItems.length) return;
-  document.getElementById("featuredTitle").classList.remove("hidden");
-  const wrap = document.getElementById("featuredScroll");
-  wrap.classList.remove("hidden");
-  wrap.innerHTML = "";
-  fItems.forEach(it=>{
-    const card = document.createElement("div");
-    card.className = "featured-card";
-    card.innerHTML = `
-      <img src="${it.image || 'cover.png'}" alt="${dispName(it)}" loading="lazy">
-      <div class="fname">${dispName(it)}</div>
-      <div class="frate">${fmt(currentRate(it))}</div>`;
-    card.onclick = ()=>{
-      const el = document.getElementById("row-"+it.id);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
-    };
-    wrap.appendChild(card);
-  });
 }
 
 const lightbox = document.getElementById("lightbox");

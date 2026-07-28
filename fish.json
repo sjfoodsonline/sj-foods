@@ -1,51 +1,93 @@
 [
   {
     "name": "راہو / مہاشیر (درمیانی)",
-    "name_roman": "Rahu / Mahseer (Darmiyani)",
-    "unit": "KG",
-    "rate": 500,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 500
+      }
+    ],
+    "available": true,
+    "image": "products/fish-0-1785227671259.jpg",
+    "featured": false,
+    "name_roman": "Rahu / Mahseer (Darmiyani)"
   },
   {
     "name": "راہو / مہاشیر (بڑی)",
-    "name_roman": "Rahu / Mahseer (Bari)",
-    "unit": "KG",
-    "rate": 600,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 600
+      }
+    ],
+    "available": true,
+    "image": "products/fish-1-1785227701832.jpg",
+    "featured": false,
+    "name_roman": "Rahu / Mahseer (Bari)"
   },
   {
     "name": "راہو / مہاشیر (بڑا کانٹا / سلائس)",
-    "name_roman": "Rahu / Mahseer (Bara Kanta / Slice)",
-    "unit": "KG",
-    "rate": 700,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 700
+      }
+    ],
+    "available": true,
+    "image": "products/fish-2-1785227738791.jpg",
+    "featured": false,
+    "name_roman": "Rahu / Mahseer (Bara Kanta / Slice)"
   },
   {
     "name": "گراس کارپ فش",
-    "name_roman": "Grass Carp Fish",
-    "unit": "KG",
-    "rate": 900,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      }
+    ],
+    "available": true,
+    "image": "products/fish-3-1785227781641.jpg",
+    "featured": false,
+    "name_roman": "Grass Carp Fish"
   },
   {
-    "name": "کالا فنگر فش",
-    "name_roman": "Kala Finger Fish",
-    "unit": "KG",
-    "rate": 800,
-    "available": true
+    "name": "فنگر فش",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 800
+      }
+    ],
+    "available": true,
+    "image": "products/fish-4-1785227998216.jpg",
+    "featured": false,
+    "name_roman": "Kala Finger Fish"
   },
   {
     "name": "کتھل / تھائلہ فش",
-    "name_roman": "Kathal / Thaila Fish (Catla)",
-    "unit": "KG",
-    "rate": 1600,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1600
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false,
+    "name_roman": "Kathal / Thaila Fish (Catla)"
   },
   {
     "name": "سواتی ٹراؤٹ فش",
-    "name_roman": "Swati Trout Fish",
-    "unit": "KG",
-    "rate": 2300,
-    "available": true
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2300
+      }
+    ],
+    "available": false,
+    "image": "products/fish-6-1785228049880.jpg",
+    "featured": false,
+    "name_roman": "Swati Trout Fish"
   }
 ]

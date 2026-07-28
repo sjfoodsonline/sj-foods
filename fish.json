@@ -1,0 +1,51 @@
+[
+  {
+    "name": "راہو / مہاشیر (درمیانی)",
+    "name_roman": "Rahu / Mahseer (Darmiyani)",
+    "unit": "KG",
+    "rate": 500,
+    "available": true
+  },
+  {
+    "name": "راہو / مہاشیر (بڑی)",
+    "name_roman": "Rahu / Mahseer (Bari)",
+    "unit": "KG",
+    "rate": 600,
+    "available": true
+  },
+  {
+    "name": "راہو / مہاشیر (بڑا کانٹا / سلائس)",
+    "name_roman": "Rahu / Mahseer (Bara Kanta / Slice)",
+    "unit": "KG",
+    "rate": 700,
+    "available": true
+  },
+  {
+    "name": "گراس کارپ فش",
+    "name_roman": "Grass Carp Fish",
+    "unit": "KG",
+    "rate": 900,
+    "available": true
+  },
+  {
+    "name": "کالا فنگر فش",
+    "name_roman": "Kala Finger Fish",
+    "unit": "KG",
+    "rate": 800,
+    "available": true
+  },
+  {
+    "name": "کتھل / تھائلہ فش",
+    "name_roman": "Kathal / Thaila Fish (Catla)",
+    "unit": "KG",
+    "rate": 1600,
+    "available": true
+  },
+  {
+    "name": "سواتی ٹراؤٹ فش",
+    "name_roman": "Swati Trout Fish",
+    "unit": "KG",
+    "rate": 2300,
+    "available": true
+  }
+]

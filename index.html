@@ -85,6 +85,23 @@
   header h1{margin:0 0 4px; font-size:22px; font-weight:700; position:relative;}
   header p{margin:0; font-size:12.5px; opacity:.92; position:relative;}
 
+  /* ---- 1. اردو کے مطابق درست ٹاپ بینر (RTL Scrolling) ---- */
+  .top-ticker {
+    width: 100%; overflow: hidden; white-space: nowrap;
+    background: #2e7d32; color: white; padding: 6px 0; font-size: 12.5px; font-weight: bold;
+    direction: ltr; /* ٹیکسٹ کی صحیح سمت کے لیے */
+  }
+  .top-ticker-content {
+    display: inline-block;
+    padding-right: 100%;
+    animation: urduTicker 25s linear infinite;
+    direction: rtl;
+  }
+  @keyframes urduTicker {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(0%); }
+  }
+
   .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
   #search{
     width:100%; padding:12px 14px; font-size:15px;
@@ -94,7 +111,7 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- 1. کیٹیگریز: ایک ایک کر کے رک رک کر چلنے والی اینیمیشن ---- */
+  /* ---- 2. کیٹیگریز: مناسب رفتار کے ساتھ سموتھ اینیمیشن ---- */
   .chips {
     overflow: hidden; padding: 10px 0; position: sticky; top: 52px;
     background: var(--paper); z-index: 19; white-space: nowrap;
@@ -102,18 +119,14 @@
   }
   .chips-track {
     display: flex; gap: 10px; width: max-content;
-    animation: stepPauseSlide 16s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    animation: smoothCatScroll 28s linear infinite; /* سموتھ اور مناسب سلو رفتار */
   }
   .chips:hover .chips-track {
-    animation-play-state: paused; /* ماؤس یا لمس پر رک جائے گا */
+    animation-play-state: paused;
   }
-  @keyframes stepPauseSlide {
-    0%, 15%   { transform: translateX(0); }
-    20%, 35%  { transform: translateX(20%); }
-    40%, 55%  { transform: translateX(40%); }
-    60%, 75%  { transform: translateX(60%); }
-    80%, 95%  { transform: translateX(80%); }
-    100%      { transform: translateX(100%); }
+  @keyframes smoothCatScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
   .chip {
@@ -126,21 +139,7 @@
     background: var(--mid); color: #fff; transform: scale(1.05);
   }
 
-  /* ---- Top Smooth Ticker Banner ---- */
-  .top-ticker {
-    width: 100%; overflow: hidden; white-space: nowrap;
-    background: #2e7d32; color: white; padding: 6px 0; font-size: 12px; font-weight: bold;
-  }
-  .top-ticker-content {
-    display: inline-block; padding-left: 100%;
-    animation: ticker 20s linear infinite;
-  }
-  @keyframes ticker {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
-  }
-
-  /* ---- 2. نمایاں اشیاء (Featured Scroll): مخالف سمت میں سموتھ اینیمیشن ---- */
+  /* ---- 3. نمایاں اشیاء (Featured Shuffle Animation) ---- */
   .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
   .featured-scroll {
     display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none;
@@ -149,14 +148,21 @@
   
   .featured-track {
     display: flex; gap: 10px; width: max-content;
-    animation: autoSlideFeatured 30s linear infinite reverse; /* مخالف سمت میں ہلکی سلائیڈنگ */
+    animation: shuffleWave 18s ease-in-out infinite; /* دو آگے ایک پیچھے ہلاؤ اینیمیشن */
   }
   .featured-scroll:hover .featured-track {
     animation-play-state: paused;
   }
-  @keyframes autoSlideFeatured {
+
+  /* آگے اور پیچھے شفل ہونے والی اینیمیشن (Shuffle Style) */
+  @keyframes shuffleWave {
     0%   { transform: translateX(0); }
-    100% { transform: translateX(50%); }
+    20%  { transform: translateX(180px); }  /* 2 آئٹمز آگے */
+    30%  { transform: translateX(90px); }   /* 1 آئٹم پیچھے */
+    50%  { transform: translateX(360px); }  /* مزید 2 آئٹمز آگے */
+    60%  { transform: translateX(270px); }  /* 1 آئٹم پیچھے */
+    80%  { transform: translateX(500px); }  /* آگے */
+    100% { transform: translateX(0); }      /* دوبارہ پہلی حالت میں */
   }
 
   .featured-card{
@@ -446,7 +452,7 @@
   <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
 </div>
 
-<!-- Featured Items Auto-Slide -->
+<!-- Featured Items Shuffle Wave Slide -->
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
 <div class="featured-scroll hidden" id="featuredScroll"></div>
 
@@ -464,7 +470,7 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- Step-Pause Category Bar -->
+<!-- Smooth Category Chips Bar -->
 <div class="chips" id="chips"></div>
 
 <main id="list"></main>
@@ -517,561 +523,450 @@
       <div class="area-note" id="areaNote"></div>
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
-      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
+      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>📌 SJ Foods Online Store, Main Bazar, Mingora, Swat</div>
     </div>
 
     <div class="actions">
-      <button id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
-      <button id="clearBtn">🗑️</button>
+      <button id="waBtn">💬 واٹس ایپ پر آرڈر بھیجیں</button>
+      <button id="clearBtn" title="کارٹ خالی کریں">🗑️</button>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
+<a href="https://wa.me/923349353799" class="fab fab-wa" target="_blank" title="واٹس ایپ">💬</a>
+
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="بڑا منظر">
+</div>
+
 <div class="pay-methods-strip">
-  <div class="pay-method-badge">📲<span class="ic"></span>ایزی پیسہ</div>
-  <div class="pay-method-badge">💵<span class="ic"></span>کیش آن ڈیلیوری</div>
-  <div class="pay-method-badge soon">🏦<span class="ic"></span>بینک ٹرانسفر (جلد)</div>
+  <div class="pay-method-badge"><span class="ic">💵</span>کیش آن ڈیلیوری</div>
+  <div class="pay-method-badge"><span class="ic">📲</span>ایزی پیسہ</div>
+  <div class="pay-method-badge soon"><span class="ic">💳</span>کارڈ (جلد)</div>
 </div>
 
 <footer>
-  SJ Foods Mingora Swat — تازہ اشیاء، تیز ڈیلیوری، بھروسہ مند سروس 🌿<br>
-  <span id="footerContact">📞 0334-9353799   📧 sjfoodsonline@outlook.com</span><br>
-  📍 <span id="footerAddress">Al Basit Plaza, Haji Baba Road, Mingora Swat</span><br>
-  🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک
-  <div class="footer-links" id="footerSocial"></div>
+  <div>© 2026 SJ Foods Online Store Mingora Swat. All rights reserved.</div>
+  <div>تازہ ترین ریٹس روزانہ اپ ڈیٹ ہوتے ہیں — مینگورہ شہر و گردونواح میں فوری ڈیلیوری</div>
   <div class="footer-links">
-    <button id="openPrivacy">پرائیویسی پالیسی</button>
-    <button id="openTerms">شرائط و ضوابط</button>
+    <button id="openPrivacy">Privacy Policy</button> • 
+    <button id="openTerms">Terms & Conditions</button>
   </div>
 </footer>
 
 <div class="policy-overlay hidden" id="policyOverlay">
   <div class="policy-sheet">
-    <h3 id="policyTitle"></h3>
+    <h3 id="policyTitle">پرائیویسی پالیسی</h3>
     <div id="policyBody"></div>
-    <button id="closePolicy">ٹھیک ہے</button>
+    <button id="closePolicy">بند کریں</button>
   </div>
 </div>
 
-<div class="lightbox hidden" id="lightbox">
-  <button class="lightbox-close" id="closeLightbox">✕</button>
-  <img id="lightboxImg" src="" alt="">
-</div>
-
-<a class="fab fab-wa" id="floatingWaBtn" href="#" target="_blank" title="واٹس ایپ">💬</a>
-
-<div class="toast" id="toast"></div>
-
 <script>
-let CATEGORIES_META = [];
-let ITEMS = [];
+let items = [];
+let cart = {};
+let config = {};
+let activeCat = "ALL";
+let deferredPrompt = null;
 
-const listEl = document.getElementById("list");
-const chipsEl = document.getElementById("chips");
-const noResultEl = document.getElementById("noResult");
-const loadingMsg = document.getElementById("loadingMsg");
-const billbar = document.getElementById("billbar");
+const PHONE_NUMBER = "923349353799";
+const DISPLAY_PHONE = "0334-9353799";
+const DISPLAY_EMAIL = "sjfoodsonline@outlook.com";
 
-function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+const $ = id => document.getElementById(id);
 
-function buildItemsFromCategories(catData){
-  let items = [];
-  catData.forEach((cat, ci) => {
-    cat.items.forEach((it, ii) => {
-      const units = (it.units && it.units.length)
-        ? it.units.map(u=>({label:u.label, rate:u.rate}))
-        : [{label: it.unit, rate: it.rate}];
-      items.push({
-        id: ci+"-"+ii, cat: cat.category, icon: cat.icon,
-        name: it.name, name_roman: it.name_roman || "", units: units, unitIndex: 0,
-        available: it.available !== false,
-        image: it.image || "",
-        featured: it.featured === true,
-        qty: 0
-      });
-    });
-  });
-  return items;
-}
-function currentUnit(it){ return it.units[it.unitIndex] || it.units[0]; }
-function currentRate(it){ return currentUnit(it).rate; }
-function currentLabel(it){ return currentUnit(it).label; }
-function dispName(it){ return it.name_roman ? `${it.name_roman} (${it.name})` : it.name; }
-function dispCatName(cat){ return cat.name_roman ? `${cat.name_roman} (${cat.name})` : cat.name; }
+async function loadData() {
+  try {
+    const res = await fetch('data.json?v=' + Date.now());
+    const data = await res.json();
+    items = data.items || [];
+    config = data.config || {};
+    $('loadingMsg').style.display = 'none';
 
-async function loadRates(){
-  try{
-    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
-    const index = await idxRes.json();
-
-    const catResults = await Promise.all(
-      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
-    );
-
-    CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
-
-    const combined = index.map((entry, i) => ({
-      category: entry.category,
-      icon: entry.icon,
-      items: catResults[i]
-    }));
-    ITEMS = buildItemsFromCategories(combined);
-  }catch(e){
-    loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
-    console.error(e);
+    renderCover();
+    renderFeatured();
+    renderChips();
+    renderList();
+    bindHeaderAndFooterInfo();
+  } catch(e) {
+    $('loadingMsg').innerText = '❌ ریٹ لسٹ لوڈ نہ ہو سکی، صفحہ ریفریش کریں۔';
   }
 }
 
-async function loadSettings(){
-  try{
-    const res = await fetch("settings.json", {cache:"no-store"});
-    const s = await res.json();
-    if(s.whatsapp) SHOP_WHATSAPP = s.whatsapp;
-    if(s.pay_number) SHOP_PAY_NUMBER = s.pay_number;
-    if(s.email) SHOP_EMAIL = s.email;
-    if(s.cover_image){
-      document.getElementById("coverImg").src = s.cover_image;
-      document.getElementById("coverBanner").style.display = "block";
-    }
-    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
-    document.getElementById("footerContact").textContent = `📞 ${SHOP_PAY_NUMBER}   📧 ${SHOP_EMAIL}`;
-    document.getElementById("noteContact").textContent = SHOP_PAY_NUMBER;
-    document.getElementById("noteEmail").textContent = SHOP_EMAIL;
-    if(s.address) document.getElementById("footerAddress").textContent = s.address;
-    refreshHeroLinks();
-    renderSocialLinks(s);
-  }catch(e){}
+function renderCover(){
+  if(config.cover_image){
+    $('coverImg').src = config.cover_image;
+    $('coverBanner').style.display = 'block';
+  }
 }
 
-/* رک رک کر آگے بڑھنے والا کیٹیگری بار (Chips) */
-function renderChips(){
-  chipsEl.innerHTML = "";
-  
-  const track = document.createElement("div");
-  track.className = "chips-track";
-
-  const doubleCategories = [...CATEGORIES_META, ...CATEGORIES_META];
-
-  doubleCategories.forEach(cat => {
-    const chip = document.createElement("div");
-    chip.className = "chip";
-    chip.textContent = cat.icon + " " + dispCatName(cat);
-    
-    chip.onclick = () => {
-      const el = document.getElementById("cat-" + cat.name);
-      if(el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
-    
-    track.appendChild(chip);
-  });
-
-  chipsEl.appendChild(track);
+function bindHeaderAndFooterInfo(){
+  const wa = `https://wa.me/${PHONE_NUMBER}`;
+  $('heroWaBtn').href = wa;
+  $('heroCallBtn').href = `tel:+${PHONE_NUMBER}`;
+  $('noteContact').innerText = DISPLAY_PHONE;
+  $('noteEmail').innerText = DISPLAY_EMAIL;
 }
 
-/* نمایاں اشیاء (Featured Items) جو مخالف سمت میں سلائیڈ ہوں گی */
 function renderFeatured(){
-  const fItems = ITEMS.filter(i=> i.featured);
-  if(!fItems.length) return;
+  const feat = items.filter(i => i.featured);
+  if(!feat.length) return;
+  $('featuredTitle').classList.remove('hidden');
+  $('featuredScroll').classList.remove('hidden');
   
-  document.getElementById("featuredTitle").classList.remove("hidden");
-  const wrap = document.getElementById("featuredScroll");
-  wrap.classList.remove("hidden");
-  wrap.innerHTML = "";
-
-  const track = document.createElement("div");
-  track.className = "featured-track";
-
-  const doubleFeatured = [...fItems, ...fItems];
-
-  doubleFeatured.forEach(it=>{
-    const card = document.createElement("div");
-    card.className = "featured-card";
-    card.innerHTML = `
-      <img src="${it.image || 'cover.png'}" alt="${dispName(it)}" loading="lazy">
-      <div class="fname">${dispName(it)}</div>
-      <div class="frate">${fmt(currentRate(it))}</div>`;
-      
-    card.onclick = ()=>{
-      const el = document.getElementById("row-"+it.id);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
-    };
-    
-    track.appendChild(card);
+  // شفل وِیو اینیمیشن کے لیے ٹریک
+  let html = '<div class="featured-track">';
+  feat.forEach(i => {
+    const unitObj = (i.units && i.units.length) ? i.units[0] : null;
+    const rateTxt = unitObj ? `Rs. ${unitObj.price} / ${unitObj.unit_name}` : 'ریٹ دستیاب نہیں';
+    const imgHtml = i.image ? `<img src="${i.image}" alt="${i.item_name_ur}">` : `<div style="font-size:36px; padding-top:10px;">🥦</div>`;
+    html += `
+      <div class="featured-card">
+        ${imgHtml}
+        <div class="fname">${i.item_name_ur}</div>
+        <div class="frate">${rateTxt}</div>
+      </div>
+    `;
   });
-
-  wrap.appendChild(track);
+  html += '</div>';
+  $('featuredScroll').innerHTML = html;
 }
 
-function renderList(filter){
-  listEl.innerHTML = "";
-  const f = (filter||"").trim();
-  let anyShown = false;
+/* سموتھ کیٹیگریز رینڈرنگ (دوبارہ نان اسٹاپ لوپ کے لیے ڈپلیکیٹ کی گئی ہیں) */
+function renderChips(){
+  const cats = ["ALL", ...new Set(items.map(i => i.category_ur))];
+  let chipsMarkup = '';
+  
+  cats.forEach(c => {
+    const label = c === "ALL" ? "سب اشیاء" : c;
+    chipsMarkup += `<div class="chip" onclick="filterCat('${c}')">${label}</div>`;
+  });
 
-  CATEGORIES_META.forEach(cat=>{
-    const catItems = ITEMS.filter(it=> it.cat===cat.name && (!f || it.name.includes(f) || (it.name_roman && it.name_roman.toLowerCase().includes(f.toLowerCase()))));
-    if(catItems.length===0) return;
-    anyShown = true;
+  // بغیر وقفے کے سموتھ گھومنے کے لیے ڈپلیکیٹ آئٹمز ایڈ کیے گئے ہیں
+  $('chips').innerHTML = `<div class="chips-track">${chipsMarkup}${chipsMarkup}</div>`;
+}
 
-    const title = document.createElement("div");
-    title.className = "cat-title";
-    title.id = "cat-"+cat.name;
-    title.textContent = cat.icon + " " + dispCatName(cat);
+function filterCat(c){
+  activeCat = c;
+  renderList();
+}
 
-    if(cat.image){
-      const banner = document.createElement("div");
-      banner.className = "cat-banner";
-      banner.innerHTML = `<img src="${cat.image}" alt="${dispCatName(cat)}">`;
-      listEl.appendChild(banner);
+function renderList(){
+  const q = $('search').value.trim().toLowerCase();
+  const listEl = $('list');
+  listEl.innerHTML = '';
+
+  let filtered = items.filter(i => {
+    const matchCat = (activeCat === "ALL" || i.category_ur === activeCat);
+    const matchQ = !q || (i.item_name_ur && i.item_name_ur.toLowerCase().includes(q)) || (i.item_name_en && i.item_name_en.toLowerCase().includes(q));
+    return matchCat && matchQ;
+  });
+
+  if(!filtered.length){
+    $('noResult').style.display = 'block';
+    return;
+  }
+  $('noResult').style.display = 'none';
+
+  const grouped = {};
+  filtered.forEach(i => {
+    const cat = i.category_ur || "دیگر";
+    if(!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(i);
+  });
+
+  for(const cat in grouped){
+    const catHeader = document.createElement('div');
+    catHeader.className = 'cat-title';
+    catHeader.id = 'cat-' + cat;
+    catHeader.innerText = cat;
+    listEl.appendChild(catHeader);
+
+    if(config.category_banners && config.category_banners[cat]){
+      const bDiv = document.createElement('div');
+      bDiv.className = 'cat-banner';
+      bDiv.innerHTML = `<img src="${config.category_banners[cat]}" alt="${cat}">`;
+      listEl.appendChild(bDiv);
     }
-    listEl.appendChild(title);
 
-    catItems.forEach(it=>{
-      const row = document.createElement("div");
-      row.className = "item" + (it.qty>0 ? " active":"") + (!it.available ? " unavailable":"");
-      row.id = "row-"+it.id;
-      const multi = it.units.length > 1;
-      const unitOptionsHtml = multi
-        ? it.units.map((u,idx)=>`<option value="${idx}" ${idx===it.unitIndex?"selected":""}>${u.label} — ${fmt(u.rate)}</option>`).join("")
-        : "";
-      const perLabel = "فی";
-      const outLabel = "آج ناموجود";
-      const freeLabel = "🎁 مفت (بطور تحفہ)";
-      row.innerHTML = `
+    grouped[cat].forEach(item => {
+      const el = document.createElement('div');
+      const isAvail = item.available !== false;
+      const inCartKey = getCartKey(item.item_id);
+      const isSelected = !!cart[inCartKey];
+
+      el.className = `item ${isSelected ? 'active' : ''} ${!isAvail ? 'unavailable' : ''}`;
+      
+      const thumbHtml = item.image ? `<img src="${item.image}" alt="${item.item_name_ur}">` : `<span>🥦</span>`;
+      const availBadge = isAvail ? `<div class="avail-badge yes" title="دستیاب">🟢</div>` : `<div class="avail-badge no" title="غیر دستیاب">🔴</div>`;
+
+      let unitsSelectHtml = '';
+      let metaPriceTxt = '';
+
+      if(!isAvail){
+        metaPriceTxt = `<span class="tag-out">فی الوقت دستیاب نہیں</span>`;
+      } else if(!item.units || !item.units.length){
+        metaPriceTxt = `<span class="tag-free">قیمت معلوم کریں</span>`;
+      } else {
+        const firstUnit = item.units[0];
+        metaPriceTxt = `<b>Rs. ${firstUnit.price}</b> / ${firstUnit.unit_name}`;
+        
+        if(item.units.length > 1){
+          unitsSelectHtml = `<select class="unit-select" onchange="changeUnit('${item.item_id}', this.value)">`;
+          item.units.forEach((u, idx) => {
+            unitsSelectHtml += `<option value="${idx}">${u.unit_name} — Rs. ${u.price}</option>`;
+          });
+          unitsSelectHtml += `</select>`;
+        }
+      }
+
+      const cartItem = cart[inCartKey] || { qty: 0 };
+
+      el.innerHTML = `
         <div class="item-row-top">
-          <div class="item-thumb" data-img="${it.image||''}" data-name="${dispName(it)}">
-            ${it.image ? `<img src="${it.image}" alt="${dispName(it)}" loading="lazy">` : `<span>${it.icon||'🛒'}</span>`}
-          </div>
+          <div class="item-thumb" onclick="openLightbox('${item.image || ''}')">${thumbHtml}</div>
           <div class="info">
-            <div class="name">${dispName(it)}</div>
-            ${(!multi) ? `<div class="meta">${
-              it.available
-                ? (currentRate(it) === 0
-                    ? `<span class="tag-free">${freeLabel}</span>`
-                    : `${perLabel} ${currentLabel(it)} — <b>${fmt(currentRate(it))}</b>`)
-                : `<span class="tag-out">${outLabel}</span>`
-            }</div>` : (!it.available ? `<div class="meta"><span class="tag-out">${outLabel}</span></div>` : '')}
+            <div class="name">${item.item_name_ur}</div>
+            <div class="meta" id="meta-${item.item_id}">${metaPriceTxt}</div>
           </div>
-          <div class="avail-badge ${it.available ? 'yes' : 'no'}" title="${it.available ? 'دستیاب' : 'ناموجود'}">
-            ${it.available
-              ? `<svg width="15" height="15" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-              : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#A8A499" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>`
-            }
-          </div>
+          ${availBadge}
         </div>
         <div class="item-row-bottom">
-          ${(it.available && multi) ? `<select class="unit-select" data-id="${it.id}">${unitOptionsHtml}</select>` : `<span></span>`}
+          ${unitsSelectHtml || '<div style="flex:1;"></div>'}
           <div class="qty-box">
-            <button class="minus" data-id="${it.id}" ${!it.available?"disabled":""}>−</button>
-            <input type="number" min="0" value="${it.qty}" data-id="${it.id}" ${!it.available?"disabled":""}>
-            <button class="plus" data-id="${it.id}" ${!it.available?"disabled":""}>+</button>
+            <button class="minus" onclick="updateQty('${item.item_id}', -1)" ${!isAvail ? 'disabled' : ''}>-</button>
+            <input type="text" readonly value="${cartItem.qty}" id="qty-${item.item_id}">
+            <button class="plus" onclick="updateQty('${item.item_id}', 1)" ${!isAvail ? 'disabled' : ''}>+</button>
           </div>
-        </div>`;
-      listEl.appendChild(row);
+        </div>
+      `;
+      listEl.appendChild(el);
     });
-  });
+  }
+}
 
-  noResultEl.style.display = anyShown ? "none" : "block";
+function getCartKey(itemId, unitIdx = 0){
+  return `${itemId}_${unitIdx}`;
+}
 
-  listEl.querySelectorAll(".minus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, -1));
-  listEl.querySelectorAll(".plus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, 1));
-  listEl.querySelectorAll('input[type="number"]').forEach(inp=>{
-    inp.onchange = ()=> setQty(inp.dataset.id, parseInt(inp.value)||0);
-  });
-  listEl.querySelectorAll('.unit-select').forEach(sel=>{
-    sel.onchange = ()=>{
-      const it = findItem(sel.dataset.id);
-      it.unitIndex = parseInt(sel.value);
-      renderBill();
+function changeUnit(itemId, unitIdx){
+  const item = items.find(i => i.item_id === itemId);
+  if(!item) return;
+  const u = item.units[unitIdx];
+  const metaEl = $(`meta-${itemId}`);
+  if(metaEl) metaEl.innerHTML = `<b>Rs. ${u.price}</b> / ${u.unit_name}`;
+}
+
+function updateQty(itemId, delta){
+  const item = items.find(i => i.item_id === itemId);
+  if(!item || item.available === false) return;
+
+  const unitSelect = document.querySelector(`#qty-${itemId}`)?.closest('.item')?.querySelector('.unit-select');
+  const unitIdx = unitSelect ? parseInt(unitSelect.value) : 0;
+  const key = getCartKey(itemId, unitIdx);
+  const selectedUnit = (item.units && item.units[unitIdx]) ? item.units[unitIdx] : { unit_name: 'عدا', price: 0 };
+
+  if(!cart[key]){
+    cart[key] = {
+      item_id: item.item_id,
+      name: item.item_name_ur,
+      unit: selectedUnit.unit_name,
+      price: selectedUnit.price,
+      qty: 0
     };
-  });
-}
-
-function findItem(id){ return ITEMS.find(i=>i.id===id); }
-
-function changeQty(id, delta){
-  const it = findItem(id);
-  if(!it.available) return;
-  it.qty = Math.max(0, it.qty + delta);
-  syncAfterChange(it);
-}
-function setQty(id, val){
-  const it = findItem(id);
-  if(!it.available) return;
-  it.qty = Math.max(0, val);
-  syncAfterChange(it);
-}
-function syncAfterChange(it){
-  const row = document.getElementById("row-"+it.id);
-  if(row){
-    row.classList.toggle("active", it.qty>0);
-    row.querySelector('input[type="number"]').value = it.qty;
   }
-  renderBill();
+
+  cart[key].qty += delta;
+  if(cart[key].qty <= 0){
+    delete cart[key];
+  }
+
+  const inputEl = $(`qty-${itemId}`);
+  if(inputEl) inputEl.value = cart[key] ? cart[key].qty : 0;
+
+  showToast(delta > 0 ? 'آئٹم کارٹ میں شامل ہو گیا' : 'آئٹم کم کر دیا گیا');
+  updateBillBar();
+  renderList();
 }
 
-let SHOP_WHATSAPP = "923349353799";
-let SHOP_PAY_NUMBER = "0334-9353799";
-let SHOP_EMAIL = "sjfoodsonline@outlook.com";
+function updateBillBar(){
+  const bar = $('billbar');
+  const keys = Object.keys(cart);
 
-const billLines = document.getElementById("billLines");
-const itemCountEl = document.getElementById("itemCount");
-const summaryTotalEl = document.getElementById("summaryTotal");
-const finalTotalEl = document.getElementById("finalTotal");
-const payAmountEl = document.getElementById("payAmount");
+  if(!keys.length){
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
 
-function renderBill(){
-  const chosen = ITEMS.filter(i=>i.qty>0);
-  billLines.innerHTML = "";
-  let subtotal = 0;
-  chosen.forEach(it=>{
-    const lineTotal = it.qty * currentRate(it);
-    subtotal += lineTotal;
-    const line = document.createElement("div");
-    line.className = "bill-line";
-    line.innerHTML = `<span class="l-name">${dispName(it)} × ${it.qty} ${currentLabel(it)}</span><span class="l-val">${fmt(lineTotal)}</span>`;
-    billLines.appendChild(line);
+  let totalQty = 0;
+  let totalPrice = 0;
+  let linesHtml = '';
+
+  keys.forEach(k => {
+    const c = cart[k];
+    const lineTotal = c.price * c.qty;
+    totalQty += c.qty;
+    totalPrice += lineTotal;
+
+    linesHtml += `
+      <div class="bill-line">
+        <span class="l-name">${c.name} (${c.unit}) × ${c.qty}</span>
+        <span class="l-val">Rs. ${lineTotal}</span>
+      </div>
+    `;
   });
 
-  itemCountEl.textContent = chosen.length;
-  summaryTotalEl.textContent = fmt(subtotal);
-  finalTotalEl.textContent = fmt(subtotal);
-  payAmountEl.textContent = fmt(subtotal);
-
-  if(chosen.length===0) billbar.classList.add("collapsed");
+  $('itemCount').innerText = totalQty;
+  $('summaryTotal').innerText = `Rs. ${totalPrice}`;
+  $('finalTotal').innerText = `Rs. ${totalPrice}`;
+  $('payAmount').innerText = `Rs. ${totalPrice}`;
+  $('billLines').innerHTML = linesHtml;
 }
 
-document.getElementById("summary").onclick = ()=> billbar.classList.toggle("collapsed");
-document.getElementById("handle").onclick = ()=> billbar.classList.toggle("collapsed");
+$('handle').onclick = () => $('billbar').classList.toggle('collapsed');
+$('summary').onclick = () => $('billbar').classList.toggle('collapsed');
 
-document.getElementById("copyNumBtn").onclick = async ()=>{
-  try{
-    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
-    showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){
-    showToast("نمبر: " + SHOP_PAY_NUMBER);
-  }
+$('clearBtn').onclick = () => {
+  cart = {};
+  updateBillBar();
+  renderList();
+  showToast('کارٹ خالی کر دیا گیا');
 };
 
-document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
+$('copyNumBtn').onclick = () => {
+  navigator.clipboard.writeText('03349353799');
+  showToast('نمبر کاپی ہو گیا!');
+};
 
-const areaSelect = document.getElementById("custArea");
-const payCod = document.getElementById("payCod");
-const payEasy = document.getElementById("payEasy");
-const lblCod = document.getElementById("lblCod");
-const lblEasy = document.getElementById("lblEasy");
-const areaNote = document.getElementById("areaNote");
-
-function updatePayMethodUI(){
-  lblCod.classList.toggle("checked", payCod.checked);
-  lblEasy.classList.toggle("checked", payEasy.checked);
-}
-
-areaSelect.addEventListener("change", ()=>{
-  const val = areaSelect.value;
-  if(val === "outside"){
-    payCod.checked = false;
-    payCod.disabled = true;
-    lblCod.classList.add("disabled");
-    payEasy.checked = true;
-    areaNote.className = "area-note warn";
-    areaNote.textContent = "⚠️ اس علاقے میں ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے";
-  } else if(val === "inside"){
-    payCod.disabled = false;
-    lblCod.classList.remove("disabled");
-    payCod.checked = true;
-    areaNote.className = "area-note ok";
-    areaNote.textContent = "✅ کیش آن ڈیلیوری دستیاب ہے — اگر ایزی پیسہ ایڈوانس ادا کریں تو آرڈر مزید تیزی سے پراسیس ہوگا";
-  } else {
-    payCod.disabled = false;
-    lblCod.classList.remove("disabled");
-    payCod.checked = false; payEasy.checked = false;
-    areaNote.className = "area-note";
+$('waBtn').onclick = () => {
+  const keys = Object.keys(cart);
+  if(!keys.length){
+    alert('آپ کا کارٹ خالی ہے!');
+    return;
   }
-  updatePayMethodUI();
-});
-payCod.addEventListener("change", updatePayMethodUI);
-payEasy.addEventListener("change", updatePayMethodUI);
 
-function areaLabel(v){ return v==="inside" ? "مینگورہ شہر کے اندر" : v==="outside" ? "مینگورہ سے باہر / سائیڈ ایریا" : "نامعلوم"; }
-function payLabel(v){ return v==="easypaisa" ? "ایزی پیسہ ایڈوانس" : "کیش آن ڈیلیوری"; }
+  const name = $('custName').value.trim();
+  const phone = $('custPhone').value.trim();
+  const addr = $('custAddr').value.trim();
+  const area = $('custArea').value;
+  const payM = document.querySelector('input[name="paymethod"]:checked')?.value;
 
-function buildMessage(name, phone, addr, area, payMethod){
-  const chosen = ITEMS.filter(i=>i.qty>0);
-  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
+  if(!name || !phone || !addr || !area || !payM){
+    alert('براہ کرم تمام معلومات (نام، فون، مکمل پتہ، علاقہ اور ادائیگی کا طریقہ) درج کریں!');
+    return;
+  }
 
-  let msg = "🛒 نیا آرڈر — SJ Foods ویب سائٹ\n\n";
-  msg += "👤 نام: " + name + "\n";
-  msg += "📞 نمبر: " + phone + "\n";
-  msg += "📍 پتہ: " + addr + "\n";
-  msg += "🗺️ علاقہ: " + areaLabel(area) + "\n\n";
-  chosen.forEach(it=>{
-    msg += `${it.name} — ${it.qty} ${currentLabel(it)} — ${fmt(it.qty*currentRate(it))}\n`;
+  let text = `🛍️ *نیا آرڈر — SJ Foods Mingora*\n`;
+  text += `👤 *نام:* ${name}\n📞 *فون:* ${phone}\n📍 *پتہ:* ${addr}\n`;
+  text += `🌆 *علاقہ:* ${area === 'inside' ? 'مینگورہ شہر کے اندر' : 'مینگورہ سے باہر / سائیڈ ایریا'}\n`;
+  text += `💳 *ادائیگی کا طریقہ:* ${payM === 'easypaisa' ? 'ایزی پیسہ (ایڈوانس)' : 'کیش آن ڈیلیوری'}\n\n`;
+  text += `📋 *سامان کی لسٹ:*\n`;
+
+  let sum = 0;
+  keys.forEach((k, i) => {
+    const c = cart[k];
+    const t = c.price * c.qty;
+    sum += t;
+    text += `${i+1}. ${c.name} (${c.unit}) — ${c.qty} عدد = Rs. ${t}\n`;
   });
-  msg += "\n💰 کل رقم: " + fmt(subtotal);
-  msg += "\n🚚 ڈیلیوری چارج: راستے کے حساب سے، موقع پر ادا";
-  msg += "\n💳 ادائیگی کا طریقہ: " + payLabel(payMethod);
-  if(payMethod === "easypaisa"){
-    msg += "\n📲 ایزی پیسہ نمبر: " + SHOP_PAY_NUMBER;
+
+  text += `\n💰 *کل رقم:* Rs. ${sum}\n`;
+  text += `🚚 *ڈیلیوری چارج:* (راستے کے حساب سے موقع پر ادا)\n\n`;
+  if(payM === 'easypaisa'){
+    text += `📲 *نوٹ:* میں ایزی پیسہ سے ادائیگی کرنا چاہتا ہوں۔ براہ کرم تصدیق کریں تاکہ میں رقم بھیج سکوں۔\n`;
   }
-  msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
-  msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
-  msg += "\n🙏 SJ Foods منتخب کرنے کا شکریہ!";
-  return msg;
-}
+  text += `شکریہ!`;
 
-document.getElementById("waBtn").onclick = ()=>{
-  const chosen = ITEMS.filter(i=>i.qty>0);
-  if(chosen.length===0){ showToast("❌ پہلے آئٹم منتخب کریں"); return; }
-
-  const name = document.getElementById("custName").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
-  const addr = document.getElementById("custAddr").value.trim();
-  const area = areaSelect.value;
-  const payMethod = document.querySelector('input[name="paymethod"]:checked')?.value;
-
-  if(!name){ showToast("نام ضروری ہے"); return; }
-  if(!phone){ showToast("نمبر ضروری ہے"); return; }
-  if(!addr){ showToast("پتہ ضروری ہے"); return; }
-  if(!area){ showToast("علاقہ منتخب کریں"); return; }
-  if(!payMethod){ showToast("ادائیگی کا طریقہ منتخب کریں"); return; }
-
-  const msg = buildMessage(name, phone, addr, area, payMethod);
-  const url = "https://wa.me/" + SHOP_WHATSAPP + "?text=" + encodeURIComponent(msg);
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
 };
 
-document.getElementById("clearBtn").onclick = ()=>{
-  ITEMS.forEach(i=> i.qty = 0);
-  renderList(document.getElementById("search").value);
-  renderBill();
-  showToast("کارٹ خالی کر دیا گیا");
-};
+$('search').oninput = renderList;
 
 function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 2200);
+  const t = $('toast');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
 }
 
-let deferredPrompt = null;
-window.addEventListener("beforeinstallprompt", (e) => {
+function openLightbox(src){
+  if(!src) return;
+  $('lightboxImg').src = src;
+  $('lightbox').classList.remove('hidden');
+}
+$('lightboxClose').onclick = () => $('lightbox').classList.add('hidden');
+$('lightbox').onclick = (e) => { if(e.target === $('lightbox')) $('lightbox').classList.add('hidden'); };
+
+// Dark Mode Toggle
+$('themeToggle').onclick = () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  $('themeToggle').innerText = isDark ? '☀️' : '🌙';
+};
+
+// PWA Install Prompt
+window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  document.getElementById("installBtn").style.display = "flex";
+  $('installBtn').style.display = 'flex';
 });
 
-document.getElementById("installBtn").onclick = async () => {
-  if (deferredPrompt) {
+$('installBtn').onclick = () => {
+  if(deferredPrompt){
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    document.getElementById("installBtn").style.display = "none";
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      $('installBtn').style.display = 'none';
+    });
   } else {
-    showInstallGuide();
+    showInstallInstructions();
   }
 };
 
-function showInstallGuide(){
+function showInstallInstructions(){
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const title = document.getElementById("installTitle");
-  const steps = document.getElementById("installSteps");
-  if(isIOS){
-    title.textContent = "📲 ایپل (iPhone) پر ایپ انسٹال کریں";
-    steps.innerHTML = `
-      <div class="install-step"><div class="num">1</div><span>سفاری (Safari) میں نیچے <b>Share (شیئر)</b> بٹن دبائیں</span></div>
-      <div class="install-step"><div class="num">2</div><span><b>Add to Home Screen</b> پر ٹیپ کریں</span></div>
-      <div class="install-step"><div class="num">3</div><span>اوپر <b>Add</b> پر کلک کریں</span></div>`;
-  } else {
-    title.textContent = "📲 اینڈرائیڈ پر ایپ انسٹال کریں";
-    steps.innerHTML = `
-      <div class="install-step"><div class="num">1</div><span>کروم میں اوپر دائیں طرف <b>تھری ڈاٹس (⋮)</b> پر کلک کریں</span></div>
-      <div class="install-step"><div class="num">2</div><span><b>Install app</b> یا <b>Add to Home Screen</b> منتخب کریں</span></div>`;
-  }
-  document.getElementById("installOverlay").classList.remove("hidden");
+  $('installTitle').innerText = isIOS ? '📲 iPhone پر انسٹال کریں' : '📲 اینڈرائیڈ پر انسٹال کریں';
+  $('installSteps').innerHTML = isIOS ? `
+    <div class="install-step"><span class="num">1</span> نیچے شیئر (Share) کا بٹن دبائیں۔</div>
+    <div class="install-step"><span class="num">2</span> "Add to Home Screen" کا انتخاب کریں۔</div>
+  ` : `
+    <div class="install-step"><span class="num">1</span> اوپر کونے میں تین نقطوں (⋮) پر کلک کریں۔</div>
+    <div class="install-step"><span class="num">2</span> "Install app" یا "Add to Home screen" منتخب کریں۔</div>
+  `;
+  $('installOverlay').classList.remove('hidden');
 }
-document.getElementById("closeInstallOverlay").onclick = ()=>{
-  document.getElementById("installOverlay").classList.add("hidden");
+$('closeInstallOverlay').onclick = () => $('installOverlay').classList.add('hidden');
+
+// Privacy & Terms
+$('openPrivacy').onclick = () => {
+  $('policyTitle').innerText = 'پرائیویسی پالیسی (Privacy Policy)';
+  $('policyBody').innerHTML = `
+    <p>ایس جے فوڈز آپ کی پرائیویسی اور معلومات کی حفاظت کو مقدم رکھتا ہے۔</p>
+    <p>1. <b>معلومات کا استعمال:</b> آرڈر مکمل کرنے کے لیے ہم صرف آپ کا نام، رابطہ نمبر اور پتہ لیتے ہیں۔ یہ معلومات صرف آرڈر ڈیلیوری کے لیے استعمال ہوتی ہیں۔</p>
+    <p>2. <b>ڈیٹا کا تحفظ:</b> ہم آپ کا ڈیٹا کسی تیسرے فرد کو نہیں بیچتے۔</p>
+    <p>3. <b>رابطہ:</b> سوالات کے لیے sjfoodsonline@outlook.com یا 0334-9353799 پر رابطہ کریں۔</p>
+  `;
+  $('policyOverlay').classList.remove('hidden');
 };
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
-}
-
-document.getElementById("themeToggle").onclick = ()=>{
-  document.body.classList.toggle("dark");
-  const isDark = document.body.classList.contains("dark");
-  document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
-  localStorage.setItem("sj_theme", isDark ? "dark" : "light");
+$('openTerms').onclick = () => {
+  $('policyTitle').innerText = 'شرائط و ضوابط (Terms & Conditions)';
+  $('policyBody').innerHTML = `
+    <p>ایس جے فوڈز آن لائن استعمال کرنے کی شرائط:</p>
+    <p>1. <b>قیمتیں:</b> تمام سبزیاں و پھل روزانہ مارکیٹ کے مطابق اپ ڈیٹ ہوتے ہیں۔</p>
+    <p>2. <b>ڈیلیوری:</b> سامان 30-45 منٹ میں پہنچایا جائے گا۔ ڈیلیوری چارجز علاقے کے مطابق ہوں گے۔</p>
+    <p>3. <b>واپسی/تبدیلی:</b> اگر سامان معیار کے مطابق نہ ہو تو موقع پر ہی واپس کر سکتے ہیں۔</p>
+  `;
+  $('policyOverlay').classList.remove('hidden');
 };
-if(localStorage.getItem("sj_theme") === "dark"){
-  document.body.classList.add("dark");
-  document.getElementById("themeToggle").textContent = "☀️";
-}
+$('closePolicy').onclick = () => $('policyOverlay').classList.add('hidden');
 
-function refreshHeroLinks(){
-  document.getElementById("heroWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
-  document.getElementById("heroCallBtn").href = "tel:" + SHOP_PAY_NUMBER.replace(/-/g,"");
-  document.getElementById("floatingWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
-}
-
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightboxImg");
-document.addEventListener("click", (e)=>{
-  const thumb = e.target.closest(".item-thumb");
-  if(thumb && thumb.dataset.img){
-    lightboxImg.src = thumb.dataset.img;
-    lightboxImg.alt = thumb.dataset.name || "";
-    lightbox.classList.remove("hidden");
-  }
-});
-document.getElementById("closeLightbox").onclick = ()=> lightbox.classList.add("hidden");
-lightbox.onclick = (e)=>{ if(e.target===lightbox) lightbox.classList.add("hidden"); };
-
-function renderSocialLinks(s){
-  const wrap = document.getElementById("footerSocial");
-  wrap.innerHTML = "";
-  if(s.facebook) wrap.innerHTML += `<a href="${s.facebook}" target="_blank">فیس بک</a>`;
-  if(s.instagram) wrap.innerHTML += `<a href="${s.instagram}" target="_blank">انسٹاگرام</a>`;
-  if(s.location_map) wrap.innerHTML += `<a href="${s.location_map}" target="_blank">گوگل میپ (لوکیشن)</a>`;
-}
-
-const policyOverlay = document.getElementById("policyOverlay");
-const policyTitle = document.getElementById("policyTitle");
-const policyBody = document.getElementById("policyBody");
-document.getElementById("closePolicy").onclick = ()=> policyOverlay.classList.add("hidden");
-
-document.getElementById("openPrivacy").onclick = ()=>{
-  policyTitle.textContent = "🔒 پرائیویسی پالیسی";
-  policyBody.innerHTML = `
-    <p>ایس جے فوڈز مینگورہ سوات میں آپ کی پرائیویسی ہمارے لیے انتہائی اہم ہے۔</p>
-    <p>1۔ ہم صرف آپ کا نام، فون نمبر اور پتہ ڈیلیوری مکمل کرنے کے لیے حاصل کرتے ہیں۔</p>
-    <p>2۔ آپ کا ڈیٹا کسی تیسرے فرد کے ساتھ شیئر نہیں کیا جاتا۔</p>
-    <p>3۔ ویب سائٹ آپ کی سہولت کے لیے ڈارک تھیم کی ترجیح لوکل اسٹوریج میں محفوظ کرتی ہے۔</p>`;
-  policyOverlay.classList.remove("hidden");
-};
-
-document.getElementById("openTerms").onclick = ()=>{
-  policyTitle.textContent = "📜 شرائط و ضوابط";
-  policyBody.innerHTML = `
-    <p>1۔ ریٹ روزانہ کی بنیاد پر سوات کی مقامی منڈی کے مطابق اپ ڈیٹ کیے جاتے ہیں۔</p>
-    <p>2۔ مینگورہ شہر کے اندر کیش آن ڈیلیوری اور ایزی پیسہ دونوں دستیاب ہیں؛ باہر کے علاقوں کے لیے ایزی پیسہ ایڈوانس لازمی ہے۔</p>
-    <p>3۔ ڈیلیوری چارج راستے کے حساب سے سامان پہنچنے پر موقع پر ادا کرنا ہوگا۔</p>
-    <p>4۔ کسی بھی خرابی یا شکایت کی صورت میں موقع پر ہی رائڈر یا ہمارے واٹس ایپ نمبر پر رابطہ کریں۔</p>`;
-  policyOverlay.classList.remove("hidden");
-};
-
-(async function init(){
-  await loadRates();
-  await loadSettings();
-  loadingMsg.style.display = "none";
-  renderChips();
-  renderList();
-  renderBill();
-  renderFeatured();
-})();
+loadData();
 </script>
+
 </body>
 </html>

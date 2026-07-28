@@ -94,24 +94,32 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- Category Bar & Mouse Drag Styles ---- */
-  .chips, .categories-container {
-    display:flex; gap:8px; overflow-x:auto; padding:12px 16px 4px; 
-    scrollbar-width:none; position:sticky; top:52px; background:var(--paper); z-index:19;
-    scroll-behavior: smooth; cursor: grab; user-select: none; -ms-overflow-style: none;
+  /* ---- Auto-Sliding Loop Category Bar (Chips) ---- */
+  .chips {
+    overflow: hidden; padding: 10px 0; position: sticky; top: 52px;
+    background: var(--paper); z-index: 19; white-space: nowrap;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   }
-  .chips::-webkit-scrollbar, .categories-container::-webkit-scrollbar { display:none; }
-  .chips:active, .categories-container:active { cursor: grabbing; }
+  .chips-track {
+    display: flex; gap: 10px; width: max-content;
+    animation: autoSlideChips 28s linear infinite;
+  }
+  .chips:hover .chips-track {
+    animation-play-state: paused; /* ماؤس لانے پر سلائیڈنگ رک جائے گی */
+  }
+  @keyframes autoSlideChips {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
 
-  .chip, .category-card {
-    flex:0 0 auto; background:var(--leaf); color:var(--dark);
-    border:1px solid #cfe8d1; border-radius:20px; padding:7px 14px;
-    font-size:12.5px; font-weight:700; white-space:nowrap; cursor:pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .chip {
+    flex: 0 0 auto; background: var(--leaf); color: var(--dark);
+    border: 1px solid #cfe8d1; border-radius: 20px; padding: 7px 16px;
+    font-size: 12.5px; font-weight: 700; white-space: nowrap; cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
   }
-  .chip:hover, .category-card:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  .chip:hover {
+    background: var(--mid); color: #fff; transform: scale(1.05);
   }
 
   /* ---- Top Smooth Ticker Banner ---- */
@@ -132,7 +140,7 @@
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark);
     margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    scroll-margin-top:14px;
+    scroll-margin-top:100px;
   }
   .item{
     display:flex; flex-direction:column; gap:8px;
@@ -185,7 +193,7 @@
     box-shadow:0 -8px 24px rgba(0,0,0,0.08);
     padding:14px 18px 18px;
     max-height:82vh;
-    display:flex; flex-direction:column;
+    display:flex; flex-direction:column; z-index:30;
   }
   #billbar.collapsed{ padding:16px 18px 20px; }
   #billbar.collapsed .cart-details{display:none;}
@@ -343,15 +351,6 @@
   .featured-card .fname{font-size:12px; font-weight:700; margin-top:6px; color:var(--ink);}
   .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:700; margin-top:2px;}
 
-  .offer-slider{margin:14px 16px 0; border-radius:16px; overflow:hidden; position:relative;}
-  .offer-slide{
-    background:linear-gradient(135deg,var(--dark),var(--mid)); color:#fff; padding:16px;
-    display:none;
-  }
-  .offer-slide.active{display:block;}
-  .offer-slide .ot{font-size:15px; font-weight:800;}
-  .offer-slide .os{font-size:12px; opacity:.9; margin-top:4px;}
-
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
     display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:30px; cursor:pointer;
@@ -416,7 +415,7 @@
   <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
-<div class="features-scroll categories-container" id="featuresScroll">
+<div class="features-scroll" id="featuresScroll">
   <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
   <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
   <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
@@ -427,10 +426,8 @@
   <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
 </div>
 
-<div class="offer-slider hidden" id="offerSlider"></div>
-
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
-<div class="featured-scroll categories-container hidden" id="featuredScroll"></div>
+<div class="featured-scroll hidden" id="featuredScroll"></div>
 
 <button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
 
@@ -446,7 +443,8 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<div class="chips categories-container" id="chips"></div>
+<!-- Category chips container for infinite loop -->
+<div class="chips" id="chips"></div>
 
 <main id="list"></main>
 
@@ -497,7 +495,7 @@
       </div>
       <div class="area-note" id="areaNote"></div>
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
-      <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز (سبزی، بیکری، دودھ، گوشت) کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
+      <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
       <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
     </div>
 
@@ -624,18 +622,32 @@ async function loadSettings(){
   }catch(e){}
 }
 
+/* مسلسل لوپ (Auto Infinite Loop) بنانے کا فنکشن */
 function renderChips(){
   chipsEl.innerHTML = "";
-  CATEGORIES_META.forEach(cat=>{
+  
+  const track = document.createElement("div");
+  track.className = "chips-track";
+
+  // فہرست کو ڈپلیکیٹ کرتے ہیں تاکہ بغیر بریک کے لوپ بن جائے
+  const doubleCategories = [...CATEGORIES_META, ...CATEGORIES_META];
+
+  doubleCategories.forEach(cat => {
     const chip = document.createElement("div");
     chip.className = "chip";
     chip.textContent = cat.icon + " " + dispCatName(cat);
-    chip.onclick = ()=>{
-      const el = document.getElementById("cat-"+cat.name);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    
+    chip.onclick = () => {
+      const el = document.getElementById("cat-" + cat.name);
+      if(el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     };
-    chipsEl.appendChild(chip);
+    
+    track.appendChild(chip);
   });
+
+  chipsEl.appendChild(track);
 }
 
 function renderList(filter){
@@ -851,269 +863,183 @@ function buildMessage(name, phone, addr, area, payMethod){
   }
   msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
   msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
-  msg += "\n🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک";
-  msg += "\n\nشکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏";
+  msg += "\n🙏 SJ Foods منتخب کرنے کا شکریہ!";
   return msg;
-}
-
-function showToast(text){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 2200);
 }
 
 document.getElementById("waBtn").onclick = ()=>{
   const chosen = ITEMS.filter(i=>i.qty>0);
-  if(chosen.length===0){ showToast("پہلے کچھ آئٹمز کارٹ میں شامل کریں"); return; }
+  if(chosen.length===0){ showToast("❌ پہلے آئٹم منتخب کریں"); return; }
 
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
   const area = areaSelect.value;
-  const payMethod = payEasy.checked ? "easypaisa" : (payCod.checked ? "cod" : "");
+  const payMethod = document.querySelector('input[name="paymethod"]:checked')?.value;
 
-  if(!name || !phone || !addr){
-    showToast("براہ مہربانی نام، نمبر اور پتہ لکھیں");
-    return;
-  }
-  if(!area){
-    showToast("براہ مہربانی اپنا علاقہ منتخب کریں");
-    return;
-  }
-  if(!payMethod){
-    showToast("براہ مہربانی ادائیگی کا طریقہ منتخب کریں");
-    return;
-  }
+  if(!name){ showToast("نام ضروری ہے"); return; }
+  if(!phone){ showToast("نمبر ضروری ہے"); return; }
+  if(!addr){ showToast("پتہ ضروری ہے"); return; }
+  if(!area){ showToast("علاقہ منتخب کریں"); return; }
+  if(!payMethod){ showToast("ادائیگی کا طریقہ منتخب کریں"); return; }
 
   const msg = buildMessage(name, phone, addr, area, payMethod);
-  const url = `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  const url = "https://wa.me/" + SHOP_WHATSAPP + "?text=" + encodeURIComponent(msg);
   window.open(url, "_blank");
-  showToast("✅ واٹس ایپ کھل رہا ہے — پیغام بھیج دیں");
 };
 
 document.getElementById("clearBtn").onclick = ()=>{
-  if(!confirm("کارٹ خالی کر دیں؟")) return;
-  ITEMS.forEach(it=> it.qty = 0);
+  ITEMS.forEach(i=> i.qty = 0);
   renderList(document.getElementById("search").value);
   renderBill();
-  billbar.classList.add("collapsed");
+  showToast("کارٹ خالی کر دیا گیا");
 };
 
-function renderFeatured(){
-  const featured = ITEMS.filter(i=>i.featured);
-  const scroll = document.getElementById("featuredScroll");
-  const title = document.getElementById("featuredTitle");
-  if(!featured.length) return;
-  
-  title.classList.remove("hidden");
-  scroll.classList.remove("hidden");
-  scroll.innerHTML = "";
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2200);
+}
 
-  featured.forEach(it=>{
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installBtn").style.display = "flex";
+});
+
+document.getElementById("installBtn").onclick = async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById("installBtn").style.display = "none";
+  } else {
+    showInstallGuide();
+  }
+};
+
+function showInstallGuide(){
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const title = document.getElementById("installTitle");
+  const steps = document.getElementById("installSteps");
+  if(isIOS){
+    title.textContent = "📲 ایپل (iPhone) پر ایپ انسٹال کریں";
+    steps.innerHTML = `
+      <div class="install-step"><div class="num">1</div><span>سفاری (Safari) میں نیچے <b>Share (شیئر)</b> بٹن دبائیں</span></div>
+      <div class="install-step"><div class="num">2</div><span><b>Add to Home Screen</b> پر ٹیپ کریں</span></div>
+      <div class="install-step"><div class="num">3</div><span>اوپر <b>Add</b> پر کلک کریں</span></div>`;
+  } else {
+    title.textContent = "📲 اینڈرائیڈ پر ایپ انسٹال کریں";
+    steps.innerHTML = `
+      <div class="install-step"><div class="num">1</div><span>کروم میں اوپر دائیں طرف <b>تھری ڈاٹس (⋮)</b> پر کلک کریں</span></div>
+      <div class="install-step"><div class="num">2</div><span><b>Install app</b> یا <b>Add to Home Screen</b> منتخب کریں</span></div>`;
+  }
+  document.getElementById("installOverlay").classList.remove("hidden");
+}
+document.getElementById("closeInstallOverlay").onclick = ()=>{
+  document.getElementById("installOverlay").classList.add("hidden");
+};
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
+document.getElementById("themeToggle").onclick = ()=>{
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("sj_theme", isDark ? "dark" : "light");
+};
+if(localStorage.getItem("sj_theme") === "dark"){
+  document.body.classList.add("dark");
+  document.getElementById("themeToggle").textContent = "☀️";
+}
+
+function refreshHeroLinks(){
+  document.getElementById("heroWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
+  document.getElementById("heroCallBtn").href = "tel:" + SHOP_PAY_NUMBER.replace(/-/g,"");
+  document.getElementById("floatingWaBtn").href = "https://wa.me/" + SHOP_WHATSAPP;
+}
+
+function renderFeatured(){
+  const fItems = ITEMS.filter(i=> i.featured);
+  if(!fItems.length) return;
+  document.getElementById("featuredTitle").classList.remove("hidden");
+  const wrap = document.getElementById("featuredScroll");
+  wrap.classList.remove("hidden");
+  wrap.innerHTML = "";
+  fItems.forEach(it=>{
     const card = document.createElement("div");
     card.className = "featured-card";
     card.innerHTML = `
-      <img src="${it.image || 'icon-192.png'}" alt="${dispName(it)}">
+      <img src="${it.image || 'cover.png'}" alt="${dispName(it)}" loading="lazy">
       <div class="fname">${dispName(it)}</div>
-      <div class="frate">${fmt(currentRate(it))}</div>
-    `;
+      <div class="frate">${fmt(currentRate(it))}</div>`;
     card.onclick = ()=>{
       const el = document.getElementById("row-"+it.id);
       if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
     };
-    scroll.appendChild(card);
+    wrap.appendChild(card);
   });
 }
-
-function renderSocialLinks(s){
-  const el = document.getElementById("footerSocial");
-  if(!el || !s.social) return;
-  el.innerHTML = "";
-  Object.keys(s.social).forEach(k=>{
-    if(s.social[k]){
-      const a = document.createElement("a");
-      a.href = s.social[k];
-      a.target = "_blank";
-      a.textContent = k.toUpperCase();
-      el.appendChild(a);
-    }
-  });
-}
-
-(async function init(){
-  await Promise.all([loadRates(), loadSettings()]);
-  loadingMsg.style.display = "none";
-  billbar.style.display = "flex";
-  renderChips();
-  renderList("");
-  renderBill();
-  renderFeatured();
-})();
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
-}
-
-const installBtn = document.getElementById("installBtn");
-const installOverlay = document.getElementById("installOverlay");
-const installSteps = document.getElementById("installSteps");
-const installTitle = document.getElementById("installTitle");
-let deferredInstallPrompt = null;
-
-const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-const ua = navigator.userAgent || "";
-const isIOS = /iphone|ipad|ipod/i.test(ua);
-
-function showInstallButton(){
-  if(!isStandalone) installBtn.style.display = "flex";
-}
-if(!isStandalone) showInstallButton();
-
-window.addEventListener("beforeinstallprompt", (e)=>{
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  showInstallButton();
-});
-
-window.addEventListener("appinstalled", ()=>{
-  installBtn.style.display = "none";
-});
-
-function openInstallModal(stepsHtml, title){
-  installTitle.textContent = title;
-  installSteps.innerHTML = stepsHtml;
-  installOverlay.classList.remove("hidden");
-}
-document.getElementById("closeInstallOverlay").onclick = ()=> installOverlay.classList.add("hidden");
-installOverlay.onclick = (e)=>{ if(e.target===installOverlay) installOverlay.classList.add("hidden"); };
-
-installBtn.onclick = async ()=>{
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    const choice = await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    if(choice.outcome === "accepted") installBtn.style.display = "none";
-    return;
-  }
-  if(isIOS){
-    openInstallModal(`
-      <div class="install-step"><span class="num">1</span><span>نیچے Safari میں شیئر بٹن (⬆️) دبائیں</span></div>
-      <div class="install-step"><span class="num">2</span><span>فہرست میں "Add to Home Screen" تلاش کر کے دبائیں</span></div>
-      <div class="install-step"><span class="num">3</span><span>اوپر دائیں "Add" دبائیں — SJ Foods آئیکن ہوم اسکرین پر آ جائے گا</span></div>
-    `, "📲 آئی فون پر انسٹال کریں");
-  } else {
-    openInstallModal(`
-      <div class="install-step"><span class="num">1</span><span>اوپر دائیں کونے میں 3 نقطے (⋮) دبائیں</span></div>
-      <div class="install-step"><span class="num">2</span><span>"Add to Home screen" یا "Install app" پر کلک کریں</span></div>
-      <div class="install-step"><span class="num">3</span><span>"Install" / "Add" دبائیں — SJ Foods آئیکن ہوم اسکرین پر آ جائے گا</span></div>
-    `, "📲 اینڈرائیڈ پر انسٹال کریں");
-  }
-};
-
-const themeToggle = document.getElementById("themeToggle");
-function applyTheme(t){
-  document.body.classList.toggle("dark", t === "dark");
-  themeToggle.textContent = t === "dark" ? "☀️" : "🌙";
-}
-applyTheme(localStorage.getItem("sjfoods-theme") || "light");
-themeToggle.onclick = ()=>{
-  const next = document.body.classList.contains("dark") ? "light" : "dark";
-  applyTheme(next);
-  localStorage.setItem("sjfoods-theme", next);
-};
-
-function refreshHeroLinks(){
-  const greet = encodeURIComponent("السلام علیکم! مجھے SJ Foods سے آرڈر کرنا ہے 🛒");
-  document.getElementById("heroWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
-  document.getElementById("heroCallBtn").href = `tel:+${SHOP_WHATSAPP}`;
-  document.getElementById("floatingWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
-}
-refreshHeroLinks();
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
-let lightboxOpen = false;
-
-function openLightboxImg(src, alt){
-  lightboxImg.src = src;
-  lightboxImg.alt = alt;
-  lightbox.classList.remove("hidden");
-  lightboxOpen = true;
-  history.pushState({ lightbox: true }, "");
-}
-function closeLightboxImg(){
-  lightbox.classList.add("hidden");
-  lightboxOpen = false;
-}
-
 document.addEventListener("click", (e)=>{
   const thumb = e.target.closest(".item-thumb");
   if(thumb && thumb.dataset.img){
-    openLightboxImg(thumb.dataset.img, thumb.dataset.name);
+    lightboxImg.src = thumb.dataset.img;
+    lightboxImg.alt = thumb.dataset.name || "";
+    lightbox.classList.remove("hidden");
   }
 });
+document.getElementById("closeLightbox").onclick = ()=> lightbox.classList.add("hidden");
+lightbox.onclick = (e)=>{ if(e.target===lightbox) lightbox.classList.add("hidden"); };
 
-document.getElementById("closeLightbox").onclick = ()=>{
-  if(lightboxOpen) history.back(); else closeLightboxImg();
-};
-lightbox.onclick = (e)=>{
-  if(e.target===lightbox){ if(lightboxOpen) history.back(); else closeLightboxImg(); }
-};
-
-window.addEventListener("popstate", ()=>{
-  if(lightboxOpen) closeLightboxImg();
-});
+function renderSocialLinks(s){
+  const wrap = document.getElementById("footerSocial");
+  wrap.innerHTML = "";
+  if(s.facebook) wrap.innerHTML += `<a href="${s.facebook}" target="_blank">فیس بک</a>`;
+  if(s.instagram) wrap.innerHTML += `<a href="${s.instagram}" target="_blank">انسٹاگرام</a>`;
+  if(s.location_map) wrap.innerHTML += `<a href="${s.location_map}" target="_blank">گوگل میپ (لوکیشن)</a>`;
+}
 
 const policyOverlay = document.getElementById("policyOverlay");
 const policyTitle = document.getElementById("policyTitle");
 const policyBody = document.getElementById("policyBody");
-const POLICIES = {
-  privacy: {
-    title: "🔒 پرائیویسی پالیسی",
-    body: `<p>ہم آپ کا نام، رابطہ نمبر اور پتہ صرف آپ کا آرڈر مکمل کرنے اور ڈیلیوری کے لیے استعمال کرتے ہیں۔ یہ معلومات کسی تیسرے فریق کو فروخت یا شیئر نہیں کی جاتیں۔</p>`
-  },
-  terms: {
-    title: "📜 شرائط و ضوابط",
-    body: `<p>1. آرڈرز کی ڈیلیوری دستیابی کے تابع ہے۔<br>2. خرابی یا غلط آئٹم کی صورت میں فوری واٹس ایپ پر رابطہ کریں۔</p>`
-  }
-};
-
-document.getElementById("openPrivacy").onclick = ()=>{
-  policyTitle.textContent = POLICIES.privacy.title;
-  policyBody.innerHTML = POLICIES.privacy.body;
-  policyOverlay.classList.remove("hidden");
-};
-document.getElementById("openTerms").onclick = ()=>{
-  policyTitle.textContent = POLICIES.terms.title;
-  policyBody.innerHTML = POLICIES.terms.body;
-  policyOverlay.classList.remove("hidden");
-};
 document.getElementById("closePolicy").onclick = ()=> policyOverlay.classList.add("hidden");
 
-// ---- Enable Mouse Drag Scrolling for Category & Features Bars ----
-document.querySelectorAll('.categories-container').forEach(slider => {
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+document.getElementById("openPrivacy").onclick = ()=>{
+  policyTitle.textContent = "🔒 پرائیویسی پالیسی";
+  policyBody.innerHTML = `
+    <p>ایس جے فوڈز مینگورہ سوات میں آپ کی پرائیویسی ہمارے لیے انتہائی اہم ہے۔</p>
+    <p>1۔ ہم صرف آپ کا نام، فون نمبر اور پتہ ڈیلیوری مکمل کرنے کے لیے حاصل کرتے ہیں۔</p>
+    <p>2۔ آپ کا ڈیٹا کسی تیسرے فرد کے ساتھ شیئر نہیں کیا جاتا۔</p>
+    <p>3۔ ویب سائٹ آپ کی سہولت کے لیے ڈارک تھیم کی ترجیح لوکل اسٹوریج میں محفوظ کرتی ہے۔</p>`;
+  policyOverlay.classList.remove("hidden");
+};
 
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
-  });
-  slider.addEventListener('mouseleave', () => { isDown = false; });
-  slider.addEventListener('mouseup', () => { isDown = false; });
-  slider.addEventListener('mousemove', (e) => {
-    if(!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 2;
-    slider.scrollLeft = scrollLeft - walk;
-  });
-});
+document.getElementById("openTerms").onclick = ()=>{
+  policyTitle.textContent = "📜 شرائط و ضوابط";
+  policyBody.innerHTML = `
+    <p>1۔ ریٹ روزانہ کی بنیاد پر سوات کی مقامی منڈی کے مطابق اپ ڈیٹ کیے جاتے ہیں۔</p>
+    <p>2۔ مینگورہ شہر کے اندر کیش آن ڈیلیوری اور ایزی پیسہ دونوں دستیاب ہیں؛ باہر کے علاقوں کے لیے ایزی پیسہ ایڈوانس لازمی ہے۔</p>
+    <p>3۔ ڈیلیوری چارج راستے کے حساب سے سامان پہنچنے پر موقع پر ادا کرنا ہوگا۔</p>
+    <p>4۔ کسی بھی خرابی یا شکایت کی صورت میں موقع پر ہی رائڈر یا ہمارے واٹس ایپ نمبر پر رابطہ کریں۔</p>`;
+  policyOverlay.classList.remove("hidden");
+};
+
+(async function init(){
+  await loadRates();
+  await loadSettings();
+  loadingMsg.style.display = "none";
+  renderChips();
+  renderList();
+  renderBill();
+  renderFeatured();
+})();
 </script>
 </body>
 </html>

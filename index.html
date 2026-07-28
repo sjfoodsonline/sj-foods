@@ -94,12 +94,38 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  .chips{display:flex; gap:8px; overflow-x:auto; padding:12px 16px 4px; scrollbar-width:none; position:sticky; top:52px; background:var(--paper); z-index:19;}
-  .chips::-webkit-scrollbar{display:none;}
-  .chip{
+  /* ---- Category Bar & Mouse Drag Styles ---- */
+  .chips, .categories-container {
+    display:flex; gap:8px; overflow-x:auto; padding:12px 16px 4px; 
+    scrollbar-width:none; position:sticky; top:52px; background:var(--paper); z-index:19;
+    scroll-behavior: smooth; cursor: grab; user-select: none; -ms-overflow-style: none;
+  }
+  .chips::-webkit-scrollbar, .categories-container::-webkit-scrollbar { display:none; }
+  .chips:active, .categories-container:active { cursor: grabbing; }
+
+  .chip, .category-card {
     flex:0 0 auto; background:var(--leaf); color:var(--dark);
     border:1px solid #cfe8d1; border-radius:20px; padding:7px 14px;
     font-size:12.5px; font-weight:700; white-space:nowrap; cursor:pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .chip:hover, .category-card:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  /* ---- Top Smooth Ticker Banner ---- */
+  .top-ticker {
+    width: 100%; overflow: hidden; white-space: nowrap;
+    background: #2e7d32; color: white; padding: 6px 0; font-size: 12px; font-weight: bold;
+  }
+  .top-ticker-content {
+    display: inline-block; padding-left: 100%;
+    animation: ticker 20s linear infinite;
+  }
+  @keyframes ticker {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
   }
 
   main{padding:6px 16px 10px;}
@@ -284,7 +310,6 @@
 
   footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 8px;}
 
-  /* ---- header action buttons ---- */
   .header-actions{display:flex; gap:8px; margin-top:12px; position:relative;}
   .header-actions a, .header-actions button{
     flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
@@ -299,15 +324,6 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  /* ---- free delivery badge ---- */
-  .delivery-badge{
-    margin:12px 16px 0; background:linear-gradient(135deg,#FFF8E1,#FFECB3);
-    border:1.5px dashed var(--gold); border-radius:14px; padding:10px 14px; text-align:center;
-  }
-  .delivery-badge .main{color:#8A6D00; font-weight:800; font-size:13.5px;}
-  .delivery-badge .sub{color:#8A6D00; font-size:11px; margin-top:2px; opacity:.85;}
-
-  /* ---- feature badges scroll ---- */
   .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
   .features-scroll::-webkit-scrollbar{display:none;}
   .feature-card{
@@ -317,7 +333,6 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- featured / offers ---- */
   .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
   .featured-scroll{display:flex; gap:10px; overflow-x:auto; padding:0 16px 4px; scrollbar-width:none;}
   .featured-scroll::-webkit-scrollbar{display:none;}
@@ -337,7 +352,6 @@
   .offer-slide .ot{font-size:15px; font-weight:800;}
   .offer-slide .os{font-size:12px; opacity:.9; margin-top:4px;}
 
-  /* ---- product thumbnail + lightbox ---- */
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
     display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:30px; cursor:pointer;
@@ -352,7 +366,6 @@
   .lightbox img{max-width:100%; max-height:80vh; border-radius:12px;}
   .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:18px; cursor:pointer; z-index:1;}
 
-  /* ---- payment methods strip ---- */
   .pay-methods-strip{display:flex; gap:10px; padding:4px 16px 0; justify-content:center;}
   .pay-method-badge{
     flex:1; max-width:110px; background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -361,7 +374,6 @@
   .pay-method-badge.soon{opacity:.5;}
   .pay-method-badge .ic{font-size:20px; display:block; margin-bottom:4px;}
 
-  /* ---- floating buttons ---- */
   .fab{
     position:fixed; left:14px; width:52px; height:52px; border-radius:50%;
     display:flex; align-items:center; justify-content:center; font-size:24px;
@@ -369,7 +381,6 @@
   }
   .fab-wa{bottom:95px; background:#25D366; color:#fff;}
 
-  /* ---- footer expanded ---- */
   .footer-links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
   .footer-links a, .footer-links button{
     color:var(--mid); text-decoration:none; font-size:11px; font-family:inherit; background:none; border:none; cursor:pointer; font-weight:700;
@@ -383,6 +394,12 @@
 </style>
 </head>
 <body>
+
+<div class="top-ticker">
+  <div class="top-ticker-content">
+    🚚 ایس جے فوڈز مینگورہ سوات — 100% تازہ سبزی، پھل، کریانہ، تیز ترین ڈیلیوری سروس — آن لائن آرڈر کریں! 🌿
+  </div>
+</div>
 
 <header>
   <button class="theme-toggle" id="themeToggle" title="تھیم" style="left:0;">🌙</button>
@@ -399,9 +416,7 @@
   <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
-
-
-<div class="features-scroll">
+<div class="features-scroll categories-container" id="featuresScroll">
   <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
   <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
   <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
@@ -415,7 +430,7 @@
 <div class="offer-slider hidden" id="offerSlider"></div>
 
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
-<div class="featured-scroll hidden" id="featuredScroll"></div>
+<div class="featured-scroll categories-container hidden" id="featuredScroll"></div>
 
 <button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
 
@@ -431,7 +446,7 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<div class="chips" id="chips"></div>
+<div class="chips categories-container" id="chips"></div>
 
 <main id="list"></main>
 
@@ -529,13 +544,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// =========================================================
-// Rates are loaded from rates.json in this same folder.
-// To change prices: open rates.json in this GitHub repo,
-// click the pencil (edit) icon, change the "rate" numbers
-// or "available" true/false, then commit — the site updates
-// automatically within a minute.
-// =========================================================
 let CATEGORIES_META = [];
 let ITEMS = [];
 
@@ -613,9 +621,7 @@ async function loadSettings(){
     if(s.address) document.getElementById("footerAddress").textContent = s.address;
     refreshHeroLinks();
     renderSocialLinks(s);
-  }catch(e){
-    // settings.json not found yet — site still works with defaults
-  }
+  }catch(e){}
 }
 
 function renderChips(){
@@ -739,7 +745,6 @@ function syncAfterChange(it){
   renderBill();
 }
 
-// ---------------- Bill panel ----------------
 let SHOP_WHATSAPP = "923349353799";
 let SHOP_PAY_NUMBER = "0334-9353799";
 let SHOP_EMAIL = "sjfoodsonline@outlook.com";
@@ -785,7 +790,6 @@ document.getElementById("copyNumBtn").onclick = async ()=>{
 
 document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
 
-// ---------------- Area & payment method logic ----------------
 const areaSelect = document.getElementById("custArea");
 const payCod = document.getElementById("payCod");
 const payEasy = document.getElementById("payEasy");
@@ -896,7 +900,47 @@ document.getElementById("clearBtn").onclick = ()=>{
   billbar.classList.add("collapsed");
 };
 
-// ---------------- init ----------------
+function renderFeatured(){
+  const featured = ITEMS.filter(i=>i.featured);
+  const scroll = document.getElementById("featuredScroll");
+  const title = document.getElementById("featuredTitle");
+  if(!featured.length) return;
+  
+  title.classList.remove("hidden");
+  scroll.classList.remove("hidden");
+  scroll.innerHTML = "";
+
+  featured.forEach(it=>{
+    const card = document.createElement("div");
+    card.className = "featured-card";
+    card.innerHTML = `
+      <img src="${it.image || 'icon-192.png'}" alt="${dispName(it)}">
+      <div class="fname">${dispName(it)}</div>
+      <div class="frate">${fmt(currentRate(it))}</div>
+    `;
+    card.onclick = ()=>{
+      const el = document.getElementById("row-"+it.id);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    };
+    scroll.appendChild(card);
+  });
+}
+
+function renderSocialLinks(s){
+  const el = document.getElementById("footerSocial");
+  if(!el || !s.social) return;
+  el.innerHTML = "";
+  Object.keys(s.social).forEach(k=>{
+    if(s.social[k]){
+      const a = document.createElement("a");
+      a.href = s.social[k];
+      a.target = "_blank";
+      a.textContent = k.toUpperCase();
+      el.appendChild(a);
+    }
+  });
+}
+
 (async function init(){
   await Promise.all([loadRates(), loadSettings()]);
   loadingMsg.style.display = "none";
@@ -913,7 +957,6 @@ if("serviceWorker" in navigator){
   });
 }
 
-// ---------------- Install app button ----------------
 const installBtn = document.getElementById("installBtn");
 const installOverlay = document.getElementById("installOverlay");
 const installSteps = document.getElementById("installSteps");
@@ -927,7 +970,7 @@ const isIOS = /iphone|ipad|ipod/i.test(ua);
 function showInstallButton(){
   if(!isStandalone) installBtn.style.display = "flex";
 }
-if(!isStandalone) showInstallButton(); // show by default; Android will also get native prompt when ready
+if(!isStandalone) showInstallButton();
 
 window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
@@ -970,7 +1013,6 @@ installBtn.onclick = async ()=>{
   }
 };
 
-// ---------------- Dark / Light mode ----------------
 const themeToggle = document.getElementById("themeToggle");
 function applyTheme(t){
   document.body.classList.toggle("dark", t === "dark");
@@ -983,7 +1025,6 @@ themeToggle.onclick = ()=>{
   localStorage.setItem("sjfoods-theme", next);
 };
 
-// ---------------- Hero WhatsApp/Call buttons ----------------
 function refreshHeroLinks(){
   const greet = encodeURIComponent("السلام علیکم! مجھے SJ Foods سے آرڈر کرنا ہے 🛒");
   document.getElementById("heroWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
@@ -992,7 +1033,6 @@ function refreshHeroLinks(){
 }
 refreshHeroLinks();
 
-// ---------------- Product image lightbox ----------------
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
 let lightboxOpen = false;
@@ -1000,14 +1040,12 @@ let lightboxOpen = false;
 function openLightboxImg(src, alt){
   lightboxImg.src = src;
   lightboxImg.alt = alt;
-  lightboxImg.classList.remove("zoomed");
   lightbox.classList.remove("hidden");
   lightboxOpen = true;
   history.pushState({ lightbox: true }, "");
 }
 function closeLightboxImg(){
   lightbox.classList.add("hidden");
-  lightboxImg.classList.remove("zoomed");
   lightboxOpen = false;
 }
 
@@ -1018,8 +1056,6 @@ document.addEventListener("click", (e)=>{
   }
 });
 
-// closing via the X button or tapping the dark backdrop: go back in history
-// so the pushed state is consumed and the phone's back button stays in sync
 document.getElementById("closeLightbox").onclick = ()=>{
   if(lightboxOpen) history.back(); else closeLightboxImg();
 };
@@ -1027,185 +1063,57 @@ lightbox.onclick = (e)=>{
   if(e.target===lightbox){ if(lightboxOpen) history.back(); else closeLightboxImg(); }
 };
 
-// phone/browser back button: just close the lightbox, never leave the page
 window.addEventListener("popstate", ()=>{
   if(lightboxOpen) closeLightboxImg();
 });
 
-// image zoom is now purely natural pinch-zoom-with-fingers (browser native),
-// no forced/automatic zoom level — matches how much the person actually pinches
-
-// ---------------- Policy modal ----------------
 const policyOverlay = document.getElementById("policyOverlay");
 const policyTitle = document.getElementById("policyTitle");
 const policyBody = document.getElementById("policyBody");
 const POLICIES = {
   privacy: {
     title: "🔒 پرائیویسی پالیسی",
-    body: `<p>ہم آپ کا نام، رابطہ نمبر اور پتہ صرف آپ کا آرڈر مکمل کرنے اور ڈیلیوری کے لیے استعمال کرتے ہیں۔ یہ معلومات کسی تیسرے فریق کو فروخت یا شیئر نہیں کی جاتیں۔ آرڈر واٹس ایپ کے ذریعے بھیجا جاتا ہے، اس لیے آپ کی گفتگو واٹس ایپ کی اپنی پرائیویسی پالیسی کے تحت محفوظ رہتی ہے۔</p>`
+    body: `<p>ہم آپ کا نام، رابطہ نمبر اور پتہ صرف آپ کا آرڈر مکمل کرنے اور ڈیلیوری کے لیے استعمال کرتے ہیں۔ یہ معلومات کسی تیسرے فریق کو فروخت یا شیئر نہیں کی جاتیں۔</p>`
   },
   terms: {
     title: "📜 شرائط و ضوابط",
-    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتی ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
+    body: `<p>1. آرڈرز کی ڈیلیوری دستیابی کے تابع ہے۔<br>2. خرابی یا غلط آئٹم کی صورت میں فوری واٹس ایپ پر رابطہ کریں۔</p>`
   }
 };
-function openPolicy(key){
-  policyTitle.textContent = POLICIES[key].title;
-  policyBody.innerHTML = POLICIES[key].body;
+
+document.getElementById("openPrivacy").onclick = ()=>{
+  policyTitle.textContent = POLICIES.privacy.title;
+  policyBody.innerHTML = POLICIES.privacy.body;
   policyOverlay.classList.remove("hidden");
-}
-document.getElementById("openPrivacy").onclick = ()=> openPolicy("privacy");
-document.getElementById("openTerms").onclick = ()=> openPolicy("terms");
+};
+document.getElementById("openTerms").onclick = ()=>{
+  policyTitle.textContent = POLICIES.terms.title;
+  policyBody.innerHTML = POLICIES.terms.body;
+  policyOverlay.classList.remove("hidden");
+};
 document.getElementById("closePolicy").onclick = ()=> policyOverlay.classList.add("hidden");
-policyOverlay.onclick = (e)=>{ if(e.target===policyOverlay) policyOverlay.classList.add("hidden"); };
 
-// ---------------- Social links (from settings.json, shown only if provided) ----------------
-function renderSocialLinks(s){
-  const box = document.getElementById("footerSocial");
-  box.innerHTML = "";
-  if(s.facebook_url) box.innerHTML += `<a href="${s.facebook_url}" target="_blank">📘 فیس بک</a>`;
-  if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
-}
+// ---- Enable Mouse Drag Scrolling for Category & Features Bars ----
+document.querySelectorAll('.categories-container').forEach(slider => {
+  let isDown = false;
+  let startX;
+  let scrollLeft;
 
-// ---------------- Featured products (only shows if items are flagged "featured": true in category JSON) ----------------
-function renderFeatured(){
-  const featuredItems = ITEMS.filter(it => it.featured && it.available);
-  const scrollEl = document.getElementById("featuredScroll");
-  const titleEl = document.getElementById("featuredTitle");
-  if(featuredItems.length === 0){
-    scrollEl.classList.add("hidden");
-    titleEl.classList.add("hidden");
-    return;
-  }
-  scrollEl.classList.remove("hidden");
-  titleEl.classList.remove("hidden");
-  scrollEl.innerHTML = featuredItems.map(it => `
-    <div class="featured-card">
-      <img src="${it.image || ''}" alt="${it.name}" loading="lazy" onerror="this.style.display='none'">
-      <div class="fname">${it.name}</div>
-      <div class="frate">${fmt(currentRate(it))}</div>
-    </div>
-  `).join("");
-}
-
-// ---------------- Offers slider (reads offers.json; hidden if empty/missing) ----------------
-async function loadOffers(){
-  try{
-    const res = await fetch("offers.json", {cache:"no-store"});
-    const offers = await res.json();
-    if(!Array.isArray(offers) || offers.length === 0) return;
-    const slider = document.getElementById("offerSlider");
-    slider.classList.remove("hidden");
-    slider.innerHTML = offers.map((o,i)=>`
-      <div class="offer-slide ${i===0?'active':''}">
-        <div class="ot">${o.title || ''}</div>
-        <div class="os">${o.subtitle || ''}</div>
-      </div>
-    `).join("");
-    if(offers.length > 1){
-      let idx = 0;
-      setInterval(()=>{
-        const slides = slider.querySelectorAll(".offer-slide");
-        slides[idx].classList.remove("active");
-        idx = (idx+1) % slides.length;
-        slides[idx].classList.add("active");
-      }, 4000);
-    }
-  }catch(e){
-    // offers.json not present — no offers to show, that's fine
-  }
-}
-loadOffers();
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  });
+  slider.addEventListener('mouseleave', () => { isDown = false; });
+  slider.addEventListener('mouseup', () => { isDown = false; });
+  slider.addEventListener('mousemove', (e) => {
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2;
+    slider.scrollLeft = scrollLeft - walk;
+  });
+});
 </script>
-</body> 
-</html> /* 1. Category Bar Drag and Wheel Smooth Styling */
-.categories-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    cursor: grab;
-    user-select: none;
-    scrollbar-width: none; /* Hide Scrollbar Firefox */
-    -ms-overflow-style: none; /* Hide Scrollbar IE */
-    padding: 10px 0;
-}
-
-.categories-container::-webkit-scrollbar {
-    display: none; /* Hide Scrollbar Chrome/Safari */
-}
-
-.categories-container:active {
-    cursor: grabbing;
-}
-
-/* Category Card Smooth Hover */
-.category-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    flex: 0 0 auto;
-}
-
-.category-card:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-
-/* 2. Top Banner Smooth Moving Text */
-.top-ticker {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    background: #2e7d32;
-    color: white;
-    padding: 8px 0;
-}
-
-.top-ticker-content {
-    display: inline-block;
-    padding-left: 100%;
-    animation: ticker 18s linear infinite;
-}
-
-@keyframes ticker {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
-} 
-<script>
-// Mouse Wheel Scroll (ماؤس کے ویل سے دائیں بائیں اسکرول کرنا)
-const catContainer = document.querySelector('.categories-container');
-
-if (catContainer) {
-    // Wheel Scroll Conversion
-    catContainer.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        catContainer.scrollLeft += e.deltaY * 1.5;
-    });
-
-    // Mouse Drag Scroll (ماؤس سے پکڑ کر کھینچنا)
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    catContainer.addEventListener('mousedown', (e) => {
-        isDown = true;
-        catContainer.classList.add('active');
-        startX = e.pageX - catContainer.offsetLeft;
-        scrollLeft = catContainer.scrollLeft;
-    });
-
-    catContainer.addEventListener('mouseleave', () => {
-        isDown = false;
-    });
-
-    catContainer.addEventListener('mouseup', () => {
-        isDown = false;
-    });
-
-    catContainer.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - catContainer.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll Speed
-        catContainer.scrollLeft = scrollLeft - walk;
-    });
-}
-</script>
+</body>
+</html>

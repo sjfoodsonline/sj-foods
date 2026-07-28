@@ -94,7 +94,7 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- Drag Cursor Setup for PC ---- */
+  /* ---- Drag Cursor ---- */
   .chips, .features-scroll, .featured-scroll {
     cursor: grab;
     user-select: none;
@@ -113,7 +113,7 @@
 
   main{padding:6px 16px 10px;}
 
-  /* ---- Animations for Category & Items ---- */
+  /* ---- Animations ---- */
   .cat-title-animate {
     animation: fadeInTitle 0.7s ease-out forwards;
   }
@@ -619,7 +619,7 @@ async function loadRates(){
     if(loadingMsg) loadingMsg.style.display = "none";
     renderChips();
     renderList();
-    enableMouseDragAll(); // Enable Mouse Dragging for PC
+    enableMouseDragAll();
   }catch(e){
     if(loadingMsg) loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
     console.error(e);
@@ -669,7 +669,6 @@ function renderList(filter){
     if(catItems.length===0) return;
     anyShown = true;
 
-    // Category Title with Animation
     const title = document.createElement("div");
     title.className = "cat-title cat-title-animate";
     title.id = "cat-"+cat.name;
@@ -683,7 +682,6 @@ function renderList(filter){
     }
     listEl.appendChild(title);
 
-    // Render Items with Delay Animation
     catItems.forEach((it, index)=>{
       const row = document.createElement("div");
       row.className = "item item-animate" + (it.qty>0 ? " active":"") + (!it.available ? " unavailable":"");
@@ -723,8 +721,8 @@ function renderList(filter){
   if(noResultEl) noResultEl.style.display = anyShown ? "none" : "block";
 }
 
-// ---- Laptop / PC Smooth Drag Function ----
-function enableMouseDrag(container) {
+// PC Smooth Dragging Function
+function enableDrag(container) {
   if(!container) return;
   let isDown = false;
   let startX;
@@ -735,5 +733,5 @@ function enableMouseDrag(container) {
     startX = e.pageX - container.offsetLeft;
     scrollLeft = container.scrollLeft;
   });
-
-  container.addEventListener('mouseleave', () => { isDown = falseNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+  container.addEventListener('mouseleave', () => { isDown = false; });
+  Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.

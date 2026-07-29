@@ -2,521 +2,339 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — ایڈمن پینل</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر | Swat</title>
+<meta name="description" content="SJ Foods Mingora Swat — تازہ سبزیاں، پھل، کریانہ، بیکری، دودھ و ڈیری اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں۔">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
-    --app-w:480px;
+    --dark:#153A20;
+    --mid:#2E7D32;
+    --leaf:#E8F5E9;
+    --accent:#FF6F00;
+    --gold:#C9A227;
+    --paper:#FFFDF8;
+    --ink:#20241F;
+    --muted:#8A8F86;
+    --price:#B71C1C;
+    --line:#E5E4DA;
+    --card:#FFFFFF;
+    --app-w: 480px;
   }
+  body.dark{
+    --paper:#0F1A12;
+    --ink:#EAF3EA;
+    --muted:#9AA79A;
+    --line:#233826;
+    --card:#17251A;
+    --leaf:#16301C;
+  }
+  body.dark .item, body.dark #billbar, body.dark .checkout-box input{ background:var(--card); color:var(--ink); }
+  body.dark .chip{background:var(--card); border-color:var(--line);}
+  body.dark #search{background:var(--card); color:var(--ink); border-color:var(--line);}
   *{box-sizing:border-box;}
-  html, body { margin:0; padding:0; }
-  
+  html,body{margin:0;padding:0;}
   body{
-    background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:90px;
+    background:var(--paper); color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,"Noto Naskh Arabic",sans-serif;
+    direction:rtl; padding-bottom:90px;
+  }
+  @media (min-width: 640px){
+    html{ background:#EDEAE0; }
+    body{ max-width:var(--app-w); margin:0 auto; min-height:100vh; box-shadow:0 0 50px rgba(0,0,0,0.18); }
+    #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
+  }
+  header{
+    background:linear-gradient(160deg,var(--dark),var(--mid));
+    color:#fff; padding:18px 16px 16px; border-radius:0 0 22px 22px;
+    box-shadow:0 6px 18px rgba(21,58,32,0.25); position:relative; overflow:hidden;
+  }
+  header h1{margin:0 0 4px; font-size:22px; font-weight:700; font-family:"Noto Nastaliq Urdu",serif;}
+  header p{margin:0; font-size:12.5px; opacity:.92;}
+
+  .top-ticker {
+    width: 100%; overflow: hidden; white-space: nowrap;
+    background: #1b5e20; color: white; padding: 8px 0; font-size: 13px; font-weight: 600;
+  }
+  .top-ticker-content {
+    display: inline-block; padding-right: 100%; animation: ticker-rtl 22s linear infinite;
+  }
+  @keyframes ticker-rtl {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(100%, 0, 0); }
   }
 
-  @media (min-width: 640px) {
-    html { background: #EDEAE0; }
-    body {
-      max-width: var(--app-w);
-      margin: 20px auto;
-      min-height: 95vh;
-      box-shadow: 0 0 50px rgba(0,0,0,0.18);
-      border-radius: 20px;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .savebar {
-      max-width: var(--app-w);
-      left: 50% !important;
-      transform: translateX(-50%);
-      border-radius: 0 0 20px 20px;
-    }
+  .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
+  #search{
+    width:100%; padding:12px 14px; font-size:15px; border-radius:14px;
+    border:1.5px solid var(--line); background:#fff; outline:none;
   }
 
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
-  header h1{margin:0; font-size:18px; font-family:"Noto Nastaliq Urdu",serif;}
-  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
-
-  .wrap{padding:14px;}
-  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
-  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  input[type=text], input[type=password], input[type=number], select{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+  /* Camera & Upload Options */
+  .upload-btn-wrap {
+    padding: 6px 16px; display: flex; gap: 8px; justify-content: center;
   }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
-  button{font-family:inherit; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
-  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
-  .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
-
-  .cat-select{display:flex; gap:8px; margin-bottom:10px;}
-  .cat-select select{flex:1; margin-bottom:0;}
-
-  .product-row{
-    background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px;
-    display:flex; flex-direction:column; gap:8px;
+  .upload-btn {
+    flex:1; background: var(--mid); color: #fff; padding: 10px; border-radius: 10px;
+    text-align: center; font-weight: bold; font-size: 13px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 6px;
   }
-  .product-row.dragging{opacity:.4;}
-  .row-top{display:flex; align-items:center; gap:8px;}
-  .drag-handle{cursor:grab; font-size:22px; color:var(--muted); flex:0 0 34px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; touch-action:none; user-select:none; -webkit-user-select:none;}
-  
-  .images-container {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin: 4px 0;
-  }
-  .thumb-box{
-    width:52px; height:52px; border-radius:10px; background:var(--leaf);
-    display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;
-    border: 1px solid var(--line);
-  }
-  .thumb-box img{width:100%; height:100%; object-fit:cover;}
-  .thumb-box .remove-img-icon {
-    position: absolute; top: 2px; left: 2px; background: rgba(183,28,28,0.85); color: #fff;
-    border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer;
-  }
-  .add-img-box {
-    width: 52px; height: 52px; border-radius: 10px; border: 1.5px dashed var(--mid);
-    background: var(--leaf); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; font-size: 18px;
-  }
-  .add-img-box input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width:100%; height:100%; }
 
-  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
-  .row-fields input{margin-bottom:0;}
-  .row-flags{display:flex; align-items:center; gap:10px; font-size:11.5px;}
-  .row-flags label{display:flex; align-items:center; gap:4px; margin:0; color:var(--ink);}
-
-  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
-  .unit-row input{margin-bottom:0;}
-  .unit-row input.u-label{flex:2;}
-  .unit-row input.u-rate{flex:1;}
-  .unit-row button{flex:0 0 auto; font-size:14px; background:none; color:var(--price); padding:2px 6px;}
-  .add-unit-btn{font-size:11px; background:none; color:var(--mid); font-weight:700; padding:2px 4px;}
-
-  .row-bottom{display:flex; justify-content:space-between; align-items:center;}
-
-  .savebar{
-    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
-    padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index: 50;
+  .categories-container {
+    display: flex; gap: 10px; overflow-x: auto; padding: 12px 16px;
+    scroll-behavior: smooth; position: sticky; top: 52px; background: var(--paper); z-index: 19;
   }
-  .savebar .status{flex:1; font-size:11.5px; color:var(--muted);}
-  .savebar button{flex:0 0 auto; border-radius:10px; padding:11px 18px; font-size:13px; font-weight:700;}
-
-  .toast{
-    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
-    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:80;
+  .chip{
+    flex:0 0 auto; background:var(--leaf); color:var(--dark); border:1px solid #cfe8d1;
+    border-radius:20px; padding:8px 16px; font-size:13px; font-weight:700; cursor:pointer;
   }
-  .toast.show{opacity:1; top:26px;}
-  .toast.err{background:#B71C1C;}
+  .chip.active{ background: var(--dark); color: #fff; }
 
-  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+  main{padding:6px 16px 10px;}
+  .cat-title{ font-size:16px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark); }
+  .item{
+    display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:10px 12px; margin-bottom:8px;
+  }
+  .item-row-top{display:flex; align-items:center; gap:10px;}
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .item .info{flex:1;}
+  .item .name{font-size:15.5px; font-weight:600;}
+
+  /* Image Slider / Multiple Thumbnails Support */
+  .item-thumbs-container { display: flex; gap: 4px; overflow-x: auto; max-width: 100px; }
+  .item-thumb{
+    flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:#f8f9fa;
+    display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; border:1px solid var(--line);
+  }
+  .item-thumb img{width:100%; height:100%; object-fit:contain;}
+
+  .qty-box{display:flex; align-items:center; gap:6px;}
+  .qty-box button{ width:32px; height:32px; border-radius:9px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:700; cursor:pointer; }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box input{ width:38px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:15px; font-weight:700; padding:5px 2px; }
+
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
+    border-radius:20px 20px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.08); padding:14px 18px 18px;
+    z-index: 30; display:flex; flex-direction:column;
+  }
+  #billbar.collapsed .cart-details{display:none;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
+  .bill-summary .total{font-size:25px; font-weight:800; color:var(--dark);}
+
+  /* Lightbox Modal & Gallery */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:90;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px;
+  }
+  .lightbox.hidden{display:none;}
+  .lightbox img{ max-width:95%; max-height:70vh; border-radius:12px; object-fit:contain; }
+  .lightbox-gallery { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; max-width: 90%; }
+  .lightbox-gallery img { width: 50px; height: 50px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+  .lightbox-gallery img.active-gallery { border-color: var(--accent); }
+  .lightbox-close{ position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:40px; height:40px; font-size:20px; cursor:pointer; }
+
+  .actions{display:flex; gap:8px; margin-top:10px;}
+  .actions button{ flex:1; border:none; border-radius:12px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; }
+  #waBtn{background:#25D366; color:#fff;}
 </style>
 </head>
 <body>
 
+<div class="top-ticker">
+  <div class="top-ticker-content">
+    خوش آمدید! SJ Foods سے تازہ ترین سبزیاں، پھل اور گروسری مناسب ترین قیمتوں پر حاصل کریں!
+  </div>
+</div>
+
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>یہاں سے پروڈکٹس، قیمتیں اور تصویریں بغیر کوڈ کے بدلیں</p>
+  <h1>🟢 ایس جے فوڈز مینگورہ سوات</h1>
+  <p>تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء آن لائن آرڈر کریں</p>
 </header>
 
-<div class="wrap">
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
+</div>
 
-  <!-- SETUP CARD -->
-  <div class="card" id="setupCard">
-    <h3>🔑 ایک بار سیٹ اپ کریں</h3>
-    <p>یہ صرف پہلی بار کرنا ہے۔ آپ کا ٹوکن صرف اسی فون کے براؤزر میں محفوظ رہے گا۔</p>
+<!-- ڈائریکٹ کیمرہ اور گیلری اپ لوڈ آپشن -->
+<div class="upload-btn-wrap">
+  <label class="upload-btn">
+    📷 ڈائریکٹ کیمرہ کھولیں
+    <input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
+  </label>
+  <label class="upload-btn" style="background:var(--dark);">
+    🖼️ گیلری سے منتخب کریں
+    <input type="file" accept="image/*" id="galleryInput" style="display:none;">
+  </label>
+</div>
 
-    <label>GitHub یوزر نیم (Owner)</label>
-    <input type="text" id="cfgOwner" value="sjfoodsonline">
+<div class="categories-container" id="chips"></div>
 
-    <label>ریپازٹری کا نام (Repository)</label>
-    <input type="text" id="cfgRepo" value="sj-foods">
+<main id="list"></main>
 
-    <label>Personal Access Token</label>
-    <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-
-    <br>
-    <button class="btn-primary" id="saveConfigBtn">محفوظ کریں اور شروع کریں</button>
+<div id="billbar" class="collapsed">
+  <div class="bill-summary" id="summary">
+    <div>🛒 کارٹ آئٹمز</div>
+    <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
-
-  <!-- MAIN PANEL -->
-  <div id="mainPanel" style="display:none;">
-
-    <div class="card">
-      <div class="cat-select">
-        <select id="categoryPicker"></select>
-        <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
-      </div>
+  <div class="cart-details">
+    <div class="actions">
+      <button id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
     </div>
-
-    <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-
-    <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
   </div>
-
 </div>
 
-<div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">تبدیلیاں محفوظ نہیں ہوئیں</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;">💾 محفوظ کریں</button>
+<!-- Image Lightbox Modal with Multiple Image Support -->
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">✕</button>
+  <img id="lightboxImg" src="" alt="پروڈکٹ کی تصویر">
+  <div class="lightbox-gallery" id="lightboxGallery"></div>
 </div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-const CATEGORIES_INDEX_FILE = "categories_index.json";
-let CFG = null;
-let CATEGORIES_INDEX = [];
-let currentCategoryFile = null;
-let currentItems = [];
-let currentSha = null;
-let dirty = false;
+let CATEGORIES_META = [];
+let ITEMS = [];
 
-function showToast(msg, isErr){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show" + (isErr ? " err" : "");
-  setTimeout(()=> t.className = "toast", 2600);
-}
-function markDirty(){
-  dirty = true;
-  document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہوئیں — نیچے 'محفوظ کریں' دبائیں";
-}
-function markClean(){
-  dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
-}
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-function utf8ToBase64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = "";
-  bytes.forEach(b => bin += String.fromCharCode(b));
-  return btoa(bin);
-}
-function base64ToUtf8(b64){
-  const bin = atob(b64.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
-}
-
-async function ghRequest(path, options){
-  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
-  const res = await fetch(url, Object.assign({
-    headers: {
-      "Authorization": "token " + CFG.token,
-      "Accept": "application/vnd.github+json"
-    }
-  }, options || {}));
-  if(!res.ok){
-    const errText = await res.text().catch(()=> "");
-    throw new Error(`GitHub API error (${res.status}): ${errText.slice(0,200)}`);
-  }
-  return res.json();
-}
-async function ghGetJson(path){
-  const data = await ghRequest(path);
-  return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
-}
-async function ghPutJson(path, obj, sha, message){
-  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content, sha, branch: "main" })
-  });
-}
-async function ghPutBinary(path, base64Content, message){
-  let sha;
-  try{
-    const existing = await ghRequest(path);
-    sha = existing.sha;
-  }catch(e){ }
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content: base64Content, sha, branch: "main" })
-  });
-}
-
-function loadConfig(){
-  const raw = localStorage.getItem("sjfoods-admin-config");
-  if(!raw) return null;
-  try{ return JSON.parse(raw); }catch(e){ return null; }
-}
-function saveConfig(cfg){
-  localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg));
-}
-
-document.getElementById("saveConfigBtn").onclick = async ()=>{
-  const owner = document.getElementById("cfgOwner").value.trim();
-  const repo = document.getElementById("cfgRepo").value.trim();
-  const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){
-    showToast("براہ کرم تینوں خانے پُر کریں", true);
-    return;
-  }
-  CFG = { owner, repo, token };
-  try{
-    await ghRequest(CATEGORIES_INDEX_FILE);
-    saveConfig(CFG);
-    showToast("✅ کنکشن کامیاب!");
-    startMainPanel();
-  }catch(e){
-    showToast("❌ ٹوکن یا نام غلط ہے، دوبارہ چیک کریں", true);
-  }
-};
-
-document.getElementById("changeAccountBtn").onclick = ()=>{
-  if(!confirm("اکاؤنٹ کی معلومات صاف کر کے دوبارہ سیٹ اپ کریں؟")) return;
-  localStorage.removeItem("sjfoods-admin-config");
-  location.reload();
-};
-
-async function startMainPanel(){
-  document.getElementById("setupCard").style.display = "none";
-  document.getElementById("mainPanel").style.display = "block";
-
-  const { json } = await ghGetJson(CATEGORIES_INDEX_FILE);
-  CATEGORIES_INDEX = json;
-
-  if(CATEGORIES_INDEX.length === 0){
-    document.getElementById("productsArea").innerHTML = `<div class="loading">⚠️ کوئی کیٹگری موجود نہیں</div>`;
-    return;
-  }
-
-  const picker = document.getElementById("categoryPicker");
-  picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
-  picker.onchange = ()=> loadCategory(picker.value);
-
-  await loadCategory(CATEGORIES_INDEX[0].file);
-}
-
-async function loadCategory(file){
-  if(dirty && !confirm("غیر محفوظ تبدیلیاں ضائع ہو جائیں گی۔ آگے بڑھیں؟")) {
-    document.getElementById("categoryPicker").value = currentCategoryFile;
-    return;
-  }
-  currentCategoryFile = file;
-  document.getElementById("productsArea").innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
-  document.getElementById("addProductBtn").style.display = "none";
-  try{
-    const { json, sha } = await ghGetJson(file);
-    currentItems = json.map(normalizeItem);
-    currentSha = sha;
-    renderProducts();
-    markClean();
-    document.getElementById("saveBar").style.display = "flex";
-    document.getElementById("addProductBtn").style.display = "block";
-  }catch(e){
-    document.getElementById("productsArea").innerHTML = `<div class="loading">❌ لوڈ نہیں ہو سکا: ${e.message}</div>`;
-  }
-}
-
-function normalizeItem(it){
-  let images = [];
-  if (Array.isArray(it.images) && it.images.length > 0) {
-    images = it.images;
-  } else if (it.image) {
-    images = [it.image];
-  }
-
-  const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "کلو", rate: it.rate || 0}];
-  return {
-    name: it.name || "",
-    name_roman: it.name_roman || undefined,
-    available: it.available !== false,
-    images: images,
-    featured: it.featured === true,
-    units
-  };
-}
-
-function renderProducts(){
-  const area = document.getElementById("productsArea");
-  area.innerHTML = "";
-  currentItems.forEach((it, idx) => area.appendChild(buildRow(it, idx)));
-}
-
-function buildRow(it, idx){
-  const row = document.createElement("div");
-  row.className = "product-row";
-  row.draggable = false;
-  row.dataset.idx = idx;
-
-  row.innerHTML = `
-    <div class="row-top">
-      <span class="drag-handle">↕️</span>
-      <div class="row-fields">
-        <input type="text" class="f-name" placeholder="پروڈکٹ کا نام (اردو)" value="${it.name}">
-        <input type="text" class="f-name-en" placeholder="Roman Urdu name" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
-      </div>
-    </div>
-
-    <div style="font-size:11px; color:var(--muted);">📷 تصاویر (گیلری یا کیمرہ):</div>
-    <div class="images-container">
-      ${it.images.map((imgSrc, imgIdx) => `
-        <div class="thumb-box">
-          <img src="${imgSrc}" alt="img">
-          <span class="remove-img-icon" onclick="removeImageFromItem(${idx}, ${imgIdx})">✕</span>
-        </div>
-      `).join('')}
-      <div class="add-img-box" title="تصویر شامل کریں">
-        ➕
-        <input type="file" accept="image/*" class="img-input-element" multiple>
-      </div>
-    </div>
-
-    <div class="units-box"></div>
-    <button class="add-unit-btn">➕ سائز/قیمت شامل کریں</button>
-    <div class="row-bottom">
-      <div class="row-flags">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
-        <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
-      </div>
-      <button class="btn-danger remove-row-btn">🗑️ حذف کریں</button>
-    </div>
-  `;
-
-  const imgInput = row.querySelector(".img-input-element");
-  imgInput.onchange = async (e) => {
-    const files = e.target.files;
-    if(!files || files.length === 0) return;
-    
-    showToast("⏳ تصاویر اپ لوڈ ہو رہی ہیں...");
-    try {
-      for(let file of Array.from(files)) {
-        const base64 = await fileToBase64(file);
-        const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}-${Math.floor(Math.random()*1000)}.jpg`;
-        await ghPutBinary(path, base64, `Upload image for ${it.name}`);
-        it.images.push(path);
+// ملٹیپل امیجز کو سپورٹ کرنے کے لیے فنکشن میں تبدیلی
+function buildItemsFromCategories(catData){
+  let items = [];
+  catData.forEach((cat, ci) => {
+    cat.items.forEach((it, ii) => {
+      // اگر images کی ایرے ہو تو وہ لے لے، ورنہ single image لے
+      let imgList = [];
+      if(Array.isArray(it.images) && it.images.length > 0){
+        imgList = it.images;
+      } else if(it.image){
+        imgList = [it.image];
       }
-      renderProducts();
-      markDirty();
-      showToast("✅ تصاویر اپ لوڈ ہو گئیں — 'محفوظ کریں' دبائیں");
-    } catch(err) {
-      showToast("❌ تصویر اپ لوڈ نہ ہو سکی: " + err.message, true);
-    }
-  };
 
-  const unitsBox = row.querySelector(".units-box");
-  function renderUnits(){
-    unitsBox.innerHTML = "";
-    it.units.forEach((u, ui) => {
-      const ur = document.createElement("div");
-      ur.className = "unit-row";
-      ur.innerHTML = `
-        <input type="text" class="u-label" placeholder="یونٹ (مثلاً KG)" value="${u.label}">
-        <input type="number" class="u-rate" placeholder="قیمت" value="${u.rate}">
-        ${it.units.length > 1 ? `<button class="remove-unit-btn">✕</button>` : ""}
-      `;
-      ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
-      ur.querySelector(".u-rate").oninput = (e)=>{ u.rate = parseFloat(e.target.value)||0; markDirty(); };
-      const rmBtn = ur.querySelector(".remove-unit-btn");
-      if(rmBtn) rmBtn.onclick = ()=>{ it.units.splice(ui,1); renderUnits(); markDirty(); };
-      unitsBox.appendChild(ur);
+      items.push({
+        id: ci+"-"+ii, cat: cat.category, icon: cat.icon,
+        name: it.name, name_roman: it.name_roman || "",
+        units: (it.units && it.units.length) ? it.units : [{label: it.unit, rate: it.rate}],
+        unitIndex: 0, available: it.available !== false,
+        images: imgList, // تصاویر کی لسٹ
+        qty: 0
+      });
     });
-  }
-  renderUnits();
-
-  row.querySelector(".add-unit-btn").onclick = ()=>{
-    it.units.push({label:"", rate:0});
-    renderUnits();
-    markDirty();
-  };
-
-  row.querySelector(".f-name").oninput = (e)=>{ it.name = e.target.value; markDirty(); };
-  row.querySelector(".f-name-en").oninput = (e)=>{ it.name_roman = e.target.value.trim() || undefined; markDirty(); };
-  row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
-  row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
-
-  row.querySelector(".remove-row-btn").onclick = ()=>{
-    if(!confirm(`"${it.name}" حذف کر دیں؟`)) return;
-    const i = currentItems.indexOf(it);
-    currentItems.splice(i,1);
-    renderProducts();
-    markDirty();
-  };
-
-  row._item = it;
-  return row;
+  });
+  return items;
 }
 
-window.removeImageFromItem = function(itemIdx, imgIdx) {
-  if(currentItems[itemIdx] && currentItems[itemIdx].images) {
-    currentItems[itemIdx].images.splice(imgIdx, 1);
-    renderProducts();
-    markDirty();
-  }
-};
+async function loadRates(){
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+    const catResults = await Promise.all(
+      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
+    );
 
-function syncOrderFromDom(){
-  const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item);
+    CATEGORIES_META = index.map(entry => ({name: entry.category, icon: entry.icon}));
+    const combined = index.map((entry, i) => ({
+      category: entry.category, icon: entry.icon, items: catResults[i]
+    }));
+    ITEMS = buildItemsFromCategories(combined);
+    renderChips();
+    renderList("");
+  }catch(e){ console.error(e); }
 }
 
-function fileToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = ()=> resolve(reader.result.split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+function renderChips(){
+  const chipsEl = document.getElementById("chips");
+  chipsEl.innerHTML = "";
+  CATEGORIES_META.forEach((cat, idx)=>{
+    const chip = document.createElement("div");
+    chip.className = "chip" + (idx === 0 ? " active" : "");
+    chip.textContent = cat.icon + " " + cat.name;
+    chipsEl.appendChild(chip);
   });
 }
 
-document.getElementById("addProductBtn").onclick = ()=>{
-  currentItems.push({ name:"", available:true, images:[], featured:false, units:[{label:"KG", rate:0}] });
-  renderProducts();
-  markDirty();
-  window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"});
-};
+function renderList(filter){
+  const listEl = document.getElementById("list");
+  listEl.innerHTML = "";
 
-document.getElementById("saveBtn").onclick = async ()=>{
-  syncOrderFromDom();
-  document.getElementById("saveStatus").textContent = "⏳ محفوظ ہو رہا ہے...";
-  try{
-    const fresh = await ghRequest(currentCategoryFile);
-    const payload = currentItems.map(it => {
-      const obj = {
-        name: it.name,
-        units: it.units,
-        available: it.available,
-        images: it.images,
-        image: it.images.length > 0 ? it.images[0] : "",
-        featured: it.featured
+  CATEGORIES_META.forEach(cat=>{
+    const catItems = ITEMS.filter(it=> it.cat===cat.name);
+    if(catItems.length===0) return;
+
+    const title = document.createElement("div");
+    title.className = "cat-title";
+    title.textContent = cat.icon + " " + cat.name;
+    listEl.appendChild(title);
+
+    catItems.forEach(it=>{
+      const row = document.createElement("div");
+      row.className = "item";
+
+      // ملٹیپل تھمب نیلز بنانے کا طریقہ
+      let thumbHtml = "";
+      if(it.images.length > 0){
+        thumbHtml = `<div class="item-thumbs-container">` + 
+          it.images.map(img => `<div class="item-thumb" onclick='openLightbox(${JSON.stringify(it.images)}, "${img}")'><img src="${img}"></div>`).join("") + 
+          `</div>`;
+      } else {
+        thumbHtml = `<div class="item-thumb"><span>${it.icon||'🛒'}</span></div>`;
+      }
+
+      row.innerHTML = `
+        <div class="item-row-top">
+          ${thumbHtml}
+          <div class="info">
+            <div class="name">${it.name}</div>
+            <div>${fmt(it.units[0].rate)} / ${it.units[0].label}</div>
+          </div>
+        </div>`;
+      listEl.appendChild(row);
+    });
+  });
+}
+
+/* Lightbox with Gallery Support */
+function openLightbox(imgArray, activeImg) {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const galleryContainer = document.getElementById("lightboxGallery");
+
+  lightboxImg.src = activeImg;
+  galleryContainer.innerHTML = "";
+
+  if(imgArray.length > 1) {
+    imgArray.forEach(imgSrc => {
+      const gImg = document.createElement("img");
+      gImg.src = imgSrc;
+      if(imgSrc === activeImg) gImg.classList.add("active-gallery");
+      gImg.onclick = () => {
+        lightboxImg.src = imgSrc;
+        document.querySelectorAll(".lightbox-gallery img").forEach(i => i.classList.remove("active-gallery"));
+        gImg.classList.add("active-gallery");
       };
-      if(it.name_roman) obj.name_roman = it.name_roman;
-      return obj;
+      galleryContainer.appendChild(gImg);
     });
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update ${currentCategoryFile}`);
-    markClean();
-    showToast("✅ محفوظ ہو گیا!");
-  }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ محفوظ نہیں ہو سکا";
-    showToast("❌ خرابی: " + e.message, true);
   }
+  lightbox.classList.remove("hidden");
+}
+
+document.getElementById("closeLightbox").onclick = () => {
+  document.getElementById("lightbox").classList.add("hidden");
 };
 
-(function init(){
-  CFG = loadConfig();
-  if(CFG){
-    document.getElementById("cfgOwner").value = CFG.owner;
-    document.getElementById("cfgRepo").value = CFG.repo;
-    startMainPanel().catch(()=>{
-      showToast("❌ کنکشن ناکام", true);
-      localStorage.removeItem("sjfoods-admin-config");
-    });
+// کیمرہ اور فائل اپ لوڈ ایونٹ ہینڈلرز
+document.getElementById("cameraInput").addEventListener("change", handleFileUpload);
+document.getElementById("galleryInput").addEventListener("change", handleFileUpload);
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if(file) {
+    alert("تصویر کامیابی سے منتخب ہو گئی: " + file.name);
   }
-})();
+}
+
+loadRates();
 </script>
 </body>
 </html>

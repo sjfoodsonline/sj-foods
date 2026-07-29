@@ -16,6 +16,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-0-1785052638035.jpg"
+    ],
     "image": "products/sabzi-0-1785052638035.jpg",
     "featured": false,
     "name_roman": "Aloo"
@@ -37,6 +40,10 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-1-1785052754168.jpg",
+      "products/sabzi-1-1785335074825-172.jpg"
+    ],
     "image": "products/sabzi-1-1785052754168.jpg",
     "featured": false,
     "name_roman": "Pyaz"
@@ -54,6 +61,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-2-1785053017749.jpg"
+    ],
     "image": "products/sabzi-2-1785053017749.jpg",
     "featured": true,
     "name_roman": "Tamatar"
@@ -71,6 +81,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-3-1785053762180.jpg"
+    ],
     "image": "products/sabzi-3-1785053762180.jpg",
     "featured": true,
     "name_roman": "Kachalu"
@@ -88,6 +101,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-4-1785050455068.jpg"
+    ],
     "image": "products/sabzi-4-1785050455068.jpg",
     "featured": true,
     "name_roman": "Bhindi"
@@ -105,6 +121,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-5-1785053803796.jpg"
+    ],
     "image": "products/sabzi-5-1785053803796.jpg",
     "featured": false,
     "name_roman": "Matar"
@@ -122,6 +141,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-6-1785053855241.jpg"
+    ],
     "image": "products/sabzi-6-1785053855241.jpg",
     "featured": false,
     "name_roman": "Tori"
@@ -139,6 +161,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-7-1785053981892.jpg"
+    ],
     "image": "products/sabzi-7-1785053981892.jpg",
     "featured": false,
     "name_roman": "Kaddu"
@@ -156,6 +181,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-8-1785053985277.jpg"
+    ],
     "image": "products/sabzi-8-1785053985277.jpg",
     "featured": false,
     "name_roman": "Karela"
@@ -173,6 +201,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-9-1785053990863.jpg"
+    ],
     "image": "products/sabzi-9-1785053990863.jpg",
     "featured": false,
     "name_roman": "Baingan"
@@ -190,6 +221,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-10-1785054172550.jpg"
+    ],
     "image": "products/sabzi-10-1785054172550.jpg",
     "featured": false,
     "name_roman": "Shimla Mirch"
@@ -207,6 +241,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-11-1785054553711.jpg"
+    ],
     "image": "products/sabzi-11-1785054553711.jpg",
     "featured": false,
     "name_roman": "Band Gobhi"
@@ -224,6 +261,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-12-1785054633102.jpg"
+    ],
     "image": "products/sabzi-12-1785054633102.jpg",
     "featured": false,
     "name_roman": "Gajar"
@@ -241,6 +281,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-13-1785054717941.jpg"
+    ],
     "image": "products/sabzi-13-1785054717941.jpg",
     "featured": false,
     "name_roman": "Kheera"
@@ -258,6 +301,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-14-1785054720853.jpg"
+    ],
     "image": "products/sabzi-14-1785054720853.jpg",
     "featured": false,
     "name_roman": "Phool Gobhi"
@@ -275,6 +321,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-15-1785054824930.jpg"
+    ],
     "image": "products/sabzi-15-1785054824930.jpg",
     "featured": false,
     "name_roman": "Shalgham"
@@ -292,6 +341,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-16-1785054904651.jpg"
+    ],
     "image": "products/sabzi-16-1785054904651.jpg",
     "featured": false,
     "name_roman": "Farash Been"
@@ -309,6 +361,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-17-1785050682060.jpg"
+    ],
     "image": "products/sabzi-17-1785050682060.jpg",
     "featured": false,
     "name_roman": "Pamnkay"
@@ -326,6 +381,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-18-1785050694950.jpg"
+    ],
     "image": "products/sabzi-18-1785050694950.jpg",
     "featured": false,
     "name_roman": "Hari Mirch"
@@ -347,6 +405,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-19-1785050711978.jpg"
+    ],
     "image": "products/sabzi-19-1785050711978.jpg",
     "featured": false,
     "name_roman": "Adrak"
@@ -368,6 +429,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-20-1785050729762.jpg"
+    ],
     "image": "products/sabzi-20-1785050729762.jpg",
     "featured": false,
     "name_roman": "Lehsan"
@@ -389,6 +453,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-21-1785050769712.jpg"
+    ],
     "image": "products/sabzi-21-1785050769712.jpg",
     "featured": true,
     "name_roman": "Lemon"
@@ -406,6 +473,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-22-1785050788775.jpg"
+    ],
     "image": "products/sabzi-22-1785050788775.jpg",
     "featured": false,
     "name_roman": "Gol Tinday"
@@ -423,6 +493,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-23-1785050808015.jpg"
+    ],
     "image": "products/sabzi-23-1785050808015.jpg",
     "featured": false,
     "name_roman": "Chuqandar"
@@ -436,6 +509,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-24-1785050818856.jpg"
+    ],
     "image": "products/sabzi-24-1785050818856.jpg",
     "featured": false,
     "name_roman": "Sabz Dhania"
@@ -449,6 +525,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-25-1785050829478.jpg"
+    ],
     "image": "products/sabzi-25-1785050829478.jpg",
     "featured": true,
     "name_roman": "Pudina"
@@ -462,6 +541,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-26-1785050838827.jpg"
+    ],
     "image": "products/sabzi-26-1785050838827.jpg",
     "featured": false,
     "name_roman": "Salad Patti"
@@ -475,6 +557,9 @@
       }
     ],
     "available": false,
+    "images": [
+      "products/sabzi-27-1785051065277.jpg"
+    ],
     "image": "products/sabzi-27-1785051065277.jpg",
     "featured": false,
     "name_roman": "Mooli"
@@ -488,6 +573,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-28-1785050851049.jpg"
+    ],
     "image": "products/sabzi-28-1785050851049.jpg",
     "featured": false,
     "name_roman": "Lambay Tinday"
@@ -501,6 +589,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-29-1785055337912.jpg"
+    ],
     "image": "products/sabzi-29-1785055337912.jpg",
     "featured": false,
     "name_roman": "Saag"
@@ -514,6 +605,9 @@
       }
     ],
     "available": true,
+    "images": [
+      "products/sabzi-30-1785050885008.jpg"
+    ],
     "image": "products/sabzi-30-1785050885008.jpg",
     "featured": false,
     "name_roman": "Hari Pyaz"

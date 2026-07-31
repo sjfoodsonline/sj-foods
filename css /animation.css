@@ -1,0 +1,163 @@
+/* ==========================================
+   SJ Foods - Animations & Loops
+   ========================================== */
+
+/* 1. Feature Strip & Offer Slider Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 2. Category Chips Loop & Pop Animation */
+.animated-chip-box {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 14px;
+  scrollbar-width: none;
+}
+
+.animated-chip-box::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-item {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--leaf);
+  border: 1px solid var(--line);
+  color: var(--dark);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.chip-item.active {
+  background: var(--dark);
+  color: #fff;
+  border-color: var(--dark);
+}
+
+.chip-item:active {
+  transform: scale(0.95);
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 3. Featured Products Animated Cards Loop */
+.animated-featured-box {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 14px;
+  scrollbar-width: none;
+}
+
+.animated-featured-box::-webkit-scrollbar {
+  display: none;
+}
+
+.featured-card {
+  flex: 0 0 140px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.25s ease;
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+[data-theme="dark"] .featured-card {
+  background: #1A231C;
+}
+
+.featured-card:hover {
+  transform: translateY(-3px);
+}
+
+.featured-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.featured-card .title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 6px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.featured-card .price {
+  font-size: 11px;
+  color: var(--price);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.18);
+  }
+}
+
+/* 4. Cart Floating Action Button Pulse */
+.fab-wa {
+  animation: fabPulse 2s infinite;
+}
+
+@keyframes fabPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+/* 5. Skeleton Loading Animation */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

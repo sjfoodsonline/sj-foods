@@ -94,71 +94,52 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- ANIMATED POP-UP CATEGORY CHIPS CONTAINER ---- */
+  /* ---- HORIZONTAL SCROLLING CATEGORY CHIPS WITH AUTO-PAUSE LOOP ---- */
   .chips-wrapper{
     position:sticky; top:52px; background:var(--paper); z-index:19;
-    padding:10px 16px; display:flex; justify-content:center; align-items:center;
-    perspective: 600px;
+    padding:10px 16px; overflow:hidden;
   }
-  .animated-chip-box{
-    width: 100%; max-width: 320px; height: 44px; position: relative;
+  .chips-scroll-container{
+    display:flex; gap:10px; overflow-x:auto; scrollbar-width:none;
+    scroll-behavior:smooth;
   }
-  .chip-single{
-    position: absolute; inset:0;
+  .chips-scroll-container::-webkit-scrollbar{display:none;}
+  .cat-chip-item{
+    flex:0 0 auto;
     background:var(--leaf); color:var(--dark);
     border:1.5px solid #cfe8d1; border-radius:22px;
-    font-size:15px; font-weight:700;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    cursor:pointer; opacity:0; pointer-events:none;
-    transform: rotateX(-90deg) scale(0.85);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+    padding:8px 16px; font-size:14px; font-weight:700;
+    white-space:nowrap; cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    transition: background 0.2s, transform 0.2s;
   }
-  .chip-single.active{
-    opacity:1; pointer-events:auto;
-    transform: rotateX(0deg) scale(1);
-  }
-  .chip-single.exit{
-    opacity:0; pointer-events:none;
-    transform: rotateX(90deg) scale(0.85);
+  .cat-chip-item:active{
+    transform:scale(0.96);
   }
 
-  /* ---- ANIMATED POP-UP FEATURED BOX ---- */
+  /* ---- FEATURED ITEMS GRID (2-COLUMNS) ---- */
   .featured-container{
-    margin:10px 16px; perspective: 600px;
+    margin:10px 16px;
   }
-  .animated-featured-box{
-    width:100%; height:130px; position:relative;
+  .featured-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:10px;
   }
-  .featured-single{
-    position:absolute; inset:0;
-    background:var(--card); border:1.5px solid var(--line); border-radius:16px;
-    padding:10px 14px; display:flex; align-items:center; gap:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,0.05);
-    opacity:0; pointer-events:none;
-    transform: rotateX(-90deg) scale(0.85);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  .featured-card-2col{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+    padding:10px; display:flex; flex-direction:column; align-items:center; text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,0.04);
   }
-  .featured-single.active{
-    opacity:1; pointer-events:auto;
-    transform: rotateX(0deg) scale(1);
+  .featured-card-2col img{
+    width:100%; height:90px; object-fit:cover; border-radius:10px; background:var(--leaf); margin-bottom:8px;
   }
-  .featured-single.exit{
-    opacity:0; pointer-events:none;
-    transform: rotateX(90deg) scale(0.85);
-  }
-  .featured-single img{
-    width:90px; height:90px; object-fit:cover; border-radius:12px; background:var(--leaf); flex:0 0 90px;
-  }
-  .featured-single .f-info{ flex:1; min-width:0; }
-  .featured-single .fname{ font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-  .featured-single .frate{ font-size:15px; color:var(--price); font-weight:700; }
+  .featured-card-2col .fname{ font-size:14px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+  .featured-card-2col .frate{ font-size:13.5px; color:var(--price); font-weight:700; }
 
   main{padding:6px 16px 10px;}
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark);
     margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    scroll-margin-top:14px;
+    scroll-margin-top:110px;
   }
   .item{
     display:flex; flex-direction:column; gap:8px;
@@ -172,7 +153,6 @@
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
   .item .info{min-width:0; flex:1;}
   .item .name{font-size:15.5px; font-weight:600; line-height:1.3;}
-  .item .name .tick-badge{display:none;}
   .avail-badge{
     flex:0 0 30px; width:30px; height:30px; border-radius:9px;
     display:flex; align-items:center; justify-content:center;
@@ -336,7 +316,6 @@
 
   footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 8px;}
 
-  /* ---- header action buttons ---- */
   .header-actions{display:flex; gap:8px; margin-top:12px; position:relative;}
   .header-actions a, .header-actions button{
     flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
@@ -351,7 +330,6 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  /* ---- feature badges scroll ---- */
   .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
   .features-scroll::-webkit-scrollbar{display:none;}
   .feature-card{
@@ -372,7 +350,6 @@
   .offer-slide .ot{font-size:15px; font-weight:800;}
   .offer-slide .os{font-size:12px; opacity:.9; margin-top:4px;}
 
-  /* ---- product thumbnail + lightbox ---- */
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
     display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:30px; cursor:pointer;
@@ -387,7 +364,6 @@
   .lightbox img{max-width:100%; max-height:80vh; border-radius:12px;}
   .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:18px; cursor:pointer; z-index:1;}
 
-  /* ---- payment methods strip ---- */
   .pay-methods-strip{display:flex; gap:10px; padding:4px 16px 0; justify-content:center;}
   .pay-method-badge{
     flex:1; max-width:110px; background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -396,7 +372,6 @@
   .pay-method-badge.soon{opacity:.5;}
   .pay-method-badge .ic{font-size:20px; display:block; margin-bottom:4px;}
 
-  /* ---- floating buttons ---- */
   .fab{
     position:fixed; left:14px; width:52px; height:52px; border-radius:50%;
     display:flex; align-items:center; justify-content:center; font-size:24px;
@@ -404,7 +379,6 @@
   }
   .fab-wa{bottom:95px; background:#25D366; color:#fff;}
 
-  /* ---- footer expanded ---- */
   .footer-links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
   .footer-links a, .footer-links button{
     color:var(--mid); text-decoration:none; font-size:11px; font-family:inherit; background:none; border:none; cursor:pointer; font-weight:700;
@@ -447,10 +421,10 @@
 
 <div class="offer-slider hidden" id="offerSlider"></div>
 
-<!-- FEATURED ITEMS ANIMATED CONTAINER -->
+<!-- FEATURED ITEMS 2-COLUMN GRID -->
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
 <div class="featured-container hidden" id="featuredContainer">
-  <div class="animated-featured-box" id="animatedFeaturedBox"></div>
+  <div class="featured-grid" id="featuredGrid"></div>
 </div>
 
 <button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
@@ -467,9 +441,9 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- POP-UP LOOP ANIMATED CATEGORY CHIP -->
+<!-- SINGLE LINE HORIZONTAL SCROLL CATEGORY CHIPS WITH PAUSE LOOP -->
 <div class="chips-wrapper">
-  <div class="animated-chip-box" id="animatedChipBox"></div>
+  <div class="chips-scroll-container" id="chipsScrollContainer"></div>
 </div>
 
 <main id="list"></main>
@@ -572,7 +546,7 @@ let CATEGORIES_META = [];
 let ITEMS = [];
 
 const listEl = document.getElementById("list");
-const animatedChipBox = document.getElementById("animatedChipBox");
+const chipsScrollContainer = document.getElementById("chipsScrollContainer");
 const noResultEl = document.getElementById("noResult");
 const loadingMsg = document.getElementById("loadingMsg");
 const billbar = document.getElementById("billbar");
@@ -644,50 +618,67 @@ async function loadSettings(){
     document.getElementById("noteEmail").textContent = SHOP_EMAIL;
     if(s.address) document.getElementById("footerAddress").textContent = s.address;
     refreshHeroLinks();
-    renderSocialLinks(s);
   }catch(e){
   }
 }
 
-/* ---------------- SINGLE POP-UP LOOP CATEGORY ANIMATION ---------------- */
-let catInterval = null;
-function startCategoryLoopAnimation(){
-  if(!CATEGORIES_META.length) return;
-  animatedChipBox.innerHTML = "";
+/* ---------------- HORIZONTAL SCROLL CHIPS & AUTOMATIC PAUSE-SCROLL ---------------- */
+let isUserInteracting = false;
+let autoScrollTimer = null;
 
-  CATEGORIES_META.forEach((cat, idx) => {
-    const el = document.createElement("div");
-    el.className = "chip-single" + (idx === 0 ? " active" : "");
-    el.innerHTML = `<span>${cat.icon} ${dispCatName(cat)}</span>`;
-    el.onclick = () => {
+function renderCategoryChips(){
+  if(!CATEGORIES_META.length) return;
+  chipsScrollContainer.innerHTML = "";
+
+  CATEGORIES_META.forEach((cat) => {
+    const chip = document.createElement("div");
+    chip.className = "cat-chip-item";
+    chip.innerHTML = `${cat.icon} ${dispCatName(cat)}`;
+    chip.onclick = () => {
       const target = document.getElementById("cat-" + cat.name);
       if(target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-    animatedChipBox.appendChild(el);
+    chipsScrollContainer.appendChild(chip);
   });
 
-  if(CATEGORIES_META.length <= 1) return;
+  startAutoScrollChips();
+}
 
-  let currentIdx = 0;
-  if(catInterval) clearInterval(catInterval);
+function startAutoScrollChips(){
+  let userInteractionTimeout = null;
 
-  catInterval = setInterval(() => {
-    const chips = animatedChipBox.querySelectorAll(".chip-single");
+  // جب صارف خود اسکرول کرے تو خودکار موومنٹ کو عارضی طور پر روک دیں
+  chipsScrollContainer.addEventListener("touchstart", () => { isUserInteracting = true; clearTimer(); });
+  chipsScrollContainer.addEventListener("mousedown", () => { isUserInteracting = true; clearTimer(); });
+  chipsScrollContainer.addEventListener("touchend", resetInteraction);
+  chipsScrollContainer.addEventListener("mouseup", resetInteraction);
+
+  function resetInteraction(){
+    clearTimeout(userInteractionTimeout);
+    userInteractionTimeout = setTimeout(() => { isUserInteracting = false; }, 4000);
+  }
+
+  function clearTimer(){
+    if(autoScrollTimer) clearInterval(autoScrollTimer);
+  }
+
+  clearTimer();
+  autoScrollTimer = setInterval(() => {
+    if(isUserInteracting) return;
+    const chips = chipsScrollContainer.querySelectorAll(".cat-chip-item");
     if(!chips.length) return;
 
-    chips[currentIdx].classList.remove("active");
-    chips[currentIdx].classList.add("exit");
+    let containerLeft = chipsScrollContainer.scrollLeft;
+    let containerWidth = chipsScrollContainer.clientWidth;
+    let maxScroll = chipsScrollContainer.scrollWidth - containerWidth;
 
-    const prevIdx = currentIdx;
-    currentIdx = (currentIdx + 1) % chips.length;
-
-    chips[currentIdx].classList.remove("exit");
-    chips[currentIdx].classList.add("active");
-
-    setTimeout(() => {
-      chips[prevIdx].classList.remove("exit");
-    }, 500);
-  }, 2800);
+    // اگلے چِپ کی طرف اسکرول کریں (RTL سپورٹ کے ساتھ)
+    if(Math.abs(containerLeft) >= maxScroll - 10){
+      chipsScrollContainer.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      chipsScrollContainer.scrollBy({ left: -140, behavior: "smooth" });
+    }
+  }, 2500); // ہر 2.5 سیکنڈ بعد رکے گی اور آگے بڑھے گی
 }
 
 function renderList(filter){
@@ -903,242 +894,124 @@ function buildMessage(name, phone, addr, area, payMethod){
   }
   msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
   msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
-  msg += "\n🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک";
-  msg += "\n\nشکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏";
-  return msg;
-}
-
-function showToast(text){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 2200);
+  msg += "\n```html
+return msg;
 }
 
 document.getElementById("waBtn").onclick = ()=>{
   const chosen = ITEMS.filter(i=>i.qty>0);
-  if(chosen.length===0){ showToast("پہلے کچھ آئٹمز کارٹ میں شامل کریں"); return; }
+  if(chosen.length===0){ showToast("❌ پہلے کچھ اشیاء کارٹ میں شامل کریں"); return; }
 
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
   const area = areaSelect.value;
-  const payMethod = payEasy.checked ? "easypaisa" : (payCod.checked ? "cod" : "");
+  const payMethod = payCod.checked ? "cod" : payEasy.checked ? "easypaisa" : "";
 
-  if(!name || !phone || !addr){
-    showToast("براہ مہربانی نام، نمبر اور پتہ لکھیں");
-    return;
-  }
-  if(!area){
-    showToast("براہ مہربانی اپنا علاقہ منتخب کریں");
-    return;
-  }
-  if(!payMethod){
-    showToast("براہ مہربانی ادائیگی کا طریقہ منتخب کریں");
-    return;
-  }
+  if(!name){ showToast("⚠️ براہ کرم اپنا نام درج کریں"); return; }
+  if(!phone){ showToast("⚠️ براہ کرم اپنا رابطہ نمبر درج کریں"); return; }
+  if(!addr){ showToast("⚠️ براہ کرم اپنا پتہ درج کریں"); return; }
+  if(!area){ showToast("⚠️ براہ کرم اپنا علاقہ منتخب کریں"); return; }
+  if(!payMethod){ showToast("⚠️ براہ کرم ادائیگی کا طریقہ منتخب کریں"); return; }
 
-  const msg = buildMessage(name, phone, addr, area, payMethod);
-  const url = `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  const text = encodeURIComponent(buildMessage(name, phone, addr, area, payMethod));
+  const url = `[https://wa.me/$](https://wa.me/$){SHOP_WHATSAPP}?text=${text}`;
   window.open(url, "_blank");
-  showToast("✅ واٹس ایپ کھل رہا ہے — پیغام بھیج دیں");
 };
 
 document.getElementById("clearBtn").onclick = ()=>{
-  if(!confirm("کارٹ خالی کر دیں؟")) return;
-  ITEMS.forEach(it=> it.qty = 0);
+  ITEMS.forEach(i=>i.qty=0);
   renderList(document.getElementById("search").value);
   renderBill();
-  billbar.classList.add("collapsed");
+  showToast("🗑️ کارٹ خالی کر دیا گیا");
 };
 
-/* ---------------- FEATURED ITEMS ANIMATED POP-UP LOOP ---------------- */
-let featInterval = null;
-function renderFeatured(){
-  const fItems = ITEMS.filter(it => it.featured);
-  const title = document.getElementById("featuredTitle");
-  const container = document.getElementById("featuredContainer");
-  const box = document.getElementById("animatedFeaturedBox");
-
-  if(!fItems.length){
-    title.classList.add("hidden");
-    container.classList.add("hidden");
-    return;
-  }
-
-  title.classList.remove("hidden");
-  container.classList.remove("hidden");
-  box.innerHTML = "";
-
-  fItems.forEach((it, idx) => {
-    const el = document.createElement("div");
-    el.className = "featured-single" + (idx === 0 ? " active" : "");
-    el.innerHTML = `
-      <img src="${it.image || 'icon-192.png'}" alt="${dispName(it)}">
-      <div class="f-info">
-        <div class="fname">${dispName(it)}</div>
-        <div class="frate">${currentLabel(it)} — ${fmt(currentRate(it))}</div>
-      </div>
-    `;
-    box.appendChild(el);
-  });
-
-  if(fItems.length <= 1) return;
-
-  let currentIdx = 0;
-  if(featInterval) clearInterval(featInterval);
-
-  featInterval = setInterval(() => {
-    const slides = box.querySelectorAll(".featured-single");
-    if(!slides.length) return;
-
-    slides[currentIdx].classList.remove("active");
-    slides[currentIdx].classList.add("exit");
-
-    const prevIdx = currentIdx;
-    currentIdx = (currentIdx + 1) % slides.length;
-
-    slides[currentIdx].classList.remove("exit");
-    slides[currentIdx].classList.add("active");
-
-    setTimeout(() => {
-      slides[prevIdx].classList.remove("exit");
-    }, 500);
-  }, 3200);
+function showToast(m){
+  const t = document.getElementById("toast");
+  t.textContent = m;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2500);
 }
 
-// ---------------- init ----------------
-(async function init(){
-  await Promise.all([loadRates(), loadSettings()]);
-  loadingMsg.style.display = "none";
-  billbar.style.display = "flex";
-  startCategoryLoopAnimation();
-  renderList("");
-  renderBill();
-  renderFeatured();
-})();
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
-}
-
-// ---------------- Install app button ----------------
-const installBtn = document.getElementById("installBtn");
-const installOverlay = document.getElementById("installOverlay");
-const installSteps = document.getElementById("installSteps");
-const installTitle = document.getElementById("installTitle");
-let deferredInstallPrompt = null;
-
-const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-const ua = navigator.userAgent || "";
-const isIOS = /iphone|ipad|ipod/i.test(ua);
-
-function showInstallButton(){
-  if(!isStandalone) installBtn.style.display = "flex";
-}
-if(!isStandalone) showInstallButton();
-
-window.addEventListener("beforeinstallprompt", (e)=>{
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  showInstallButton();
-});
-
-window.addEventListener("appinstalled", ()=>{
-  installBtn.style.display = "none";
-});
-
-function openInstallModal(stepsHtml, title){
-  installTitle.textContent = title;
-  installSteps.innerHTML = stepsHtml;
-  installOverlay.classList.remove("hidden");
-}
-document.getElementById("closeInstallOverlay").onclick = ()=> installOverlay.classList.add("hidden");
-installOverlay.onclick = (e)=>{ if(e.target===installOverlay) installOverlay.classList.add("hidden"); };
-
-installBtn.onclick = async ()=>{
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    const choice = await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    if(choice.outcome === "accepted") installBtn.style.display = "none";
-    return;
-  }
-  if(isIOS){
-    openInstallModal(`
-      <div class="install-step"><span class="num">1</span><span>نیچے Safari میں شیئر بٹن (⬆️) دبائیں</span></div>
-      <div class="install-step"><span class="num">2</span><span>فہرست میں "Add to Home Screen" تلاش کر کے دبائیں</span></div>
-      <div class="install-step"><span class="num">3</span><span>اوپر دائیں "Add" دبائیں — SJ Foods آئیکن ہوم اسکرین پر آ جائے گا</span></div>
-    `, "📲 آئی فون پر انسٹال کریں");
-  } else {
-    openInstallModal(`
-      <div class="install-step"><span class="num">1</span><span>اوپر دائیں کونے میں 3 نقطے (⋮) دبائیں</span></div>
-      <div class="install-step"><span class="num">2</span><span>"Add to Home screen" یا "Install app" پر کلک کریں</span></div>
-      <div class="install-step"><span class="num">3</span><span>"Install" / "Add" دبائیں — SJ Foods آئیکن ہوم اسکرین پر آ جائے گا</span></div>
-    `, "📲 اینڈرائیڈ پر انسٹال کریں");
-  }
-};
-
-// ---------------- Dark / Light mode ----------------
-const themeToggle = document.getElementById("themeToggle");
-function applyTheme(t){
-  document.body.classList.toggle("dark", t === "dark");
-  themeToggle.textContent = t === "dark" ? "☀️" : "🌙";
-}
-applyTheme(localStorage.getItem("sjfoods-theme") || "light");
-themeToggle.onclick = ()=>{
-  const next = document.body.classList.contains("dark") ? "light" : "dark";
-  applyTheme(next);
-  localStorage.setItem("sjfoods-theme", next);
-};
-
-// ---------------- Hero WhatsApp/Call buttons ----------------
 function refreshHeroLinks(){
-  const greet = encodeURIComponent("السلام علیکم! مجھے SJ Foods سے آرڈر کرنا ہے 🛒");
-  document.getElementById("heroWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
-  document.getElementById("heroCallBtn").href = `tel:+${SHOP_WHATSAPP}`;
-  document.getElementById("floatingWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
+  document.getElementById("heroWaBtn").href = `[https://wa.me/$](https://wa.me/$){SHOP_WHATSAPP}`;
+  document.getElementById("heroCallBtn").href = `tel:${SHOP_PAY_NUMBER.replace(/-/g,"")}`;
+  document.getElementById("floatingWaBtn").href = `[https://wa.me/$](https://wa.me/$){SHOP_WHATSAPP}`;
 }
-refreshHeroLinks();
 
-// ---------------- Product image lightbox ----------------
+/* ---------------- FEATURED ITEMS 2-COLUMN GRID DISPLAY ---------------- */
+function renderFeaturedItems(){
+  const featItems = ITEMS.filter(it=> it.featured === true);
+  const featContainer = document.getElementById("featuredContainer");
+  const featTitle = document.getElementById("featuredTitle");
+  const featGrid = document.getElementById("featuredGrid");
+
+  if(!featItems.length){
+    featContainer.classList.add("hidden");
+    featTitle.classList.add("hidden");
+    return;
+  }
+
+  featContainer.classList.remove("hidden");
+  featTitle.classList.remove("hidden");
+  featGrid.innerHTML = "";
+
+  featItems.forEach(it => {
+    const card = document.createElement("div");
+    card.className = "featured-card-2col";
+    card.innerHTML = `
+      ${it.image ? `<img src="${it.image}" alt="${dispName(it)}">` : `<div style="font-size:40px; margin-bottom:8px;">${it.icon||'⭐'}</div>`}
+      <div class="fname">${dispName(it)}</div>
+      <div class="frate">${fmt(currentRate(it))} (${currentLabel(it)})</div>
+    `;
+    card.onclick = () => {
+      const row = document.getElementById("row-" + it.id);
+      if(row) row.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+    featGrid.appendChild(card);
+  });
+}
+
+/* ---------------- LIGHTBOX FOR PRODUCT IMAGES ---------------- */
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
-let lightboxOpen = false;
 
-function openLightboxImg(src, alt){
-  lightboxImg.src = src;
-  lightboxImg.alt = alt;
-  lightboxImg.classList.remove("zoomed");
-  lightbox.classList.remove("hidden");
-  lightboxOpen = true;
-  history.pushState({ lightbox: true }, "");
-}
-function closeLightboxImg(){
-  lightbox.classList.add("hidden");
-  lightboxImg.classList.remove("zoomed");
-  lightboxOpen = false;
-}
-
-document.addEventListener("click", (e)=>{
+document.addEventListener("click", (e) => {
   const thumb = e.target.closest(".item-thumb");
-  if(thumb && thumb.dataset.img){
-    openLightboxImg(thumb.dataset.img, thumb.dataset.name || "");
+  if(thumb){
+    const imgUrl = thumb.dataset.img;
+    if(imgUrl){
+      lightboxImg.src = imgUrl;
+      lightbox.classList.remove("hidden");
+    }
   }
 });
+document.getElementById("closeLightbox").onclick = () => lightbox.classList.add("hidden");
+lightbox.onclick = (e) => { if(e.target === lightbox) lightbox.classList.add("hidden"); };
 
-document.getElementById("closeLightbox").onclick = closeLightboxImg;
-lightbox.onclick = (e)=>{
-  if(e.target === lightbox) closeLightboxImg();
+/* ---------------- DARK / LIGHT THEME TOGGLE ---------------- */
+const themeToggle = document.getElementById("themeToggle");
+themeToggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  themeToggle.textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("sj_theme", isDark ? "dark" : "light");
 };
+if(localStorage.getItem("sj_theme") === "dark"){
+  document.body.classList.add("dark");
+  themeToggle.textContent = "☀️";
+}
 
-window.addEventListener("popstate", (e)=>{
-  if(lightboxOpen){
-    closeLightboxImg();
-  }
-});
+/* ---------------- INITIALIZATION ---------------- */
+(async function init(){
+  await loadSettings();
+  await loadRates();
+  renderCategoryChips();
+  renderFeaturedItems();
+  renderList("");
+  renderBill();
+  loadingMsg.style.display = "none";
+})();
 </script>
 </body>
 </html>

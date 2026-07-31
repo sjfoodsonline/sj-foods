@@ -1,0 +1,45 @@
+[
+  {
+    "name": "دودھ (تازہ)",
+    "unit": "لیٹر",
+    "rate": 200,
+    "available": true,
+    "name_roman": "Doodh (Taza)"
+  },
+  {
+    "name": "دہی",
+    "unit": "KG",
+    "rate": 180,
+    "available": true,
+    "name_roman": "Dahi"
+  },
+  {
+    "name": "پنیر",
+    "unit": "KG",
+    "rate": 900,
+    "available": true,
+    "name_roman": "Paneer"
+  },
+  {
+    "name": "مکھن",
+    "unit": "پیکٹ",
+    "rate": 350,
+    "available": true,
+    "name_roman": "Makhan"
+  },
+  {
+    "name": "دودھ پیکٹ (چھوٹا پیک)",
+    "available": false,
+    "units": [
+      {
+        "label": "ایک پیکٹ",
+        "rate": 0
+      },
+      {
+        "label": "ایک کارٹن (24 پیکٹ)",
+        "rate": 0
+      }
+    ],
+    "name_roman": "Doodh Packet (Chhota Pack)"
+  }
+]

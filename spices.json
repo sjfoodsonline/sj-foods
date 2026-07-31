@@ -1,0 +1,275 @@
+[
+  {
+    "name": "سالن مصالحہ سپیشل",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "available": true,
+    "image": "products/spices-0-1785162498368.jpg",
+    "featured": false,
+    "name_roman": "Salan Masala Special"
+  },
+  {
+    "name": "گرم مصالحہ نمبر 1",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1400
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 700
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 350
+      }
+    ],
+    "available": true,
+    "image": "products/spices-1-1785162522466.jpg",
+    "featured": false,
+    "name_roman": "Garam Masala No. 1"
+  },
+  {
+    "name": "زیرہ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "available": true,
+    "image": "products/spices-2-1785162556076.jpg",
+    "featured": false,
+    "name_roman": "Zeera"
+  },
+  {
+    "name": "ہانڈی مصالحہ ہانڈی مصالحہ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1500
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 750
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 375
+      }
+    ],
+    "available": true,
+    "image": "products/spices-3-1785162605971.jpg",
+    "featured": false,
+    "name_roman": "Handi Masala"
+  },
+  {
+    "name": "دھنیا ثابت",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "available": true,
+    "image": "products/spices-4-1785162652380.jpg",
+    "featured": false,
+    "name_roman": "Dhania Sabut"
+  },
+  {
+    "name": "دھنیا پاؤڈر",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "available": true,
+    "image": "products/spices-5-1785162671936.jpg",
+    "featured": false,
+    "name_roman": "Dhania Powder"
+  },
+  {
+    "name": "کالی مرچ ثابت",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "available": true,
+    "image": "products/spices-6-1785162760586.jpg",
+    "featured": false,
+    "name_roman": "Kali Mirch Sabut"
+  },
+  {
+    "name": "کالی مرچ پاؤڈر",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 2800
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 1400
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 700
+      }
+    ],
+    "available": true,
+    "image": "products/spices-7-1785162787189.jpg",
+    "featured": false,
+    "name_roman": "Kali Mirch Powder"
+  },
+  {
+    "name": "دار چینی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "available": true,
+    "image": "products/spices-8-1785162807203.jpg",
+    "featured": false,
+    "name_roman": "Dar Cheeni"
+  },
+  {
+    "name": "ہلدی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1200
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 600
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 300
+      }
+    ],
+    "available": true,
+    "image": "products/spices-9-1785162846243.jpg",
+    "featured": false,
+    "name_roman": "Haldi"
+  },
+  {
+    "name": "سرخ مرچ دانے دار",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 900
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 450
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 225
+      }
+    ],
+    "available": true,
+    "image": "products/spices-10-1785162910707.jpg",
+    "featured": false,
+    "name_roman": "Surkh Mirch Dana Dar"
+  },
+  {
+    "name": "سرخ مرچ پاؤڈر",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 850
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 425
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 210
+      }
+    ],
+    "available": true,
+    "image": "products/spices-11-1785162937350.jpg",
+    "featured": false,
+    "name_roman": "Surkh Mirch Powder"
+  },
+  {
+    "name": "سرخ مرچ گول",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1100
+      },
+      {
+        "label": "آدھا KG",
+        "rate": 550
+      },
+      {
+        "label": "پاؤ (250 گرام)",
+        "rate": 275
+      }
+    ],
+    "available": true,
+    "image": "products/spices-12-1785162977032.jpg",
+    "featured": false,
+    "name_roman": "Surkh Mirch Gol"
+  }
+]

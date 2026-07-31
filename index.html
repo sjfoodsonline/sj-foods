@@ -1,220 +1,980 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>کیٹگری اور پروڈکٹ سلائیڈر</title>
-  <style>
-    /* ================= عمومی سٹائل ================= */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 20px;
-      direction: rtl;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر | Swat</title>
+<meta name="description" content="SJ Foods Mingora Swat — تازہ سبزیاں، پھل، کریانہ، بیکری، دودھ و ڈیری اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں۔ کیش آن ڈیلیوری اور ایزی پیسہ دونوں سہولت۔">
+<meta name="keywords" content="SJ Foods, Mingora grocery, Swat online grocery, سبزی آن لائن مینگورہ, گروسری ڈیلیوری سوات">
+<meta property="og:title" content="SJ Foods Mingora — آن لائن گروسری اسٹور">
+<meta property="og:description" content="تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں">
+<meta property="og:image" content="cover.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#153A20">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#153A20;
+    --mid:#2E7D32;
+    --leaf:#E8F5E9;
+    --accent:#FF6F00;
+    --gold:#C9A227;
+    --paper:#FFFDF8;
+    --ink:#20241F;
+    --muted:#8A8F86;
+    --price:#B71C1C;
+    --line:#E5E4DA;
+    --card:#FFFFFF;
+  }
+  body.dark{
+    --paper:#0F1A12;
+    --ink:#EAF3EA;
+    --muted:#9AA79A;
+    --line:#233826;
+    --card:#17251A;
+    --leaf:#16301C;
+  }
+  body.dark .item, body.dark #billbar, body.dark .install-card, body.dark .checkout-box input{
+    background:var(--card); color:var(--ink);
+  }
+  body.dark .chip{background:var(--card); border-color:var(--line);}
+  body.dark #search{background:var(--card); color:var(--ink); border-color:var(--line);}
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,"Noto Naskh Arabic",sans-serif;
+    direction:rtl;
+    padding-bottom:90px;
+  }
+  :root{ --app-w: 480px; }
+  @media (min-width: 640px){
+    html{ background:#EDEAE0; }
+    body{
+      max-width:var(--app-w); margin:0 auto; min-height:100vh;
+      box-shadow:0 0 50px rgba(0,0,0,0.18);
     }
+    #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
+    .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
+    .toast{ left:50%; }
+    .search-wrap, .chips-wrapper{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
+    .install-card, .policy-sheet{ max-width:420px; }
+  }
+  header h1{font-family:"Noto Nastaliq Urdu","Segoe UI",serif;}
+  header{
+    background:linear-gradient(160deg,var(--dark),var(--mid));
+    color:#fff;
+    padding:18px 16px 16px;
+    border-radius:0 0 22px 22px;
+    box-shadow:0 6px 18px rgba(21,58,32,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 85% -10%, rgba(255,255,255,0.12), transparent 55%);
+  }
+  header h1{margin:0 0 4px; font-size:22px; font-weight:700; position:relative;}
+  header p{margin:0; font-size:12.5px; opacity:.92; position:relative;}
 
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 15px;
-    }
+  .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
+  #search{
+    width:100%; padding:12px 14px; font-size:15px;
+    border-radius:14px; border:1.5px solid var(--line);
+    background:#fff; font-family:inherit; direction:rtl;
+    outline:none;
+  }
+  #search:focus{border-color:var(--mid);}
 
-    /* ================= 1. کیٹگری اینیمیشن (نصف سپیڈ/سلو) ================= */
-    .category-slider-container {
-      overflow: hidden;
-      width: 100%;
-      background: #ffffff;
-      padding: 15px 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin-bottom: 40px;
-    }
+  /* ---- 1. کیٹگری سلائیڈر اینیمیشن (نصف اسپیڈ / 2 کیٹلاگ لائیو) ---- */
+  .category-slider-container {
+    overflow: hidden;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 5px;
+  }
+  .category-track {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    animation: scrollCategory 35s linear infinite; /* نصف اسپیڈ (Slow speed) */
+  }
+  .category-card {
+    padding: 8px 18px;
+    background: var(--leaf);
+    border-radius: 20px;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--dark);
+    border: 1px solid #cfe8d1;
+    cursor: pointer;
+  }
+  @keyframes scrollCategory {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
 
-    .category-track {
-      display: flex;
-      gap: 15px;
-      width: max-content;
-      /* 40s سپیڈ کی وجہ سے اینیمیشن بالکل آہستہ (Half Speed) چلے گی */
-      animation: scrollCategory 40s linear infinite;
-    }
+  /* ---- 2. نمایاں اشیاء سلائیڈر (2 کیٹلاگ ایک ساتھ، ایک سائز، مکمل نام) ---- */
+  .featured-wrapper {
+    overflow: hidden;
+    margin: 10px 16px;
+  }
+  .featured-slider-track {
+    display: flex;
+    gap: 12px;
+    transition: transform 0.6s ease-in-out;
+  }
+  .featured-card {
+    flex: 0 0 calc(50% - 6px); /* ایک وقت میں صرف 2 کیٹلاگ دکھائے گا */
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  }
+  .featured-card .f-img-box {
+    width: 100%;
+    height: 110px; /* تمام تصاویر کا یکساں اور برابر سائز */
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--leaf);
+  }
+  .featured-card .f-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* تصویر فریم کے اندر درست سائز میں آئے گی */
+  }
+  .featured-card .f-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 8px 0 2px 0;
+    text-align: center;
+    white-space: normal; /* مکمل نام دکھائے گا، کٹے گا نہیں */
+    word-break: break-word;
+  }
+  .featured-card .f-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--price);
+  }
 
-    .category-card {
-      padding: 10px 25px;
-      background: #e9ecef;
-      border-radius: 20px;
-      white-space: nowrap;
-      font-weight: bold;
-      color: #495057;
-      border: 1px solid #dee2e6;
-    }
+  main{padding:6px 16px 10px;}
+  .cat-title{
+    font-size:16px; font-weight:700; color:var(--dark);
+    margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
+    scroll-margin-top:14px;
+  }
+  .item{
+    display:flex; flex-direction:column; gap:8px;
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:10px 12px; margin-bottom:8px;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .item.active{border-color:var(--mid); box-shadow:0 2px 10px rgba(46,125,50,0.12);}
+  .item.unavailable{opacity:.55;}
+  .item-row-top{display:flex; align-items:center; gap:10px;}
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .item .info{min-width:0; flex:1;}
+  .item .name{font-size:15.5px; font-weight:600; line-height:1.3;}
+  .item .name .tick-badge{display:none;}
+  .avail-badge{
+    flex:0 0 30px; width:30px; height:30px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .avail-badge.yes{background:var(--mid);}
+  .avail-badge.no{background:#ECEAE1;}
+  .item .meta{font-size:12px; color:var(--muted); margin-top:3px;}
+  .item .meta b{color:var(--price); font-weight:700;}
+  .item .meta .tag-out{color:var(--price); font-weight:700;}
+  .item .meta .tag-free{color:var(--mid); font-weight:700;}
+  .unit-select{
+    flex:1; min-width:0; border:1.5px solid var(--mid); border-radius:9px;
+    padding:8px 8px; font-size:12.5px; font-weight:600; font-family:inherit; direction:rtl;
+    background:#fff; color:var(--dark); margin-top:0;
+  }
 
-    @keyframes scrollCategory {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(50%); } /* RTL کے لیے مثبت سمت */
-    }
+  .qty-box{display:flex; align-items:center; gap:6px; flex:0 0 auto;}
+  .qty-box button{
+    width:32px; height:32px; border-radius:9px; border:none;
+    background:var(--leaf); color:var(--dark); font-size:18px; font-weight:700;
+    line-height:1; cursor:pointer;
+  }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box button:disabled{opacity:.4; cursor:not-allowed;}
+  .qty-box input{
+    width:38px; text-align:center; border:1px solid var(--line); border-radius:8px;
+    font-size:15px; font-weight:700; padding:5px 2px; font-family:inherit;
+  }
 
-    /* ================= 2. نمایاں اشیاء (ایک سائز اور 2 کیٹلاگ سلائیڈ) ================= */
-    .featured-products-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      overflow: hidden;
-      position: relative;
-      padding: 10px 0;
-    }
+  .empty-msg{text-align:center; color:var(--muted); font-size:13px; padding:30px 10px;}
 
-    .featured-slider {
-      display: flex;
-      gap: 20px;
-      transition: transform 0.6s ease-in-out;
-    }
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0;
+    background:#fff; border-top:1.5px solid var(--line);
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 24px rgba(0,0,0,0.08);
+    padding:14px 18px 18px;
+    max-height:82vh;
+    display:flex; flex-direction:column;
+  }
+  #billbar.collapsed{ padding:16px 18px 20px; }
+  #billbar.collapsed .cart-details{display:none;}
+  .cart-details{overflow-y:auto;}
+  .bill-handle{display:flex; justify-content:center; padding:2px 0 10px; cursor:pointer;}
+  .bill-handle span{width:44px; height:5px; background:#C9C6B8; border-radius:3px; display:block;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer; min-height:38px;}
+  .bill-summary .lbl{font-size:16px; color:var(--ink); font-weight:600;}
+  .bill-summary .count{
+    background:var(--accent); color:#fff; font-size:14px; font-weight:700;
+    border-radius:12px; padding:3px 11px; margin-right:8px;
+  }
+  .bill-summary .total{font-size:25px; font-weight:800; color:var(--dark);}
 
-    .product-card {
-      /* ایک وقت میں صرف 2 کارڈز نظر آئیں گے */
-      flex: 0 0 calc(50% - 10px); 
-      box-sizing: border-box;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
+  .bill-lines{max-height:22vh; overflow-y:auto; margin:10px 0; border-top:1px dashed var(--line); padding-top:8px;}
+  .bill-line{display:flex; justify-content:space-between; font-size:13px; padding:4px 0;}
+  .bill-line .l-name{color:var(--ink);}
+  .bill-line .l-val{color:var(--dark); font-weight:700;}
+  .bill-row-charge{display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:4px 0; color:var(--muted);}
+  .bill-row-final{display:flex; justify-content:space-between; font-size:16px; font-weight:700; color:var(--dark); padding:8px 0 2px; border-top:1px solid var(--line); margin-top:4px;}
 
-    /* تمام تصاویر کا ایک جیسا یکساں سائز (Equal Size Cover) */
-    .product-card .img-box {
-      width: 100%;
-      height: 180px; 
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: #f1f1f1;
-    }
+  .pay-card{
+    background:linear-gradient(135deg,#1B5E20,#2E7D32);
+    border-radius:16px; padding:14px; margin-top:12px; text-align:center;
+    box-shadow:0 4px 14px rgba(27,94,32,0.25);
+  }
+  .pay-card-title{color:#fff; font-size:13px; font-weight:700; opacity:.95;}
+  .pay-amount{color:#fff; font-size:30px; font-weight:700; margin:4px 0 10px;}
+  .pay-number-row{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
+    border-radius:12px; padding:8px 10px; margin:0 auto; max-width:260px;
+  }
+  .pay-number{color:#fff; font-size:18px; font-weight:700; letter-spacing:0.5px; direction:ltr;}
+  #copyNumBtn{
+    background:#fff; color:var(--dark); border:none; border-radius:8px;
+    padding:5px 10px; font-size:12px; font-weight:700; font-family:inherit; cursor:pointer;
+  }
+  .pay-hint{color:#FFF3CD; font-size:11px; margin-top:8px; line-height:1.5;}
 
-    .product-card .img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* تصویر کا سائز خود بخود فریم کے اندر ایڈجسٹ ہوگا */
-    }
+  .checkout-box{background:var(--leaf); border-radius:14px; padding:12px; margin-top:12px;}
+  .checkout-title{font-size:13px; font-weight:700; color:var(--dark); margin-bottom:8px;}
+  .checkout-box input{
+    width:100%; border:1px solid #cfe8d1; border-radius:10px; padding:9px 10px;
+    font-size:13.5px; font-family:inherit; direction:rtl; margin-bottom:8px;
+    background:#fff; color:var(--ink);
+  }
+  .checkout-box input:last-of-type{margin-bottom:0;}
+  .pay-note{
+    font-size:11.5px; color:#5D4037; background:#FFF8E1; border-radius:10px;
+    padding:8px 10px; margin-top:8px; line-height:1.6;
+  }
 
-    /* مکمل نام اور ٹیکسٹ ظاہر کرنے کے لیے */
-    .product-title {
-      font-size: 16px;
-      margin: 12px 0 0 0;
-      text-align: center;
-      color: #212529;
-      word-wrap: break-word;
-      white-space: normal; /* پورا نام بغیر کٹے اگلی لائن میں آئے گا */
-    }
-  </style>
+  .cover-banner{width:100%; overflow:hidden; display:none; position:relative;}
+  .cover-banner img{width:100%; height:auto; display:block;}
+  .install-btn{
+    display:none; align-items:center; justify-content:center; gap:8px;
+    width:calc(100% - 32px); margin:12px auto 0; padding:13px 16px;
+    background:linear-gradient(135deg,#1B5E20,#2E7D32); color:#fff;
+    border:none; border-radius:14px; font-family:inherit; font-size:15px; font-weight:700;
+    box-shadow:0 4px 14px rgba(27,94,32,0.3); cursor:pointer;
+  }
+  .install-overlay{
+    position:fixed; inset:0; background:rgba(21,58,32,0.6); z-index:70;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .install-overlay.hidden{display:none;}
+  .install-card{
+    background:#fff; border-radius:18px; padding:22px 20px; max-width:360px; width:100%;
+    text-align:center;
+  }
+  .install-card h3{margin:0 0 12px; color:var(--dark); font-size:17px;}
+  .install-step{
+    display:flex; align-items:center; gap:10px; background:var(--paper);
+    border-radius:12px; padding:10px 12px; margin-bottom:10px; text-align:right; font-size:13.5px;
+  }
+  .install-step .num{
+    flex:0 0 26px; height:26px; border-radius:50%; background:var(--mid); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
+  }
+  .install-card button{
+    margin-top:6px; background:var(--dark); color:#fff; border:none; border-radius:10px;
+    padding:11px 20px; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;
+  }
+
+  .cat-banner{width:100%; border-radius:14px; overflow:hidden; margin:20px 0 8px;}
+  .cat-banner img{width:100%; height:auto; display:block;}
+
+  .area-select{
+    width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 10px;
+    font-size:13.5px; font-family:inherit; direction:rtl; margin-bottom:8px;
+    background:#fff; color:var(--ink);
+  }
+  .pay-method{display:flex; gap:8px; margin-bottom:8px;}
+  .pay-method label{
+    flex:1; display:flex; align-items:center; gap:6px; font-size:12px;
+    background:#fff; border:1.5px solid var(--line); border-radius:10px;
+    padding:8px 8px; cursor:pointer;
+  }
+  .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
+  .pay-method label.disabled{opacity:.4; cursor:not-allowed;}
+  .pay-method input{width:15px; height:15px; flex:0 0 auto;}
+  .area-note{font-size:11.5px; border-radius:10px; padding:8px 10px; margin-bottom:8px; line-height:1.6; display:none;}
+  .area-note.warn{background:#FFEBEE; color:#B71C1C; display:block;}
+  .area-note.ok{background:#E8F5E9; color:#1B5E20; display:block;}
+
+  .actions{display:flex; gap:8px; margin-top:10px;}
+  .actions button{
+    flex:1; border:none; border-radius:12px; padding:12px 8px;
+    font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;
+  }
+  #waBtn{background:#25D366; color:#fff;}
+  #clearBtn{background:#F5F1E8; color:#9a5b3a; flex:0 0 44px;}
+
+  .toast{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s;
+    z-index:50;
+  }
+  .toast.show{opacity:1; top:26px;}
+
+  footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 8px;}
+
+  /* ---- header action buttons ---- */
+  .header-actions{display:flex; gap:8px; margin-top:12px; position:relative;}
+  .header-actions a, .header-actions button{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:10px 8px; border-radius:11px; font-size:13px; font-weight:700;
+    text-decoration:none; font-family:inherit; border:none; cursor:pointer;
+  }
+  .btn-wa-header{background:#25D366; color:#fff;}
+  .btn-call-header{background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.4) !important;}
+  .theme-toggle{
+    position:absolute; left:0; top:-46px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.35);
+    color:#fff; border-radius:10px; width:34px; height:34px; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---- feature badges scroll ---- */
+  .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
+  .features-scroll::-webkit-scrollbar{display:none;}
+  .feature-card{
+    flex:0 0 auto; width:88px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:12px 8px; text-align:center;
+  }
+  .feature-card .ic{font-size:22px;}
+  .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
+
+  .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 4px; padding-right:8px; border-right:4px solid var(--gold);}
+
+  /* ---- product thumbnail + lightbox ---- */
+  .item-thumb{
+    flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:30px; cursor:pointer;
+  }
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+  .lightbox{
+    position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:90;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    overflow:auto; touch-action:pinch-zoom pan-x pan-y;
+  }
+  .lightbox.hidden{display:none;}
+  .lightbox img{max-width:100%; max-height:80vh; border-radius:12px;}
+  .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:18px; cursor:pointer; z-index:1;}
+
+  /* ---- payment methods strip ---- */
+  .pay-methods-strip{display:flex; gap:10px; padding:4px 16px 0; justify-content:center;}
+  .pay-method-badge{
+    flex:1; max-width:110px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:10px 6px; text-align:center; font-size:11px; font-weight:700; color:var(--ink);
+  }
+  .pay-method-badge.soon{opacity:.5;}
+  .pay-method-badge .ic{font-size:20px; display:block; margin-bottom:4px;}
+
+  /* ---- floating buttons ---- */
+  .fab{
+    position:fixed; left:14px; width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25); z-index:40; text-decoration:none; border:none; cursor:pointer;
+  }
+  .fab-wa{bottom:95px; background:#25D366; color:#fff;}
+
+  /* ---- footer expanded ---- */
+  .footer-links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
+  .footer-links a, .footer-links button{
+    color:var(--mid); text-decoration:none; font-size:11px; font-family:inherit; background:none; border:none; cursor:pointer; font-weight:700;
+  }
+  .policy-overlay{position:fixed; inset:0; background:rgba(21,58,32,0.55); z-index:80; display:flex; align-items:flex-end; justify-content:center;}
+  .policy-overlay.hidden{display:none;}
+  .policy-sheet{background:var(--card); color:var(--ink); width:100%; max-width:520px; max-height:80vh; overflow-y:auto; border-radius:20px 20px 0 0; padding:18px;}
+  .policy-sheet h3{color:var(--dark); margin-top:0;}
+  .policy-sheet p{font-size:13px; line-height:1.9;}
+  .policy-sheet button{margin-top:10px; background:var(--dark); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-family:inherit; font-weight:700; cursor:pointer;}
+</style>
 </head>
 <body>
 
-  <!-- 1. کیٹگری اینیمیشن سیکشن -->
-  <h2>کیٹگریز</h2>
-  <div class="category-slider-container">
-    <div class="category-track">
-      <div class="category-card">سبزیاں</div>
-      <div class="category-card">پھل</div>
-      <div class="category-card">ڈیری مصنوعات</div>
-      <div class="category-card">بیکری</div>
-      <div class="category-card">مشروبات</div>
-      <div class="category-card">ڈرائی فروٹ</div>
-      <!-- ڈپلیکیٹ آئٹمز ہموار لوپ (Continuous Loop) کے لیے -->
-      <div class="category-card">سبزیاں</div>
-      <div class="category-card">پھل</div>
-      <div class="category-card">ڈیری مصنوعات</div>
-      <div class="category-card">بیکری</div>
-      <div class="category-card">مشروبات</div>
-      <div class="category-card">ڈرائی فروٹ</div>
-    </div>
+<header>
+  <button class="theme-toggle" id="themeToggle" title="تھیم" style="left:0;">🌙</button>
+  <h1>🟢 ایس جے فوڈز مینگورہ سوات</h1>
+  <p style="opacity:.85; font-size:11px; margin:2px 0 4px;">SJ Foods Mingora Swat — Fresh Groceries, Delivered Fast</p>
+  <p>تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء — اپنی پسند کی چیزیں منتخب کریں، کارٹ میں ڈالیں، اور آرڈر بھیج دیں</p>
+  <div class="header-actions">
+    <a class="btn-wa-header" id="heroWaBtn" href="#" target="_blank">💬 واٹس ایپ پر آرڈر</a>
+    <a class="btn-call-header" id="heroCallBtn" href="#">📞 کال کریں</a>
+  </div>
+</header>
+
+<div class="cover-banner" id="coverBanner">
+  <img id="coverImg" src="" alt="SJ Foods">
+</div>
+
+<div class="features-scroll">
+  <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
+  <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
+  <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
+  <div class="feature-card"><div class="ic">🔒</div><div class="tx">Secure Payment</div></div>
+  <div class="feature-card"><div class="ic">💬</div><div class="tx">WhatsApp Order</div></div>
+  <div class="feature-card"><div class="ic">📲</div><div class="tx">EasyPaisa</div></div>
+  <div class="feature-card"><div class="ic">🤝</div><div class="tx">Local Trust</div></div>
+  <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
+</div>
+
+<!-- 1. کیٹگری سلائیڈر سیکشن -->
+<div class="category-slider-container">
+  <div class="category-track" id="categoryTrack"></div>
+</div>
+
+<!-- 2. نمایاں اشیاء سیکشن -->
+<div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
+<div class="featured-wrapper hidden" id="featuredWrapper">
+  <div class="featured-slider-track" id="featuredSliderTrack"></div>
+</div>
+
+<button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
+
+<div class="install-overlay hidden" id="installOverlay">
+  <div class="install-card">
+    <h3 id="installTitle">📲 ایپ انسٹال کریں</h3>
+    <div id="installSteps"></div>
+    <button id="closeInstallOverlay">ٹھیک ہے</button>
+  </div>
+</div>
+
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
+</div>
+
+<main id="list"></main>
+
+<div class="empty-msg" id="noResult" style="display:none;">کوئی آئٹم نہیں ملا</div>
+<div class="empty-msg" id="loadingMsg">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+
+<div id="billbar" class="collapsed" style="display:none;">
+  <div class="bill-handle" id="handle"><span></span></div>
+  <div class="bill-summary" id="summary">
+    <div class="lbl">🛒 <span class="count" id="itemCount">0</span> آئٹمز کارٹ میں</div>
+    <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
 
-  <!-- 2. نمایاں اشیاء سیکشن -->
-  <h2>نمایاں اشیاء</h2>
-  <div class="featured-products-wrapper">
-    <div class="featured-slider" id="featuredSlider">
-      
-      <!-- پروڈکٹ 1 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="ٹماٹر">
-        </div>
-        <h3 class="product-title">تازہ سرخ ٹماٹر (فارم سے براہ راست)</h3>
-      </div>
+  <div class="cart-details" id="cartDetails">
+    <div class="bill-lines" id="billLines"></div>
+    <div class="bill-row-charge">
+      <span>ڈیلیوری چارج</span>
+      <span id="deliveryDisplay">راستے کے حساب سے، موقع پر ادا</span>
+    </div>
+    <div class="bill-row-final">
+      <span>💰 کل رقم</span>
+      <span id="finalTotal">Rs. 0</span>
+    </div>
 
-      <!-- پروڈکٹ 2 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="آٹا">
-        </div>
-        <h3 class="product-title">دیسی گندم کا خالص آٹا 10 کلوگرام پیک</h3>
+    <div class="pay-card" id="payCard">
+      <div class="pay-card-title">📲 ایزی پیسہ ایڈوانس (ترجیحی)</div>
+      <div class="pay-amount" id="payAmount">Rs. 0</div>
+      <div class="pay-number-row">
+        <span class="pay-number" id="payNumber">0334-9353799</span>
+        <button id="copyNumBtn">📋 کاپی</button>
       </div>
+      <div class="pay-hint">✅ کیش آن ڈیلیوری بھی دستیاب ہے — مگر اگر آپ ایزی پیسہ پر ایڈوانس ادائیگی کر سکیں تو ہماری ترجیح ہوگی۔ پہلے نیچے "واٹس ایپ پر آرڈر بھیجیں" دبائیں، ہماری تصدیق کے بعد ہی رقم بھیجیں</div>
+    </div>
 
-      <!-- پروڈکٹ 3 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="دودھ">
-        </div>
-        <h3 class="product-title">خالص فارمی دودھ 1 لیٹر بوتل</h3>
+    <div class="checkout-box">
+      <div class="checkout-title">📦 ڈیلیوری کی تفصیلات دیں</div>
+      <input id="custName" type="text" placeholder="آپ کا نام">
+      <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر">
+      <input id="custAddr" type="text" placeholder="مکمل پتہ / ایریا (مینگورہ شہر)">
+      <select id="custArea" class="area-select">
+        <option value="">📍 اپنا علاقہ منتخب کریں</option>
+        <option value="inside">مینگورہ شہر کے اندر</option>
+        <option value="outside">مینگورہ سے باہر / سائیڈ ایریا</option>
+      </select>
+      <div class="pay-method" id="payMethodBox">
+        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈیلیوری</label>
+        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ ایڈوانس</label>
       </div>
+      <div class="area-note" id="areaNote"></div>
+      <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
+      <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز (سبزی، بیکری، دودھ، گوشت) کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
+      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
+    </div>
 
-      <!-- پروڈکٹ 4 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="ڈبل روٹی">
-        </div>
-        <h3 class="product-title">تازہ اور ملائم ڈبل روٹی لارج سائز</h3>
-      </div>
-
-      <!-- پروڈکٹ 5 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="سیب">
-        </div>
-        <h3 class="product-title">تازہ سواتی سیب درج اول (1 کلو)</h3>
-      </div>
-
-      <!-- پروڈکٹ 6 -->
-      <div class="product-card">
-        <div class="img-box">
-          <img src="https://via.placeholder.com/300x200" alt="مکھن">
-        </div>
-        <h3 class="product-title">دیسی مکھن 250 گرام تازہ پیکنگ</h3>
-      </div>
-
+    <div class="actions">
+      <button id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
+      <button id="clearBtn">🗑️</button>
     </div>
   </div>
+</div>
 
-  <!-- 3. JavaScript (ہر بار 2 اشیاء اگے نکالنے کے لیے) -->
-  <script>
-    const slider = document.getElementById('featuredSlider');
-    const cards = document.querySelectorAll('.product-card');
-    let currentIndex = 0;
+<div class="pay-methods-strip">
+  <div class="pay-method-badge">📲<span class="ic"></span>ایزی پیسہ</div>
+  <div class="pay-method-badge">💵<span class="ic"></span>کیش آن ڈیلیوری</div>
+  <div class="pay-method-badge soon">🏦<span class="ic"></span>بینک ترانسفر (جلد)</div>
+</div>
 
-    function slideNextTwo() {
-      const totalCards = cards.length;
-      
-      // ہر بار 2 پروڈکٹس آگے بڑھیں گی
-      currentIndex += 2;
-      
-      // اگر تمام اشیاء ختم ہو جائیں تو دوبارہ پہلے 2 کارڈز پر آ جائے
-      if (currentIndex >= totalCards) {
-        currentIndex = 0;
-      }
+<footer>
+  SJ Foods Mingora Swat — تازہ اشیاء، تیز ڈیلیوری، بھروسہ مند سروس 🌿<br>
+  <span id="footerContact">📞 0334-9353799   📧 sjfoodsonline@outlook.com</span><br>
+  📍 <span id="footerAddress">Al Basit Plaza, Haji Baba Road, Mingora Swat</span><br>
+  🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک
+  <div class="footer-links" id="footerSocial"></div>
+  <div class="footer-links">
+    <button id="openPrivacy">پرائیویسی پالیسی</button>
+    <button id="openTerms">شرائط و ضوابط</button>
+  </div>
+</footer>
 
-      // ایک کارڈ کی چوڑائی اور 20px کا Gap
-      const cardWidth = cards[0].offsetWidth + 20; 
-      const moveDistance = cardWidth * currentIndex;
+<div class="policy-overlay hidden" id="policyOverlay">
+  <div class="policy-sheet">
+    <h3 id="policyTitle"></h3>
+    <div id="policyBody"></div>
+    <button id="closePolicy">ٹھیک ہے</button>
+  </div>
+</div>
 
-      // RTL سائیڈ کے لیے مثبت transform رکھیں
-      slider.style.transform = `translateX(${moveDistance}px)`;
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<a class="fab fab-wa" id="floatingWaBtn" href="#" target="_blank" title="واٹس ایپ">💬</a>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let CATEGORIES_META = [];
+let ITEMS = [];
+
+const listEl = document.getElementById("list");
+const noResultEl = document.getElementById("noResult");
+const loadingMsg = document.getElementById("loadingMsg");
+const billbar = document.getElementById("billbar");
+
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function buildItemsFromCategories(catData){
+  let items = [];
+  catData.forEach((cat, ci) => {
+    cat.items.forEach((it, ii) => {
+      const units = (it.units && it.units.length)
+        ? it.units.map(u=>({label:u.label, rate:u.rate}))
+        : [{label: it.unit, rate: it.rate}];
+      items.push({
+        id: ci+"-"+ii, cat: cat.category, icon: cat.icon,
+        name: it.name, name_roman: it.name_roman || "", units: units, unitIndex: 0,
+        available: it.available !== false,
+        image: it.image || "",
+        featured: it.featured === true,
+        qty: 0
+      });
+    });
+  });
+  return items;
+}
+function currentUnit(it){ return it.units[it.unitIndex] || it.units[0]; }
+function currentRate(it){ return currentUnit(it).rate; }
+function currentLabel(it){ return currentUnit(it).label; }
+function dispName(it){ return it.name_roman ? `${it.name_roman} (${it.name})` : it.name; }
+function dispCatName(cat){ return cat.name_roman ? `${cat.name_roman} (${cat.name})` : cat.name; }
+
+async function loadRates(){
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+
+    const catResults = await Promise.all(
+      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
+    );
+
+    CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
+
+    const combined = index.map((entry, i) => ({
+      category: entry.category,
+      icon: entry.icon,
+      items: catResults[i]
+    }));
+    ITEMS = buildItemsFromCategories(combined);
+  }catch(e){
+    loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
+    console.error(e);
+  }
+}
+
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    if(s.whatsapp) SHOP_WHATSAPP = s.whatsapp;
+    if(s.pay_number) SHOP_PAY_NUMBER = s.pay_number;
+    if(s.email) SHOP_EMAIL = s.email;
+    if(s.cover_image){
+      document.getElementById("coverImg").src = s.cover_image;
+      document.getElementById("coverBanner").style.display = "block";
     }
+    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
+    document.getElementById("footerContact").textContent = `📞 ${SHOP_PAY_NUMBER}   📧 ${SHOP_EMAIL}`;
+    document.getElementById("noteContact").textContent = SHOP_PAY_NUMBER;
+    document.getElementById("noteEmail").textContent = SHOP_EMAIL;
+    if(s.address) document.getElementById("footerAddress").textContent = s.address;
+    refreshHeroLinks();
+  }catch(e){
+  }
+}
 
-    // ہر 3.5 سیکنڈ بعد اگلی 2 اشیاء سامنے آئیں گی
-    setInterval(slideNextTwo, 3500);
-  </script>
+/* ---------------- 1. کیٹگری سلائیڈر رینڈر (Continuous Smooth Loop) ---------------- */
+function renderCategorySlider(){
+  const track = document.getElementById("categoryTrack");
+  if(!CATEGORIES_META.length) return;
+  track.innerHTML = "";
 
-</body>
-</html>
+  // ڈپلیکیٹ لسٹ تاکہ لوپ میں بغیر رکے اینیمیشن چلے
+  const listToRender = [...CATEGORIES_META, ...CATEGORIES_META];
+
+  listToRender.forEach((cat) => {
+    const el = document.createElement("div");
+    el.className = "category-card";
+    el.innerHTML = `${cat.icon} ${dispCatName(cat)}`;
+    el.onclick = () => {
+      const target = document.getElementById("cat-" + cat.name);
+      if(target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    track.appendChild(el);
+  });
+}
+
+function renderList(filter){
+  listEl.innerHTML = "";
+  const f = (filter||"").trim();
+  let anyShown = false;
+
+  CATEGORIES_META.forEach(cat=>{
+    const catItems = ITEMS.filter(it=> it.cat===cat.name && (!f || it.name.includes(f) || (it.name_roman && it.name_roman.toLowerCase().includes(f.toLowerCase()))));
+    if(catItems.length===0) return;
+    anyShown = true;
+
+    const title = document.createElement("div");
+    title.className = "cat-title";
+    title.id = "cat-"+cat.name;
+    title.textContent = cat.icon + " " + dispCatName(cat);
+
+    if(cat.image){
+      const banner = document.createElement("div");
+      banner.className = "cat-banner";
+      banner.innerHTML = `<img src="${cat.image}" alt="${dispCatName(cat)}">`;
+      listEl.appendChild(banner);
+    }
+    listEl.appendChild(title);
+
+    catItems.forEach(it=>{
+      const row = document.createElement("div");
+      row.className = "item" + (it.qty>0 ? " active":"") + (!it.available ? " unavailable":"");
+      row.id = "row-"+it.id;
+      const multi = it.units.length > 1;
+      const unitOptionsHtml = multi
+        ? it.units.map((u,idx)=>`<option value="${idx}" ${idx===it.unitIndex?"selected":""}>${u.label} — ${fmt(u.rate)}</option>`).join("")
+        : "";
+      const perLabel = "فی";
+      const outLabel = "آج ناموجود";
+      const freeLabel = "🎁 مفت (بطور تحفہ)";
+      row.innerHTML = `
+        <div class="item-row-top">
+          <div class="item-thumb" data-img="${it.image||''}" data-name="${dispName(it)}">
+            ${it.image ? `<img src="${it.image}" alt="${dispName(it)}" loading="lazy">` : `<span>${it.icon||'🛒'}</span>`}
+          </div>
+          <div class="info">
+            <div class="name">${dispName(it)}</div>
+            ${(!multi) ? `<div class="meta">${
+              it.available
+                ? (currentRate(it) === 0
+                    ? `<span class="tag-free">${freeLabel}</span>`
+                    : `${perLabel} ${currentLabel(it)} — <b>${fmt(currentRate(it))}</b>`)
+                : `<span class="tag-out">${outLabel}</span>`
+            }</div>` : (!it.available ? `<div class="meta"><span class="tag-out">${outLabel}</span></div>` : '')}
+          </div>
+          <div class="avail-badge ${it.available ? 'yes' : 'no'}" title="${it.available ? 'دستیاب' : 'ناموجود'}">
+            ${it.available
+              ? `<svg width="15" height="15" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+              : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#A8A499" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>`
+            }
+          </div>
+        </div>
+        <div class="item-row-bottom">
+          ${(it.available && multi) ? `<select class="unit-select" data-id="${it.id}">${unitOptionsHtml}</select>` : `<span></span>`}
+          <div class="qty-box">
+            <button class="minus" data-id="${it.id}" ${!it.available?"disabled":""}>−</button>
+            <input type="number" min="0" value="${it.qty}" data-id="${it.id}" ${!it.available?"disabled":""}>
+            <button class="plus" data-id="${it.id}" ${!it.available?"disabled":""}>+</button>
+          </div>
+        </div>`;
+      listEl.appendChild(row);
+    });
+  });
+
+  noResultEl.style.display = anyShown ? "none" : "block";
+
+  listEl.querySelectorAll(".minus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, -1));
+  listEl.querySelectorAll(".plus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, 1));
+  listEl.querySelectorAll('input[type="number"]').forEach(inp=>{
+    inp.onchange = ()=> setQty(inp.dataset.id, parseInt(inp.value)||0);
+  });
+  listEl.querySelectorAll('.unit-select').forEach(sel=>{
+    sel.onchange = ()=>{
+      const it = findItem(sel.dataset.id);
+      it.unitIndex = parseInt(sel.value);
+      renderBill();
+    };
+  });
+}
+
+function findItem(id){ return ITEMS.find(i=>i.id===id); }
+
+function changeQty(id, delta){
+  const it = findItem(id);
+  if(!it.available) return;
+  it.qty = Math.max(0, it.qty + delta);
+  syncAfterChange(it);
+}
+function setQty(id, val){
+  const it = findItem(id);
+  if(!it.available) return;
+  it.qty = Math.max(0, val);
+  syncAfterChange(it);
+}
+function syncAfterChange(it){
+  const row = document.getElementById("row-"+it.id);
+  if(row){
+    row.classList.toggle("active", it.qty>0);
+    row.querySelector('input[type="number"]').value = it.qty;
+  }
+  renderBill();
+}
+
+let SHOP_WHATSAPP = "923349353799";
+let SHOP_PAY_NUMBER = "0334-9353799";
+let SHOP_EMAIL = "sjfoodsonline@outlook.com";
+
+const billLines = document.getElementById("billLines");
+const itemCountEl = document.getElementById("itemCount");
+const summaryTotalEl = document.getElementById("summaryTotal");
+const finalTotalEl = document.getElementById("finalTotal");
+const payAmountEl = document.getElementById("payAmount");
+
+function renderBill(){
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  billLines.innerHTML = "";
+  let subtotal = 0;
+  chosen.forEach(it=>{
+    const lineTotal = it.qty * currentRate(it);
+    subtotal += lineTotal;
+    const line = document.createElement("div");
+    line.className = "bill-line";
+    line.innerHTML = `<span class="l-name">${dispName(it)} × ${it.qty} ${currentLabel(it)}</span><span class="l-val">${fmt(lineTotal)}</span>`;
+    billLines.appendChild(line);
+  });
+
+  itemCountEl.textContent = chosen.length;
+  summaryTotalEl.textContent = fmt(subtotal);
+  finalTotalEl.textContent = fmt(subtotal);
+  payAmountEl.textContent = fmt(subtotal);
+
+  if(chosen.length===0) billbar.classList.add("collapsed");
+}
+
+document.getElementById("summary").onclick = ()=> billbar.classList.toggle("collapsed");
+document.getElementById("handle").onclick = ()=> billbar.classList.toggle("collapsed");
+
+document.getElementById("copyNumBtn").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
+    showToast("✅ نمبر کاپی ہوگیا");
+  }catch(e){
+    showToast("نمبر: " + SHOP_PAY_NUMBER);
+  }
+};
+
+document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
+
+const areaSelect = document.getElementById("custArea");
+const payCod = document.getElementById("payCod");
+const payEasy = document.getElementById("payEasy");
+const lblCod = document.getElementById("lblCod");
+const lblEasy = document.getElementById("lblEasy");
+const areaNote = document.getElementById("areaNote");
+
+function updatePayMethodUI(){
+  lblCod.classList.toggle("checked", payCod.checked);
+  lblEasy.classList.toggle("checked", payEasy.checked);
+}
+
+areaSelect.addEventListener("change", ()=>{
+  const val = areaSelect.value;
+  if(val === "outside"){
+    payCod.checked = false;
+    payCod.disabled = true;
+    lblCod.classList.add("disabled");
+    payEasy.checked = true;
+    areaNote.className = "area-note warn";
+    areaNote.textContent = "⚠️ اس علاقے میں ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے";
+  } else if(val === "inside"){
+    payCod.disabled = false;
+    lblCod.classList.remove("disabled");
+    payCod.checked = true;
+    areaNote.className = "area-note ok";
+    areaNote.textContent = "✅ کیش آن ڈیلیوری دستیاب ہے — اگر ایزی پیسہ ایڈوانس ادا کریں تو آرڈر مزید تیزی سے پراسیس ہوگا";
+  } else {
+    payCod.disabled = false;
+    lblCod.classList.remove("disabled");
+    payCod.checked = false; payEasy.checked = false;
+    areaNote.className = "area-note";
+  }
+  updatePayMethodUI();
+});
+payCod.addEventListener("change", updatePayMethodUI);
+payEasy.addEventListener("change", updatePayMethodUI);
+
+function areaLabel(v){ return v==="inside" ? "مینگورہ شہر کے اندر" : v==="outside" ? "مینگورہ سے باہر / سائیڈ ایریا" : "نامعلوم"; }
+function payLabel(v){ return v==="easypaisa" ? "ایزی پیسہ ایڈوانس" : "کیش آن ڈیلیوری"; }
+
+function buildMessage(name, phone, addr, area, payMethod){
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
+
+  let msg = "🛒 نیا آرڈر — SJ Foods ویب سائٹ\n\n";
+  msg += "👤 نام: " + name + "\n";
+  msg += "📞 نمبر: " + phone + "\n";
+  msg += "📍 پتہ: " + addr + "\n";
+  msg += "🗺️ علاقہ: " + areaLabel(area) + "\n\n";
+  chosen.forEach(it=>{
+    msg += `${it.name} — ${it.qty} ${currentLabel(it)} — ${fmt(it.qty*currentRate(it))}\n`;
+  });
+  msg += "\n💰 کل رقم: " + fmt(subtotal);
+  msg += "\n🚚 ڈیلیوری چارج: راستے کے حساب سے، موقع پر ادا";
+  msg += "\n💳 ادائیگی کا طریقہ: " + payLabel(payMethod);
+  if(payMethod === "easypaisa"){
+    msg += "\n📲 ایزی پیسہ نمبر: " + SHOP_PAY_NUMBER;
+  }
+  msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
+  msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
+  msg += "\nیہ رہا آپ کا **مکمل اور تیار شدہ HTML کوڈ** جس میں تمام ایلیمنٹس، بٹنز، ماڈلز، اور جاوا اسکرپٹ لاجک کو شامل کر دیا گیا ہے:
+
+```html
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر | Swat</title>
+<meta name="description" content="SJ Foods Mingora Swat — تازہ سبزیاں، پھل، کریانہ، بیکری، دودھ و ڈیری اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں۔ کیش آن ڈیلیوری اور ایزی پیسہ دونوں سہولت۔">
+<meta name="keywords" content="SJ Foods, Mingora grocery, Swat online grocery, سبزی آن لائن مینگورہ, گروسری ڈیلیوری سوات">
+<meta property="og:title" content="SJ Foods Mingora — آن لائن گروسری اسٹور">
+<meta property="og:description" content="تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں">
+<meta property="og:image" content="cover.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#153A20">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+<link href="[https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap](https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap)" rel="stylesheet">
+<style>
+  :root{
+    --dark:#153A20;
+    --mid:#2E7D32;
+    --leaf:#E8F5E9;
+    --accent:#FF6F00;
+    --gold:#C9A227;
+    --paper:#FFFDF8;
+    --ink:#20241F;
+    --muted:#8A8F86;
+    --price:#B71C1C;
+    --line:#E5E4DA;
+    --card:#FFFFFF;
+  }
+  body.dark{
+    --paper:#0F1A12;
+    --ink:#EAF3EA;
+    --muted:#9AA79A;
+    --line:#233826;
+    --card:#17251A;
+    --leaf:#16301C;
+  }
+  body.dark .item, body.dark #billbar, body.dark .install-card, body.dark .checkout-box input{
+    background:var(--card); color:var(--ink);
+  }
+  body.dark .chip{background:var(--card); border-color:var(--line);}
+  body.dark #search{background:var(--card); color:var(--ink); border-color:var(--line);}
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,"Noto Naskh Arabic",sans-serif;
+    direction:rtl;
+    padding-bottom:90px;
+  }
+  :root{ --app-w: 480px; }
+  @media (min-width: 640px){
+    html{ background:#EDEAE0; }
+    body{
+      max-width:var(--app-w); margin:0 auto; min-height:100vh;
+      box-shadow:0 0 50px rgba(0,0,0,0.18);
+    }
+    #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
+    .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
+    .toast{ left:50%; }
+    .search-wrap, .chips-wrapper{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
+    .install-card, .policy-sheet{ max-width:420px; }
+  }
+  header h1{font-family:"Noto Nastaliq Urdu","Segoe UI",serif;}
+  header{
+    background:linear-gradient(160deg,var(--dark),var(--mid));
+    color:#fff;
+    padding:18px 16px 16px;
+    border-radius:0 0 22px 22px;
+    box-shadow:0 6px 18px rgba(21,58,32,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 85% -10%, rgba(255,255,255,0.12), transparent 55%);
+  }
+  header h1{margin:0 0 4px; font-size:22px; font-weight:700; position:relative;}
+  header p{margin:0; font-size:12.5px; opacity:.92; position:relative;}
+
+  .search-wrap{padding:14px 16px 4px; position:sticky; top:0

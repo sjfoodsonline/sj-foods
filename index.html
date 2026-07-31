@@ -42,7 +42,7 @@
   body.dark .item, body.dark #billbar, body.dark .install-card, body.dark .checkout-box input{
     background:var(--card); color:var(--ink);
   }
-  body.dark .chip{background:var(--card); border-color:var(--line); color:var(--ink);}
+  body.dark .chip{background:var(--card); border-color:var(--line);}
   body.dark #search{background:var(--card); color:var(--ink); border-color:var(--line);}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -63,7 +63,7 @@
     #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
     .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
     .toast{ left:50%; }
-    .search-wrap, .chips-container{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .search-wrap, .chips-wrapper{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
     .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
     .install-card, .policy-sheet{ max-width:420px; }
   }
@@ -94,23 +94,94 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- کیٹیگریز کی افقی اسکرولنگ پٹی (Horizontal Chips Slider) ---- */
-  .chips-container{ padding:10px 16px 6px; background:var(--paper); overflow:hidden; }
-  .chips-scroll{
-    display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth;
-    padding-bottom:6px; -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x mandatory;
+  /* ---- HORIZONTAL SCROLL CATEGORY CHIPS (ایک لائن میں اسکرول) ---- */
+  .chips-wrapper{
+    position:sticky; top:52px; background:var(--paper); z-index:19;
+    padding:10px 16px 6px;
+    overflow: hidden;
   }
-  .chips-scroll::-webkit-scrollbar{ display:none; }
-  .chips-scroll{ -ms-overflow-style:none; scrollbar-width:none; }
-  .chip{
-    flex:0 0 auto; scroll-snap-align:start;
-    background:var(--leaf); color:var(--dark);
-    border:1px solid #cfe8d1; border-radius:12px; padding:8px 16px;
-    font-size:13.5px; font-weight:700; cursor:pointer; white-space:nowrap;
-    transition:background .2s, color .2s;
+  .chips-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
   }
-  .chip:hover, .chip.active{ background:var(--mid); color:#fff; border-color:var(--mid); }
+  .chips-scroll::-webkit-scrollbar { display: none; }
+  .chips-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    background: var(--leaf);
+    color: var(--dark);
+    border: 1px solid #cfe8d1;
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s, color .2s, transform .15s;
+  }
+  .chip:hover, .chip.active {
+    background: var(--mid);
+    color: #fff;
+    border-color: var(--mid);
+  }
+  .chip:active { transform: scale(0.96); }
+
+  /* ---- FEATURED ITEMS SLIDER (ڈھائی کارڈز کی ہموار سلائیڈ) ---- */
+  .featured-container{
+    padding:0 16px 4px;
+    overflow: hidden;
+  }
+  .featured-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .featured-scroll::-webkit-scrollbar { display: none; }
+  .featured-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .featured-card {
+    flex: 0 0 calc((100% - 20px) / 2.35);
+    scroll-snap-align: start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .featured-card img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--leaf);
+  }
+  .featured-card .fname {
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-top: 6px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .featured-card .frate {
+    font-size: 11.5px;
+    color: var(--price);
+    font-weight: 700;
+    margin-top: 2px;
+  }
 
   main{padding:6px 16px 10px;}
   .cat-title{
@@ -307,42 +378,16 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  .features-grid{display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; padding:14px 16px 4px;}
+  .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
+  .features-scroll::-webkit-scrollbar{display:none;}
   .feature-card{
-    background:var(--card); border:1px solid var(--line); border-radius:14px;
-    padding:8px 4px; text-align:center;
+    flex:0 0 auto; width:88px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:12px 8px; text-align:center;
   }
-  .feature-card .ic{font-size:20px;}
-  .feature-card .tx{font-size:10px; color:var(--ink); margin-top:2px; line-height:1.2; font-weight:600;}
+  .feature-card .ic{font-size:22px;}
+  .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- نمایاں اشیاء (2.5 Card Visible Horizontal Scroll) ---- */
   .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
-  .featured-scroll-container{ padding:0 16px 4px; overflow:hidden; }
-  .featured-scroll{
-    display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth;
-    padding-bottom:8px; -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x mandatory;
-  }
-  .featured-scroll::-webkit-scrollbar{ display:none; }
-  .featured-scroll{ -ms-overflow-style:none; scrollbar-width:none; }
-  
-  /* ڈھائی کارڈز (2.5) کی وڈتھ کا حسابی فارمولا: calc((100% - 20px) / 2.35) */
-  .featured-card{
-    flex:0 0 calc((100% - 20px) / 2.35); scroll-snap-align:start;
-    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:8px; text-align:center;
-  }
-  .featured-card img{width:100%; height:80px; object-fit:cover; border-radius:10px; background:var(--leaf);}
-  .featured-card .fname{font-size:12.5px; font-weight:700; margin-top:6px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:700; margin-top:2px;}
-
-  .offer-slider{margin:14px 16px 0; border-radius:16px; overflow:hidden; position:relative;}
-  .offer-slide{
-    background:linear-gradient(135deg,var(--dark),var(--mid)); color:#fff; padding:16px;
-    display:none;
-  }
-  .offer-slide.active{display:block;}
-  .offer-slide .ot{font-size:15px; font-weight:800;}
-  .offer-slide .os{font-size:12px; opacity:.9; margin-top:4px;}
 
   .item-thumb{
     flex:0 0 68px; width:68px; height:68px; border-radius:12px; background:var(--leaf);
@@ -402,18 +447,20 @@
   <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
-<div class="features-grid">
+<div class="features-scroll">
   <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
   <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
   <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
   <div class="feature-card"><div class="ic">🔒</div><div class="tx">Secure Payment</div></div>
+  <div class="feature-card"><div class="ic">💬</div><div class="tx">WhatsApp Order</div></div>
+  <div class="feature-card"><div class="ic">📲</div><div class="tx">EasyPaisa</div></div>
+  <div class="feature-card"><div class="ic">🤝</div><div class="tx">Local Trust</div></div>
+  <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
 </div>
 
-<div class="offer-slider hidden" id="offerSlider"></div>
-
-<!-- نمایاں اشیاء (2.5 Cards Horizontal Scroll) -->
+<!-- FEATURED ITEMS HORIZONTAL SLIDER -->
 <div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
-<div class="featured-scroll-container hidden" id="featuredScrollContainer">
+<div class="featured-container hidden" id="featuredContainer">
   <div class="featured-scroll" id="featuredScroll"></div>
 </div>
 
@@ -431,9 +478,9 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- کیٹیگریز کی افقی اسکرولنگ پٹی -->
-<div class="chips-container">
-  <div class="chips-scroll" id="chips"></div>
+<!-- CATEGORY CHIPS HORIZONTAL SCROLL -->
+<div class="chips-wrapper">
+  <div class="chips-scroll" id="chipsScroll"></div>
 </div>
 
 <main id="list"></main>
@@ -486,538 +533,511 @@
       <div class="area-note" id="areaNote"></div>
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز (سبزی، بیکری، دودھ، گوشت) کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
-      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>📍 <span id="noteLocation">سوات شاپنگ مال مینگورہ</span></div>
+      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0334-9353799</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
     </div>
 
     <div class="actions">
-      <button id="waBtn">💬 واٹس ایپ پر آرڈر بھیجیں</button>
+      <button id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
       <button id="clearBtn">🗑️</button>
     </div>
   </div>
 </div>
 
-<a class="fab fab-wa" id="fabWa" href="#" target="_blank" title="واٹس ایپ رابطہ">💬</a>
-
-<div class="toast" id="toast"></div>
-
-<div class="lightbox hidden" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose">✕</button>
-  <img id="lightboxImg" src="" alt="بڑا سائز">
+<div class="pay-methods-strip">
+  <div class="pay-method-badge">📲<span class="ic"></span>ایزی پیسہ</div>
+  <div class="pay-method-badge">💵<span class="ic"></span>کیش آن ڈیلیوری</div>
+  <div class="pay-method-badge soon">🏦<span class="ic"></span>بینک ٹرانسفر (جلد)</div>
 </div>
+
+<footer>
+  SJ Foods Mingora Swat — تازہ اشیاء، تیز ڈیلیوری، بھروسہ مند سروس 🌿<br>
+  <span id="footerContact">📞 0334-9353799   📧 sjfoodsonline@outlook.com</span><br>
+  📍 <span id="footerAddress">Al Basit Plaza, Haji Baba Road, Mingora Swat</span><br>
+  اوقات کار: صبح 10 بجے سے رات 8 بجے تک
+  <div class="footer-links" id="footerSocial"></div>
+  <div class="footer-links">
+    <button id="openPrivacy">پرائیویسی پالیسی</button>
+    <button id="openTerms">شرائط و ضوابط</button>
+  </div>
+</footer>
 
 <div class="policy-overlay hidden" id="policyOverlay">
   <div class="policy-sheet">
     <h3 id="policyTitle"></h3>
-    <p id="policyBody"></p>
-    <button id="closePolicy">بند کریں</button>
+    <div id="policyBody"></div>
+    <button id="closePolicy">ٹھیک ہے</button>
   </div>
 </div>
 
-<footer>
-  <div class="pay-methods-strip">
-    <div class="pay-method-badge"><span class="ic">📲</span>Easypaisa (پریفرڈ)</div>
-    <div class="pay-method-badge"><span class="ic">💵</span>Cash on Delivery</div>
-    <div class="pay-method-badge soon"><span class="ic">💳</span>Card / Bank (جلد)</div>
-  </div>
-  <p style="margin-top:12px;">© <span id="copyYear">2026</span> SJ Foods Mingora Swat. All Rights Reserved.</p>
-  <div class="footer-links">
-    <button id="privacyBtn">Privacy Policy</button>
-    <button id="termsBtn">Terms of Service</button>
-    <button id="refundBtn">Refund & Exchange</button>
-  </div>
-</footer>
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<a class="fab fab-wa" id="floatingWaBtn" href="#" target="_blank" title="واٹس ایپ">💬</a>
+
+<div class="toast" id="toast"></div>
 
 <script>
-let CONFIG = {
-  shop_name: "SJ Foods Mingora Swat",
-  tagline: "آن لائن سبزی و گروسری اسٹور",
-  contact: {
-    whatsapp: "923349353799",
-    whatsapp_display: "0334-9353799",
-    phone: "03349353799",
-    phone_display: "0334-9353799",
-    easypaisa: "0334-9353799",
-    easypaisa_name: "SJ Foods",
-    email: "sjfoodsonline@outlook.com",
-    address: "سوات شاپنگ مال مینگورہ سوات"
-  },
-  cover_image: "",
-  categories_file: "categories_index.json",
-  featured_file: "featured.json",
-  offers_file: "offers.json"
-};
+let CATEGORIES_META = [];
+let ITEMS = [];
 
-let CATEGORIES = [];
-let ALL_DATA = [];
-let cart = {};
-let selectedUnits = {};
-let deferredPrompt = null;
-let autoSlideInterval = null;
+const listEl = document.getElementById("list");
+const chipsScroll = document.getElementById("chipsScroll");
+const noResultEl = document.getElementById("noResult");
+const loadingMsg = document.getElementById("loadingMsg");
+const billbar = document.getElementById("billbar");
 
-const $ = id => document.getElementById(id);
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-async function loadConfig(){
-  try{
-    const r = await fetch('config.json?v=' + Date.now());
-    if(r.ok){
-      const c = await r.json();
-      CONFIG = {...CONFIG, ...c};
-    }
-  }catch(e){}
-  applyConfig();
-}
-
-function applyConfig(){
-  const waUrl = `https://wa.me/${CONFIG.contact.whatsapp}`;
-  $('heroWaBtn').href = waUrl;
-  $('heroCallBtn').href = `tel:${CONFIG.contact.phone}`;
-  $('fabWa').href = waUrl;
-  $('payNumber').innerText = CONFIG.contact.easypaisa;
-  $('noteContact').innerText = CONFIG.contact.whatsapp_display;
-  $('noteEmail').innerText = CONFIG.contact.email;
-  $('noteLocation').innerText = CONFIG.contact.address;
-  
-  if(CONFIG.cover_image){
-    $('coverImg').src = CONFIG.cover_image;
-    $('coverBanner').style.display = 'block';
-  }
-}
-
-async function loadCategories(){
-  try{
-    const r = await fetch(CONFIG.categories_file + '?v=' + Date.now());
-    if(r.ok) CATEGORIES = await r.json();
-  }catch(e){}
-}
-
-async function loadOffers(){
-  try{
-    const r = await fetch(CONFIG.offers_file + '?v=' + Date.now());
-    if(!r.ok) return;
-    const offers = await r.json();
-    if(!offers || !offers.length) return;
-    const slider = $('offerSlider');
-    slider.innerHTML = offers.map((o, idx) => `
-      <div class="offer-slide ${idx===0?'active':''}">
-        <div class="ot">${o.title}</div>
-        <div class="os">${o.subtitle||''}</div>
-      </div>
-    `).join('');
-    slider.classList.remove('hidden');
-    
-    if(offers.length > 1){
-      let current = 0;
-      setInterval(() => {
-        const slides = slider.querySelectorAll('.offer-slide');
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-      }, 4000);
-    }
-  }catch(e){}
-}
-
-async function loadFeatured(){
-  try{
-    const r = await fetch(CONFIG.featured_file + '?v=' + Date.now());
-    if(!r.ok) return;
-    const feat = await r.json();
-    if(!feat || !feat.length) return;
-    
-    $('featuredTitle').classList.remove('hidden');
-    $('featuredScrollContainer').classList.remove('hidden');
-    
-    const sc = $('featuredScroll');
-    sc.innerHTML = feat.map(f => `
-      <div class="featured-card">
-        <img src="${f.image || 'icon-192.png'}" alt="${f.name}" onerror="this.src='icon-192.png'">
-        <div class="fname">${f.name}</div>
-        <div class="frate">Rs. ${f.rate} / ${f.unit || 'عدد'}</div>
-      </div>
-    `).join('');
-  }catch(e){}
-}
-
-async function loadData(){
-  $('loadingMsg').style.display = 'block';
-  await loadConfig();
-  await loadCategories();
-  await loadOffers();
-  await loadFeatured();
-
-  ALL_DATA = [];
-  for(const cat of CATEGORIES){
-    try{
-      const r = await fetch(cat.file + '?v=' + Date.now());
-      if(r.ok){
-        const items = await r.json();
-        ALL_DATA.push({ ...cat, items });
-      }
-    }catch(e){}
-  }
-
-  $('loadingMsg').style.display = 'none';
-  renderChips();
-  renderList(ALL_DATA);
-}
-
-function renderChips(){
-  const wrap = $('chips');
-  let html = `<button class="chip active" data-cat="all">سب آئٹمز (${ALL_DATA.reduce((a,b)=>a+b.items.length,0)})</button>`;
-  ALL_DATA.forEach(c => {
-    html += `<button class="chip" data-cat="${c.category}">${c.icon||''} ${c.category} (${c.items.length})</button>`;
-  });
-  wrap.innerHTML = html;
-
-  wrap.querySelectorAll('.chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      wrap.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const cat = btn.dataset.cat;
-      if(cat === 'all'){
-        renderList(ALL_DATA);
-      } else {
-        const filtered = ALL_DATA.filter(c => c.category === cat);
-        renderList(filtered);
-      }
+function buildItemsFromCategories(catData){
+  let items = [];
+  catData.forEach((cat, ci) => {
+    cat.items.forEach((it, ii) => {
+      const units = (it.units && it.units.length)
+        ? it.units.map(u=>({label:u.label, rate:u.rate}))
+        : [{label: it.unit, rate: it.rate}];
+      items.push({
+        id: ci+"-"+ii, cat: cat.category, icon: cat.icon,
+        name: it.name, name_roman: it.name_roman || "", units: units, unitIndex: 0,
+        available: it.available !== false,
+        image: it.image || "",
+        featured: it.featured === true,
+        qty: 0
+      });
     });
   });
+  return items;
+}
+function currentUnit(it){ return it.units[it.unitIndex] || it.units[0]; }
+function currentRate(it){ return currentUnit(it).rate; }
+function currentLabel(it){ return currentUnit(it).label; }
+function dispName(it){ return it.name_roman ? `${it.name_roman} (${it.name})` : it.name; }
+function dispCatName(cat){ return cat.name_roman ? `${cat.name_roman} (${cat.name})` : cat.name; }
+
+async function loadRates(){
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+
+    const catResults = await Promise.all(
+      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
+    );
+
+    CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
+
+    const combined = index.map((entry, i) => ({
+      category: entry.category,
+      icon: entry.icon,
+      items: catResults[i]
+    }));
+    ITEMS = buildItemsFromCategories(combined);
+  }catch(e){
+    loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
+    console.error(e);
+  }
 }
 
-function itemKey(catName, itemName){
-  return catName + '___' + itemName;
-}
-
-function renderList(groups){
-  const main = $('list');
-  main.innerHTML = '';
-  let count = 0;
-
-  groups.forEach(g => {
-    if(!g.items || !g.items.length) return;
-    
-    const sec = document.createElement('div');
-    sec.innerHTML = `<div class="cat-title">${g.icon||''} ${g.category}</div>`;
-    
-    if(g.banner){
-      sec.innerHTML += `<div class="cat-banner"><img src="${g.banner}" alt="${g.category}"></div>`;
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    if(s.whatsapp) SHOP_WHATSAPP = s.whatsapp;
+    if(s.pay_number) SHOP_PAY_NUMBER = s.pay_number;
+    if(s.email) SHOP_EMAIL = s.email;
+    if(s.cover_image){
+      document.getElementById("coverImg").src = s.cover_image;
+      document.getElementById("coverBanner").style.display = "block";
     }
+    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
+    document.getElementById("footerContact").textContent = `📞 ${SHOP_PAY_NUMBER}   📧 ${SHOP_EMAIL}`;
+    document.getElementById("noteContact").textContent = SHOP_PAY_NUMBER;
+    document.getElementById("noteEmail").textContent = SHOP_EMAIL;
+    if(s.address) document.getElementById("footerAddress").textContent = s.address;
+    refreshHeroLinks();
+  }catch(e){
+  }
+}
 
-    g.items.forEach(it => {
-      count++;
-      const k = itemKey(g.category, it.name);
-      const qty = cart[k] || 0;
-      const isAvail = (it.available !== false);
+/* ---------------- HORIZONTAL CATEGORY CHIPS RENDER & AUTO-SCROLL ---------------- */
+function renderCategoryChips(){
+  if(!CATEGORIES_META.length) return;
+  chipsScroll.innerHTML = "";
 
-      const div = document.createElement('div');
-      div.className = `item ${qty>0 ? 'active' : ''} ${!isAvail ? 'unavailable' : ''}`;
-      
-      let priceText = '';
-      if(it.variations && it.variations.length > 0){
-        const currentVarIdx = selectedUnits[k] || 0;
-        const curVar = it.variations[currentVarIdx];
-        if(curVar.rate === 0) priceText = `<span class="tag-free">مفت</span>`;
-        else priceText = `<b>Rs. ${curVar.rate}</b> / ${curVar.unit}`;
-      } else {
-        if(it.rate === 0) priceText = `<span class="tag-free">مفت</span>`;
-        else priceText = `<b>Rs. ${it.rate}</b> / ${it.unit||'عدد'}`;
-      }
+  CATEGORIES_META.forEach((cat, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "chip" + (idx === 0 ? " active" : "");
+    btn.innerHTML = `${cat.icon} ${dispCatName(cat)}`;
+    btn.onclick = () => {
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      const target = document.getElementById("cat-" + cat.name);
+      if(target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    chipsScroll.appendChild(btn);
+  });
+}
 
-      let varSelectorHtml = '';
-      if(it.variations && it.variations.length > 0){
-        varSelectorHtml = `<select class="unit-select" data-key="${k}">
-          ${it.variations.map((v, idx) => `<option value="${idx}" ${(selectedUnits[k]||0)===idx?'selected':''}>${v.unit} — Rs. ${v.rate}</option>`).join('')}
-        </select>`;
-      }
+function renderList(filter){
+  listEl.innerHTML = "";
+  const f = (filter||"").trim();
+  let anyShown = false;
 
-      div.innerHTML = `
+  CATEGORIES_META.forEach(cat=>{
+    const catItems = ITEMS.filter(it=> it.cat===cat.name && (!f || it.name.includes(f) || (it.name_roman && it.name_roman.toLowerCase().includes(f.toLowerCase()))));
+    if(catItems.length===0) return;
+    anyShown = true;
+
+    const title = document.createElement("div");
+    title.className = "cat-title";
+    title.id = "cat-"+cat.name;
+    title.textContent = cat.icon + " " + dispCatName(cat);
+
+    if(cat.image){
+      const banner = document.createElement("div");
+      banner.className = "cat-banner";
+      banner.innerHTML = `<img src="${cat.image}" alt="${dispCatName(cat)}">`;
+      listEl.appendChild(banner);
+    }
+    listEl.appendChild(title);
+
+    catItems.forEach(it=>{
+      const row = document.createElement("div");
+      row.className = "item" + (it.qty>0 ? " active":"") + (!it.available ? " unavailable":"");
+      row.id = "row-"+it.id;
+      const multi = it.units.length > 1;
+      const unitOptionsHtml = multi
+        ? it.units.map((u,idx)=>`<option value="${idx}" ${idx===it.unitIndex?"selected":""}>${u.label} — ${fmt(u.rate)}</option>`).join("")
+        : "";
+      const perLabel = "فی";
+      const outLabel = "آج ناموجود";
+      const freeLabel = "🎁 مفت (بطور تحفہ)";
+      row.innerHTML = `
         <div class="item-row-top">
-          <div class="item-thumb" data-img="${it.image||''}">
-            ${it.image ? `<img src="${it.image}" alt="${it.name}" onerror="this.parentElement.innerHTML='🥦'">` : (g.icon||'🥦')}
+          <div class="item-thumb" data-img="${it.image||''}" data-name="${dispName(it)}">
+            ${it.image ? `<img src="${it.image}" alt="${dispName(it)}" loading="lazy">` : `<span>${it.icon||'🛒'}</span>`}
           </div>
           <div class="info">
-            <div class="name">${it.name}</div>
-            <div class="meta">${isAvail ? priceText : '<span class="tag-out">فی الحال دستیاب نہیں</span>'}</div>
+            <div class="name">${dispName(it)}</div>
+            ${(!multi) ? `<div class="meta">${
+              it.available
+                ? (currentRate(it) === 0
+                    ? `<span class="tag-free">${freeLabel}</span>`
+                    : `${perLabel} ${currentLabel(it)} — <b>${fmt(currentRate(it))}</b>`)
+                : `<span class="tag-out">${outLabel}</span>`
+            }</div>` : (!it.available ? `<div class="meta"><span class="tag-out">${outLabel}</span></div>` : '')}
           </div>
-          <div class="avail-badge ${isAvail?'yes':'no'}">${isAvail?'✅':'❌'}</div>
+          <div class="avail-badge ${it.available ? 'yes' : 'no'}" title="${it.available ? 'دستیاب' : 'ناموجود'}">
+            ${it.available
+              ? `<svg width="15" height="15" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+              : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#A8A499" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>`
+            }
+          </div>
         </div>
         <div class="item-row-bottom">
-          ${varSelectorHtml}
+          ${(it.available && multi) ? `<select class="unit-select" data-id="${it.id}">${unitOptionsHtml}</select>` : `<span></span>`}
           <div class="qty-box">
-            <button class="minus" data-key="${k}" ${!isAvail || qty===0 ? 'disabled' : ''}>−</button>
-            <input type="number" value="${qty}" readonly>
-            <button class="plus" data-key="${k}" ${!isAvail ? 'disabled' : ''}>+</button>
+            <button class="minus" data-id="${it.id}" ${!it.available?"disabled":""}>−` + `</button>
+            <input type="number" min="0" value="${it.qty}" data-id="${it.id}" ${!it.available?"disabled":""}>
+            <button class="plus" data-id="${it.id}" ${!it.available?"disabled":""}>+</button>
           </div>
-        </div>
-      `;
-
-      sec.appendChild(div);
+        </div>`;
+      listEl.appendChild(row);
     });
-
-    main.appendChild(sec);
   });
 
-  $('noResult').style.display = (count === 0) ? 'block' : 'none';
-  attachEvents();
-}
+  noResultEl.style.display = anyShown ? "none" : "block";
 
-function attachEvents(){
-  document.querySelectorAll('.qty-box .plus').forEach(b => {
-    b.onclick = () => updateQty(b.dataset.key, 1);
+  listEl.querySelectorAll(".minus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, -1));
+  listEl.querySelectorAll(".plus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, 1));
+  listEl.querySelectorAll('input[type="number"]').forEach(inp=>{
+    inp.onchange = ()=> setQty(inp.dataset.id, parseInt(inp.value)||0);
   });
-  document.querySelectorAll('.qty-box .minus').forEach(b => {
-    b.onclick = () => updateQty(b.dataset.key, -1);
-  });
-  document.querySelectorAll('.unit-select').forEach(s => {
-    s.onchange = (e) => {
-      selectedUnits[s.dataset.key] = parseInt(e.target.value);
-      renderList(ALL_DATA);
-      updateBill();
-    };
-  });
-  document.querySelectorAll('.item-thumb').forEach(t => {
-    t.onclick = () => {
-      const img = t.dataset.img;
-      if(img){
-        $('lightboxImg').src = img;
-        $('lightbox').classList.remove('hidden');
-      }
+  listEl.querySelectorAll('.unit-select').forEach(sel=>{
+    sel.onchange = ()=>{
+      const it = findItem(sel.dataset.id);
+      it.unitIndex = parseInt(sel.value);
+      renderBill();
     };
   });
 }
 
-function updateQty(key, delta){
-  const current = cart[key] || 0;
-  const n = current + delta;
-  if(n <= 0) delete cart[key];
-  else cart[key] = n;
-  
-  updateBill();
-  renderList(ALL_DATA);
-}
+function findItem(id){ return ITEMS.find(i=>i.id===id); }
 
-function getItemData(key){
-  const [cat, name] = key.split('___');
-  for(const g of ALL_DATA){
-    if(g.category === cat){
-      const it = g.items.find(x => x.name === name);
-      if(it){
-        if(it.variations && it.variations.length > 0){
-          const varIdx = selectedUnits[key] || 0;
-          const v = it.variations[varIdx];
-          return { name: `${it.name} (${v.unit})`, rate: v.rate, unit: v.unit };
-        }
-        return { name: it.name, rate: it.rate, unit: it.unit||'عدد' };
-      }
-    }
+function changeQty(id, delta){
+  const it = findItem(id);
+  if(!it.available) return;
+  it.qty = Math.max(0, it.qty + delta);
+  syncAfterChange(it);
+}
+function setQty(id, val){
+  const it = findItem(id);
+  if(!it.available) return;
+  it.qty = Math.max(0, val);
+  syncAfterChange(it);
+}
+function syncAfterChange(it){
+  const row = document.getElementById("row-"+it.id);
+  if(row){
+    row.classList.toggle("active", it.qty>0);
+    row.querySelector('input[type="number"]').value = it.qty;
   }
-  return null;
+  renderBill();
 }
 
-function updateBill(){
-  const keys = Object.keys(cart);
-  const totalCount = keys.reduce((a,k) => a + cart[k], 0);
-  
-  if(totalCount === 0){
-    $('billbar').style.display = 'none';
+let SHOP_WHATSAPP = "923349353799";
+let SHOP_PAY_NUMBER = "0334-9353799";
+let SHOP_EMAIL = "sjfoodsonline@outlook.com";
+
+const billLines = document.getElementById("billLines");
+const itemCountEl = document.getElementById("itemCount");
+const summaryTotalEl = document.getElementById("summaryTotal");
+const finalTotalEl = document.getElementById("finalTotal");
+const payAmountEl = document.getElementById("payAmount");
+
+function renderBill(){
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  billLines.innerHTML = "";
+  let subtotal = 0;
+  chosen.forEach(it=>{
+    const lineTotal = it.qty * currentRate(it);
+    subtotal += lineTotal;
+    const line = document.createElement("div");
+    line.className = "bill-line";
+    line.innerHTML = `<span class="l-name">${dispName(it)} × ${it.qty} ${currentLabel(it)}</span><span class="l-val">${fmt(lineTotal)}</span>`;
+    billLines.appendChild(line);
+  });
+
+  itemCountEl.textContent = chosen.length;
+  summaryTotalEl.textContent = fmt(subtotal);
+  finalTotalEl.textContent = fmt(subtotal);
+  payAmountEl.textContent = fmt(subtotal);
+
+  if(chosen.length===0) billbar.classList.add("collapsed");
+}
+
+document.getElementById("summary").onclick = ()=> billbar.classList.toggle("collapsed");
+document.getElementById("handle").onclick = ()=> billbar.classList.toggle("collapsed");
+
+document.getElementById("copyNumBtn").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
+    showToast("✅ نمبر کاپی ہوگیا");
+  }catch(e){
+    showToast("نمبر: " + SHOP_PAY_NUMBER);
+  }
+};
+
+document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
+
+const areaSelect = document.getElementById("custArea");
+const payCod = document.getElementById("payCod");
+const payEasy = document.getElementById("payEasy");
+const lblCod = document.getElementById("lblCod");
+const lblEasy = document.getElementById("lblEasy");
+const areaNote = document.getElementById("areaNote");
+
+function updatePayMethodUI(){
+  lblCod.classList.toggle("checked", payCod.checked);
+  lblEasy.classList.toggle("checked", payEasy.checked);
+}
+
+areaSelect.addEventListener("change", ()=>{
+  const val = areaSelect.value;
+  if(val === "outside"){
+    payCod.checked = false;
+    payCod.disabled = true;
+    lblCod.classList.add("disabled");
+    payEasy.checked = true;
+    areaNote.className = "area-note warn";
+    areaNote.textContent = "⚠️ اس علاقے میں ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے";
+  } else if(val === "inside"){
+    payCod.disabled = false;
+    lblCod.classList.remove("disabled");
+    payCod.checked = true;
+    areaNote.className = "area-note ok";
+    areaNote.textContent = "✅ کیش آن ڈیلیوری دستیاب ہے — اگر ایزی پیسہ ایڈوانس ادا کریں تو آرڈر مزید تیزی سے پراسیس ہوگا";
+  } else {
+    payCod.disabled = false;
+    lblCod.classList.remove("disabled");
+    payCod.checked = false; payEasy.checked = false;
+    areaNote.className = "area-note";
+  }
+  updatePayMethodUI();
+});
+payCod.addEventListener("change", updatePayMethodUI);
+payEasy.addEventListener("change", updatePayMethodUI);
+
+function areaLabel(v){ return v==="inside" ? "مینگورہ شہر کے اندر" : v==="outside" ? "مینگورہ سے باہر / سائیڈ ایریا" : "نامعلوم"; }
+function payLabel(v){ return v==="easypaisa" ? "ایزی پیسہ ایڈوانس" : "کیش آن ڈیلیوری"; }
+
+function buildMessage(name, phone, addr, area, payMethod){
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
+
+  let msg = "🛒 نیا آرڈر — SJ Foods ویب سائٹ\n\n";
+  msg += "👤 نام: " + name + "\n";
+  msg += "📞 نمبر: " + phone + "\n";
+  msg += "📍 پتہ: " + addr + "\n";
+  msg += "🗺️ علاقہ: " + areaLabel(area) + "\n\n";
+  chosen.forEach(it=>{
+    msg += `${it.name} — ${it.qty} ${currentLabel(it)} — ${fmt(it.qty*currentRate(it))}\n`;
+  });
+  msg += "\n💰 کل رقم: " + fmt(subtotal);
+  msg += "\n🚚 ڈیلیوری چارج: راستے کے حساب سے، موقع پر ادا";
+  msg += "\n💳 ادائیگی کا طریقہ: " + payLabel(payMethod);
+  if(payMethod === "easypaisa"){
+    msg += "\n📲 ایزی پیسہ نمبر: " + SHOP_PAY_NUMBER;
+  }
+  msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
+  msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
+  msg += "\nاوقات کار: صبح 10 بجے سے رات 8 بجے تک";
+  msg += "\n\nشکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏";
+  return msg;
+}
+
+function showToast(text){
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2200);
+}
+
+document.getElementById("waBtn").onclick = ()=>{
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  if(chosen.length===0){ showToast("پہلے کچھ آئٹمز کارٹ میں شامل کریں"); return; }
+
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  const area = areaSelect.value;
+  const payMethod = payEasy.checked ? "easypaisa" : (payCod.checked ? "cod" : "");
+
+  if(!name || !phone || !addr){
+    showToast("براہ مہربانی نام، نمبر اور پتہ لکھیں");
+    return;
+  }
+  if(!area){
+    showToast("براہ مہربانی اپنا علاقہ منتخب کریں");
+    return;
+  }
+  if(!payMethod){
+    showToast("براہ مہربانی ادائیگی کا طریقہ منتخب کریں");
     return;
   }
 
-  $('billbar').style.display = 'flex';
-  $('itemCount').innerText = totalCount;
+  const msg = buildMessage(name, phone, addr, area, payMethod);
+  const url = `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+  showToast("✅ واٹس ایپ کھل رہا ہے — پیغام بھیج دیں");
+};
 
-  let totalRs = 0;
-  const linesHtml = keys.map(k => {
-    const data = getItemData(k);
-    if(!data) return '';
-    const q = cart[k];
-    const lineTot = data.rate * q;
-    totalRs += lineTot;
-    return `
-      <div class="bill-line">
-        <span class="l-name">${data.name} × ${q}</span>
-        <span class="l-val">Rs. ${lineTot}</span>
-      </div>
+document.getElementById("clearBtn").onclick = ()=>{
+  if(!confirm("کارٹ خالی کر دیں؟")) return;
+  ITEMS.forEach(it=> it.qty = 0);
+  renderList(document.getElementById("search").value);
+  renderBill();
+  billbar.classList.add("collapsed");
+};
+
+/* ---------------- FEATURED ITEMS HORIZONTAL SLIDER RENDER ---------------- */
+function renderFeatured(){
+  const fItems = ITEMS.filter(it => it.featured);
+  const title = document.getElementById("featuredTitle");
+  const container = document.getElementById("featuredContainer");
+  const scrollBox = document.getElementById("featuredScroll");
+
+  if(!fItems.length){
+    title.classList.add("hidden");
+    container.classList.add("hidden");
+    return;
+  }
+
+  title.classList.remove("hidden");
+  container.classList.remove("hidden");
+  scrollBox.innerHTML = "";
+
+  fItems.forEach((it) => {
+    const card = document.createElement("div");
+    card.className = "featured-card";
+    card.innerHTML = `
+      <img src="${it.image || 'icon-192.png'}" alt="${dispName(it)}">
+      <div class="fname">${dispName(it)}</div>
+      <div class="frate">${currentLabel(it)} — ${fmt(currentRate(it))}</div>
     `;
-  }).join('');
-
-  $('billLines').innerHTML = linesHtml;
-  $('summaryTotal').innerText = `Rs. ${totalRs}`;
-  $('payAmount').innerText = `Rs. ${totalRs}`;
-  $('finalTotal').innerText = `Rs. ${totalRs}`;
-}
-
-$('handle').onclick = () => $('billbar').classList.toggle('collapsed');
-$('summary').onclick = () => $('billbar').classList.toggle('collapsed');
-
-$('copyNumBtn').onclick = () => {
-  navigator.clipboard.writeText(CONFIG.contact.easypaisa);
-  showToast('نمبر کاپی ہو گیا!');
-};
-
-function showToast(msg){
-  const t = $('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-$('search').oninput = (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  if(!q){
-    renderList(ALL_DATA);
-    return;
-  }
-  const filtered = ALL_DATA.map(g => ({
-    ...g,
-    items: g.items.filter(i => i.name.toLowerCase().includes(q) || (i.name_roman && i.name_roman.toLowerCase().includes(q)))
-  })).filter(g => g.items.length > 0);
-  
-  renderList(filtered);
-};
-
-$('custArea').onchange = (e) => {
-  const v = e.target.value;
-  const note = $('areaNote');
-  const cod = $('payCod');
-  const easy = $('payEasy');
-  const lblCod = $('lblCod');
-  const lblEasy = $('lblEasy');
-
-  if(v === 'inside'){
-    note.className = 'area-note ok';
-    note.innerText = '✅ مینگورہ شہر: کیش آن ڈیلیوری اور ایزی پیسہ دونوں دستیاب ہیں۔';
-    cod.disabled = false;
-    lblCod.classList.remove('disabled');
-  } else if(v === 'outside'){
-    note.className = 'area-note warn';
-    note.innerText = '⚠️ مینگورہ سے باہر کے علاقوں کے لیے صرف "ایزی پیسہ ایڈوانس" ادائیگی قبول ہوگی۔';
-    cod.disabled = true;
-    easy.checked = true;
-    lblCod.classList.add('disabled');
-    lblEasy.classList.add('checked');
-  } else {
-    note.className = 'area-note';
-    note.style.display = 'none';
-    cod.disabled = false;
-    lblCod.classList.remove('disabled');
-  }
-};
-
-document.querySelectorAll('input[name="paymethod"]').forEach(r => {
-  r.onchange = () => {
-    document.querySelectorAll('.pay-method label').forEach(l => l.classList.remove('checked'));
-    if(r.checked) r.parentElement.classList.add('checked');
-  };
-});
-
-$('waBtn').onclick = () => {
-  const keys = Object.keys(cart);
-  if(!keys.length) return;
-
-  const name = $('custName').value.trim();
-  const phone = $('custPhone').value.trim();
-  const addr = $('custAddr').value.trim();
-  const area = $('custArea').value;
-  const payM = document.querySelector('input[name="paymethod"]:checked');
-
-  if(!name || !phone || !addr || !area){
-    alert('براہ کرم اپنا نام، فون نمبر، پتہ اور علاقہ درج کریں!');
-    return;
-  }
-
-  if(!payM){
-    alert('براہ کرم ادائیگی کا طریقہ منتخب کریں!');
-    return;
-  }
-
-  let text = `🛒 *نیا آرڈر — ${CONFIG.shop_name}*\n\n`;
-  text += `👤 *نام:* ${name}\n📞 *فون:* ${phone}\n📍 *پتہ:* ${addr}\n🌆 *علاقہ:* ${area==='inside'?'مینگورہ شہر':'مینگورہ سے باہر'}\n💳 *طریقہ:* ${payM.value==='cod'?'کیش آن ڈیلیوری':'ایزی پیسہ ایڈوانس'}\n\n*آئٹمز:*\n`;
-
-  let total = 0;
-  keys.forEach(k => {
-    const data = getItemData(k);
-    if(data){
-      const q = cart[k];
-      const lineTot = data.rate * q;
-      total += lineTot;
-      text += `• ${data.name} × ${q} = Rs. ${lineTot}\n`;
-    }
+    scrollBox.appendChild(card);
   });
+}
 
-  text += `\n💰 *کل رقم:* Rs. ${total}\n🚚 *ڈیلیوری چارج:* راستے کے حساب سے (موقع پر ادا)\n\nشکریہ!`;
+function refreshHeroLinks(){
+  const wa = document.getElementById("heroWaBtn");
+  const call = document.getElementById("heroCallBtn");
+  const floatWa = document.getElementById("floatingWaBtn");
+  if(wa) wa.href = `https://wa.me/${SHOP_WHATSAPP}`;
+  if(floatWa) floatWa.href = `https://wa.me/${SHOP_WHATSAPP}`;
+  if(call) call.href = `tel:${SHOP_PAY_NUMBER}`;
+}
 
-  const url = `https://wa.me/${CONFIG.contact.whatsapp}?text=${encodeURIComponent(text)}`;
-  window.open(url, '_blank');
-};
+// ---------------- init ----------------
+(async function init(){
+  await Promise.all([loadRates(), loadSettings()]);
+  loadingMsg.style.display = "none";
+  billbar.style.display = "flex";
+  renderCategoryChips();
+  renderList("");
+  renderBill();
+  renderFeatured();
+})();
 
-$('clearBtn').onclick = () => {
-  if(confirm('کیا آپ واقعی تمام آئٹمز کارٹ سے ہٹانا چاہتے ہیں؟')){
-    cart = {};
-    updateBill();
-    renderList(ALL_DATA);
-  }
-};
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
 
-window.addEventListener('beforeinstallprompt', (e) => {
+// ---------------- Install app button ----------------
+const installBtn = document.getElementById("installBtn");
+const installOverlay = document.getElementById("installOverlay");
+const installSteps = document.getElementById("installSteps");
+const installTitle = document.getElementById("installTitle");
+let deferredInstallPrompt = null;
+
+const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+const ua = navigator.userAgent || "";
+const isIOS = /iphone|ipad|ipod/i.test(ua);
+
+function showInstallButton(){
+  if(!isStandalone) installBtn.style.display = "flex";
+}
+if(!isStandalone) showInstallButton();
+
+window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
-  deferredPrompt = e;
-  $('installBtn').style.display = 'flex';
+  deferredInstallPrompt = e;
+  showInstallButton();
 });
 
-$('installBtn').onclick = () => {
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      $('installBtn').style.display = 'none';
-    });
-  } else {
-    showManualInstall();
+window.addEventListener("appinstalled", ()=>{
+  installBtn.style.display = "none";
+});
+
+function openInstallModal(stepsHtml, title){
+  installTitle.textContent = title;
+  installSteps.innerHTML = stepsHtml;
+  installOverlay.classList.remove("hidden");
+}
+document.getElementById("closeInstallOverlay").onclick = ()=> installOverlay.classList.add("hidden");
+installOverlay.onclick = (e)=>{ if(e.target===installOverlay) installOverlay.classList.add("hidden"); };
+
+installBtn.onclick = async ()=>{
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if(choice.outcome === "accepted") installBtn.style.display = "none";
+    return;
   }
 };
-
-function showManualInstall(){
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  $('installTitle').innerText = isIOS ? 'iPhone پر ایپ انسٹال کریں' : 'اینڈرائڈ پر ایپ انسٹال کریں';
-  $('installSteps').innerHTML = isIOS ? `
-    <div class="install-step"><span class="num">1</span> نیچے Share بٹن پر کلک کریں</div>
-    <div class="install-step"><span class="num">2</span> Add to Home Screen منتخب کریں</div>
-  ` : `
-    <div class="install-step"><span class="num">1</span> اوپر تھری ڈاٹس (⋮) پر کلک کریں</div>
-    <div class="install-step"><span class="num">2</span> Add to Home screen منتخب کریں</div>
-  `;
-  $('installOverlay').classList.remove('hidden');
-}
-
-$('closeInstallOverlay').onclick = () => $('installOverlay').classList.add('hidden');
-$('lightboxClose').onclick = () => $('lightbox').classList.add('hidden');
-
-$('themeToggle').onclick = () => {
-  document.body.classList.toggle('dark');
-  const isDark = document.body.classList.contains('dark');
-  $('themeToggle').innerText = isDark ? '☀️' : '🌙';
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-};
-
-if(localStorage.getItem('theme') === 'dark'){
-  document.body.classList.add('dark');
-  $('themeToggle').innerText = '☀️';
-}
-
-function openPolicy(title, body){
-  $('policyTitle').innerText = title;
-  $('policyBody').innerText = body;
-  $('policyOverlay').classList.remove('hidden');
-}
-
-$('closePolicy').onclick = () => $('policyOverlay').classList.add('hidden');
-
-$('privacyBtn').onclick = () => openPolicy('Privacy Policy', 'آپ کا ڈیٹا ہمارے پاس محفوظ ہے۔ ہم آپ کا نام، پتہ اور فون نمبر صرف ڈیلیوری کی سہولت کے لیے استعمال کرتے ہیں۔ کسی بھی تیسرے فریق کے ساتھ ڈیٹا شیئر نہیں کیا جاتا۔');
-$('termsBtn').onclick = () => openPolicy('Terms of Service', 'ایس جے فوڈز مینگورہ کے ذریعے تمام آرڈرز کی تصدیق واٹس ایپ پر کی جاتی ہے۔ ریٹ اور دستیابی وقت کے ساتھ تبدیل ہو سکتے ہیں۔ ڈیلیوری کا وقت مینگورہ شہر کے اندر 30 سے 45 منٹ ہے۔');
-$('refundBtn').onclick = () => openPolicy('Refund & Exchange Policy', 'اگر سامان میں کوئی نقص، خرابی یا غلط آئٹم پہنچے تو ڈیلیوری کے وقت فوری واپس کیا جا سکتا ہے۔ ہم آپ کو بلا تعطل تبادلہ یا رقم کی واپسی کی سہولت فراہم کرتے ہیں۔');
-
-loadData();
 </script>
 </body>
 </html>

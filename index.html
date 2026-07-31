@@ -1,49 +1,220 @@
-<!-- کیٹگری سیکشن (سلو اینیمیشن کے ساتھ) -->
-<div class="category-slider-container">
-  <div class="category-track">
-    <div class="category-card">سبزیاں</div>
-    <div class="category-card">پھل</div>
-    <div class="category-card">ڈیری مصنوعات</div>
-    <div class="category-card">بیکری</div>
-    <!-- ڈپلیکیٹ آئٹمز ہموار لوپ کے لیے -->
-    <div class="category-card">سبزیاں</div>
-    <div class="category-card">پھل</div>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کیٹگری اور پروڈکٹ سلائیڈر</title>
+  <style>
+    /* ================= عمومی سٹائل ================= */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    /* ================= 1. کیٹگری اینیمیشن (نصف سپیڈ/سلو) ================= */
+    .category-slider-container {
+      overflow: hidden;
+      width: 100%;
+      background: #ffffff;
+      padding: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 40px;
+    }
+
+    .category-track {
+      display: flex;
+      gap: 15px;
+      width: max-content;
+      /* 40s سپیڈ کی وجہ سے اینیمیشن بالکل آہستہ (Half Speed) چلے گی */
+      animation: scrollCategory 40s linear infinite;
+    }
+
+    .category-card {
+      padding: 10px 25px;
+      background: #e9ecef;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-weight: bold;
+      color: #495057;
+      border: 1px solid #dee2e6;
+    }
+
+    @keyframes scrollCategory {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(50%); } /* RTL کے لیے مثبت سمت */
+    }
+
+    /* ================= 2. نمایاں اشیاء (ایک سائز اور 2 کیٹلاگ سلائیڈ) ================= */
+    .featured-products-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      padding: 10px 0;
+    }
+
+    .featured-slider {
+      display: flex;
+      gap: 20px;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .product-card {
+      /* ایک وقت میں صرف 2 کارڈز نظر آئیں گے */
+      flex: 0 0 calc(50% - 10px); 
+      box-sizing: border-box;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    /* تمام تصاویر کا ایک جیسا یکساں سائز (Equal Size Cover) */
+    .product-card .img-box {
+      width: 100%;
+      height: 180px; 
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #f1f1f1;
+    }
+
+    .product-card .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* تصویر کا سائز خود بخود فریم کے اندر ایڈجسٹ ہوگا */
+    }
+
+    /* مکمل نام اور ٹیکسٹ ظاہر کرنے کے لیے */
+    .product-title {
+      font-size: 16px;
+      margin: 12px 0 0 0;
+      text-align: center;
+      color: #212529;
+      word-wrap: break-word;
+      white-space: normal; /* پورا نام بغیر کٹے اگلی لائن میں آئے گا */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. کیٹگری اینیمیشن سیکشن -->
+  <h2>کیٹگریز</h2>
+  <div class="category-slider-container">
+    <div class="category-track">
+      <div class="category-card">سبزیاں</div>
+      <div class="category-card">پھل</div>
+      <div class="category-card">ڈیری مصنوعات</div>
+      <div class="category-card">بیکری</div>
+      <div class="category-card">مشروبات</div>
+      <div class="category-card">ڈرائی فروٹ</div>
+      <!-- ڈپلیکیٹ آئٹمز ہموار لوپ (Continuous Loop) کے لیے -->
+      <div class="category-card">سبزیاں</div>
+      <div class="category-card">پھل</div>
+      <div class="category-card">ڈیری مصنوعات</div>
+      <div class="category-card">بیکری</div>
+      <div class="category-card">مشروبات</div>
+      <div class="category-card">ڈرائی فروٹ</div>
+    </div>
   </div>
-</div>
 
-<!-- نمایاں اشیاء سیکشن (2 آئٹم کی سلائیڈنگ کے ساتھ) -->
-<div class="featured-products-wrapper">
-  <div class="featured-slider" id="featuredSlider">
-    <!-- پروڈکٹ کارڈ 1 -->
-    <div class="product-card">
-      <div class="img-box">
-        <img src="item1.jpg" alt="پروڈکٹ کا نام">
+  <!-- 2. نمایاں اشیاء سیکشن -->
+  <h2>نمایاں اشیاء</h2>
+  <div class="featured-products-wrapper">
+    <div class="featured-slider" id="featuredSlider">
+      
+      <!-- پروڈکٹ 1 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="ٹماٹر">
+        </div>
+        <h3 class="product-title">تازہ سرخ ٹماٹر (فارم سے براہ راست)</h3>
       </div>
-      <h3 class="product-title">تازہ لال ٹماٹر (مکمل نام)</h3>
-    </div>
 
-    <!-- پروڈکٹ کارڈ 2 -->
-    <div class="product-card">
-      <div class="img-box">
-        <img src="item2.jpg" alt="پروڈکٹ کا نام">
+      <!-- پروڈکٹ 2 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="آٹا">
+        </div>
+        <h3 class="product-title">دیسی گندم کا خالص آٹا 10 کلوگرام پیک</h3>
       </div>
-      <h3 class="product-title">دیسی گندم کا آٹا 10 کلو</h3>
-    </div>
 
-    <!-- پروڈکٹ کارڈ 3 -->
-    <div class="product-card">
-      <div class="img-box">
-        <img src="item3.jpg" alt="پروڈکٹ کا نام">
+      <!-- پروڈکٹ 3 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="دودھ">
+        </div>
+        <h3 class="product-title">خالص فارمی دودھ 1 لیٹر بوتل</h3>
       </div>
-      <h3 class="product-title">تازہ فارمی دودھ 1 لیٹر</h3>
-    </div>
 
-    <!-- پروڈکٹ کارڈ 4 -->
-    <div class="product-card">
-      <div class="img-box">
-        <img src="item4.jpg" alt="پروڈکٹ کا نام">
+      <!-- پروڈکٹ 4 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="ڈبل روٹی">
+        </div>
+        <h3 class="product-title">تازہ اور ملائم ڈبل روٹی لارج سائز</h3>
       </div>
-      <h3 class="product-title">بیکری کی تازہ ڈبل روٹی</h3>
+
+      <!-- پروڈکٹ 5 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="سیب">
+        </div>
+        <h3 class="product-title">تازہ سواتی سیب درج اول (1 کلو)</h3>
+      </div>
+
+      <!-- پروڈکٹ 6 -->
+      <div class="product-card">
+        <div class="img-box">
+          <img src="https://via.placeholder.com/300x200" alt="مکھن">
+        </div>
+        <h3 class="product-title">دیسی مکھن 250 گرام تازہ پیکنگ</h3>
+      </div>
+
     </div>
   </div>
-</div>
+
+  <!-- 3. JavaScript (ہر بار 2 اشیاء اگے نکالنے کے لیے) -->
+  <script>
+    const slider = document.getElementById('featuredSlider');
+    const cards = document.querySelectorAll('.product-card');
+    let currentIndex = 0;
+
+    function slideNextTwo() {
+      const totalCards = cards.length;
+      
+      // ہر بار 2 پروڈکٹس آگے بڑھیں گی
+      currentIndex += 2;
+      
+      // اگر تمام اشیاء ختم ہو جائیں تو دوبارہ پہلے 2 کارڈز پر آ جائے
+      if (currentIndex >= totalCards) {
+        currentIndex = 0;
+      }
+
+      // ایک کارڈ کی چوڑائی اور 20px کا Gap
+      const cardWidth = cards[0].offsetWidth + 20; 
+      const moveDistance = cardWidth * currentIndex;
+
+      // RTL سائیڈ کے لیے مثبت transform رکھیں
+      slider.style.transform = `translateX(${moveDistance}px)`;
+    }
+
+    // ہر 3.5 سیکنڈ بعد اگلی 2 اشیاء سامنے آئیں گی
+    setInterval(slideNextTwo, 3500);
+  </script>
+
+</body>
+</html>

@@ -182,7 +182,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-13-1785082946673.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Zig Fein Atta"
   },
   {
@@ -221,7 +221,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-16-1785083276062.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "GCP Balti Ghee"
   },
   {
@@ -351,7 +351,7 @@
     ],
     "available": true,
     "image": "products/oil_ghee-26-1785083663323.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Kausar Oil Can"
   },
   {

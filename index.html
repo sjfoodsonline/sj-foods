@@ -99,7 +99,6 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
-  /* ---- CATEGORIES SWIPEABLE ---- */
   .cat-marquee-wrap{
     overflow-x:auto; position:relative; padding:4px 16px 8px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
@@ -350,7 +349,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (SMOOTH STEP & TOUCH SWIPE) ---- */
+  /* ---- FEATURED SECTION (CLEAN SMOOTH STEP-SLIDE) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -364,11 +363,11 @@
   .featured-marquee-wrap{
     overflow-x:auto; position:relative; padding:8px 16px; min-height:210px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
-    scroll-behavior:smooth;
   }
   .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
+    transition: transform 0.5s ease-out;
   }
 
   .featured-card{
@@ -376,7 +375,7 @@
     border:2px solid rgba(201,162,39,0.55); border-radius:16px;
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
-    transition:transform .3s, box-shadow .3s, border-color .3s;
+    transition:transform .2s, box-shadow .2s, border-color .2s;
     position:relative; overflow:hidden;
   }
   .featured-card::before{
@@ -386,8 +385,8 @@
     box-shadow:0 2px 6px rgba(201,162,39,0.35);
   }
   .featured-card:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 10px 24px rgba(201,162,39,0.25);
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(201,162,39,0.2);
     border-color:var(--gold);
   }
   .featured-card img{width:100%; height:120px; object-fit:cover; border-radius:12px; background:var(--leaf);}
@@ -1274,7 +1273,7 @@ const POLICIES = {
   },
   terms: {
     title: "📜 شرائط و ضوابط",
-    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتی ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
+    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتے ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
   }
 };
 function openPolicy(key){
@@ -1294,7 +1293,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- STEP & STOP AUTO-STEPPER CAROUSEL NO GAP ----------------
+// ---------------- CLEAN & SMOOTH STEP-SLIDE ENGINE ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1338,7 +1337,7 @@ function renderFeatured(){
   sectionEl.classList.remove("hidden");
   const cards = featuredItems.map(featuredCardHtml).join("");
   
-  // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا (No Gap Loop)
+  // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap" id="featSwipeWrap">
       <div class="featured-marquee-track" id="featTrack">
@@ -1349,31 +1348,30 @@ function renderFeatured(){
 
   bindFeaturedCards(scrollEl);
 
-  // ہر 3 سیکنڈ بعد دو دو کارڈز کا تیز رفتاری سے آگے بڑھ کر بریک لگانا (Step & Stop Brake)
+  // بالکل ہموار 3 سیکنڈ سلائیڈ (بغیر کسی جھٹکے یا ربڑ کے)
   if(featTimer) clearInterval(featTimer);
   featStepIndex = 0;
 
   featTimer = setInterval(() => {
-    const wrap = document.getElementById("featSwipeWrap");
-    if(!wrap) return;
+    const track = document.getElementById("featTrack");
+    if(!track) return;
 
-    const firstCard = wrap.querySelector(".featured-card");
+    const firstCard = track.querySelector(".featured-card");
     if(!firstCard) return;
 
-    const stepWidth = (firstCard.offsetWidth + 16) * 2; // دو کارڈز کا فاصلہ
+    const stepWidth = (firstCard.offsetWidth + 16) * 2; // دو کارڈز آگے بڑھنا
     featStepIndex++;
 
-    wrap.scrollTo({
-      left: featStepIndex * stepWidth,
-      behavior: 'smooth'
-    });
+    track.style.transition = 'transform 0.5s ease-out';
+    track.style.transform = `translateX(-${featStepIndex * stepWidth}px)`;
 
-    // نصف سفر مکمل ہونے پر خاموشی سے زیرو پر واپس لانا
+    // نصف سفر کے بعد خاموشی سے ری سیٹ ہونا
     if(featStepIndex >= Math.floor(featuredItems.length / 2)){
       setTimeout(() => {
-        wrap.scrollTo({ left: 0, behavior: 'instant' });
+        track.style.transition = 'none';
         featStepIndex = 0;
-      }, 700);
+        track.style.transform = `translateX(0px)`;
+      }, 550);
     }
   }, 3000);
 }

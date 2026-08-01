@@ -13,7 +13,7 @@
     ],
     "available": true,
     "image": "products/pulses-0-1785161237422.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Chana (Chola)"
   },
   {
@@ -149,7 +149,7 @@
     ],
     "available": true,
     "image": "products/pulses-8-1785161959145.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Sabz Moong (Shne Me)"
   },
   {
@@ -166,7 +166,7 @@
     ],
     "available": true,
     "image": "products/pulses-9-1785162030801.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Lobia Tajik"
   },
   {
@@ -183,7 +183,7 @@
     ],
     "available": true,
     "image": "products/pulses-10-1785162123284.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Lobia Watani"
   },
   {
@@ -234,7 +234,7 @@
     ],
     "available": true,
     "image": "products/pulses-13-1785162342782.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Macaroni No. 1"
   },
   {
@@ -259,7 +259,7 @@
     ],
     "available": true,
     "image": "products/pulses-15-1785162401984.jpg",
-    "featured": false
+    "featured": true
   },
   {
     "name": "سلانٹی پاپڑ سفید ",

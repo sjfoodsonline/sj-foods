@@ -177,9 +177,9 @@
     <div id="tabOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے موصول شدہ آرڈرز</h3>
-        <p>نیا آرڈر آنے پر گھنٹی بجے گی۔ جب تک آرڈر ڈیلیور نہ ہو کارڈ ٹمٹماتا رہے گا۔ 24 گھنٹے بعد پرانے آرڈرز خود بخود ہٹ جائیں گے۔</p>
+        <p>نیا آرڈر آنے پر تیز گھنٹی بجے گی۔ جب تک براؤزر کھلا یا ہوم اسکرین ایپ آن رہے گی، ساؤنڈ کام کرے گا۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-secondary" onclick="testNotificationSound()">🔊 ٹیسٹ بیل</button>
+          <button class="btn-secondary" onclick="testNotificationSound()">🔊 ٹیسٹ بیل (کلک کریں)</button>
           <button class="btn-success" onclick="createFakeOrder()">🧪 فرضی آرڈر</button>
           <button class="btn-danger" onclick="clearAllOrders()" style="font-size:11px; padding:6px 10px;">🗑️ سب صاف کریں</button>
         </div>
@@ -248,21 +248,24 @@ function switchTab(tab){
 function playAlertSound(){
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(950, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.6);
+    osc.stop(audioCtx.currentTime + 0.8);
   } catch(e) {}
 }
 
 function testNotificationSound(){
   playAlertSound();
-  showToast("🔊 نوٹیفکیشن ساؤنڈ ٹیسٹ کر لیا گیا");
+  showToast("🔊 ساؤنڈ ایکٹیو ہو گیا ہے!");
 }
 
 function createFakeOrder(){
@@ -401,7 +404,7 @@ async function startMainPanel(){
   picker.onchange = ()=> loadCategory(picker.value);
 
   await loadCategory(CATEGORIES_INDEX[0].file);
-  renderOrdersList(); // کیٹگری لوڈ ہونے پر لائیو آرڈرز کی لسٹ بھی رینڈر کر دیں
+  renderOrdersList();
 }
 
 async function loadCategory(file){

@@ -99,15 +99,23 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
-  /* ---- CATEGORIES SWIPEABLE ---- */
+  /* ---- CATEGORIES INFINITE MARQUEE ---- */
   .cat-marquee-wrap{
-    overflow-x:auto; position:relative; padding:4px 16px 8px;
+    overflow-x:auto; position:relative; padding:4px 0 8px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x mandatory;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
   }
   .cat-marquee-wrap::-webkit-scrollbar{display:none;}
   .cat-marquee-track{
-    display:flex; width:max-content; gap:10px; direction:rtl;
+    display:flex; width:max-content; gap:10px;
+    animation: cat-marquee-move 28s linear infinite;
+    will-change: transform; direction:rtl;
+  }
+  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
+  @keyframes cat-marquee-move {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
   .cat-chip{
@@ -117,7 +125,7 @@
     padding:9px 18px; font-size:13.5px; font-weight:700;
     white-space:nowrap; cursor:pointer; font-family:inherit;
     transition:background .18s, border-color .18s, transform .15s, box-shadow .15s;
-    box-shadow:0 2px 8px rgba(21,58,32,0.06); scroll-snap-align:start;
+    box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
   .cat-chip:hover{background:#dff0e0; border-color:var(--mid); transform:translateY(-1px); box-shadow:0 4px 12px rgba(46,125,50,0.12);}
   .cat-chip:active{transform:scale(0.97);}
@@ -351,7 +359,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (STEP & STOP TOUCH SWIPE) ---- */
+  /* ---- FEATURED SECTION (STEP & STOP NO GAP SWIPE) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -370,7 +378,6 @@
   .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
-    transition: transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1);
   }
 
   .featured-card{
@@ -717,7 +724,8 @@ function renderChips(){
   chipsEl.innerHTML = `
     <div class="cat-marquee-wrap">
       <div class="cat-marquee-track">
-        ${chips}
+        <div class="cat-marquee-set" style="display:flex; gap:10px;">${chips}</div>
+        <div class="cat-marquee-set" style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
       </div>
     </div>`;
 
@@ -1296,7 +1304,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- STEP & STOP AUTO-STEPPER CAROUSEL ----------------
+// ---------------- STEP & STOP AUTO-STEPPER CAROUSEL NO GAP ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1340,7 +1348,7 @@ function renderFeatured(){
   sectionEl.classList.remove("hidden");
   const cards = featuredItems.map(featuredCardHtml).join("");
   
-  // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا
+  // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا (No Gap Loop)
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap" id="featSwipeWrap">
       <div class="featured-marquee-track" id="featTrack">
@@ -1377,7 +1385,7 @@ function renderFeatured(){
         featStepIndex = 0;
       }, 700);
     }
-  }, 3000); // 3 سیکنڈ کا رکاؤ
+  }, 3000);
 }
 
 async function loadOffers(){

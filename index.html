@@ -99,13 +99,21 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
+  /* ---- CATEGORIES INFINITE MARQUEE ---- */
   .cat-marquee-wrap{
-    overflow-x:auto; position:relative; padding:4px 16px 8px;
-    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    overflow:hidden; position:relative; padding:4px 0 8px;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
   }
-  .cat-marquee-wrap::-webkit-scrollbar{display:none;}
   .cat-marquee-track{
-    display:flex; width:max-content; gap:10px; direction:rtl;
+    display:flex; width:max-content; gap:10px;
+    animation: cat-marquee-move 25s linear infinite;
+    will-change: transform; direction:rtl;
+  }
+  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
+  @keyframes cat-marquee-move {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
   .cat-chip{
@@ -349,7 +357,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (CLEAN SMOOTH STEP-SLIDE) ---- */
+  /* ---- FEATURED SECTION (TOP DEALS PERFECT NO-GAP CSS LOOP) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -361,13 +369,21 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow-x:auto; position:relative; padding:8px 16px; min-height:210px;
-    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    overflow:hidden; position:relative; padding:8px 0; min-height:210px;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
   }
-  .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
-    transition: transform 0.5s ease-out;
+    animation: featured-continuous-loop 22s linear infinite;
+    will-change: transform;
+  }
+  .featured-marquee-wrap:hover .featured-marquee-track{ animation-play-state: paused; }
+  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:rtl;}
+
+  @keyframes featured-continuous-loop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
   .featured-card{
@@ -714,7 +730,8 @@ function renderChips(){
   chipsEl.innerHTML = `
     <div class="cat-marquee-wrap">
       <div class="cat-marquee-track">
-        ${chips}
+        <div class="cat-marquee-set" style="display:flex; gap:10px;">${chips}</div>
+        <div class="cat-marquee-set" style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
       </div>
     </div>`;
 
@@ -1273,7 +1290,7 @@ const POLICIES = {
   },
   terms: {
     title: "📜 شرائط و ضوابط",
-    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتے ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
+    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتی ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
   }
 };
 function openPolicy(key){
@@ -1293,7 +1310,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- CLEAN & SMOOTH STEP-SLIDE ENGINE ----------------
+// ---------------- FEATURED PRODUCTS INFINITE NO GAP LOOP ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1316,9 +1333,6 @@ function bindFeaturedCards(root){
   });
 }
 
-let featStepIndex = 0;
-let featTimer = null;
-
 function renderFeatured(){
   let featuredItems = ITEMS.filter(it => it.featured && it.available);
   const scrollEl = document.getElementById("featuredScroll");
@@ -1339,41 +1353,14 @@ function renderFeatured(){
   
   // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا
   scrollEl.innerHTML = `
-    <div class="featured-marquee-wrap" id="featSwipeWrap">
-      <div class="featured-marquee-track" id="featTrack">
-        ${cards}
-        ${cards}
+    <div class="featured-marquee-wrap">
+      <div class="featured-marquee-track">
+        <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
+        <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
       </div>
     </div>`;
 
   bindFeaturedCards(scrollEl);
-
-  // بالکل ہموار 3 سیکنڈ سلائیڈ (بغیر کسی جھٹکے یا ربڑ کے)
-  if(featTimer) clearInterval(featTimer);
-  featStepIndex = 0;
-
-  featTimer = setInterval(() => {
-    const track = document.getElementById("featTrack");
-    if(!track) return;
-
-    const firstCard = track.querySelector(".featured-card");
-    if(!firstCard) return;
-
-    const stepWidth = (firstCard.offsetWidth + 16) * 2; // دو کارڈز آگے بڑھنا
-    featStepIndex++;
-
-    track.style.transition = 'transform 0.5s ease-out';
-    track.style.transform = `translateX(-${featStepIndex * stepWidth}px)`;
-
-    // نصف سفر کے بعد خاموشی سے ری سیٹ ہونا
-    if(featStepIndex >= Math.floor(featuredItems.length / 2)){
-      setTimeout(() => {
-        track.style.transition = 'none';
-        featStepIndex = 0;
-        track.style.transform = `translateX(0px)`;
-      }, 550);
-    }
-  }, 3000);
 }
 
 async function loadOffers(){

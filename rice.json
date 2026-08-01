@@ -13,7 +13,7 @@
     ],
     "available": true,
     "image": "products/rice-0-1785064481617.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Sela Zafran (Purana)"
   },
   {
@@ -98,7 +98,7 @@
     ],
     "available": true,
     "image": "products/rice-5-1785064353535.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Sela Tota (Purana) — Baba Fareed"
   },
   {

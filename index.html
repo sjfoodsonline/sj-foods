@@ -1255,11 +1255,11 @@ function initFeaturedMarquee(wrap){
   });
 }
 
-function renderFeatured(){
-  const featuredItems = ITEMS.filter(it => it.featured && it.available);
-  featuredItems.sort(() => Math.random() - 0.5);
-  const sectionEl = document.getElementById("featuredSection");
-  if(featuredItems.length === 0){
+1258 function renderFeatured(){
+1259   const featuredItems = ITEMS.filter(it => it.featured && it.available);
+1260   featuredItems.sort(() => Math.random() - 0.5);
+1261   const scrollEl = document.getElementById("featuredScroll");
+1262   const sectionEl = document.getElementById("featuredSection");
     sectionEl.classList.add("hidden");
     return;
   }

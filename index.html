@@ -53,7 +53,7 @@ async function loadRates(){
     }));
     ITEMS = buildItemsFromCategories(combined);
   }catch(e){
-    loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
+    if(loadingMsg) loadingMsg.textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی، براہ کرم صفحہ دوبارہ کھولیں";
     console.error(e);
   }
 }
@@ -66,14 +66,23 @@ async function loadSettings(){
     if(s.pay_number) SHOP_PAY_NUMBER = s.pay_number;
     if(s.email) SHOP_EMAIL = s.email;
     if(s.cover_image){
-      document.getElementById("coverImg").src = s.cover_image;
-      document.getElementById("coverBanner").style.display = "block";
+      const coverImg = document.getElementById("coverImg");
+      const coverBanner = document.getElementById("coverBanner");
+      if(coverImg) coverImg.src = s.cover_image;
+      if(coverBanner) coverBanner.style.display = "block";
     }
-    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
-    document.getElementById("footerContact").textContent = `📞 ${SHOP_PAY_NUMBER}   📧 ${SHOP_EMAIL}`;
-    document.getElementById("noteContact").textContent = SHOP_PAY_NUMBER;
-    document.getElementById("noteEmail").textContent = SHOP_EMAIL;
-    if(s.address) document.getElementById("footerAddress").textContent = s.address;
+    const payNum = document.getElementById("payNumber");
+    const footCont = document.getElementById("footerContact");
+    const noteCont = document.getElementById("noteContact");
+    const noteEm = document.getElementById("noteEmail");
+    const footAddr = document.getElementById("footerAddress");
+
+    if(payNum) payNum.textContent = SHOP_PAY_NUMBER;
+    if(footCont) footCont.textContent = `📞 ${SHOP_PAY_NUMBER}   📧 ${SHOP_EMAIL}`;
+    if(noteCont) noteCont.textContent = SHOP_PAY_NUMBER;
+    if(noteEm) noteEm.textContent = SHOP_EMAIL;
+    if(s.address && footAddr) footAddr.textContent = s.address;
+    
     refreshHeroLinks();
     renderSocialLinks(s);
   }catch(e){
@@ -81,7 +90,47 @@ async function loadSettings(){
   }
 }
 
+// ---------------- Drag / Touch Scroll Handler ----------------
+function enableManualScroll(wrap){
+  if(!wrap) return;
+  let isDown = false;
+  let startX, scrollLeft;
+
+  wrap.style.overflowX = "auto";
+  wrap.style.cursor = "grab";
+  wrap.style.webkitOverflowScrolling = "touch";
+
+  wrap.addEventListener('mousedown', (e) => {
+    isDown = true;
+    wrap.style.cursor = 'grabbing';
+    startX = e.pageX - wrap.offsetLeft;
+    scrollLeft = wrap.scrollLeft;
+    wrap.classList.add("is-paused");
+  });
+
+  wrap.addEventListener('mouseleave', () => {
+    isDown = false;
+    wrap.style.cursor = 'grab';
+    wrap.classList.remove("is-paused");
+  });
+
+  wrap.addEventListener('mouseup', () => {
+    isDown = false;
+    wrap.style.cursor = 'grab';
+    wrap.classList.remove("is-paused");
+  });
+
+  wrap.addEventListener('mousemove', (e) => {
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - wrap.offsetLeft;
+    const walk = (x - startX) * 2; 
+    wrap.scrollLeft = scrollLeft - walk;
+  });
+}
+
 function renderChips(){
+  if(!chipsEl) return;
   if(CATEGORIES_META.length === 0){
     chipsEl.innerHTML = "";
     return;
@@ -110,6 +159,8 @@ function renderChips(){
     secPerItem: 3.2
   });
 
+  enableManualScroll(catWrap);
+
   chipsEl.querySelectorAll(".cat-chip").forEach(btn=>{
     btn.onclick = ()=>{
       const el = document.getElementById("cat-"+btn.dataset.cat);
@@ -119,6 +170,7 @@ function renderChips(){
 }
 
 function renderList(filter){
+  if(!listEl) return;
   listEl.innerHTML = "";
   const f = (filter||"").trim();
   let anyShown = false;
@@ -186,7 +238,7 @@ function renderList(filter){
     });
   });
 
-  noResultEl.style.display = anyShown ? "none" : "block";
+  if(noResultEl) noResultEl.style.display = anyShown ? "none" : "block";
 
   listEl.querySelectorAll(".minus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, -1));
   listEl.querySelectorAll(".plus").forEach(b=> b.onclick = ()=> changeQty(b.dataset.id, 1));
@@ -206,13 +258,13 @@ function findItem(id){ return ITEMS.find(i=>i.id===id); }
 
 function changeQty(id, delta){
   const it = findItem(id);
-  if(!it.available) return;
+  if(!it || !it.available) return;
   it.qty = Math.max(0, it.qty + delta);
   syncAfterChange(it);
 }
 function setQty(id, val){
   const it = findItem(id);
-  if(!it.available) return;
+  if(!it || !it.available) return;
   it.qty = Math.max(0, val);
   syncAfterChange(it);
 }
@@ -220,7 +272,8 @@ function syncAfterChange(it){
   const row = document.getElementById("row-"+it.id);
   if(row){
     row.classList.toggle("active", it.qty>0);
-    row.querySelector('input[type="number"]').value = it.qty;
+    const input = row.querySelector('input[type="number"]');
+    if(input) input.value = it.qty;
   }
   renderBill();
 }
@@ -238,38 +291,46 @@ const payAmountEl = document.getElementById("payAmount");
 
 function renderBill(){
   const chosen = ITEMS.filter(i=>i.qty>0);
-  billLines.innerHTML = "";
+  if(billLines) billLines.innerHTML = "";
   let subtotal = 0;
   chosen.forEach(it=>{
     const lineTotal = it.qty * currentRate(it);
     subtotal += lineTotal;
-    const line = document.createElement("div");
-    line.className = "bill-line";
-    line.innerHTML = `<span class="l-name">${dispName(it)} × ${it.qty} ${currentLabel(it)}</span><span class="l-val">${fmt(lineTotal)}</span>`;
-    billLines.appendChild(line);
+    if(billLines){
+      const line = document.createElement("div");
+      line.className = "bill-line";
+      line.innerHTML = `<span class="l-name">${dispName(it)} × ${it.qty} ${currentLabel(it)}</span><span class="l-val">${fmt(lineTotal)}</span>`;
+      billLines.appendChild(line);
+    }
   });
 
-  itemCountEl.textContent = chosen.length;
-  summaryTotalEl.textContent = fmt(subtotal);
-  finalTotalEl.textContent = fmt(subtotal);
-  payAmountEl.textContent = fmt(subtotal);
+  if(itemCountEl) itemCountEl.textContent = chosen.length;
+  if(summaryTotalEl) summaryTotalEl.textContent = fmt(subtotal);
+  if(finalTotalEl) finalTotalEl.textContent = fmt(subtotal);
+  if(payAmountEl) payAmountEl.textContent = fmt(subtotal);
 
-  if(chosen.length===0) billbar.classList.add("collapsed");
+  if(chosen.length===0 && billbar) billbar.classList.add("collapsed");
 }
 
-document.getElementById("summary").onclick = ()=> billbar.classList.toggle("collapsed");
-document.getElementById("handle").onclick = ()=> billbar.classList.toggle("collapsed");
+const summaryBtn = document.getElementById("summary");
+const handleBtn = document.getElementById("handle");
+if(summaryBtn) summaryBtn.onclick = ()=> billbar && billbar.classList.toggle("collapsed");
+if(handleBtn) handleBtn.onclick = ()=> billbar && billbar.classList.toggle("collapsed");
 
-document.getElementById("copyNumBtn").onclick = async ()=>{
-  try{
-    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
-    showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){
-    showToast("نمبر: " + SHOP_PAY_NUMBER);
-  }
-};
+const copyBtn = document.getElementById("copyNumBtn");
+if(copyBtn){
+  copyBtn.onclick = async ()=>{
+    try{
+      await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
+      showToast("✅ نمبر کاپی ہوگیا");
+    }catch(e){
+      showToast("نمبر: " + SHOP_PAY_NUMBER);
+    }
+  };
+}
 
-document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
+const searchEl = document.getElementById("search");
+if(searchEl) searchEl.addEventListener("input", (e)=> renderList(e.target.value));
 
 // ---------------- Area & payment method logic ----------------
 const areaSelect = document.getElementById("custArea");
@@ -280,35 +341,40 @@ const lblEasy = document.getElementById("lblEasy");
 const areaNote = document.getElementById("areaNote");
 
 function updatePayMethodUI(){
-  lblCod.classList.toggle("checked", payCod.checked);
-  lblEasy.classList.toggle("checked", payEasy.checked);
+  if(lblCod && payCod) lblCod.classList.toggle("checked", payCod.checked);
+  if(lblEasy && payEasy) lblEasy.classList.toggle("checked", payEasy.checked);
 }
 
-areaSelect.addEventListener("change", ()=>{
-  const val = areaSelect.value;
-  if(val === "outside"){
-    payCod.checked = false;
-    payCod.disabled = true;
-    lblCod.classList.add("disabled");
-    payEasy.checked = true;
-    areaNote.className = "area-note warn";
-    areaNote.textContent = "⚠️ اس علاقے میں ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے";
-  } else if(val === "inside"){
-    payCod.disabled = false;
-    lblCod.classList.remove("disabled");
-    payCod.checked = true;
-    areaNote.className = "area-note ok";
-    areaNote.textContent = "✅ کیش آن ڈیلیوری دستیاب ہے — اگر ایزی پیسہ ایڈوانس ادا کریں تو آرڈر مزید تیزی سے پراسیس ہوگا";
-  } else {
-    payCod.disabled = false;
-    lblCod.classList.remove("disabled");
-    payCod.checked = false; payEasy.checked = false;
-    areaNote.className = "area-note";
-  }
-  updatePayMethodUI();
-});
-payCod.addEventListener("change", updatePayMethodUI);
-payEasy.addEventListener("change", updatePayMethodUI);
+if(areaSelect){
+  areaSelect.addEventListener("change", ()=>{
+    const val = areaSelect.value;
+    if(val === "outside"){
+      if(payCod){ payCod.checked = false; payCod.disabled = true; }
+      if(lblCod) lblCod.classList.add("disabled");
+      if(payEasy) payEasy.checked = true;
+      if(areaNote){
+        areaNote.className = "area-note warn";
+        areaNote.textContent = "⚠️ اس علاقے میں ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے";
+      }
+    } else if(val === "inside"){
+      if(payCod){ payCod.disabled = false; payCod.checked = true; }
+      if(lblCod) lblCod.classList.remove("disabled");
+      if(areaNote){
+        areaNote.className = "area-note ok";
+        areaNote.textContent = "✅ کیش آن ڈیلیوری دستیاب ہے — اگر ایزی پیسہ ایڈوانس ادا کریں تو آرڈر مزید تیزی سے پراسیس ہوگا";
+      }
+    } else {
+      if(payCod) payCod.disabled = false;
+      if(lblCod) lblCod.classList.remove("disabled");
+      if(payCod) payCod.checked = false; 
+      if(payEasy) payEasy.checked = false;
+      if(areaNote) areaNote.className = "area-note";
+    }
+    updatePayMethodUI();
+  });
+}
+if(payCod) payCod.addEventListener("change", updatePayMethodUI);
+if(payEasy) payEasy.addEventListener("change", updatePayMethodUI);
 
 function areaLabel(v){ return v==="inside" ? "مینگورہ شہر کے اندر" : v==="outside" ? "مینگورہ سے باہر / سائیڈ ایریا" : "نامعلوم"; }
 function payLabel(v){ return v==="easypaisa" ? "ایزی پیسہ ایڈوانس" : "کیش آن ڈیلیوری"; }
@@ -337,25 +403,32 @@ function buildMessage(name, phone, addr, area, payMethod){
   return msg;
 }
 
-document.getElementById("sendBtn").onclick = ()=>{
-  const name = document.getElementById("custName").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
-  const addr = document.getElementById("custAddr").value.trim();
-  const area = areaSelect.value;
-  const payMethod = payCod.checked ? "cod" : payEasy.checked ? "easypaisa" : "";
+const sendBtn = document.getElementById("sendBtn");
+if(sendBtn){
+  sendBtn.onclick = ()=>{
+    const nameEl = document.getElementById("custName");
+    const phoneEl = document.getElementById("custPhone");
+    const addrEl = document.getElementById("custAddr");
 
-  const chosen = ITEMS.filter(i=>i.qty>0);
-  if(chosen.length === 0){ showToast("❌ برائے مہربانی پہلے اشیاء منتخب کریں"); return; }
-  if(!name){ showToast("❌ اپنا نام درج کریں"); return; }
-  if(!phone){ showToast("❌ اپنا موبائل نمبر درج کریں"); return; }
-  if(!addr){ showToast("❌ اپنا مکمل پتہ درج کریں"); return; }
-  if(!area){ showToast("❌ اپنا علاقہ منتخب کریں"); return; }
-  if(!payMethod){ showToast("❌ ادائیگی کا طریقہ منتخب کریں"); return; }
+    const name = nameEl ? nameEl.value.trim() : "";
+    const phone = phoneEl ? phoneEl.value.trim() : "";
+    const addr = addrEl ? addrEl.value.trim() : "";
+    const area = areaSelect ? areaSelect.value : "";
+    const payMethod = (payCod && payCod.checked) ? "cod" : (payEasy && payEasy.checked) ? "easypaisa" : "";
 
-  const msg = buildMessage(name, phone, addr, area, payMethod);
-  const url = "https://wa.me/" + SHOP_WHATSAPP + "?text=" + encodeURIComponent(msg);
-  window.open(url, "_blank");
-};
+    const chosen = ITEMS.filter(i=>i.qty>0);
+    if(chosen.length === 0){ showToast("❌ برائے مہربانی پہلے اشیاء منتخب کریں"); return; }
+    if(!name){ showToast("❌ اپنا نام درج کریں"); return; }
+    if(!phone){ showToast("❌ اپنا موبائل نمبر درج کریں"); return; }
+    if(!addr){ showToast("❌ اپنا مکمل پتہ درج کریں"); return; }
+    if(!area){ showToast("❌ اپنا علاقہ منتخب کریں"); return; }
+    if(!payMethod){ showToast("❌ ادائیگی کا طریقہ منتخب کریں"); return; }
+
+    const msg = buildMessage(name, phone, addr, area, payMethod);
+    const url = "https://wa.me/" + SHOP_WHATSAPP + "?text=" + encodeURIComponent(msg);
+    window.open(url, "_blank");
+  };
+}
 
 function showToast(txt){
   const t = document.createElement("div");
@@ -368,7 +441,6 @@ function showToast(txt){
 // ---------------- Featured products ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
-  // صرف انگلش/رومن نام دکھانے کے لیے
   const englishName = it.name_roman || it.name;
   return `
     <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${englishName}">
@@ -437,12 +509,14 @@ function initFeaturedMarquee(wrap){
 }
 
 function renderFeatured(){
-  // نمایاں اشیاء کی شفلنگ (Random Order)
   let featuredItems = ITEMS.filter(it => it.featured && it.available);
+  // فیچرڈ اشیاء کی شفلنگ (Random Order)
   featuredItems.sort(() => Math.random() - 0.5);
 
   const sectionEl = document.getElementById("featuredSection");
   const scrollEl = document.getElementById("featuredScroll");
+
+  if(!sectionEl || !scrollEl) return;
 
   if(featuredItems.length === 0){
     sectionEl.classList.add("hidden");
@@ -460,6 +534,7 @@ function renderFeatured(){
     </div>`;
   const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
   initFeaturedMarquee(marqueeWrap);
+  enableManualScroll(marqueeWrap);
   bindFeaturedCards(scrollEl);
 }
 
@@ -481,6 +556,8 @@ function renderOffers(){
   const wrap = document.getElementById("offersSection");
   const track = document.getElementById("offersTrack");
   const dotsEl = document.getElementById("offersDots");
+  if(!wrap || !track || !dotsEl) return;
+
   if(!OFFERS || OFFERS.length===0){
     wrap.style.display = "none";
     return;
@@ -547,7 +624,7 @@ const modalCaption = document.getElementById("modalCaption");
 
 document.addEventListener("click", (e)=>{
   const thumb = e.target.closest(".item-thumb");
-  if(thumb){
+  if(thumb && modal && modalImg && modalCaption){
     const imgSrc = thumb.dataset.img;
     const name = thumb.dataset.name;
     if(imgSrc){
@@ -558,11 +635,13 @@ document.addEventListener("click", (e)=>{
   }
 });
 
-modal.onclick = (e)=>{
-  if(e.target === modal || e.target.classList.contains("modal-close")){
-    modal.classList.remove("active");
-  }
-};
+if(modal){
+  modal.onclick = (e)=>{
+    if(e.target === modal || e.target.classList.contains("modal-close")){
+      modal.classList.remove("active");
+    }
+  };
+}
 
 // ---------------- Initialize ----------------
 (async function init(){

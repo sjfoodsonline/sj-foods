@@ -9,7 +9,7 @@
     ],
     "available": true,
     "image": "products/bakery-0-1785163115765.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Gulab Jamun"
   },
   {
@@ -48,7 +48,7 @@
     ],
     "available": true,
     "image": "products/bakery-3-1785163270607.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Special Barfi"
   },
   {
@@ -100,7 +100,7 @@
     ],
     "available": true,
     "image": "products/bakery-7-1785163402041.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Cake Ras"
   },
   {
@@ -178,7 +178,7 @@
     ],
     "available": true,
     "image": "products/bakery-13-1785163638094.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Chicken Roll"
   },
   {
@@ -191,7 +191,7 @@
     ],
     "available": true,
     "image": "products/bakery-14-1785163671194.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Dry Biscuit"
   },
   {
@@ -230,7 +230,7 @@
     ],
     "available": true,
     "image": "products/bakery-17-1785163750161.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Sheermal (200g)"
   },
   {
@@ -269,7 +269,7 @@
     ],
     "available": true,
     "image": "products/bakery-20-1785163909662.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Fresh Cream Cake"
   },
   {
@@ -321,7 +321,7 @@
     ],
     "available": true,
     "image": "products/bakery-24-1785164101116.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Qeema Samosa"
   },
   {
@@ -360,7 +360,7 @@
     ],
     "available": true,
     "image": "products/bakery-27-1785164241744.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Sandwich"
   },
   {
@@ -464,7 +464,7 @@
     ],
     "available": true,
     "image": "products/bakery-35-1785164558724.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Namkoo"
   },
   {

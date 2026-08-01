@@ -42,7 +42,7 @@
   body.dark .item, body.dark #billbar, body.dark .install-card, body.dark .checkout-box input{
     background:var(--card); color:var(--ink);
   }
-  body.dark .chip{background:var(--card); border-color:var(--line);}
+  body.dark .cat-list-item{background:var(--card); border-color:var(--line);}
   body.dark #search{background:var(--card); color:var(--ink); border-color:var(--line);}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -63,7 +63,7 @@
     #billbar{ left:50%; right:auto; width:100%; max-width:var(--app-w); transform:translateX(-50%); }
     .fab{ left:calc(50% - (var(--app-w) / 2) + 14px); }
     .toast{ left:50%; }
-    .search-wrap, .chips-wrapper{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
+    .search-wrap, .cat-section{ max-width:var(--app-w); margin-left:auto; margin-right:auto; }
     .install-overlay, .lightbox, .policy-overlay{ background:rgba(21,58,32,0.55); }
     .install-card, .policy-sheet{ max-width:420px; }
   }
@@ -94,65 +94,28 @@
   }
   #search:focus{border-color:var(--mid);}
 
-  /* ---- ANIMATED POP-UP CATEGORY CHIPS CONTAINER ---- */
-  .chips-wrapper{
-    position:sticky; top:52px; background:var(--paper); z-index:19;
-    padding:10px 16px; display:flex; justify-content:center; align-items:center;
-    perspective: 600px;
+  .cat-section{padding:8px 0 4px; position:sticky; top:52px; background:var(--paper); z-index:19;}
+  .cat-section-title{margin:8px 16px 6px; font-size:14px;}
+  .cat-list{
+    display:flex; flex-direction:column; gap:6px;
+    max-height:min(42vh, 280px); overflow-y:auto; overflow-x:hidden;
+    padding:0 16px 8px; scrollbar-width:thin; scrollbar-color:var(--mid) transparent;
   }
-  .animated-chip-box{
-    width: 100%; max-width: 320px; height: 44px; position: relative;
+  .cat-list::-webkit-scrollbar{width:5px;}
+  .cat-list::-webkit-scrollbar-thumb{background:var(--mid); border-radius:4px;}
+  .cat-list-item{
+    display:flex; align-items:center; gap:10px; width:100%;
+    background:var(--card); color:var(--dark);
+    border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; font-size:13.5px; font-weight:700;
+    cursor:pointer; transition:background .18s, border-color .18s, transform .12s;
+    flex-shrink:0; font-family:inherit; text-align:right;
   }
-  .chip-single{
-    position: absolute; inset:0;
-    background:var(--leaf); color:var(--dark);
-    border:1.5px solid #cfe8d1; border-radius:22px;
-    font-size:15px; font-weight:700;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    cursor:pointer; opacity:0; pointer-events:none;
-    transform: rotateX(-90deg) scale(0.85);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-  }
-  .chip-single.active{
-    opacity:1; pointer-events:auto;
-    transform: rotateX(0deg) scale(1);
-  }
-  .chip-single.exit{
-    opacity:0; pointer-events:none;
-    transform: rotateX(90deg) scale(0.85);
-  }
-
-  /* ---- ANIMATED POP-UP FEATURED BOX ---- */
-  .featured-container{
-    margin:10px 16px; perspective: 600px;
-  }
-  .animated-featured-box{
-    width:100%; height:130px; position:relative;
-  }
-  .featured-single{
-    position:absolute; inset:0;
-    background:var(--card); border:1.5px solid var(--line); border-radius:16px;
-    padding:10px 14px; display:flex; align-items:center; gap:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,0.05);
-    opacity:0; pointer-events:none;
-    transform: rotateX(-90deg) scale(0.85);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-  }
-  .featured-single.active{
-    opacity:1; pointer-events:auto;
-    transform: rotateX(0deg) scale(1);
-  }
-  .featured-single.exit{
-    opacity:0; pointer-events:none;
-    transform: rotateX(90deg) scale(0.85);
-  }
-  .featured-single img{
-    width:90px; height:90px; object-fit:cover; border-radius:12px; background:var(--leaf); flex:0 0 90px;
-  }
-  .featured-single .f-info{ flex:1; min-width:0; }
-  .featured-single .fname{ font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-  .featured-single .frate{ font-size:15px; color:var(--price); font-weight:700; }
+  .cat-list-item:hover{background:var(--leaf); border-color:#cfe8d1;}
+  .cat-list-item:active{transform:scale(0.985);}
+  .cat-list-item .ic{font-size:20px; flex:0 0 28px; text-align:center;}
+  .cat-list-item .nm{flex:1; line-height:1.35;}
+  .cat-list-item .go{font-size:14px; opacity:.45; flex:0 0 auto;}
 
   main{padding:6px 16px 10px;}
   .cat-title{
@@ -351,6 +314,14 @@
     display:flex; align-items:center; justify-content:center;
   }
 
+  /* ---- free delivery badge ---- */
+  .delivery-badge{
+    margin:12px 16px 0; background:linear-gradient(135deg,#FFF8E1,#FFECB3);
+    border:1.5px dashed var(--gold); border-radius:14px; padding:10px 14px; text-align:center;
+  }
+  .delivery-badge .main{color:#8A6D00; font-weight:800; font-size:13.5px;}
+  .delivery-badge .sub{color:#8A6D00; font-size:11px; margin-top:2px; opacity:.85;}
+
   /* ---- feature badges scroll ---- */
   .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
   .features-scroll::-webkit-scrollbar{display:none;}
@@ -361,7 +332,50 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 4px; padding-right:8px; border-right:4px solid var(--gold);}
+  /* ---- featured / offers ---- */
+  .hidden{display:none !important;}
+  .section-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 16px 8px; padding-right:8px; border-right:4px solid var(--gold);}
+  .featured-section{margin:4px 0 8px;}
+  .featured-marquee-wrap{
+    overflow:hidden; position:relative; padding:4px 0 8px;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .featured-marquee-track{
+    display:flex; width:max-content; gap:12px;
+    animation:featured-marquee 48s linear infinite;
+    will-change:transform;
+  }
+  .featured-marquee-wrap.is-paused .featured-marquee-track{animation-play-state:paused;}
+  .featured-marquee-set{display:flex; gap:12px; flex:0 0 auto;}
+  @keyframes featured-marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .featured-marquee-track{animation:none !important;}
+    .featured-marquee-wrap{overflow-x:auto; -webkit-mask-image:none; mask-image:none; padding:0 16px 8px;}
+    .featured-marquee-track{display:flex; flex-wrap:nowrap; width:auto; gap:12px;}
+    .featured-marquee-set:last-child{display:none;}
+  }
+  .featured-card{
+    flex:0 0 138px; background:var(--card);
+    border:1.5px solid rgba(201,162,39,0.45); border-radius:14px;
+    padding:8px; text-align:center; cursor:pointer;
+    box-shadow:0 3px 12px rgba(21,58,32,0.08);
+    transition:transform .2s, box-shadow .2s, border-color .2s;
+    position:relative; overflow:hidden;
+  }
+  .featured-card::before{
+    content:"⭐"; position:absolute; top:6px; left:6px; font-size:11px;
+    background:rgba(255,255,255,0.92); border-radius:50%; width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,0.12);
+  }
+  .featured-card:hover{transform:translateY(-3px); box-shadow:0 6px 18px rgba(21,58,32,0.14); border-color:var(--gold);}
+  .featured-card img{width:100%; height:84px; object-fit:cover; border-radius:10px; background:var(--leaf);}
+  .featured-card .fname{font-size:12px; font-weight:700; margin-top:6px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:700; margin-top:3px;}
 
   .offer-slider{margin:14px 16px 0; border-radius:16px; overflow:hidden; position:relative;}
   .offer-slide{
@@ -434,6 +448,8 @@
   <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
+
+
 <div class="features-scroll">
   <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
   <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
@@ -447,10 +463,9 @@
 
 <div class="offer-slider hidden" id="offerSlider"></div>
 
-<!-- FEATURED ITEMS ANIMATED CONTAINER -->
-<div class="section-title hidden" id="featuredTitle">⭐ نمایاں اشیاء</div>
-<div class="featured-container hidden" id="featuredContainer">
-  <div class="animated-featured-box" id="animatedFeaturedBox"></div>
+<div class="featured-section hidden" id="featuredSection">
+  <div class="section-title" id="featuredTitle">⭐ نمایاں اشیاء</div>
+  <div id="featuredScroll"></div>
 </div>
 
 <button class="install-btn" id="installBtn">📲 ایپ انسٹال کریں</button>
@@ -467,9 +482,9 @@
   <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
 </div>
 
-<!-- POP-UP LOOP ANIMATED CATEGORY CHIP -->
-<div class="chips-wrapper">
-  <div class="animated-chip-box" id="animatedChipBox"></div>
+<div class="cat-section">
+  <div class="section-title cat-section-title">📂 کیٹگریز</div>
+  <div class="cat-list" id="chips"></div>
 </div>
 
 <main id="list"></main>
@@ -568,11 +583,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// =========================================================
+// Rates are loaded from rates.json in this same folder.
+// To change prices: open rates.json in this GitHub repo,
+// click the pencil (edit) icon, change the "rate" numbers
+// or "available" true/false, then commit — the site updates
+// automatically within a minute.
+// =========================================================
 let CATEGORIES_META = [];
 let ITEMS = [];
 
 const listEl = document.getElementById("list");
-const animatedChipBox = document.getElementById("animatedChipBox");
+const chipsEl = document.getElementById("chips");
 const noResultEl = document.getElementById("noResult");
 const loadingMsg = document.getElementById("loadingMsg");
 const billbar = document.getElementById("billbar");
@@ -646,48 +668,23 @@ async function loadSettings(){
     refreshHeroLinks();
     renderSocialLinks(s);
   }catch(e){
+    // settings.json not found yet — site still works with defaults
   }
 }
 
-/* ---------------- SINGLE POP-UP LOOP CATEGORY ANIMATION ---------------- */
-let catInterval = null;
-function startCategoryLoopAnimation(){
-  if(!CATEGORIES_META.length) return;
-  animatedChipBox.innerHTML = "";
-
-  CATEGORIES_META.forEach((cat, idx) => {
-    const el = document.createElement("div");
-    el.className = "chip-single" + (idx === 0 ? " active" : "");
-    el.innerHTML = `<span>${cat.icon} ${dispCatName(cat)}</span>`;
-    el.onclick = () => {
-      const target = document.getElementById("cat-" + cat.name);
-      if(target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+function renderChips(){
+  chipsEl.innerHTML = "";
+  CATEGORIES_META.forEach(cat=>{
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "cat-list-item";
+    row.innerHTML = `<span class="ic">${cat.icon}</span><span class="nm">${dispCatName(cat)}</span><span class="go">←</span>`;
+    row.onclick = ()=>{
+      const el = document.getElementById("cat-"+cat.name);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
     };
-    animatedChipBox.appendChild(el);
+    chipsEl.appendChild(row);
   });
-
-  if(CATEGORIES_META.length <= 1) return;
-
-  let currentIdx = 0;
-  if(catInterval) clearInterval(catInterval);
-
-  catInterval = setInterval(() => {
-    const chips = animatedChipBox.querySelectorAll(".chip-single");
-    if(!chips.length) return;
-
-    chips[currentIdx].classList.remove("active");
-    chips[currentIdx].classList.add("exit");
-
-    const prevIdx = currentIdx;
-    currentIdx = (currentIdx + 1) % chips.length;
-
-    chips[currentIdx].classList.remove("exit");
-    chips[currentIdx].classList.add("active");
-
-    setTimeout(() => {
-      chips[prevIdx].classList.remove("exit");
-    }, 500);
-  }, 2800);
 }
 
 function renderList(filter){
@@ -749,7 +746,7 @@ function renderList(filter){
         <div class="item-row-bottom">
           ${(it.available && multi) ? `<select class="unit-select" data-id="${it.id}">${unitOptionsHtml}</select>` : `<span></span>`}
           <div class="qty-box">
-            <button class="minus" data-id="${it.id}" ${!it.available?"disabled":""}>−` + `</button>
+            <button class="minus" data-id="${it.id}" ${!it.available?"disabled":""}>−</button>
             <input type="number" min="0" value="${it.qty}" data-id="${it.id}" ${!it.available?"disabled":""}>
             <button class="plus" data-id="${it.id}" ${!it.available?"disabled":""}>+</button>
           </div>
@@ -797,6 +794,7 @@ function syncAfterChange(it){
   renderBill();
 }
 
+// ---------------- Bill panel ----------------
 let SHOP_WHATSAPP = "923349353799";
 let SHOP_PAY_NUMBER = "0334-9353799";
 let SHOP_EMAIL = "sjfoodsonline@outlook.com";
@@ -842,6 +840,7 @@ document.getElementById("copyNumBtn").onclick = async ()=>{
 
 document.getElementById("search").addEventListener("input", (e)=> renderList(e.target.value));
 
+// ---------------- Area & payment method logic ----------------
 const areaSelect = document.getElementById("custArea");
 const payCod = document.getElementById("payCod");
 const payEasy = document.getElementById("payEasy");
@@ -952,67 +951,12 @@ document.getElementById("clearBtn").onclick = ()=>{
   billbar.classList.add("collapsed");
 };
 
-/* ---------------- FEATURED ITEMS ANIMATED POP-UP LOOP ---------------- */
-let featInterval = null;
-function renderFeatured(){
-  const fItems = ITEMS.filter(it => it.featured);
-  const title = document.getElementById("featuredTitle");
-  const container = document.getElementById("featuredContainer");
-  const box = document.getElementById("animatedFeaturedBox");
-
-  if(!fItems.length){
-    title.classList.add("hidden");
-    container.classList.add("hidden");
-    return;
-  }
-
-  title.classList.remove("hidden");
-  container.classList.remove("hidden");
-  box.innerHTML = "";
-
-  fItems.forEach((it, idx) => {
-    const el = document.createElement("div");
-    el.className = "featured-single" + (idx === 0 ? " active" : "");
-    el.innerHTML = `
-      <img src="${it.image || 'icon-192.png'}" alt="${dispName(it)}">
-      <div class="f-info">
-        <div class="fname">${dispName(it)}</div>
-        <div class="frate">${currentLabel(it)} — ${fmt(currentRate(it))}</div>
-      </div>
-    `;
-    box.appendChild(el);
-  });
-
-  if(fItems.length <= 1) return;
-
-  let currentIdx = 0;
-  if(featInterval) clearInterval(featInterval);
-
-  featInterval = setInterval(() => {
-    const slides = box.querySelectorAll(".featured-single");
-    if(!slides.length) return;
-
-    slides[currentIdx].classList.remove("active");
-    slides[currentIdx].classList.add("exit");
-
-    const prevIdx = currentIdx;
-    currentIdx = (currentIdx + 1) % slides.length;
-
-    slides[currentIdx].classList.remove("exit");
-    slides[currentIdx].classList.add("active");
-
-    setTimeout(() => {
-      slides[prevIdx].classList.remove("exit");
-    }, 500);
-  }, 3200);
-}
-
 // ---------------- init ----------------
 (async function init(){
   await Promise.all([loadRates(), loadSettings()]);
   loadingMsg.style.display = "none";
   billbar.style.display = "flex";
-  startCategoryLoopAnimation();
+  renderChips();
   renderList("");
   renderBill();
   renderFeatured();
@@ -1038,7 +982,7 @@ const isIOS = /iphone|ipad|ipod/i.test(ua);
 function showInstallButton(){
   if(!isStandalone) installBtn.style.display = "flex";
 }
-if(!isStandalone) showInstallButton();
+if(!isStandalone) showInstallButton(); // show by default; Android will also get native prompt when ready
 
 window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
@@ -1125,20 +1069,147 @@ function closeLightboxImg(){
 document.addEventListener("click", (e)=>{
   const thumb = e.target.closest(".item-thumb");
   if(thumb && thumb.dataset.img){
-    openLightboxImg(thumb.dataset.img, thumb.dataset.name || "");
+    openLightboxImg(thumb.dataset.img, thumb.dataset.name);
   }
 });
 
-document.getElementById("closeLightbox").onclick = closeLightboxImg;
+// closing via the X button or tapping the dark backdrop: go back in history
+// so the pushed state is consumed and the phone's back button stays in sync
+document.getElementById("closeLightbox").onclick = ()=>{
+  if(lightboxOpen) history.back(); else closeLightboxImg();
+};
 lightbox.onclick = (e)=>{
-  if(e.target === lightbox) closeLightboxImg();
+  if(e.target===lightbox){ if(lightboxOpen) history.back(); else closeLightboxImg(); }
 };
 
-window.addEventListener("popstate", (e)=>{
-  if(lightboxOpen){
-    closeLightboxImg();
-  }
+// phone/browser back button: just close the lightbox, never leave the page
+window.addEventListener("popstate", ()=>{
+  if(lightboxOpen) closeLightboxImg();
 });
+
+// image zoom is now purely natural pinch-zoom-with-fingers (browser native),
+// no forced/automatic zoom level — matches how much the person actually pinches
+
+// ---------------- Policy modal ----------------
+const policyOverlay = document.getElementById("policyOverlay");
+const policyTitle = document.getElementById("policyTitle");
+const policyBody = document.getElementById("policyBody");
+const POLICIES = {
+  privacy: {
+    title: "🔒 پرائیویسی پالیسی",
+    body: `<p>ہم آپ کا نام، رابطہ نمبر اور پتہ صرف آپ کا آرڈر مکمل کرنے اور ڈیلیوری کے لیے استعمال کرتے ہیں۔ یہ معلومات کسی تیسرے فریق کو فروخت یا شیئر نہیں کی جاتیں۔ آرڈر واٹس ایپ کے ذریعے بھیجا جاتا ہے، اس لیے آپ کی گفتگو واٹس ایپ کی اپنی پرائیویسی پالیسی کے تحت محفوظ رہتی ہے۔</p>`
+  },
+  terms: {
+    title: "📜 شرائط و ضوابط",
+    body: `<p>• تمام قیمتیں مارکیٹ ریٹ کے مطابق تبدیل ہو سکتی ہیں۔<br>• آرڈر کی حتمی تصدیق واٹس ایپ پر ہوگی۔<br>• ڈیلیوری چارج راستے کے حساب سے ہوگا، موقع پر ادا کریں۔<br>• مینگورہ شہر سے باہر ڈیلیوری کے لیے ایزی پیسہ ایڈوانس ادائیگی لازمی ہے۔<br>• اگر سامان واقعی زیادہ خراب یا غلط معیار کا نکلے تو جانچ کے بعد تبدیل کر دیا جائے گا۔</p>`
+  }
+};
+function openPolicy(key){
+  policyTitle.textContent = POLICIES[key].title;
+  policyBody.innerHTML = POLICIES[key].body;
+  policyOverlay.classList.remove("hidden");
+}
+document.getElementById("openPrivacy").onclick = ()=> openPolicy("privacy");
+document.getElementById("openTerms").onclick = ()=> openPolicy("terms");
+document.getElementById("closePolicy").onclick = ()=> policyOverlay.classList.add("hidden");
+policyOverlay.onclick = (e)=>{ if(e.target===policyOverlay) policyOverlay.classList.add("hidden"); };
+
+// ---------------- Social links (from settings.json, shown only if provided) ----------------
+function renderSocialLinks(s){
+  const box = document.getElementById("footerSocial");
+  box.innerHTML = "";
+  if(s.facebook_url) box.innerHTML += `<a href="${s.facebook_url}" target="_blank">📘 فیس بک</a>`;
+  if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
+}
+
+// ---------------- Featured products (only shows if items are flagged "featured": true in category JSON) ----------------
+function featuredCardHtml(it){
+  const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
+  return `
+    <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${it.name}">
+      ${it.image ? `<img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
+      <div class="fname">${it.name}</div>
+      <div class="frate">${rateText}</div>
+    </div>`;
+}
+
+function bindFeaturedCards(root){
+  root.querySelectorAll(".featured-card").forEach(card=>{
+    const go = ()=>{
+      const el = document.getElementById("row-"+card.dataset.id);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    };
+    card.onclick = go;
+    card.onkeydown = (e)=>{ if(e.key==="Enter" || e.key===" ") { e.preventDefault(); go(); } };
+  });
+}
+
+function initFeaturedMarquee(wrap){
+  const track = wrap.querySelector(".featured-marquee-track");
+  if(!track) return;
+  const sets = track.querySelectorAll(".featured-marquee-set");
+  if(sets.length < 2) return;
+  const duration = Math.max(24, sets[0].children.length * 5);
+  track.style.animationDuration = duration + "s";
+  const pause = ()=> wrap.classList.add("is-paused");
+  const resume = ()=> wrap.classList.remove("is-paused");
+  wrap.addEventListener("mouseenter", pause);
+  wrap.addEventListener("mouseleave", resume);
+  wrap.addEventListener("touchstart", pause, {passive:true});
+  wrap.addEventListener("touchend", resume, {passive:true});
+  wrap.addEventListener("focusin", pause);
+  wrap.addEventListener("focusout", resume);
+}
+
+function renderFeatured(){
+  const featuredItems = ITEMS.filter(it => it.featured && it.available);
+  const scrollEl = document.getElementById("featuredScroll");
+  const sectionEl = document.getElementById("featuredSection");
+  if(featuredItems.length === 0){
+    sectionEl.classList.add("hidden");
+    return;
+  }
+  sectionEl.classList.remove("hidden");
+  const cards = featuredItems.map(featuredCardHtml).join("");
+  scrollEl.innerHTML = `
+    <div class="featured-marquee-wrap">
+      <div class="featured-marquee-track">
+        <div class="featured-marquee-set">${cards}</div>
+        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
+      </div>
+    </div>`;
+  bindFeaturedCards(scrollEl);
+  initFeaturedMarquee(scrollEl.querySelector(".featured-marquee-wrap"));
+}
+
+// ---------------- Offers slider (reads offers.json; hidden if empty/missing) ----------------
+async function loadOffers(){
+  try{
+    const res = await fetch("offers.json", {cache:"no-store"});
+    const offers = await res.json();
+    if(!Array.isArray(offers) || offers.length === 0) return;
+    const slider = document.getElementById("offerSlider");
+    slider.classList.remove("hidden");
+    slider.innerHTML = offers.map((o,i)=>`
+      <div class="offer-slide ${i===0?'active':''}">
+        <div class="ot">${o.title || ''}</div>
+        <div class="os">${o.subtitle || ''}</div>
+      </div>
+    `).join("");
+    if(offers.length > 1){
+      let idx = 0;
+      setInterval(()=>{
+        const slides = slider.querySelectorAll(".offer-slide");
+        slides[idx].classList.remove("active");
+        idx = (idx+1) % slides.length;
+        slides[idx].classList.add("active");
+      }, 4000);
+    }
+  }catch(e){
+    // offers.json not present — no offers to show, that's fine
+  }
+}
+loadOffers();
 </script>
 </body>
 </html>

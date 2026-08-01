@@ -1,23 +1,123 @@
 [
   {
-    "name": "مرغی (فارمی، صاف شدہ) — فی کلو",
-    "unit": "KG",
-    "rate": 500,
+    "name": "🐔 مرغی (فارمی، بڑی صاف شدہ)  ",
+    "units": [
+      {
+        "label": "فی عدد",
+        "rate": 1100
+      }
+    ],
     "available": true,
+    "image": "products/poultry-0-1785580000029.jpg",
+    "featured": false,
     "name_roman": "Murghi (Farmi) — Per KG"
   },
   {
-    "name": "مرغی (فارمی، صاف شدہ) — فی عدد",
-    "unit": "پوری مرغی",
-    "rate": 700,
+    "name": "🐔 مرغی (فارمی، درمیانی صاف شدہ)  ",
+    "units": [
+      {
+        "label": "فی عدد",
+        "rate": 950
+      }
+    ],
     "available": true,
-    "name_roman": "Murghi (Farmi) — Poori"
+    "image": "products/poultry-1-1785580005930.jpg",
+    "featured": false,
+    "name_roman": "Murgi (Farmi, Chhoti Saaf Shuda)"
   },
   {
-    "name": "مچھلی",
-    "unit": "KG",
-    "rate": 600,
+    "name": "🐔 مرغی (فارمی، چھوٹی صاف شدہ)  ",
+    "units": [
+      {
+        "label": "فی عدد",
+        "rate": 800
+      }
+    ],
     "available": true,
-    "name_roman": "Machli"
+    "image": "products/poultry-2-1785580010705.jpg",
+    "featured": false,
+    "name_roman": "Murgi (Farmi, Darmiani Saaf Shuda)"
+  },
+  {
+    "name": "🥩 فارمی مرغی بون لیس",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 750
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-3-1785580041659.jpg",
+    "featured": false,
+    "name_roman": "🥩 Boneless (Farmi Murgi)"
+  },
+  {
+    "name": "🍗 فارمی مرغی لیگ پیس",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 600
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-4-1785580078303.jpg",
+    "featured": false,
+    "name_roman": "🍗 Leg Pieces (Farmi Murgi)"
+  },
+  {
+    "name": "🥩 فارمی مرغی مکس گوشت",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 550
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-5-1785580216199.jpg",
+    "featured": false,
+    "name_roman": "🥩 Mix Gosht (Farmi Murgi)"
+  },
+  {
+    "name": "فارمی مرغی ونگز",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 550
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-6-1785580260811.jpg",
+    "featured": false,
+    "name_roman": "Wings (Farmi Murgi)"
+  },
+  {
+    "name": "🍲 فارمی مرغی پوٹا کلیجی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-7-1785580298673.jpg",
+    "featured": false,
+    "name_roman": "🍲 Pota Kaleji (Farmi Murgi)"
+  },
+  {
+    "name": "🐾 فارمی مرغی پانچے",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 100
+      },
+      {
+        "label": "",
+        "rate": 0
+      }
+    ],
+    "available": true,
+    "image": "products/poultry-8-1785580352762.jpg",
+    "featured": false,
+    "name_roman": "🐾 Panje (Farmi Murgi)"
   }
 ]

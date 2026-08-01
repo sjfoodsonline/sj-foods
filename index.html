@@ -99,7 +99,6 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
-  /* ---- SLOW & SMOOTH CATEGORIES ---- */
   .cat-marquee-wrap{
     overflow:hidden; position:relative; padding:4px 0 8px;
     -webkit-mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
@@ -107,7 +106,7 @@
   }
   .cat-marquee-track{
     display:flex; width:max-content; gap:10px;
-    animation: cat-marquee-move 55s linear infinite; /* بہت آہستہ رفتار */
+    animation: cat-marquee-move 35s linear infinite;
     will-change: transform; direction:rtl;
   }
   .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
@@ -357,7 +356,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED DEALS (CENTER ZOOM & TOUCH SWIPE) ---- */
+  /* ---- TOP DEALS SMOOTH INFINITE LOOP WITH CENTER ZOOM ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -369,13 +368,22 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow-x:auto; position:relative; padding:12px 16px; min-height:230px;
-    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    overflow:hidden; position:relative; padding:12px 0; min-height:230px;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
   }
-  .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
-    align-items:center;
+    animation: featured-smooth-loop 35s linear infinite; /* آرام دہ دھیمی رفتار */
+    will-change: transform;
+    align-items: center;
+  }
+  .featured-marquee-wrap:hover .featured-marquee-track{ animation-play-state: paused; }
+  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:rtl; align-items: center;}
+
+  @keyframes featured-smooth-loop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
   .featured-card{
@@ -386,7 +394,7 @@
     position:relative; overflow:hidden;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
   }
-  /* جو کارڈ بالکل درمیان میں آئے گا وہ بڑا ہو جائے گا */
+  /* جو کارڈ درمیان میں آئے گا وہ خود بخود بڑا ہو جائے گا */
   .featured-card.is-centered {
     transform: scale(1.12);
     border-color: var(--accent);
@@ -1347,7 +1355,7 @@ function renderFeatured(){
   
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap" id="featWrap">
-      <div class="featured-marquee-track" id="featTrack">
+      <div class="featured-marquee-track">
         <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
         <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
       </div>
@@ -1356,7 +1364,6 @@ function renderFeatured(){
   bindFeaturedCards(scrollEl);
 }
 
-// جو کارڈ اسکرین کے بالکل درمیان میں آئے گا وہ بڑا (Zoom) ہو جائے گا
 function initCenterZoomListener() {
   const wrap = document.getElementById("featWrap");
   if(!wrap) return;

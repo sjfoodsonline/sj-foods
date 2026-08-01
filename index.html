@@ -99,23 +99,14 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
-  /* ---- CATEGORIES INFINITE MARQUEE ---- */
+  /* ---- CATEGORIES SWIPEABLE ---- */
   .cat-marquee-wrap{
-    overflow-x:auto; position:relative; padding:4px 0 8px;
+    overflow-x:auto; position:relative; padding:4px 16px 8px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
-    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
-    mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
   }
   .cat-marquee-wrap::-webkit-scrollbar{display:none;}
   .cat-marquee-track{
-    display:flex; width:max-content; gap:10px;
-    animation: cat-marquee-move 28s linear infinite;
-    will-change: transform; direction:rtl;
-  }
-  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
-  @keyframes cat-marquee-move {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(50%); }
+    display:flex; width:max-content; gap:10px; direction:rtl;
   }
 
   .cat-chip{
@@ -359,7 +350,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (STEP & STOP NO GAP SWIPE) ---- */
+  /* ---- FEATURED SECTION (SMOOTH STEP & TOUCH SWIPE) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -373,7 +364,7 @@
   .featured-marquee-wrap{
     overflow-x:auto; position:relative; padding:8px 16px; min-height:210px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x mandatory; scroll-behavior:smooth;
+    scroll-behavior:smooth;
   }
   .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
@@ -386,7 +377,7 @@
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
     transition:transform .3s, box-shadow .3s, border-color .3s;
-    position:relative; overflow:hidden; scroll-snap-align:start;
+    position:relative; overflow:hidden;
   }
   .featured-card::before{
     content:"⭐"; position:absolute; top:8px; right:8px; font-size:12px; z-index:1;
@@ -724,8 +715,7 @@ function renderChips(){
   chipsEl.innerHTML = `
     <div class="cat-marquee-wrap">
       <div class="cat-marquee-track">
-        <div class="cat-marquee-set" style="display:flex; gap:10px;">${chips}</div>
-        <div class="cat-marquee-set" style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
+        ${chips}
       </div>
     </div>`;
 

@@ -31,6 +31,7 @@
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   .btn-success{background:#E8F5E9; color:#1B5E20; border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700; border:1px solid var(--mid);}
+  .btn-print{background:#E3F2FD; color:#0D47A1; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
 
   /* --- TABS --- */
@@ -40,8 +41,8 @@
 
   /* --- ORDERS MANAGEMENT STYLES --- */
   .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px; transition:all .2s;}
-  .order-card.pending{background:#FFFDE7; border-color:#FFEE58;} /* ہلکا پیلا رنگ نامکمل آرڈر کے لیے */
-  .order-card.completed{background:#F1F8E9; border-color:#81C784;} /* ہلکا سبز رنگ مکمل آرڈر کے لیے */
+  .order-card.pending{background:#FFFDE7; border-color:#FFEE58;}
+  .order-card.completed{background:#F1F8E9; border-color:#81C784;}
   .order-header{display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--line); padding-bottom:8px; margin-bottom:8px;}
   .order-code{font-weight:800; font-size:15px; color:var(--dark);}
   .order-time{font-size:11px; color:var(--muted);}
@@ -100,6 +101,12 @@
   .toast.err{background:#B71C1C;}
 
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; }
+  }
 </style>
 </head>
 <body>
@@ -155,9 +162,13 @@
     <!-- TAB 2: ORDERS -->
     <div id="tabOrders" style="display:none;">
       <div class="card">
-        <h3>📋 کسٹمرز کے موصول شدہ آرڈرز</h3>
-        <p>یہاں آپ کے پاس آنے والے تمام ارڈرز کی لسٹ ہے۔ جب آرڈر ڈیلیور ہو جائے تو <b>"✅ ڈیلیورڈ"</b> دبائیں تاکہ شکریہ کا واٹس ایپ میسج جائے اور کلر سبز ہو جائے۔</p>
-        <button class="btn-danger" onclick="clearAllOrders()" style="font-size:11px; padding:6px 10px;">🗑️ تمام آرڈرز صاف کریں</button>
+        <h3>🔔 کسٹمرز کے موصول شدہ آرڈرز</h3>
+        <p>نیا آرڈر آنے پر بلند آواز میں گھنٹی بجے گی۔ پرنٹ کرنے کے لیے تھرمل یا A4 کا بٹن دبائیں۔</p>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn-secondary" onclick="testNotificationSound()">🔊 ٹیسٹ بیل بجائیں</button>
+          <button class="btn-success" onclick="createFakeOrder()">🧪 فرضی آرڈر بنا کر چیک کریں</button>
+          <button class="btn-danger" onclick="clearAllOrders()" style="font-size:11px; padding:6px 10px;">🗑️ صاف کریں</button>
+        </div>
       </div>
       <div id="ordersListArea">
         <div class="loading">کوئی آرڈر موجود نہیں</div>
@@ -167,6 +178,8 @@
   </div>
 
 </div>
+
+<div id="printArea" style="display:none;"></div>
 
 <div class="savebar" id="saveBar" style="display:none;">
   <div class="status" id="saveStatus">تبدیلیاں محفوظ نہیں ہوئیں</div>
@@ -215,6 +228,50 @@ function switchTab(tab){
     document.getElementById("saveBar").style.display = "none";
     renderOrdersList();
   }
+}
+
+// ---------------- AUDIO / NOTIFICATION SOUND ----------------
+function playAlertSound(){
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime); // تیز آواز کی فریکوئینسی
+    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.6); // 0.6 سیکنڈ کی بیل
+  } catch(e) {
+    console.log("Audio not allowed yet");
+  }
+}
+
+function testNotificationSound(){
+  playAlertSound();
+  showToast("🔊 نوٹیفکیشن ساؤنڈ ٹیسٹ کر لیا گیا");
+}
+
+function createFakeOrder(){
+  const fake = {
+    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
+    name: "محمد خان (ٹیسٹ کسٹمر)",
+    phone: "03155166034",
+    address: "مینگورہ بازار، سوات",
+    area: "مینگورہ شہر کے اندر",
+    payMethod: "کیش آن ڈیلیوری",
+    itemsSummary: "ٹماٹر (1 کلو) — Rs. 150<br>آلو (2 کلو) — Rs. 200",
+    total: 350,
+    date: new Date().toLocaleTimeString('ur-PK'),
+    status: 'pending'
+  };
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders.unshift(fake);
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  playAlertSound();
+  renderOrdersList();
+  showToast("✅ نیا فرضی آرڈر شامل ہو گیا اور گھنٹی بجی!");
 }
 
 // ---------------- BASE64 HELPERS ----------------
@@ -605,22 +662,72 @@ function renderOrdersList(){
         <div class="order-body">
           <b>📞 فون:</b> ${o.phone}<br>
           <b>📍 پتہ:</b> ${o.address} (${o.area})<br>
-          <b>💳 طریقہ ادائیگی:</b> ${o.payMethod}<br>
-          <b>🛒 اشیاء و رقم:</b><br>
+          <b>💳 ادائیگی:</b> ${o.payMethod}<br>
+          <b>🛒 اشیاء:</b><br>
           <div style="background:#fff; padding:6px; border-radius:8px; margin-top:4px; font-size:12px;">
             ${o.itemsSummary}
           </div>
           <b>💰 کل رقم:</b> <b>Rs. ${o.total}</b>
         </div>
         <div class="order-actions">
+          <button class="btn-print" onclick="printOrderReceipt(${index}, 'thermal')">🖨️ تھرمل پرنٹ</button>
+          <button class="btn-print" onclick="printOrderReceipt(${index}, 'a4')">📄 A4 پرنٹ</button>
           <button class="btn-success" onclick="markOrderDelivered(${index})">
-            ${isCompleted ? '✅ ڈیلیور ہو چکا (دوبارہ بھیجیں)' : '✅ ڈیلیور ہوا (واٹس ایپ شکریہ)'}
+            ${isCompleted ? '✅ ڈیلیورڈ (دوبارہ)' : '✅ ڈیلیورڈ (واٹس ایپ شکریہ)'}
           </button>
           <button class="btn-danger" onclick="deleteOrder(${index})">🗑️ حذف</button>
         </div>
       </div>
     `;
   }).join("");
+}
+
+function printOrderReceipt(index, type){
+  const orders = getStoredOrders();
+  const o = orders[index];
+  if(!o) return;
+
+  const printArea = document.getElementById("printArea");
+  if (type === 'thermal') {
+    printArea.innerHTML = `
+      <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
+        <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
+        <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0315-5166034</p>
+        <hr style="border-dash:1px solid #000;">
+        <p style="margin:4px 0;"><b>کوڈ:</b> ${o.code}</p>
+        <p style="margin:4px 0;"><b>کسٹمر:</b> ${o.name}</p>
+        <p style="margin:4px 0;"><b>فون:</b> ${o.phone}</p>
+        <p style="margin:4px 0;"><b>پتہ:</b> ${o.address}</p>
+        <hr style="border-dash:1px solid #000;">
+        <div style="font-size:11px; margin-bottom:10px;">${o.itemsSummary}</div>
+        <hr style="border-dash:1px solid #000;">
+        <h3 style="text-align:left; margin:5px 0;">کل رقم: Rs. ${o.total}</h3>
+        <p style="text-align:center; font-size:10px; margin-top:15px;">انتقاب پر شکریہ! 🙏</p>
+      </div>
+    `;
+  } else {
+    printArea.innerHTML = `
+      <div style="width:100%; font-family:sans-serif; direction:rtl; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #153A20; padding-bottom:10px;">
+          <h2>🟢 SJ Foods Mingora Swat</h2>
+          <div>
+            <h3>آرڈر رسید: ${o.code}</h3>
+            <p style="font-size:12px; margin:0;">تاریخ: ${o.date}</p>
+          </div>
+        </div>
+        <div style="margin:20px 0; font-size:14px; line-height:1.8;">
+          <p><b>کسٹمر کا نام:</b> ${o.name}</p>
+          <p><b>رابطہ نمبر:</b> ${o.phone}</p>
+          <p><b>ڈیلیوری کا پتہ:</b> ${o.address} (${o.area})</p>
+        </div>
+        <div style="margin-top:20px; font-size:14px; border:1px solid #ccc; padding:15px; border-radius:8px;">
+          ${o.itemsSummary}
+        </div>
+        <h2 style="text-align:left; margin-top:30px; color:#153A20;">টوٹل رقم: Rs. ${o.total}</h2>
+      </div>
+    `;
+  }
+  window.print();
 }
 
 function markOrderDelivered(index){
@@ -630,8 +737,7 @@ function markOrderDelivered(index){
   saveStoredOrders(orders);
   renderOrdersList();
 
-  // واٹس ایپ پر شکریہ اور مکمل ہونے کا پروفیشنل میسج تیار کرنا
-  const thankMsg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] کامیابی کے ساتھ SJ Foods Mingora Swat کی طرف سے آپ کے گھر پہنچا دیا گیا ہے۔ امید ہے آپ کو ہماری خدمات اور تازہ اشیاء پسند آئیں گی۔\n\nSJ Foods کو منتخب کرنے کا شکریہ! کسی بھی شکایت یا دوبارہ آرڈر کے لیے رابطہ کریں۔ 🌿`;
+  const thankMsg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] کامیابی کے ساتھ SJ Foods Mingora Swat کی طرف سے آپ کے گھر پہنچا دیا گیا ہے۔ امید ہے آپ کو ہماری خدمات اور تازہ اشیاء پسند آئیں گی۔\n\nSJ Foods کو منتخب کرنے کا شکریہ! 🌿`;
   
   let cleanPhone = o.phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")){

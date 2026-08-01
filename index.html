@@ -1372,7 +1372,6 @@ function initStageStepperEngine() {
     const cardWidth = cards[0].offsetWidth + 16;
     const wrapWidth = wrap.clientWidth;
 
-    // سینٹر میں آنے والے کارڈ کا پوزیشن کیلکولیٹ کرنا
     const targetScroll = (currentStep * cardWidth) - (wrapWidth / 2) + (cardWidth / 2);
 
     wrap.scrollTo({
@@ -1380,7 +1379,6 @@ function initStageStepperEngine() {
       behavior: 'smooth'
     });
 
-    // اسٹیج زوم ایفیکٹ
     setTimeout(() => {
       const wrapRect = wrap.getBoundingClientRect();
       const wrapCenter = wrapRect.left + wrapRect.width / 2;
@@ -1411,14 +1409,12 @@ function initStageStepperEngine() {
     }
   };
 
-  // آٹو اسٹیپ ٹائمر (ہر 3.5 سیکنڈ بعد اگلا آئٹم اسٹیج پر آئے گا)
   stageTimer = setInterval(() => {
     if(!isUserInteracting) {
       updateStage();
     }
   }, 3500);
 
-  // یوزر جب ہاتھ یا انگلی لگائے تو آٹو ٹائمر عارضی طور پر رک جائے
   wrap.addEventListener("touchstart", () => { isUserInteracting = true; }, {passive: true});
   wrap.addEventListener("mousedown", () => { isUserInteracting = true; });
   

@@ -289,6 +289,23 @@
   .area-note.warn{background:#FFEBEE; color:#B71C1C; display:block;}
   .area-note.ok{background:#E8F5E9; color:#1B5E20; display:block;}
 
+  /* ---- ایڈمن کے لیے حساب کتاب اور پرنٹ ہسٹری ---- */
+  .history-box{
+    margin:15px 16px; padding:14px; background:#fff; border:1px solid var(--line);
+    border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .history-header{display:flex; justify-style:space-between; align-items:center; margin-bottom:10px;}
+  .history-title{font-size:14px; font-weight:700; color:var(--dark);}
+  .history-item{
+    padding:8px 0; border-bottom:1px dashed var(--line); font-size:12px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .history-item:last-child{border-bottom:none;}
+  .history-btn-print{
+    background:var(--dark); color:#fff; border:none; padding:4px 8px; font-size:11px;
+    border-radius:6px; cursor:pointer; font-weight:700;
+  }
+
   .actions{display:flex; gap:8px; margin-top:10px;}
   .actions button{
     flex:1; border:none; border-radius:12px; padding:12px 8px;
@@ -332,7 +349,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (دبل سائز اور بریک والی اینیمیشن) ---- */
+  /* ---- FEATURED SECTION (تیز، ہموار اور لا متناہی لوپ) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -350,7 +367,15 @@
   }
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:ltr;
-    transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: featured-smooth-marquee 18s linear infinite;
+    will-change: transform;
+  }
+  .featured-marquee-wrap.is-paused .featured-marquee-track{animation-play-state:paused;}
+  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:ltr;}
+
+  @keyframes featured-smooth-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   /* دبل سائز والے کارڈز (Double Size Cards) */
@@ -418,17 +443,12 @@
   }
   .fab-wa{bottom:95px; background:#25D366; color:#fff;}
 
-  /* ---- footer ---- */
-  .footer-links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
-  .footer-links a, .footer-links button{
-    color:var(--mid); text-decoration:none; font-size:11px; font-family:inherit; background:none; border:none; cursor:pointer; font-weight:700;
+  /* ---- PRINT STYLES ---- */
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; }
   }
-  .policy-overlay{position:fixed; inset:0; background:rgba(21,58,32,0.55); z-index:80; display:flex; align-items:flex-end; justify-content:center;}
-  .policy-overlay.hidden{display:none;}
-  .policy-sheet{background:var(--card); color:var(--ink); width:100%; max-width:520px; max-height:80vh; overflow-y:auto; border-radius:20px 20px 0 0; padding:18px;}
-  .policy-sheet h3{color:var(--dark); margin-top:0;}
-  .policy-sheet p{font-size:13px; line-height:1.9;}
-  .policy-sheet button{margin-top:10px; background:var(--dark); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-family:inherit; font-weight:700; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -462,7 +482,6 @@
 <div class="offer-slider hidden" id="offerSlider"></div>
 
 <div class="featured-section hidden" id="featuredSection">
-  <!-- آسان اور خوبصورت انگریزی عنوان -->
   <div class="section-title" id="featuredTitle">⭐ Top Deals</div>
   <div id="featuredScroll"></div>
 </div>
@@ -490,6 +509,17 @@
 
 <div class="empty-msg" id="noResult" style="display:none;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+
+<!-- ایڈمن حساب کتاب اور پرنٹنگ کنٹرول -->
+<div class="history-box">
+  <div class="history-header">
+    <span class="history-title">📋 آرڈر ہسٹری و حساب کتاب</span>
+    <button id="clearHistoryBtn" style="border:none; background:none; color:var(--price); font-size:11px; cursor:pointer; font-weight:700;">🗑️ ہسٹری صاف کریں</button>
+  </div>
+  <div id="historyList">
+    <div style="color:var(--muted); font-size:12px; text-align:center;">ابھی تک کوئی آرڈر نہیں ہوا</div>
+  </div>
+</div>
 
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-handle" id="handle"><span></span></div>
@@ -535,8 +565,8 @@
       </div>
       <div class="area-note" id="areaNote"></div>
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
-      <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔ ہمارے تمام سپلائرز (سبزی، بیکری، دودھ، گوشت) کو سختی سے ہدایت دی گئی ہے کہ صرف بہترین معیار کی اشیاء ہی فراہم کریں۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک، آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔</div>
-      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے بلا جھجک ہمیں واٹس ایپ یا ای میل پر رابطہ کریں — ہم آپ کی رائے کی دل سے قدر کرتے ہیں۔<br>📞 <span id="noteContact">0313-5166034</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
+      <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔</div>
+      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے رابطہ کریں:<br>📞 <span id="noteContact">0313-5166034</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
     </div>
 
     <div class="actions">
@@ -545,6 +575,9 @@
     </div>
   </div>
 </div>
+
+<!-- پرنٹ کے لیے خفیہ ایریا -->
+<div id="printArea" style="display:none;"></div>
 
 <div class="pay-methods-strip">
   <div class="pay-method-badge">📲<span class="ic"></span>ایزی پیسہ</div>
@@ -584,6 +617,7 @@
 <script>
 let CATEGORIES_META = [];
 let ITEMS = [];
+let ORDER_HISTORY = JSON.parse(localStorage.getItem("sj_order_history") || "[]");
 
 const listEl = document.getElementById("list");
 const chipsEl = document.getElementById("chips");
@@ -592,6 +626,10 @@ const loadingMsg = document.getElementById("loadingMsg");
 const billbar = document.getElementById("billbar");
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function generateOrderCode() {
+  return "SJ-" + Math.floor(1000 + Math.random() * 9000);
+}
 
 function buildItemsFromCategories(catData){
   let items = [];
@@ -629,7 +667,6 @@ async function loadRates(){
 
     CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
 
-    // سبزی کی کیٹیگری سب سے پہلے شو کرنا
     CATEGORIES_META.sort((a, b) => {
       const isVegA = a.name.includes("سبزی") || a.name_roman.toLowerCase().includes("veg");
       const isVegB = b.name.includes("سبزی") || b.name_roman.toLowerCase().includes("veg");
@@ -810,7 +847,6 @@ function syncAfterChange(it){
   renderBill();
 }
 
-// ---------------- نیا واٹس ایپ و ایزی پیسہ نمبر ----------------
 let SHOP_WHATSAPP = "923135166034";
 let SHOP_PAY_NUMBER = "0313-5166034";
 let SHOP_EMAIL = "sjfoodsonline@outlook.com";
@@ -898,11 +934,12 @@ payEasy.addEventListener("change", updatePayMethodUI);
 function areaLabel(v){ return v==="inside" ? "مینگورہ شہر کے اندر" : v==="outside" ? "مینگورہ سے باہر / سائیڈ ایریا" : "نامعلوم"; }
 function payLabel(v){ return v==="easypaisa" ? "ایزی پیسہ ایڈوانس" : "کیش آن ڈیلیوری"; }
 
-function buildMessage(name, phone, addr, area, payMethod){
+function buildMessage(orderCode, name, phone, addr, area, payMethod){
   const chosen = ITEMS.filter(i=>i.qty>0);
   const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
 
-  let msg = "🛒 نیا آرڈر — SJ Foods ویب سائٹ\n\n";
+  let msg = `🛒 نیا آرڈر [${orderCode}] — SJ Foods\n\n`;
+  msg += "📌 آرڈر کوڈ: " + orderCode + "\n";
   msg += "👤 نام: " + name + "\n";
   msg += "📞 نمبر: " + phone + "\n";
   msg += "📍 پتہ: " + addr + "\n";
@@ -911,14 +948,8 @@ function buildMessage(name, phone, addr, area, payMethod){
     msg += `${it.name} — ${it.qty} ${currentLabel(it)} — ${fmt(it.qty*currentRate(it))}\n`;
   });
   msg += "\n💰 کل رقم: " + fmt(subtotal);
-  msg += "\n🚚 ڈیلیوری چارج: راستے کے حساب سے، موقع پر ادا";
-  msg += "\n💳 ادائیگی کا طریقہ: " + payLabel(payMethod);
-  if(payMethod === "easypaisa"){
-    msg += "\n📲 ایزی پیسہ نمبر: " + SHOP_PAY_NUMBER;
-  }
-  msg += "\n\n🌿 ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ اور معیاری پہنچے۔ آرڈر ملنے سے ڈیلیوری مکمل ہونے تک آپ کو مطمئن رکھنا ہماری ذمہ داری ہے۔";
-  msg += "\n💬 کسی بھی رائے یا سوال کے لیے رابطہ کریں: " + SHOP_PAY_NUMBER + " | " + SHOP_EMAIL;
-  msg += "\n🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک";
+  msg += "\n🚚 ڈیلیوری چارج: موقع پر ادا";
+  msg += "\n💳 ادائیگی: " + payLabel(payMethod);
   msg += "\n\nشکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏";
   return msg;
 }
@@ -928,6 +959,79 @@ function showToast(text){
   t.textContent = text;
   t.classList.add("show");
   setTimeout(()=> t.classList.remove("show"), 2200);
+}
+
+// ---- آرڈر کی تاریخ اور حساب کتاب محفوظ کرنا ----
+function saveOrderToHistory(orderCode, name, phone, total, items) {
+  const newOrder = { 
+    code: orderCode, name: name, phone: phone, total: total, 
+    items: items, date: new Date().toLocaleTimeString('ur-PK') 
+  };
+  ORDER_HISTORY.unshift(newOrder);
+  localStorage.setItem("sj_order_history", JSON.stringify(ORDER_HISTORY));
+  renderHistory();
+}
+
+function renderHistory() {
+  const hList = document.getElementById("historyList");
+  if(ORDER_HISTORY.length === 0){
+    hList.innerHTML = `<div style="color:var(--muted); font-size:12px; text-align:center;">ابھی تک کوئی آرڈر نہیں ہوا</div>`;
+    return;
+  }
+  hList.innerHTML = ORDER_HISTORY.slice(0, 10).map((o, idx) => `
+    <div class="history-item">
+      <div>
+        <b>${o.code}</b> — ${o.name} (${o.phone})<br>
+        <span style="color:var(--muted); font-size:10px;">${o.date} — ${fmt(o.total)}</span>
+      </div>
+      <button class="history-btn-print" onclick="printSavedOrder(${idx})">🧾 پرنٹ</button>
+    </div>
+  `).join("");
+}
+
+document.getElementById("clearHistoryBtn").onclick = () => {
+  if(confirm("کیا آپ تمام سابقہ حساب کتاب صاف کرنا چاہتے ہیں؟")){
+    ORDER_HISTORY = [];
+    localStorage.removeItem("sj_order_history");
+    renderHistory();
+  }
+};
+
+// محفوظ شدہ آرڈر کو پرنٹ کرنے کا فنکشن
+function printSavedOrder(idx) {
+  const o = ORDER_HISTORY[idx];
+  if(!o) return;
+
+  const printArea = document.getElementById("printArea");
+  let itemsHtml = o.items.map(it => `
+    <tr>
+      <td style="padding:4px; border-bottom:1px solid #ccc;">${it.name}</td>
+      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:center;">${it.qty}</td>
+      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:left;">${fmt(it.price)}</td>
+    </tr>
+  `).join("");
+
+  printArea.innerHTML = `
+    <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
+      <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
+      <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0313-5166034</p>
+      <hr style="border-dash:1px solid #000;">
+      <p style="margin:4px 0;"><b>کوڈ:</b> ${o.code}</p>
+      <p style="margin:4px 0;"><b>کسٹمر:</b> ${o.name}</p>
+      <p style="margin:4px 0;"><b>فون:</b> ${o.phone}</p>
+      <hr style="border-dash:1px solid #000;">
+      <table style="width:100%; border-collapse:collapse; font-size:11px;">
+        <thead>
+          <tr><th style="text-align:right;">آئٹم</th><th style="text-align:center;">مقدار</th><th style="text-align:left;">قیمت</th></tr>
+        </thead>
+        <tbody>${itemsHtml}</tbody>
+      </table>
+      <hr style="border-dash:1px solid #000;">
+      <h3 style="text-align:left; margin:5px 0;">کل رقم: ${fmt(o.total)}</h3>
+      <p style="text-align:center; font-size:10px; margin-top:15px;">انتقاب پر شکریہ! 🙏</p>
+    </div>
+  `;
+  window.print();
 }
 
 document.getElementById("waBtn").onclick = ()=>{
@@ -953,10 +1057,17 @@ document.getElementById("waBtn").onclick = ()=>{
     return;
   }
 
-  const msg = buildMessage(name, phone, addr, area, payMethod);
+  const orderCode = generateOrderCode();
+  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
+  const itemsData = chosen.map(it => ({ name: it.name, qty: `${it.qty} ${currentLabel(it)}`, price: it.qty * currentRate(it) }));
+
+  // ہسٹری میں محفوظ کرنا
+  saveOrderToHistory(orderCode, name, phone, subtotal, itemsData);
+
+  const msg = buildMessage(orderCode, name, phone, addr, area, payMethod);
   const url = `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`;
   window.open(url, "_blank");
-  showToast("✅ واٹس ایپ کھل رہا ہے — پیغام بھیج دیں");
+  showToast("✅ آرڈر محفوظ ہوگیا اور واٹس ایپ کھل رہا ہے");
 };
 
 document.getElementById("clearBtn").onclick = ()=>{
@@ -976,6 +1087,7 @@ document.getElementById("clearBtn").onclick = ()=>{
   renderList("");
   renderBill();
   renderFeatured();
+  renderHistory();
 })();
 
 if("serviceWorker" in navigator){
@@ -1132,7 +1244,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- FEATURED PRODUCTS (دبل سائز + بریک والی اینیمیشن) ----------------
+// ---------------- FEATURED PRODUCTS (لا متناہی سموتھ لوپ اینیمیشن) ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1193,9 +1305,6 @@ function fillMarqueeSet(wrap, setSelector){
   });
 }
 
-let featStepIndex = 0;
-let featStepTimer = null;
-
 function renderFeatured(){
   let featuredItems = ITEMS.filter(it => it.featured && it.available);
   const scrollEl = document.getElementById("featuredScroll");
@@ -1205,7 +1314,6 @@ function renderFeatured(){
     return;
   }
   
-  // شفل (Fisher-Yates) - تمام آئٹمز مکس کرنا
   for (let i = featuredItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
@@ -1216,43 +1324,21 @@ function renderFeatured(){
   
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap">
-      <div class="featured-marquee-track" id="featTrack">
-        <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
-        <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
+      <div class="featured-marquee-track">
+        <div class="featured-marquee-set">${cards}</div>
+        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
       </div>
     </div>`;
 
+  const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
+  initInfiniteMarquee(marqueeWrap, {
+    track: ".featured-marquee-track",
+    set: ".featured-marquee-set",
+    minDuration: 18,
+    secPerItem: 3
+  });
+
   bindFeaturedCards(scrollEl);
-
-  // دوسری سمت سے سپیڈ، سموتھ بریک اور رکاؤ والی اینیمیشن (Snap & Brake Effect)
-  if(featStepTimer) clearInterval(featStepTimer);
-  featStepIndex = 0;
-
-  featStepTimer = setInterval(() => {
-    const track = document.getElementById("featTrack");
-    if(!track) return;
-
-    const firstCard = track.querySelector(".featured-card");
-    if(!firstCard) return;
-
-    const stepWidth = firstCard.offsetWidth + 16; 
-    featStepIndex++;
-
-    // گاڑی کی طرح بریک والی تیز اینیمیشن
-    track.style.transform = `translateX(-${featStepIndex * stepWidth}px)`;
-
-    // ایک چکر مکمل ہونے کے بعد ریسٹور کرنا
-    if(featStepIndex >= featuredItems.length){
-      setTimeout(() => {
-        track.style.transition = 'none';
-        featStepIndex = 0;
-        track.style.transform = `translateX(0px)`;
-        setTimeout(() => {
-          track.style.transition = 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)';
-        }, 50);
-      }, 650);
-    }
-  }, 2800); // 2.8 سیکنڈ کا بہترین آئی کیچنگ ہولڈ
 }
 
 // ---------------- Offers slider ----------------

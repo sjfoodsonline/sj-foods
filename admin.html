@@ -39,11 +39,25 @@
   .admin-tab{flex:1; padding:10px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .admin-tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* --- ORDERS MANAGEMENT STYLES --- */
-  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px; transition:all .2s;}
-  .order-card.pending{background:#FFFDE7; border-color:#FFEE58;}
+  /* --- ORDERS MANAGEMENT STYLES & BLINKING --- */
+  @keyframes blink-warning {
+    0% { border-color: #E53935; background-color: #FFEBEE; }
+    50% { border-color: #FFE082; background-color: #FFFDE7; }
+    100% { border-color: #E53935; background-color: #FFEBEE; }
+  }
+
+  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px; position:relative; transition:all .3s;}
+  .order-card.pending{animation: blink-warning 1.8s infinite;} /* نا مکمل آرڈر پر پلینک (ٹمٹمانا) */
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
-  .order-header{display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--line); padding-bottom:8px; margin-bottom:8px;}
+  .order-card.faded{opacity:0.45;} /* 24 گھنٹے والے یا پرانے آرڈرز دھندلے ہو جائیں گے */
+
+  .order-top-delete {
+    position: absolute; top: 10px; left: 12px;
+    background: #FFCDD2; color: #B71C1C; border: none; border-radius: 6px;
+    padding: 3px 8px; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+
+  .order-header{display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--line); padding-bottom:8px; margin-bottom:8px; padding-left:50px;}
   .order-code{font-weight:800; font-size:15px; color:var(--dark);}
   .order-time{font-size:11px; color:var(--muted);}
   .order-body{font-size:13px; line-height:1.6; margin-bottom:10px;}
@@ -163,11 +177,11 @@
     <div id="tabOrders" style="display:none;">
       <div class="card">
         <h3>🔔 کسٹمرز کے موصول شدہ آرڈرز</h3>
-        <p>نیا آرڈر آنے پر بلند آواز میں گھنٹی بجے گی۔ پرنٹ کرنے کے لیے تھرمل یا A4 کا بٹن دبائیں۔</p>
+        <p>نیا آرڈر آنے پر گھنٹی بجے گی۔ جب تک آرڈر ڈیلیور نہ ہو کارڈ ٹمٹماتا رہے گا۔ 24 گھنٹے بعد پرانے آرڈرز خود بخود ہٹ جائیں گے۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-secondary" onclick="testNotificationSound()">🔊 ٹیسٹ بیل بجائیں</button>
-          <button class="btn-success" onclick="createFakeOrder()">🧪 فرضی آرڈر بنا کر چیک کریں</button>
-          <button class="btn-danger" onclick="clearAllOrders()" style="font-size:11px; padding:6px 10px;">🗑️ صاف کریں</button>
+          <button class="btn-secondary" onclick="testNotificationSound()">🔊 ٹیسٹ بیل</button>
+          <button class="btn-success" onclick="createFakeOrder()">🧪 فرضی آرڈر</button>
+          <button class="btn-danger" onclick="clearAllOrders()" style="font-size:11px; padding:6px 10px;">🗑️ سب صاف کریں</button>
         </div>
       </div>
       <div id="ordersListArea">
@@ -237,15 +251,13 @@ function playAlertSound(){
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime); // تیز آواز کی فریکوئینسی
-    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.6); // 0.6 سیکنڈ کی بیل
-  } catch(e) {
-    console.log("Audio not allowed yet");
-  }
+    osc.stop(audioCtx.currentTime + 0.6);
+  } catch(e) {}
 }
 
 function testNotificationSound(){
@@ -263,6 +275,7 @@ function createFakeOrder(){
     payMethod: "کیش آن ڈیلیوری",
     itemsSummary: "ٹماٹر (1 کلو) — Rs. 150<br>آلو (2 کلو) — Rs. 200",
     total: 350,
+    timestamp: Date.now(),
     date: new Date().toLocaleTimeString('ur-PK'),
     status: 'pending'
   };
@@ -271,7 +284,22 @@ function createFakeOrder(){
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   playAlertSound();
   renderOrdersList();
-  showToast("✅ نیا فرضی آرڈر شامل ہو گیا اور گھنٹی بجی!");
+  showToast("✅ نیا فرضی آرڈر شامل ہو گیا!");
+}
+
+// ---------------- 24 HOURS AUTO CLEANUP & FADE CHECK ----------------
+function cleanOldAndFadeOrders(){
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  const now = Date.now();
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+
+  // 24 گھنٹے سے پرانے آرڈرز خود بخود ہٹا دیں
+  orders = orders.filter(o => {
+    if(!o.timestamp) return true;
+    return (now - o.timestamp) < ONE_DAY;
+  });
+
+  saveStoredOrders(orders);
 }
 
 // ---------------- BASE64 HELPERS ----------------
@@ -638,6 +666,7 @@ document.getElementById("saveBtn").onclick = async ()=>{
 
 // ---------------- LIVE ORDERS MANAGEMENT ----------------
 function getStoredOrders(){
+  cleanOldAndFadeOrders();
   return JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
 }
 function saveStoredOrders(orders){
@@ -651,10 +680,17 @@ function renderOrdersList(){
     area.innerHTML = `<div class="loading">ابھی تک کوئی آرڈر موصول نہیں ہوا</div>`;
     return;
   }
+  const now = Date.now();
+  const TWELVE_HOURS = 12 * 60 * 60 * 1000;
+
   area.innerHTML = orders.map((o, index) => {
     const isCompleted = o.status === 'completed';
+    // اگر 12 گھنٹے گزر چکے ہوں تو کارڈ دھندلا (faded) ہو جائے گا
+    const isFaded = o.timestamp && (now - o.timestamp > TWELVE_HOURS);
+
     return `
-      <div class="order-card ${isCompleted ? 'completed' : 'pending'}">
+      <div class="order-card ${isCompleted ? 'completed' : 'pending'} ${isFaded ? 'faded' : ''}">
+        <button class="order-top-delete" onclick="deleteOrder(${index})">✕ حذف</button>
         <div class="order-header">
           <span class="order-code">📌 ${o.code} — ${o.name}</span>
           <span class="order-time">${o.date || ''}</span>
@@ -670,12 +706,11 @@ function renderOrdersList(){
           <b>💰 کل رقم:</b> <b>Rs. ${o.total}</b>
         </div>
         <div class="order-actions">
-          <button class="btn-print" onclick="printOrderReceipt(${index}, 'thermal')">🖨️ تھرمل پرنٹ</button>
-          <button class="btn-print" onclick="printOrderReceipt(${index}, 'a4')">📄 A4 پرنٹ</button>
+          <button class="btn-print" onclick="printOrderReceipt(${index}, 'thermal')">🖨️ تھرمل</button>
+          <button class="btn-print" onclick="printOrderReceipt(${index}, 'a4')">📄 A4</button>
           <button class="btn-success" onclick="markOrderDelivered(${index})">
-            ${isCompleted ? '✅ ڈیلیورڈ (دوبارہ)' : '✅ ڈیلیورڈ (واٹس ایپ شکریہ)'}
+            ${isCompleted ? '✅ ڈیلیورڈ (دوباره)' : '✅ ڈیلیورڈ (واٹس ایپ شکریہ)'}
           </button>
-          <button class="btn-danger" onclick="deleteOrder(${index})">🗑️ حذف</button>
         </div>
       </div>
     `;
@@ -750,7 +785,7 @@ function markOrderDelivered(index){
 }
 
 function deleteOrder(index){
-  if(!confirm("اس آرڈر کو ہسٹری سے ہٹا دیں؟")) return;
+  if(!confirm("کیا آپ اس آرڈر کو حذف کرنا چاہتے ہیں؟")) return;
   let orders = getStoredOrders();
   orders.splice(index, 1);
   saveStoredOrders(orders);

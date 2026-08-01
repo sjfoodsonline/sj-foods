@@ -97,21 +97,15 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px;}
   
+  /* ---- TOUCH SWIPEABLE CATEGORIES ---- */
   .cat-marquee-wrap{
-    overflow:hidden; position:relative; padding:2px 0 6px;
-    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 7%, #000 93%, transparent 100%);
-    mask-image:linear-gradient(to left, transparent 0, #000 7%, #000 93%, transparent 100%);
+    overflow-x:auto; position:relative; padding:4px 16px 8px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
   }
+  .cat-marquee-wrap::-webkit-scrollbar{display:none;}
   .cat-marquee-track{
-    display:flex; width:max-content; gap:10px;
-    animation:cat-marquee 36s linear infinite;
-    will-change:transform; direction:rtl;
-  }
-  .cat-marquee-wrap.is-paused .cat-marquee-track{animation-play-state:paused;}
-  .cat-marquee-set{display:flex; gap:10px; flex:0 0 auto; direction:rtl;}
-  @keyframes cat-marquee{
-    0%{transform:translateX(0);}
-    100%{transform:translateX(50%);}
+    display:flex; width:max-content; gap:10px; direction:rtl;
   }
 
   .cat-chip{
@@ -121,7 +115,7 @@
     padding:9px 16px; font-size:13px; font-weight:700;
     white-space:nowrap; cursor:pointer; font-family:inherit;
     transition:background .18s, border-color .18s, transform .15s, box-shadow .15s;
-    box-shadow:0 2px 8px rgba(21,58,32,0.06);
+    box-shadow:0 2px 8px rgba(21,58,32,0.06); scroll-snap-align:start;
   }
   .cat-chip:hover{background:#dff0e0; border-color:var(--mid); transform:translateY(-1px); box-shadow:0 4px 12px rgba(46,125,50,0.12);}
   .cat-chip:active{transform:scale(0.97);}
@@ -289,12 +283,21 @@
   .area-note.warn{background:#FFEBEE; color:#B71C1C; display:block;}
   .area-note.ok{background:#E8F5E9; color:#1B5E20; display:block;}
 
-  /* ---- ایڈمن کے لیے حساب کتاب اور پرنٹ ہسٹری ---- */
+  /* ---- PRINT BUTTONS IN CART ---- */
+  .print-btn-group{display:flex; gap:8px; margin-top:10px; margin-bottom:10px;}
+  .print-btn{
+    flex:1; padding:10px 6px; font-size:12.5px; font-weight:700; border-radius:10px;
+    border:1.5px solid var(--mid); background:#fff; color:var(--dark); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:4px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.05);
+  }
+  .print-btn:hover{background:var(--leaf);}
+
   .history-box{
     margin:15px 16px; padding:14px; background:#fff; border:1px solid var(--line);
     border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.05);
   }
-  .history-header{display:flex; justify-style:space-between; align-items:center; margin-bottom:10px;}
+  .history-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
   .history-title{font-size:14px; font-weight:700; color:var(--dark);}
   .history-item{
     padding:8px 0; border-bottom:1px dashed var(--line); font-size:12px;
@@ -349,7 +352,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (تیز، ہموار اور لا متناہی لوپ) ---- */
+  /* ---- FEATURED SECTION (Touch Swipe + Loop Animation) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -361,31 +364,23 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow:hidden; position:relative; padding:8px 0; min-height:210px;
-    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
-    mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
+    overflow-x:auto; position:relative; padding:8px 16px; min-height:210px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
   }
+  .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:ltr;
-    animation: featured-smooth-marquee 18s linear infinite;
-    will-change: transform;
-  }
-  .featured-marquee-wrap.is-paused .featured-marquee-track{animation-play-state:paused;}
-  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:ltr;}
-
-  @keyframes featured-smooth-marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
   }
 
-  /* دبل سائز والے کارڈز (Double Size Cards) */
+  /* Double Size Cards */
   .featured-card{
     flex:0 0 180px; background:var(--card);
     border:2px solid rgba(201,162,39,0.55); border-radius:16px;
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
     transition:transform .25s, box-shadow .25s, border-color .25s;
-    position:relative; overflow:hidden;
+    position:relative; overflow:hidden; scroll-snap-align:start;
   }
   .featured-card::before{
     content:"⭐"; position:absolute; top:8px; left:8px; font-size:12px; z-index:1;
@@ -510,7 +505,7 @@
 <div class="empty-msg" id="noResult" style="display:none;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 
-<!-- ایڈمن حساب کتاب اور پرنٹنگ کنٹرول -->
+<!-- حساب کتاب اور پرنٹ ہسٹری -->
 <div class="history-box">
   <div class="history-header">
     <span class="history-title">📋 آرڈر ہسٹری و حساب کتاب</span>
@@ -564,6 +559,13 @@
         <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ ایڈوانس</label>
       </div>
       <div class="area-note" id="areaNote"></div>
+
+      <!-- پرنٹنگ بٹنز (کارٹ کے اندر) -->
+      <div class="print-btn-group">
+        <button class="print-btn" onclick="triggerPrint('thermal')">🖨️ تھرمل پرنٹ (Receipt)</button>
+        <button class="print-btn" onclick="triggerPrint('a4')">📄 A4 پرنٹ (Full Page)</button>
+      </div>
+
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔</div>
       <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے رابطہ کریں:<br>📞 <span id="noteContact">0313-5166034</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
@@ -576,7 +578,7 @@
   </div>
 </div>
 
-<!-- پرنٹ کے لیے خفیہ ایریا -->
+<!-- پرنٹ کے لیے ایریا -->
 <div id="printArea" style="display:none;"></div>
 
 <div class="pay-methods-strip">
@@ -721,17 +723,10 @@ function renderChips(){
   chipsEl.innerHTML = `
     <div class="cat-marquee-wrap">
       <div class="cat-marquee-track">
-        <div class="cat-marquee-set">${chips}</div>
-        <div class="cat-marquee-set" aria-hidden="true">${chips}</div>
+        ${chips}
       </div>
     </div>`;
-  const catWrap = chipsEl.querySelector(".cat-marquee-wrap");
-  initInfiniteMarquee(catWrap, {
-    track: ".cat-marquee-track",
-    set: ".cat-marquee-set",
-    minDuration: 22,
-    secPerItem: 3.2
-  });
+
   chipsEl.querySelectorAll(".cat-chip").forEach(btn=>{
     btn.onclick = ()=>{
       const el = document.getElementById("cat-"+btn.dataset.cat);
@@ -961,7 +956,7 @@ function showToast(text){
   setTimeout(()=> t.classList.remove("show"), 2200);
 }
 
-// ---- آرڈر کی تاریخ اور حساب کتاب محفوظ کرنا ----
+// ---- حساب کتاب کی ہسٹری ----
 function saveOrderToHistory(orderCode, name, phone, total, items) {
   const newOrder = { 
     code: orderCode, name: name, phone: phone, total: total, 
@@ -997,7 +992,81 @@ document.getElementById("clearHistoryBtn").onclick = () => {
   }
 };
 
-// محفوظ شدہ آرڈر کو پرنٹ کرنے کا فنکشن
+// ---- پرنٹ کا فنکشن ----
+function triggerPrint(type) {
+  const chosen = ITEMS.filter(i=>i.qty>0);
+  if(chosen.length===0){ showToast("پرنٹ کے لیے کارٹ میں اشیاء شامل کریں"); return; }
+  
+  const name = document.getElementById("custName").value.trim() || "عام کسٹمر";
+  const phone = document.getElementById("custPhone").value.trim() || "-";
+  const addr = document.getElementById("custAddr").value.trim() || "-";
+  const orderCode = generateOrderCode();
+  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
+
+  const printArea = document.getElementById("printArea");
+  let itemsHtml = chosen.map(it => `
+    <tr>
+      <td style="padding:4px; border-bottom:1px solid #ccc;">${it.name}</td>
+      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:center;">${it.qty} ${currentLabel(it)}</td>
+      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:left;">${fmt(it.qty*currentRate(it))}</td>
+    </tr>
+  `).join("");
+
+  if (type === 'thermal') {
+    printArea.innerHTML = `
+      <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
+        <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
+        <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0313-5166034</p>
+        <hr style="border-dash:1px solid #000;">
+        <p style="margin:4px 0;"><b>کوڈ:</b> ${orderCode}</p>
+        <p style="margin:4px 0;"><b>کسٹمر:</b> ${name}</p>
+        <p style="margin:4px 0;"><b>فون:</b> ${phone}</p>
+        <p style="margin:4px 0;"><b>پتہ:</b> ${addr}</p>
+        <hr style="border-dash:1px solid #000;">
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+          <thead>
+            <tr><th style="text-align:right;">آئٹم</th><th style="text-align:center;">مقدار</th><th style="text-align:left;">قیمت</th></tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        <hr style="border-dash:1px solid #000;">
+        <h3 style="text-align:left; margin:5px 0;">کل رقم: ${fmt(subtotal)}</h3>
+        <p style="text-align:center; font-size:10px; margin-top:15px;">انتقاب پر شکریہ! 🙏</p>
+      </div>
+    `;
+  } else {
+    printArea.innerHTML = `
+      <div style="width:100%; font-family:sans-serif; direction:rtl; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #153A20; padding-bottom:10px;">
+          <h2>🟢 SJ Foods Mingora Swat</h2>
+          <div>
+            <h3>آرڈر رسید: ${orderCode}</h3>
+            <p style="font-size:12px; margin:0;">تاریخ: ${new Date().toLocaleDateString('ur-PK')}</p>
+          </div>
+        </div>
+        <div style="margin:20px 0; font-size:14px; line-height:1.8;">
+          <p><b>کسٹمر کا نام:</b> ${name}</p>
+          <p><b>رابطہ نمبر:</b> ${phone}</p>
+          <p><b>ڈیلیوری کا پتہ:</b> ${addr}</p>
+        </div>
+        <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size:14px;">
+          <thead>
+            <tr style="background:#153A20; color:#fff;">
+              <th style="padding:8px; text-align:right;">آئٹم</th>
+              <th style="padding:8px; text-align:center;">مقدار</th>
+              <th style="padding:8px; text-align:left;">کل قیمت</th>
+            </tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        <h2 style="text-align:left; margin-top:30px; color:#153A20;">ٹوٹل رقم: ${fmt(subtotal)}</h2>
+      </div>
+    `;
+  }
+
+  window.print();
+}
+
 function printSavedOrder(idx) {
   const o = ORDER_HISTORY[idx];
   if(!o) return;
@@ -1061,7 +1130,6 @@ document.getElementById("waBtn").onclick = ()=>{
   const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
   const itemsData = chosen.map(it => ({ name: it.name, qty: `${it.qty} ${currentLabel(it)}`, price: it.qty * currentRate(it) }));
 
-  // ہسٹری میں محفوظ کرنا
   saveOrderToHistory(orderCode, name, phone, subtotal, itemsData);
 
   const msg = buildMessage(orderCode, name, phone, addr, area, payMethod);
@@ -1244,7 +1312,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- FEATURED PRODUCTS (لا متناہی سموتھ لوپ اینیمیشن) ----------------
+// ---------------- FEATURED PRODUCTS ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1264,44 +1332,6 @@ function bindFeaturedCards(root){
     };
     card.onclick = go;
     card.onkeydown = (e)=>{ if(e.key==="Enter" || e.key===" ") { e.preventDefault(); go(); } };
-  });
-}
-
-function initInfiniteMarquee(wrap, opts){
-  if(!wrap) return;
-  const track = wrap.querySelector(opts.track);
-  if(!track) return;
-  fillMarqueeSet(wrap, opts.set);
-  const sets = track.querySelectorAll(opts.set);
-  if(sets.length < 2) return;
-  const duration = Math.max(opts.minDuration, sets[0].children.length * opts.secPerItem);
-  track.style.animationDuration = duration + "s";
-  const pause = ()=> wrap.classList.add("is-paused");
-  const resume = ()=> wrap.classList.remove("is-paused");
-  wrap.addEventListener("mouseenter", pause);
-  wrap.addEventListener("mouseleave", resume);
-  wrap.addEventListener("touchstart", pause, {passive:true});
-  wrap.addEventListener("touchend", resume, {passive:true});
-  wrap.addEventListener("focusin", pause);
-  wrap.addEventListener("focusout", resume);
-}
-
-function fillMarqueeSet(wrap, setSelector){
-  const set = wrap.querySelector(setSelector);
-  if(!set) return;
-  const track = set.parentElement;
-  if(!set.dataset.marqueeBase) set.dataset.marqueeBase = set.innerHTML;
-  const chunk = set.dataset.marqueeBase;
-  if(!chunk.trim()) return;
-  set.innerHTML = chunk;
-  const target = Math.max((wrap.clientWidth || 360) + 80, 420);
-  let guard = 0;
-  while(set.scrollWidth < target && guard < 24){
-    set.innerHTML += chunk;
-    guard++;
-  }
-  track.querySelectorAll(setSelector).forEach((el, i)=>{
-    if(i > 0) el.innerHTML = set.innerHTML;
   });
 }
 
@@ -1325,18 +1355,9 @@ function renderFeatured(){
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap">
       <div class="featured-marquee-track">
-        <div class="featured-marquee-set">${cards}</div>
-        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
+        ${cards}
       </div>
     </div>`;
-
-  const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
-  initInfiniteMarquee(marqueeWrap, {
-    track: ".featured-marquee-track",
-    set: ".featured-marquee-set",
-    minDuration: 18,
-    secPerItem: 3
-  });
 
   bindFeaturedCards(scrollEl);
 }

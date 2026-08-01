@@ -708,7 +708,7 @@ function renderFeatured(){
     return;
   }
   
-  // شفل (Fisher-Yates Shuffle) - تمام اشیاء کو مکس کرنے کے لیے
+  // شفل (Random Mix)
   for (let i = featuredItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
@@ -726,6 +726,7 @@ function renderFeatured(){
   const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
   initFeaturedMarquee(marqueeWrap);
   bindFeaturedCards(scrollEl);
+}
 }
       items: catResults[i]
     }));

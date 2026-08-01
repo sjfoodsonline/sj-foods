@@ -97,16 +97,26 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px;}
   
-  /* ---- Touch Swipeable Containers ---- */
+  /* ---- Category Animated Marquee & Touch Swipe ---- */
   .cat-marquee-wrap{
-    overflow-x:auto; position:relative; padding:4px 16px 8px;
+    overflow-x:auto; position:relative; padding:2px 0 6px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
-    scroll-behavior:smooth;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 7%, #000 93%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 7%, #000 93%, transparent 100%);
   }
   .cat-marquee-wrap::-webkit-scrollbar{display:none;}
   .cat-marquee-track{
-    display:flex; width:max-content; gap:10px; direction:rtl;
+    display:flex; width:max-content; gap:10px;
+    animation:cat-marquee 36s linear infinite;
+    will-change:transform; direction:rtl;
   }
+  .cat-marquee-wrap.is-paused .cat-marquee-track{animation-play-state:paused;}
+  .cat-marquee-set{display:flex; gap:10px; flex:0 0 auto; direction:rtl;}
+  @keyframes cat-marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(50%);}
+  }
+
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px;
     background:var(--leaf); color:var(--dark);
@@ -325,11 +335,11 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- featured section (Swipeable) ---- */
+  /* ---- featured section (Optimized Size + Animated Marquee) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:15px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
-    padding-right:8px; border-right:4px solid var(--gold); letter-spacing: 0.5px;
+    padding-right:8px; border-right:4px solid var(--gold); letter-spacing:0.5px;
   }
   .featured-section{
     margin:4px 0 10px; padding:4px 0 10px;
@@ -337,35 +347,47 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow-x:auto; position:relative; padding:6px 16px 10px; min-height:168px;
-    scrollbar-width:none; -webkit-overflow-scrolling:touch; scroll-behavior:smooth;
+    overflow-x:auto; position:relative; padding:6px 0 10px; min-height:145px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 2%, #000 98%, transparent 100%);
+    mask-image:linear-gradient(to left, transparent 0, #000 2%, #000 98%, transparent 100%);
   }
   .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
-    display:flex; width:max-content; gap:14px; direction:rtl;
+    display:flex; width:max-content; gap:12px;
+    animation:featured-marquee 32s linear infinite;
+    will-change:transform; direction:rtl;
   }
+  .featured-marquee-wrap.is-paused .featured-marquee-track{animation-play-state:paused;}
+  .featured-marquee-set{display:flex; gap:12px; flex:0 0 auto; direction:rtl;}
+  @keyframes featured-marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(50%);}
+  }
+
+  /* پرکشش اور پرفیکٹ سائز کے پروڈکٹ کارڈز */
   .featured-card{
-    flex:0 0 142px; background:var(--card);
-    border:2px solid rgba(201,162,39,0.55); border-radius:16px;
-    padding:9px; text-align:center; cursor:pointer;
-    box-shadow:0 4px 16px rgba(21,58,32,0.1);
+    flex:0 0 120px; background:var(--card);
+    border:1.5px solid rgba(201,162,39,0.45); border-radius:14px;
+    padding:7px; text-align:center; cursor:pointer;
+    box-shadow:0 3px 10px rgba(21,58,32,0.08);
     transition:transform .25s, box-shadow .25s, border-color .25s;
     position:relative; overflow:hidden;
   }
   .featured-card::before{
-    content:"⭐"; position:absolute; top:7px; left:7px; font-size:11px; z-index:1;
-    background:linear-gradient(135deg,#FFF8E1,#FFECB3); border-radius:50%; width:22px; height:22px;
+    content:"⭐"; position:absolute; top:5px; left:5px; font-size:10px; z-index:1;
+    background:linear-gradient(135deg,#FFF8E1,#FFECB3); border-radius:50%; width:18px; height:18px;
     display:flex; align-items:center; justify-content:center; line-height:1;
-    box-shadow:0 2px 6px rgba(201,162,39,0.35);
+    box-shadow:0 2px 4px rgba(201,162,39,0.3);
   }
   .featured-card:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 8px 20px rgba(201,162,39,0.25);
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:0 6px 14px rgba(201,162,39,0.2);
     border-color:var(--gold);
   }
-  .featured-card img{width:100%; height:88px; object-fit:cover; border-radius:11px; background:var(--leaf);}
-  .featured-card .fname{font-size:12px; font-weight:700; margin-top:7px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-  .featured-card .frate{font-size:12px; color:var(--price); font-weight:800; margin-top:4px;}
+  .featured-card img{width:100%; height:72px; object-fit:cover; border-radius:9px; background:var(--leaf);}
+  .featured-card .fname{font-size:11.5px; font-weight:700; margin-top:5px; color:var(--ink); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .featured-card .frate{font-size:11.5px; color:var(--price); font-weight:800; margin-top:3px;}
 
   .offer-slider{margin:14px 16px 0; border-radius:16px; overflow:hidden; position:relative;}
   .offer-slide{
@@ -452,7 +474,7 @@
 <div class="offer-slider hidden" id="offerSlider"></div>
 
 <div class="featured-section hidden" id="featuredSection">
-  <!-- پرکشش انگریزی عنوان -->
+  <!-- شاندار انگریزی ہیڈنگ -->
   <div class="section-title" id="featuredTitle">⭐ Handpicked Fresh Essentials</div>
   <div id="featuredScroll"></div>
 </div>
@@ -619,7 +641,7 @@ async function loadRates(){
 
     CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
 
-    // سبزی کی کیٹیگری کو لسٹ میں سب سے پہلے لانا
+    // سبزی کو لسٹ میں سب سے پہلے رکھنا
     CATEGORIES_META.sort((a, b) => {
       const isVegA = a.name.includes("سبزی") || a.name_roman.toLowerCase().includes("veg");
       const isVegB = b.name.includes("سبزی") || b.name_roman.toLowerCase().includes("veg");
@@ -668,16 +690,23 @@ function renderChips(){
     chipsEl.innerHTML = "";
     return;
   }
-  
   const chips = CATEGORIES_META.map(cat =>
     `<button type="button" class="cat-chip" data-cat="${cat.name}">${cat.icon} ${dispCatName(cat)}</button>`
   ).join("");
-  
   chipsEl.innerHTML = `
-    <div class="cat-marquee-wrap" id="catSwipeWrap">
-      <div class="cat-marquee-track">${chips}</div>
+    <div class="cat-marquee-wrap">
+      <div class="cat-marquee-track">
+        <div class="cat-marquee-set">${chips}</div>
+        <div class="cat-marquee-set" aria-hidden="true">${chips}</div>
+      </div>
     </div>`;
-    
+  const catWrap = chipsEl.querySelector(".cat-marquee-wrap");
+  initInfiniteMarquee(catWrap, {
+    track: ".cat-marquee-track",
+    set: ".cat-marquee-set",
+    minDuration: 22,
+    secPerItem: 3.2
+  });
   chipsEl.querySelectorAll(".cat-chip").forEach(btn=>{
     btn.onclick = ()=>{
       const el = document.getElementById("cat-"+btn.dataset.cat);
@@ -1115,13 +1144,13 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- Featured products (Swipeable with Shuffle) ----------------
+// ---------------- Featured products (Shuffle + Infinite Smooth Animation) ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
   return `
     <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${displayName}">
-      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
+      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:72px;display:flex;align-items:center;justify-content:center;font-size:32px;background:var(--leaf);border-radius:9px;">${it.icon||'🛒'}</div>`}
       <div class="fname">${displayName}</div>
       <div class="frate">${rateText}</div>
     </div>`;
@@ -1138,6 +1167,53 @@ function bindFeaturedCards(root){
   });
 }
 
+function initInfiniteMarquee(wrap, opts){
+  if(!wrap) return;
+  const track = wrap.querySelector(opts.track);
+  if(!track) return;
+  fillMarqueeSet(wrap, opts.set);
+  const sets = track.querySelectorAll(opts.set);
+  if(sets.length < 2) return;
+  const duration = Math.max(opts.minDuration, sets[0].children.length * opts.secPerItem);
+  track.style.animationDuration = duration + "s";
+  const pause = ()=> wrap.classList.add("is-paused");
+  const resume = ()=> wrap.classList.remove("is-paused");
+  wrap.addEventListener("mouseenter", pause);
+  wrap.addEventListener("mouseleave", resume);
+  wrap.addEventListener("touchstart", pause, {passive:true});
+  wrap.addEventListener("touchend", resume, {passive:true});
+  wrap.addEventListener("focusin", pause);
+  wrap.addEventListener("focusout", resume);
+}
+
+function fillMarqueeSet(wrap, setSelector){
+  const set = wrap.querySelector(setSelector);
+  if(!set) return;
+  const track = set.parentElement;
+  if(!set.dataset.marqueeBase) set.dataset.marqueeBase = set.innerHTML;
+  const chunk = set.dataset.marqueeBase;
+  if(!chunk.trim()) return;
+  set.innerHTML = chunk;
+  const target = Math.max((wrap.clientWidth || 360) + 80, 420);
+  let guard = 0;
+  while(set.scrollWidth < target && guard < 24){
+    set.innerHTML += chunk;
+    guard++;
+  }
+  track.querySelectorAll(setSelector).forEach((el, i)=>{
+    if(i > 0) el.innerHTML = set.innerHTML;
+  });
+}
+
+function initFeaturedMarquee(wrap){
+  initInfiniteMarquee(wrap, {
+    track: ".featured-marquee-track",
+    set: ".featured-marquee-set",
+    minDuration: 28,
+    secPerItem: 4
+  });
+}
+
 function renderFeatured(){
   let featuredItems = ITEMS.filter(it => it.featured && it.available);
   const scrollEl = document.getElementById("featuredScroll");
@@ -1147,7 +1223,7 @@ function renderFeatured(){
     return;
   }
   
-  // اشیاء کو شفل کرنا
+  // شفل (مکس کرنا)
   for (let i = featuredItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
@@ -1156,9 +1232,14 @@ function renderFeatured(){
   sectionEl.classList.remove("hidden");
   const cards = featuredItems.map(featuredCardHtml).join("");
   scrollEl.innerHTML = `
-    <div class="featured-marquee-wrap" id="featuredSwipeWrap">
-      <div class="featured-marquee-track">${cards}</div>
+    <div class="featured-marquee-wrap">
+      <div class="featured-marquee-track">
+        <div class="featured-marquee-set">${cards}</div>
+        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
+      </div>
     </div>`;
+  const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
+  initFeaturedMarquee(marqueeWrap);
   bindFeaturedCards(scrollEl);
 }
 

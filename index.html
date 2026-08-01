@@ -726,7 +726,7 @@ function renderChips(){
     chipsEl.innerHTML = "";
     return;
   }
-  CATEGORIES_META.sort(() => Math.random() - 0.5);
+  const chips = CATEGORIES_META.map(cat =>
     `<button type="button" class="cat-chip" data-cat="${cat.name}">${cat.icon} ${dispCatName(cat)}</button>`
   ).join("");
   chipsEl.innerHTML = `
@@ -1192,7 +1192,7 @@ function featuredCardHtml(it){
   return `
     <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${it.name}">
       ${it.image ? `<img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
-      <div class="fname">${it.name_roman || it.name}</div>
+      <div class="fname">${it.name}</div>
       <div class="frate">${rateText}</div>
     </div>`;
 }
@@ -1255,11 +1255,11 @@ function initFeaturedMarquee(wrap){
   });
 }
 
-1258 function renderFeatured(){
-1259   const featuredItems = ITEMS.filter(it => it.featured && it.available);
-1260   featuredItems.sort(() => Math.random() - 0.5);
-1261   const scrollEl = document.getElementById("featuredScroll");
-1262   const sectionEl = document.getElementById("featuredSection");
+function renderFeatured(){
+  const featuredItems = ITEMS.filter(it => it.featured && it.available);
+  const scrollEl = document.getElementById("featuredScroll");
+  const sectionEl = document.getElementById("featuredSection");
+  if(featuredItems.length === 0){
     sectionEl.classList.add("hidden");
     return;
   }

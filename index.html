@@ -291,14 +291,7 @@
   .area-note.warn{background:#FFEBEE; color:#B71C1C; display:block;}
   .area-note.ok{background:#E8F5E9; color:#1B5E20; display:block;}
 
-  .print-btn-group{display:flex; gap:8px; margin-top:10px; margin-bottom:10px;}
-  .print-btn{
-    flex:1; padding:10px 6px; font-size:12.5px; font-weight:700; border-radius:10px;
-    border:1.5px solid var(--mid); background:#fff; color:var(--dark); cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:4px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.05);
-  }
-  .print-btn:hover{background:var(--leaf);}
+  .print-btn-group{display:none;} /* عام لوگوں کی نظروں سے پرنٹ کے بٹن چھپا دیے گئے ہیں */
 
   .history-box{
     margin:15px 16px; padding:14px; background:#fff; border:1px solid var(--line);
@@ -371,7 +364,7 @@
     z-index: 1;
   }
   .featured-marquee-wrap{
-    overflow-x:auto; position:relative; padding:12px 16px; min-height:230px;
+    overflow-x:auto; position:relative; padding:16px; min-height:240px;
     scrollbar-width:none; -webkit-overflow-scrolling:touch;
     scroll-behavior: smooth;
   }
@@ -387,13 +380,13 @@
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
     position:relative; overflow:hidden;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
   }
   /* اسٹیج پر آنے والا مرکزی کارڈ بڑا اور شاندار ہوگا */
   .featured-card.is-centered {
-    transform: scale(1.12);
+    transform: scale(1.15);
     border-color: var(--accent);
-    box-shadow: 0 12px 30px rgba(255,111,0,0.3);
+    box-shadow: 0 14px 32px rgba(255,111,0,0.35);
     z-index: 5;
   }
   .featured-card::before{
@@ -563,11 +556,6 @@
         <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ ایڈوانس</label>
       </div>
       <div class="area-note" id="areaNote"></div>
-
-      <div class="print-btn-group">
-        <button class="print-btn" onclick="triggerPrint('thermal')">🖨️ تھرمل پرنٹ (Receipt)</button>
-        <button class="print-btn" onclick="triggerPrint('a4')">📄 A4 پرنٹ (Full Page)</button>
-      </div>
 
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔</div>
@@ -998,116 +986,6 @@ document.getElementById("clearHistoryBtn").onclick = () => {
   }
 };
 
-function triggerPrint(type) {
-  const chosen = ITEMS.filter(i=>i.qty>0);
-  if(chosen.length===0){ showToast("پرنٹ کے لیے کارٹ میں اشیاء شامل کریں"); return; }
-  
-  const name = document.getElementById("custName").value.trim() || "عام کسٹمر";
-  const phone = document.getElementById("custPhone").value.trim() || "-";
-  const addr = document.getElementById("custAddr").value.trim() || "-";
-  const orderCode = generateOrderCode();
-  const subtotal = chosen.reduce((s,it)=> s + it.qty*currentRate(it), 0);
-
-  const printArea = document.getElementById("printArea");
-  let itemsHtml = chosen.map(it => `
-    <tr>
-      <td style="padding:4px; border-bottom:1px solid #ccc;">${it.name}</td>
-      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:center;">${it.qty} ${currentLabel(it)}</td>
-      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:left;">${fmt(it.qty*currentRate(it))}</td>
-    </tr>
-  `).join("");
-
-  if (type === 'thermal') {
-    printArea.innerHTML = `
-      <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
-        <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
-        <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0315-5166034</p>
-        <hr style="border-dash:1px solid #000;">
-        <p style="margin:4px 0;"><b>کوڈ:</b> ${orderCode}</p>
-        <p style="margin:4px 0;"><b>کسٹمر:</b> ${name}</p>
-        <p style="margin:4px 0;"><b>فون:</b> ${phone}</p>
-        <p style="margin:4px 0;"><b>پتہ:</b> ${addr}</p>
-        <hr style="border-dash:1px solid #000;">
-        <table style="width:100%; border-collapse:collapse; font-size:11px;">
-          <thead>
-            <tr><th style="text-align:right;">آئٹم</th><th style="text-align:center;">مقدار</th><th style="text-align:left;">قیمت</th></tr>
-          </thead>
-          <tbody>${itemsHtml}</tbody>
-        </table>
-        <hr style="border-dash:1px solid #000;">
-        <h3 style="text-align:left; margin:5px 0;">کل رقم: ${fmt(subtotal)}</h3>
-        <p style="text-align:center; font-size:10px; margin-top:15px;">انتقاب پر شکریہ! 🙏</p>
-      </div>
-    `;
-  } else {
-    printArea.innerHTML = `
-      <div style="width:100%; font-family:sans-serif; direction:rtl; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #153A20; padding-bottom:10px;">
-          <h2>🟢 SJ Foods Mingora Swat</h2>
-          <div>
-            <h3>آرڈر رسید: ${orderCode}</h3>
-            <p style="font-size:12px; margin:0;">تاریخ: ${new Date().toLocaleDateString('ur-PK')}</p>
-          </div>
-        </div>
-        <div style="margin:20px 0; font-size:14px; line-height:1.8;">
-          <p><b>کسٹمر کا نام:</b> ${name}</p>
-          <p><b>رابطہ نمبر:</b> ${phone}</p>
-          <p><b>ڈیلیوری کا پتہ:</b> ${addr}</p>
-        </div>
-        <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size:14px;">
-          <thead>
-            <tr style="background:#153A20; color:#fff;">
-              <th style="padding:8px; text-align:right;">آئٹم</th>
-              <th style="padding:8px; text-align:center;">مقدار</th>
-              <th style="padding:8px; text-align:left;">کل قیمت</th>
-            </tr>
-          </thead>
-          <tbody>${itemsHtml}</tbody>
-        </table>
-        <h2 style="text-align:left; margin-top:30px; color:#153A20;">ٹوٹل رقم: ${fmt(subtotal)}</h2>
-      </div>
-    `;
-  }
-
-  window.print();
-}
-
-function printSavedOrder(idx) {
-  const o = ORDER_HISTORY[idx];
-  if(!o) return;
-
-  const printArea = document.getElementById("printArea");
-  let itemsHtml = o.items.map(it => `
-    <tr>
-      <td style="padding:4px; border-bottom:1px solid #ccc;">${it.name}</td>
-      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:center;">${it.qty}</td>
-      <td style="padding:4px; border-bottom:1px solid #ccc; text-align:left;">${fmt(it.price)}</td>
-    </tr>
-  `).join("");
-
-  printArea.innerHTML = `
-    <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
-      <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
-      <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0315-5166034</p>
-      <hr style="border-dash:1px solid #000;">
-      <p style="margin:4px 0;"><b>کوڈ:</b> ${o.code}</p>
-      <p style="margin:4px 0;"><b>کسٹمر:</b> ${o.name}</p>
-      <p style="margin:4px 0;"><b>فون:</b> ${o.phone}</p>
-      <hr style="border-dash:1px solid #000;">
-      <table style="width:100%; border-collapse:collapse; font-size:11px;">
-        <thead>
-          <tr><th style="text-align:right;">آئٹم</th><th style="text-align:center;">مقدار</th><th style="text-align:left;">قیمت</th></tr>
-        </thead>
-        <tbody>${itemsHtml}</tbody>
-      </table>
-      <hr style="border-dash:1px solid #000;">
-      <h3 style="text-align:left; margin:5px 0;">کل رقم: ${fmt(o.total)}</h3>
-      <p style="text-align:center; font-size:10px; margin-top:15px;">انتقاب پر شکریہ! 🙏</p>
-    </div>
-  `;
-  window.print();
-}
-
 document.getElementById("waBtn").onclick = ()=>{
   const chosen = ITEMS.filter(i=>i.qty>0);
   if(chosen.length===0){ showToast("پہلے کچھ آئٹمز کارٹ میں شامل کریں"); return; }
@@ -1160,6 +1038,7 @@ document.getElementById("clearBtn").onclick = ()=>{
   renderBill();
   renderFeatured();
   renderHistory();
+  initStageStepperEngine();
 })();
 
 if("serviceWorker" in navigator){
@@ -1310,7 +1189,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- TOP DEALS CLEAN TOUCH CAROUSEL ----------------
+// ---------------- TOP DEALS STAGE STEPPER ANIMATION ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1351,14 +1230,87 @@ function renderFeatured(){
   const cards = featuredItems.map(featuredCardHtml).join("");
   
   scrollEl.innerHTML = `
-    <div class="featured-marquee-wrap">
-      <div class="featured-marquee-track">
-        <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
-        <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
+    <div class="featured-marquee-wrap" id="featWrap">
+      <div class="featured-marquee-track" id="featTrack">
+        ${cards}
+        ${cards}
       </div>
     </div>`;
 
   bindFeaturedCards(scrollEl);
+}
+
+function initStageStepperEngine() {
+  const wrap = document.getElementById("featWrap");
+  const track = document.getElementById("featTrack");
+  if(!wrap || !track) return;
+
+  let currentStep = 0;
+  let stageTimer = null;
+  let isUserInteracting = false;
+
+  const updateStage = () => {
+    const cards = track.querySelectorAll(".featured-card");
+    if(cards.length === 0) return;
+
+    const cardWidth = cards[0].offsetWidth + 16;
+    const wrapWidth = wrap.clientWidth;
+
+    const targetScroll = (currentStep * cardWidth) - (wrapWidth / 2) + (cardWidth / 2);
+
+    wrap.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
+
+    setTimeout(() => {
+      const wrapRect = wrap.getBoundingClientRect();
+      const wrapCenter = wrapRect.left + wrapRect.width / 2;
+
+      let closestCard = null;
+      let minDistance = Infinity;
+
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(wrapCenter - cardCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestCard = card;
+        }
+      });
+
+      cards.forEach(card => card.classList.remove("is-centered"));
+      if (closestCard) {
+        closestCard.classList.add("is-centered");
+      }
+    }, 250);
+
+    currentStep++;
+    if(currentStep >= cards.length / 2) {
+      currentStep = 0;
+    }
+  };
+
+  stageTimer = setInterval(() => {
+    if(!isUserInteracting) {
+      updateStage();
+    }
+  }, 3500);
+
+  wrap.addEventListener("touchstart", () => { isUserInteracting = true; }, {passive: true});
+  wrap.addEventListener("mousedown", () => { isUserInteracting = true; });
+  
+  wrap.addEventListener("touchend", () => { 
+    setTimeout(() => { isUserInteracting = false; }, 4000); 
+  }, {passive: true});
+  
+  wrap.addEventListener("mouseup", () => { 
+    setTimeout(() => { isUserInteracting = false; }, 4000); 
+  });
+
+  setTimeout(updateStage, 500);
 }
 </script>
 </body>

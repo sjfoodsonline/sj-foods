@@ -1,28 +1,28 @@
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر | Swat</title>
-<meta name="description" content="SJ Foods Mingora Swat — تازہ سبزیاں، پھل، کریانہ، بیکری، دودھ و ڈیری اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں۔ کیش آن ڈیلیوری اور ایزی پیسہ دونوں سہولت۔">
-<meta name="keywords" content="SJ Foods, Mingora grocery, Swat online grocery, سبزی آن لائن مینگورہ, گروسری ڈیلیوری سوات">
-<meta property="og:title" content="SJ Foods Mingora — آن لائن گروسری اسٹور">
-<meta property="og:description" content="تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء گھر بیٹھے آرڈر کریں">
-<meta property="og:image" content="cover.png">
-<meta property="og:type" content="website">
-<meta name="robots" content="index, follow">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#153A20">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --dark:#153A20;
-    --mid:#2E7D32;
-    --leaf:#E8F5E9;
-    --accent:#FF6F00;
+function renderFeatured(){
+  let featuredItems = ITEMS.filter(it => it.featured && it.available);
+  const scrollEl = document.getElementById("featuredScroll");
+  const sectionEl = document.getElementById("featuredSection");
+  if(featuredItems.length === 0){
+    sectionEl.classList.add("hidden");
+    return;
+  }
+  sectionEl.classList.remove("hidden");
+
+  // آئٹمز کو شفل (مکس) کرنے کا طریقہ
+  featuredItems.sort(() => Math.random() - 0.5);
+
+  const cards = featuredItems.map(featuredCardHtml).join("");
+  scrollEl.innerHTML = `
+    <div class="featured-marquee-wrap">
+      <div class="featured-marquee-track">
+        <div class="featured-marquee-set">${cards}</div>
+        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
+      </div>
+    </div>`;
+  const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
+  initFeaturedMarquee(marqueeWrap);
+  bindFeaturedCards(scrollEl);
+}
     --gold:#C9A227;
     --paper:#FFFDF8;
     --ink:#20241F;

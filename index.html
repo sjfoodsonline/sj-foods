@@ -356,7 +356,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- TOP DEALS SMOOTH INFINITE LOOP WITH CENTER ZOOM ---- */
+  /* ---- TOP DEALS STAGE STEPPER ANIMATION ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -368,22 +368,14 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow:hidden; position:relative; padding:12px 0; min-height:230px;
-    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
-    mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
+    overflow-x:auto; position:relative; padding:12px 16px; min-height:230px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    scroll-behavior: smooth;
   }
+  .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
-    animation: featured-smooth-loop 35s linear infinite; /* آرام دہ دھیمی رفتار */
-    will-change: transform;
     align-items: center;
-  }
-  .featured-marquee-wrap:hover .featured-marquee-track{ animation-play-state: paused; }
-  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:rtl; align-items: center;}
-
-  @keyframes featured-smooth-loop {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(50%); }
   }
 
   .featured-card{
@@ -392,9 +384,9 @@
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
     position:relative; overflow:hidden;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
   }
-  /* جو کارڈ درمیان میں آئے گا وہ خود بخود بڑا ہو جائے گا */
+  /* اسٹیج پر آنے والا مرکزی کارڈ بڑا اور شاندار ہوگا */
   .featured-card.is-centered {
     transform: scale(1.12);
     border-color: var(--accent);
@@ -1162,7 +1154,7 @@ document.getElementById("clearBtn").onclick = ()=>{
   renderBill();
   renderFeatured();
   renderHistory();
-  initCenterZoomListener();
+  initStageStepperEngine();
 })();
 
 if("serviceWorker" in navigator){
@@ -1313,7 +1305,7 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- FEATURED PRODUCTS: CENTER ZOOM & TOUCH SWIPE ----------------
+// ---------------- STAGE STEPPER ENGINE: STEP-BY-STEP STAGE ENTRY ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
@@ -1355,47 +1347,90 @@ function renderFeatured(){
   
   scrollEl.innerHTML = `
     <div class="featured-marquee-wrap" id="featWrap">
-      <div class="featured-marquee-track">
-        <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
-        <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
+      <div class="featured-marquee-track" id="featTrack">
+        ${cards}
+        ${cards}
       </div>
     </div>`;
 
   bindFeaturedCards(scrollEl);
 }
 
-function initCenterZoomListener() {
+function initStageStepperEngine() {
   const wrap = document.getElementById("featWrap");
-  if(!wrap) return;
+  const track = document.getElementById("featTrack");
+  if(!wrap || !track) return;
 
-  const handleZoom = () => {
-    const cards = wrap.querySelectorAll(".featured-card");
-    const wrapRect = wrap.getBoundingClientRect();
-    const wrapCenter = wrapRect.left + wrapRect.width / 2;
+  let currentStep = 0;
+  let stageTimer = null;
+  let isUserInteracting = false;
 
-    let closestCard = null;
-    let minDistance = Infinity;
+  const updateStage = () => {
+    const cards = track.querySelectorAll(".featured-card");
+    if(cards.length === 0) return;
 
-    cards.forEach(card => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const distance = Math.abs(wrapCenter - cardCenter);
+    const cardWidth = cards[0].offsetWidth + 16;
+    const wrapWidth = wrap.clientWidth;
 
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestCard = card;
-      }
+    // سینٹر میں آنے والے کارڈ کا پوزیشن کیلکولیٹ کرنا
+    const targetScroll = (currentStep * cardWidth) - (wrapWidth / 2) + (cardWidth / 2);
+
+    wrap.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
     });
 
-    cards.forEach(card => card.classList.remove("is-centered"));
-    if (closestCard) {
-      closestCard.classList.add("is-centered");
+    // اسٹیج زوم ایفیکٹ
+    setTimeout(() => {
+      const wrapRect = wrap.getBoundingClientRect();
+      const wrapCenter = wrapRect.left + wrapRect.width / 2;
+
+      let closestCard = null;
+      let minDistance = Infinity;
+
+      cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(wrapCenter - cardCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestCard = card;
+        }
+      });
+
+      cards.forEach(card => card.classList.remove("is-centered"));
+      if (closestCard) {
+        closestCard.classList.add("is-centered");
+      }
+    }, 250);
+
+    currentStep++;
+    if(currentStep >= cards.length / 2) {
+      currentStep = 0;
     }
   };
 
-  wrap.addEventListener("scroll", handleZoom, { passive: true });
-  window.addEventListener("resize", handleZoom);
-  setTimeout(handleZoom, 300);
+  // آٹو اسٹیپ ٹائمر (ہر 3.5 سیکنڈ بعد اگلا آئٹم اسٹیج پر آئے گا)
+  stageTimer = setInterval(() => {
+    if(!isUserInteracting) {
+      updateStage();
+    }
+  }, 3500);
+
+  // یوزر جب ہاتھ یا انگلی لگائے تو آٹو ٹائمر عارضی طور پر رک جائے
+  wrap.addEventListener("touchstart", () => { isUserInteracting = true; }, {passive: true});
+  wrap.addEventListener("mousedown", () => { isUserInteracting = true; });
+  
+  wrap.addEventListener("touchend", () => { 
+    setTimeout(() => { isUserInteracting = false; }, 4000); 
+  }, {passive: true});
+  
+  wrap.addEventListener("mouseup", () => { 
+    setTimeout(() => { isUserInteracting = false; }, 4000); 
+  });
+
+  setTimeout(updateStage, 500);
 }
 </script>
 </body>

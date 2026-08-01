@@ -103,17 +103,11 @@
   }
   .cat-marquee-track{
     display:flex; width:max-content; gap:10px;
-    animation:cat-marquee 36s linear infinite;
-    will-change:transform; direction:rtl;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    direction:rtl;
   }
-  .cat-marquee-wrap.is-paused .cat-marquee-track{animation-play-state:paused;}
   .cat-marquee-set{display:flex; gap:10px; flex:0 0 auto; direction:rtl;}
-  @keyframes cat-marquee{
-    0%{transform:translateX(0);}
-    100%{transform:translateX(50%);}
-  }
   @media (prefers-reduced-motion: reduce){
-    .cat-marquee-track{animation:none !important;}
     .cat-marquee-wrap{overflow-x:auto; -webkit-mask-image:none; mask-image:none; padding:0 16px 6px; scrollbar-width:none;}
     .cat-marquee-wrap::-webkit-scrollbar{display:none;}
     .cat-marquee-track{display:flex; flex-wrap:nowrap; width:auto; gap:10px;}
@@ -497,8 +491,6 @@
   <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
-
-
 <div class="features-scroll">
   <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
   <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
@@ -628,106 +620,60 @@
 </div>
 
 <a class="fab fab-wa" id="floatingWaBtn" href="#" target="_blank" title="واٹس ایپ">💬</a>
-// ---------------- Featured products (only shows if items are flagged "featured": true in category JSON) ----------------
-function featuredCardHtml(it){
-  const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
-  // انگلش نام (name_roman) کو ترجیح دی گئی ہے
-  const displayName = it.name_roman || it.name;
-  return `
-    <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${displayName}">
-      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
-      <div class="fname">${displayName}</div>
-      <div class="frate">${rateText}</div>
-    </div>`;
-}
 
-function bindFeaturedCards(root){
-  root.querySelectorAll(".featured-card").forEach(card=>{
-    const go = ()=>{
-      const el = document.getElementById("row-"+card.dataset.id);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
-    };
-    card.onclick = go;
-    card.onkeydown = (e)=>{ if(e.key==="Enter" || e.key===" ") { e.preventDefault(); go(); } };
+<div class="toast" id="toast"></div>
+
+<script>
+let CATEGORIES_META = [];
+let ITEMS = [];
+
+const listEl = document.getElementById("list");
+const chipsEl = document.getElementById("chips");
+const noResultEl = document.getElementById("noResult");
+const loadingMsg = document.getElementById("loadingMsg");
+const billbar = document.getElementById("billbar");
+
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function buildItemsFromCategories(catData){
+  let items = [];
+  catData.forEach((cat, ci) => {
+    cat.items.forEach((it, ii) => {
+      const units = (it.units && it.units.length)
+        ? it.units.map(u=>({label:u.label, rate:u.rate}))
+        : [{label: it.unit, rate: it.rate}];
+      items.push({
+        id: ci+"-"+ii, cat: cat.category, icon: cat.icon,
+        name: it.name, name_roman: it.name_roman || "", units: units, unitIndex: 0,
+        available: it.available !== false,
+        image: it.image || "",
+        featured: it.featured === true,
+        qty: 0
+      });
+    });
   });
+  return items;
 }
+function currentUnit(it){ return it.units[it.unitIndex] || it.units[0]; }
+function currentRate(it){ return currentUnit(it).rate; }
+function currentLabel(it){ return currentUnit(it).label; }
+function dispName(it){ return it.name_roman ? `${it.name_roman} (${it.name})` : it.name; }
+function dispCatName(cat){ return cat.name_roman ? `${cat.name_roman} (${cat.name})` : cat.name; }
 
-function initInfiniteMarquee(wrap, opts){
-  if(!wrap) return;
-  const track = wrap.querySelector(opts.track);
-  if(!track) return;
-  fillMarqueeSet(wrap, opts.set);
-  const sets = track.querySelectorAll(opts.set);
-  if(sets.length < 2) return;
-  const duration = Math.max(opts.minDuration, sets[0].children.length * opts.secPerItem);
-  track.style.animationDuration = duration + "s";
-  const pause = ()=> wrap.classList.add("is-paused");
-  const resume = ()=> wrap.classList.remove("is-paused");
-  wrap.addEventListener("mouseenter", pause);
-  wrap.addEventListener("mouseleave", resume);
-  wrap.addEventListener("touchstart", pause, {passive:true});
-  wrap.addEventListener("touchend", resume, {passive:true});
-  wrap.addEventListener("focusin", pause);
-  wrap.addEventListener("focusout", resume);
-}
+async function loadRates(){
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
 
-function fillMarqueeSet(wrap, setSelector){
-  const set = wrap.querySelector(setSelector);
-  if(!set) return;
-  const track = set.parentElement;
-  if(!set.dataset.marqueeBase) set.dataset.marqueeBase = set.innerHTML;
-  const chunk = set.dataset.marqueeBase;
-  if(!chunk.trim()) return;
-  set.innerHTML = chunk;
-  const target = Math.max((wrap.clientWidth || 360) + 80, 420);
-  let guard = 0;
-  while(set.scrollWidth < target && guard < 24){
-    set.innerHTML += chunk;
-    guard++;
-  }
-  track.querySelectorAll(setSelector).forEach((el, i)=>{
-    if(i > 0) el.innerHTML = set.innerHTML;
-  });
-}
+    const catResults = await Promise.all(
+      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
+    );
 
-function initFeaturedMarquee(wrap){
-  initInfiniteMarquee(wrap, {
-    track: ".featured-marquee-track",
-    set: ".featured-marquee-set",
-    minDuration: 28,
-    secPerItem: 4
-  });
-}
+    CATEGORIES_META = index.map(entry => ({name: entry.category, name_roman: entry.category_roman || "", icon: entry.icon, image: entry.image || ""}));
 
-function renderFeatured(){
-  let featuredItems = ITEMS.filter(it => it.featured && it.available);
-  const scrollEl = document.getElementById("featuredScroll");
-  const sectionEl = document.getElementById("featuredSection");
-  if(featuredItems.length === 0){
-    sectionEl.classList.add("hidden");
-    return;
-  }
-  
-  // شفل (Random Mix)
-  for (let i = featuredItems.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
-  }
-
-  sectionEl.classList.remove("hidden");
-  const cards = featuredItems.map(featuredCardHtml).join("");
-  scrollEl.innerHTML = `
-    <div class="featured-marquee-wrap">
-      <div class="featured-marquee-track">
-        <div class="featured-marquee-set">${cards}</div>
-        <div class="featured-marquee-set" aria-hidden="true">${cards}</div>
-      </div>
-    </div>`;
-  const marqueeWrap = scrollEl.querySelector(".featured-marquee-wrap");
-  initFeaturedMarquee(marqueeWrap);
-  bindFeaturedCards(scrollEl);
-}
-}
+    const combined = index.map((entry, i) => ({
+      category: entry.category,
+      icon: entry.icon,
       items: catResults[i]
     }));
     ITEMS = buildItemsFromCategories(combined);
@@ -756,38 +702,68 @@ async function loadSettings(){
     refreshHeroLinks();
     renderSocialLinks(s);
   }catch(e){
-    // settings.json not found yet — site still works with defaults
+    // settings.json not found yet
   }
 }
+
+let catStepIndex = 0;
+let catStepTimer = null;
 
 function renderChips(){
   if(CATEGORIES_META.length === 0){
     chipsEl.innerHTML = "";
     return;
   }
+  
+  // کیٹیگریز کو مکس/شفل کرنا
+  CATEGORIES_META.sort(() => Math.random() - 0.5);
+  
   const chips = CATEGORIES_META.map(cat =>
     `<button type="button" class="cat-chip" data-cat="${cat.name}">${cat.icon} ${dispCatName(cat)}</button>`
   ).join("");
+  
   chipsEl.innerHTML = `
     <div class="cat-marquee-wrap">
-      <div class="cat-marquee-track">
+      <div class="cat-marquee-track" id="catTrack">
         <div class="cat-marquee-set">${chips}</div>
         <div class="cat-marquee-set" aria-hidden="true">${chips}</div>
       </div>
     </div>`;
-  const catWrap = chipsEl.querySelector(".cat-marquee-wrap");
-  initInfiniteMarquee(catWrap, {
-    track: ".cat-marquee-track",
-    set: ".cat-marquee-set",
-    minDuration: 22,
-    secPerItem: 3.2
-  });
+    
   chipsEl.querySelectorAll(".cat-chip").forEach(btn=>{
     btn.onclick = ()=>{
       const el = document.getElementById("cat-"+btn.dataset.cat);
       if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
     };
   });
+
+  // اینیمیشن: گاڑی والی سپیڈ سے آنا، 3.5 سیکنڈ رکنا، پھر آگے جانا
+  if(catStepTimer) clearInterval(catStepTimer);
+  catStepIndex = 0;
+  
+  catStepTimer = setInterval(() => {
+    const track = document.getElementById("catTrack");
+    if(!track) return;
+    
+    const firstChip = track.querySelector(".cat-chip");
+    if(!firstChip) return;
+    
+    const stepWidth = firstChip.offsetWidth + 10; 
+    catStepIndex++;
+    
+    track.style.transform = `translateX(${catStepIndex * stepWidth}px)`;
+    
+    if(catStepIndex >= CATEGORIES_META.length){
+      setTimeout(() => {
+        track.style.transition = 'none';
+        catStepIndex = 0;
+        track.style.transform = `translateX(0px)`;
+        setTimeout(() => {
+          track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        }, 50);
+      }, 600);
+    }
+  }, 3500);
 }
 
 function renderList(filter){
@@ -1085,7 +1061,7 @@ const isIOS = /iphone|ipad|ipod/i.test(ua);
 function showInstallButton(){
   if(!isStandalone) installBtn.style.display = "flex";
 }
-if(!isStandalone) showInstallButton(); // show by default; Android will also get native prompt when ready
+if(!isStandalone) showInstallButton();
 
 window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
@@ -1176,8 +1152,6 @@ document.addEventListener("click", (e)=>{
   }
 });
 
-// closing via the X button or tapping the dark backdrop: go back in history
-// so the pushed state is consumed and the phone's back button stays in sync
 document.getElementById("closeLightbox").onclick = ()=>{
   if(lightboxOpen) history.back(); else closeLightboxImg();
 };
@@ -1185,13 +1159,9 @@ lightbox.onclick = (e)=>{
   if(e.target===lightbox){ if(lightboxOpen) history.back(); else closeLightboxImg(); }
 };
 
-// phone/browser back button: just close the lightbox, never leave the page
 window.addEventListener("popstate", ()=>{
   if(lightboxOpen) closeLightboxImg();
 });
-
-// image zoom is now purely natural pinch-zoom-with-fingers (browser native),
-// no forced/automatic zoom level — matches how much the person actually pinches
 
 // ---------------- Policy modal ----------------
 const policyOverlay = document.getElementById("policyOverlay");
@@ -1217,7 +1187,7 @@ document.getElementById("openTerms").onclick = ()=> openPolicy("terms");
 document.getElementById("closePolicy").onclick = ()=> policyOverlay.classList.add("hidden");
 policyOverlay.onclick = (e)=>{ if(e.target===policyOverlay) policyOverlay.classList.add("hidden"); };
 
-// ---------------- Social links (from settings.json, shown only if provided) ----------------
+// ---------------- Social links ----------------
 function renderSocialLinks(s){
   const box = document.getElementById("footerSocial");
   box.innerHTML = "";
@@ -1225,13 +1195,14 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- Featured products (only shows if items are flagged "featured": true in category JSON) ----------------
+// ---------------- Featured products ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
+  const displayName = it.name_roman || it.name;
   return `
-    <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${it.name}">
-      ${it.image ? `<img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
-      <div class="fname">${it.name}</div>
+    <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${displayName}">
+      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:84px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--leaf);border-radius:10px;">${it.icon||'🛒'}</div>`}
+      <div class="fname">${displayName}</div>
       <div class="frate">${rateText}</div>
     </div>`;
 }
@@ -1295,13 +1266,20 @@ function initFeaturedMarquee(wrap){
 }
 
 function renderFeatured(){
-  const featuredItems = ITEMS.filter(it => it.featured && it.available);
+  let featuredItems = ITEMS.filter(it => it.featured && it.available);
   const scrollEl = document.getElementById("featuredScroll");
   const sectionEl = document.getElementById("featuredSection");
   if(featuredItems.length === 0){
     sectionEl.classList.add("hidden");
     return;
   }
+  
+  // شفل (Fisher-Yates) - تمام نمایا اشیاء کو مکس کرنا
+  for (let i = featuredItems.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
+  }
+
   sectionEl.classList.remove("hidden");
   const cards = featuredItems.map(featuredCardHtml).join("");
   scrollEl.innerHTML = `
@@ -1316,7 +1294,7 @@ function renderFeatured(){
   bindFeaturedCards(scrollEl);
 }
 
-// ---------------- Offers slider (reads offers.json; hidden if empty/missing) ----------------
+// ---------------- Offers slider ----------------
 async function loadOffers(){
   try{
     const res = await fetch("offers.json", {cache:"no-store"});
@@ -1340,7 +1318,7 @@ async function loadOffers(){
       }, 4000);
     }
   }catch(e){
-    // offers.json not present — no offers to show, that's fine
+    // offers.json not present
   }
 }
 loadOffers();

@@ -99,7 +99,7 @@
   .cat-section{padding:6px 0 10px; position:sticky; top:52px; background:var(--paper); z-index:19;}
   .cat-section-title{margin:8px 16px 6px; font-size:14px; font-weight:700; text-align:right;}
   
-  /* ---- CATEGORIES INFINITE MARQUEE ---- */
+  /* ---- SLOW & SMOOTH CATEGORIES ---- */
   .cat-marquee-wrap{
     overflow:hidden; position:relative; padding:4px 0 8px;
     -webkit-mask-image:linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
@@ -107,7 +107,7 @@
   }
   .cat-marquee-track{
     display:flex; width:max-content; gap:10px;
-    animation: cat-marquee-move 25s linear infinite;
+    animation: cat-marquee-move 55s linear infinite; /* بہت آہستہ رفتار */
     will-change: transform; direction:rtl;
   }
   .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
@@ -357,7 +357,7 @@
   .feature-card .ic{font-size:22px;}
   .feature-card .tx{font-size:10.5px; color:var(--ink); margin-top:4px; line-height:1.4; font-weight:600;}
 
-  /* ---- FEATURED SECTION (TOP DEALS PERFECT NO-GAP CSS LOOP) ---- */
+  /* ---- FEATURED DEALS (CENTER ZOOM & TOUCH SWIPE) ---- */
   .hidden{display:none !important;}
   .section-title{
     font-size:17px; font-weight:800; color:var(--dark); margin:16px 16px 8px; 
@@ -369,30 +369,29 @@
     border-radius:0 0 18px 18px;
   }
   .featured-marquee-wrap{
-    overflow:hidden; position:relative; padding:8px 0; min-height:210px;
-    -webkit-mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
-    mask-image:linear-gradient(to left, transparent 0, #000 3%, #000 97%, transparent 100%);
+    overflow-x:auto; position:relative; padding:12px 16px; min-height:230px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
   }
+  .featured-marquee-wrap::-webkit-scrollbar{display:none;}
   .featured-marquee-track{
     display:flex; width:max-content; gap:16px; direction:rtl;
-    animation: featured-continuous-loop 22s linear infinite;
-    will-change: transform;
-  }
-  .featured-marquee-wrap:hover .featured-marquee-track{ animation-play-state: paused; }
-  .featured-marquee-set{display:flex; gap:16px; flex:0 0 auto; direction:rtl;}
-
-  @keyframes featured-continuous-loop {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(50%); }
+    align-items:center;
   }
 
   .featured-card{
-    flex:0 0 180px; background:var(--card);
+    flex:0 0 170px; background:var(--card);
     border:2px solid rgba(201,162,39,0.55); border-radius:16px;
     padding:10px; text-align:center; cursor:pointer;
     box-shadow:0 6px 18px rgba(21,58,32,0.12);
-    transition:transform .2s, box-shadow .2s, border-color .2s;
     position:relative; overflow:hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  /* جو کارڈ بالکل درمیان میں آئے گا وہ بڑا ہو جائے گا */
+  .featured-card.is-centered {
+    transform: scale(1.12);
+    border-color: var(--accent);
+    box-shadow: 0 12px 30px rgba(255,111,0,0.3);
+    z-index: 5;
   }
   .featured-card::before{
     content:"⭐"; position:absolute; top:8px; right:8px; font-size:12px; z-index:1;
@@ -400,14 +399,9 @@
     display:flex; align-items:center; justify-content:center; line-height:1;
     box-shadow:0 2px 6px rgba(201,162,39,0.35);
   }
-  .featured-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(201,162,39,0.2);
-    border-color:var(--gold);
-  }
-  .featured-card img{width:100%; height:120px; object-fit:cover; border-radius:12px; background:var(--leaf);}
-  .featured-card .fname{font-size:13.5px; font-weight:700; margin-top:8px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-align:center;}
-  .featured-card .frate{font-size:14px; color:var(--price); font-weight:800; margin-top:5px; text-align:center;}
+  .featured-card img{width:100%; height:110px; object-fit:cover; border-radius:12px; background:var(--leaf);}
+  .featured-card .fname{font-size:13px; font-weight:700; margin-top:8px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-align:center;}
+  .featured-card .frate{font-size:13.5px; color:var(--price); font-weight:800; margin-top:4px; text-align:center;}
 
   .offer-slider{margin:14px 16px 0; border-radius:16px; overflow:hidden; position:relative;}
   .offer-slide{
@@ -545,7 +539,7 @@
       <div class="pay-card-title">📲 ایزی پیسہ ایڈوانس (ترجیحی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
       <div class="pay-number-row">
-        <span class="pay-number" id="payNumber">0313-5166034</span>
+        <span class="pay-number" id="payNumber">0315-5166034</span>
         <button id="copyNumBtn">📋 کاپی</button>
       </div>
       <div class="pay-hint">✅ کیش آن ڈیلیوری بھی دستیاب ہے — مگر اگر آپ ایزی پیسہ پر ایڈوانس ادائیگی کر سکیں تو ہماری ترجیح ہوگی۔ پہلے نیچے "واٹس ایپ پر آرڈر بھیجیں" دبائیں، ہماری تصدیق کے بعد ہی رقم بھیجیں</div>
@@ -574,7 +568,7 @@
 
       <div class="pay-note">🚚 ڈیلیوری چارج راستے کے حساب سے، سامان پہنچنے پر موقع پر ادا کریں۔ سامان 30-45 منٹ میں پہنچا دیا جائے گا۔</div>
       <div class="pay-note" style="margin-top:6px; background:#E8F5E9; color:#1B5E20;">🌿 آن لائن خریداری میں ہماری سو فیصد کوشش ہوگی کہ آپ تک ہر چیز بالکل تازہ، درست اور معیاری پہنچے۔</div>
-      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے رابطہ کریں:<br>📞 <span id="noteContact">0313-5166034</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
+      <div class="pay-note" style="margin-top:6px;">💬 کسی بھی رائے، تجویز یا سوال کے لیے رابطہ کریں:<br>📞 <span id="noteContact">0315-5166034</span>   📧 <span id="noteEmail">sjfoodsonline@outlook.com</span><br>🕙 اوقات کار: صبح 10 بجے سے رات 8 بجے تک<br><br>شکریہ کہ آپ نے SJ Foods کو منتخب کیا! 🙏</div>
     </div>
 
     <div class="actions">
@@ -594,7 +588,7 @@
 
 <footer>
   SJ Foods Mingora Swat — Fresh Quality, Fast Delivery 🌿<br>
-  <span id="footerContact">📞 0313-5166034   📧 sjfoodsonline@outlook.com</span><br>
+  <span id="footerContact">📞 0315-5166034   📧 sjfoodsonline@outlook.com</span><br>
   📍 <span id="footerAddress">Al Basit Plaza, Haji Baba Road, Mingora Swat</span><br>
   🕙 Hours: 10:00 AM - 8:00 PM
   <div class="footer-links" id="footerSocial"></div>
@@ -850,8 +844,8 @@ function syncAfterChange(it){
   renderBill();
 }
 
-let SHOP_WHATSAPP = "923135166034";
-let SHOP_PAY_NUMBER = "0313-5166034";
+let SHOP_WHATSAPP = "923155166034";
+let SHOP_PAY_NUMBER = "0315-5166034";
 let SHOP_EMAIL = "sjfoodsonline@outlook.com";
 
 const billLines = document.getElementById("billLines");
@@ -1021,7 +1015,7 @@ function triggerPrint(type) {
     printArea.innerHTML = `
       <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
         <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
-        <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0313-5166034</p>
+        <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0315-5166034</p>
         <hr style="border-dash:1px solid #000;">
         <p style="margin:4px 0;"><b>کوڈ:</b> ${orderCode}</p>
         <p style="margin:4px 0;"><b>کسٹمر:</b> ${name}</p>
@@ -1088,7 +1082,7 @@ function printSavedOrder(idx) {
   printArea.innerHTML = `
     <div style="width:280px; font-family:sans-serif; font-size:12px; direction:rtl; padding:10px;">
       <h2 style="text-align:center; margin:0; font-size:16px;">🟢 SJ Foods Mingora</h2>
-      <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0313-5166034</p>
+      <p style="text-align:center; margin:2px 0 10px; font-size:10px;">Swat — 0315-5166034</p>
       <hr style="border-dash:1px solid #000;">
       <p style="margin:4px 0;"><b>کوڈ:</b> ${o.code}</p>
       <p style="margin:4px 0;"><b>کسٹمر:</b> ${o.name}</p>
@@ -1160,6 +1154,7 @@ document.getElementById("clearBtn").onclick = ()=>{
   renderBill();
   renderFeatured();
   renderHistory();
+  initCenterZoomListener();
 })();
 
 if("serviceWorker" in navigator){
@@ -1310,13 +1305,13 @@ function renderSocialLinks(s){
   if(s.instagram_url) box.innerHTML += `<a href="${s.instagram_url}" target="_blank">📷 انسٹاگرام</a>`;
 }
 
-// ---------------- FEATURED PRODUCTS INFINITE NO GAP LOOP ----------------
+// ---------------- FEATURED PRODUCTS: CENTER ZOOM & TOUCH SWIPE ----------------
 function featuredCardHtml(it){
   const rateText = currentRate(it) === 0 ? "🎁 مفت" : fmt(currentRate(it));
   const displayName = it.name_roman || it.name;
   return `
     <div class="featured-card" data-id="${it.id}" role="button" tabindex="0" title="${displayName}">
-      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:42px;background:var(--leaf);border-radius:12px;">${it.icon||'🛒'}</div>`}
+      ${it.image ? `<img src="${it.image}" alt="${displayName}" loading="lazy" onerror="this.style.display='none'">` : `<div style="height:110px;display:flex;align-items:center;justify-content:center;font-size:38px;background:var(--leaf);border-radius:12px;">${it.icon||'🛒'}</div>`}
       <div class="fname">${displayName}</div>
       <div class="frate">${rateText}</div>
     </div>`;
@@ -1342,7 +1337,6 @@ function renderFeatured(){
     return;
   }
   
-  // شفل کرنا
   for (let i = featuredItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
@@ -1351,10 +1345,9 @@ function renderFeatured(){
   sectionEl.classList.remove("hidden");
   const cards = featuredItems.map(featuredCardHtml).join("");
   
-  // دوبار سیٹ بنا کر لا متناہی لوپنگ بنانا
   scrollEl.innerHTML = `
-    <div class="featured-marquee-wrap">
-      <div class="featured-marquee-track">
+    <div class="featured-marquee-wrap" id="featWrap">
+      <div class="featured-marquee-track" id="featTrack">
         <div class="featured-marquee-set" style="display:flex; gap:16px;">${cards}</div>
         <div class="featured-marquee-set" style="display:flex; gap:16px;" aria-hidden="true">${cards}</div>
       </div>
@@ -1363,33 +1356,40 @@ function renderFeatured(){
   bindFeaturedCards(scrollEl);
 }
 
-async function loadOffers(){
-  try{
-    const res = await fetch("offers.json", {cache:"no-store"});
-    const offers = await res.json();
-    if(!Array.isArray(offers) || offers.length === 0) return;
-    const slider = document.getElementById("offerSlider");
-    slider.classList.remove("hidden");
-    slider.innerHTML = offers.map((o,i)=>`
-      <div class="offer-slide ${i===0?'active':''}">
-        <div class="ot">${o.title || ''}</div>
-        <div class="os">${o.subtitle || ''}</div>
-      </div>
-    `).join("");
-    if(offers.length > 1){
-      let idx = 0;
-      setInterval(()=>{
-        const slides = slider.querySelectorAll(".offer-slide");
-        slides[idx].classList.remove("active");
-        idx = (idx+1) % slides.length;
-        slides[idx].classList.add("active");
-      }, 4000);
+// جو کارڈ اسکرین کے بالکل درمیان میں آئے گا وہ بڑا (Zoom) ہو جائے گا
+function initCenterZoomListener() {
+  const wrap = document.getElementById("featWrap");
+  if(!wrap) return;
+
+  const handleZoom = () => {
+    const cards = wrap.querySelectorAll(".featured-card");
+    const wrapRect = wrap.getBoundingClientRect();
+    const wrapCenter = wrapRect.left + wrapRect.width / 2;
+
+    let closestCard = null;
+    let minDistance = Infinity;
+
+    cards.forEach(card => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const distance = Math.abs(wrapCenter - cardCenter);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestCard = card;
+      }
+    });
+
+    cards.forEach(card => card.classList.remove("is-centered"));
+    if (closestCard) {
+      closestCard.classList.add("is-centered");
     }
-  }catch(e){
-    // offers.json
-  }
+  };
+
+  wrap.addEventListener("scroll", handleZoom, { passive: true });
+  window.addEventListener("resize", handleZoom);
+  setTimeout(handleZoom, 300);
 }
-loadOffers();
 </script>
 </body>
 </html>

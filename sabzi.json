@@ -63,11 +63,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 120
+        "rate": 200
       },
       {
         "label": "آدھا KG",
-        "rate": 60
+        "rate": 100
       }
     ],
     "available": true,
@@ -114,11 +114,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 300
       },
       {
         "label": "آدھا KG",
-        "rate": 100
+        "rate": 150
       }
     ],
     "available": true,
@@ -165,11 +165,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 120
+        "rate": 200
       },
       {
         "label": "آدھا KG",
-        "rate": 60
+        "rate": 100
       }
     ],
     "available": true,

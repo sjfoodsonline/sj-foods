@@ -12,7 +12,13 @@
     --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
   }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:90px;}
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; }
+  body{
+    margin:0 auto; padding:0 0 90px 0; background:var(--paper); color:var(--ink);
+    font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right;
+    width:100%; max-width:480px; min-height:100vh; position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden;
+  }
   header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
   header h1{margin:0; font-size:18px; font-family:"Jameel Noori Nastaleeq",serif;}
   header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
@@ -79,6 +85,7 @@
   .savebar{
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
     padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;
+    width:100%; max-width:480px; margin:0 auto;
   }
   .savebar .status{flex:1; font-size:11.5px; color:var(--muted);}
   .savebar button{flex:0 0 auto; border-radius:10px; padding:11px 18px; font-size:13px; font-weight:700;}
@@ -125,7 +132,6 @@
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <!-- 1. لائیو آرڈرز سیکشن -->
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
@@ -139,14 +145,13 @@
       <div id="ordersArea"></div>
     </div>
 
-    <!-- 2. پروڈکٹس اور ریٹس سیکشن (خودکار حساب کتاب کے ساتھ) -->
     <div id="secProducts" style="display:none;">
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker"></select>
           <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
         </div>
-        <div class="hint">💡 <b>ٹپ:</b> جب آپ 1 KG یا کلو کا ریٹ لکھیں گے، تو دوسرے یونٹس (آدھا کلو، پاؤ، دڑی وغیرہ) خود بخود ایڈجسٹ ہو جائیں گے!</div>
+        <div class="hint">💡 <b>ٹپ:</b> جب آپ 1 KG یا کلو کا ریٹ لکھیں گے، تو دوسرے یونٹس خود بخود ایڈجسٹ ہو جائیں گے!</div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
@@ -427,7 +432,6 @@ function normalizeItem(it){
   };
 }
 
-// خودکار حساب کتاب (پاؤ، ادھا کلو، دڑی وغیرہ کے لیے)
 function isBaseKgLabel(label){
   const t = (label||"").trim().toLowerCase();
   return t === "kg" || t === "کلو";
@@ -450,7 +454,7 @@ function applyAutoLink(it, kgRate, currentRowEl){
     if(isBaseKgLabel(u.label)) return;
     const mult = parseUnitMultiplier(u.label);
     if(mult === null) return;
-    u.rate = Math.round((kgRate * mult) / 5) * 5; // قریبی 5 روپے پر راؤنڈ کرنا
+    u.rate = Math.round((kgRate * mult) / 5) * 5;
     const rowEl = unitsBox.children[offset + ui];
     if(rowEl){
       const rateInput = rowEl.querySelector(".u-rate");

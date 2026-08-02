@@ -3,326 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
+<title>SJ Foods — ایڈمن پینل</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --gold:#C9A227; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86;
-    --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF;
-  }
+  :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --line:#E5E4DA; }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right; padding-bottom:90px;}
-  :root{ --app-w: 480px; }
-  @media (min-width: 640px){
-    body{ max-width:var(--app-w); margin:0 auto; min-height:100vh; box-shadow:0 0 40px rgba(0,0,0,0.15); }
-    #billbar{ left:50% !important; transform:translateX(-50%); width:100%; max-width:var(--app-w); }
-  }
-  header{ background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 20px 20px; position:relative; }
-  header h1{margin:0 0 4px; font-size:20px; font-family:"Noto Nastaliq Urdu",serif;}
-  header p{margin:0; font-size:12px; opacity:.9;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",sans-serif; direction:rtl; padding-bottom:40px;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 16px 16px;}
+  header h1{margin:0; font-size:17px; font-family:"Noto Nastaliq Urdu",serif;}
+  .wrap{padding:14px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px;}
+  button{cursor:pointer; border:none; font-family:inherit;}
+  .btn{background:var(--dark); color:#fff; border-radius:8px; padding:10px; font-size:13px; font-weight:700; width:100%;}
+  .btn-success{background:#E8F5E9; color:#1B5E20; border:1px solid var(--mid); border-radius:8px; padding:8px; font-weight:700;}
+  .btn-danger{background:#FFEBEE; color:#B71C1C; border-radius:8px; padding:6px 10px; font-size:11px;}
   
-  .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:10px; width:34px; height:34px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; position:relative;}
+  .order-card.pending{animation: blink 1.8s infinite;}
+  .order-card.completed{background:#F1F8E9; border-color:#81C784;}
+  @keyframes blink{ 0%{border-color:#E53935;background:#FFEBEE;} 50%{border-color:#FFE082;background:#FFFDE7;} 100%{border-color:#E53935;background:#FFEBEE;} }
   
-  .search-wrap{padding:12px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
-  #search{width:100%; padding:11px 14px; font-size:14px; border-radius:12px; border:1.5px solid var(--line); outline:none; font-family:inherit;}
-  
-  .cat-section{padding:4px 0 8px; position:sticky; top:52px; background:var(--paper); z-index:19; overflow-x:auto; white-space:nowrap; scrollbar-width:none;}
-  .cat-section::-webkit-scrollbar{display:none;}
-  .cat-container{display:inline-flex; gap:8px; padding:0 16px;}
-  .cat-chip{background:var(--leaf); color:var(--dark); border:1.5px solid #cfe8d1; border-radius:20px; padding:7px 14px; font-size:12.5px; font-weight:700; cursor:pointer;}
-
-  main{padding:6px 16px;}
-  .cat-title{font-size:15px; font-weight:700; color:var(--dark); margin:16px 0 8px; border-right:4px solid var(--dark); padding-right:8px;}
-  
-  .item{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:8px; display:flex; flex-direction:column; gap:8px;}
-  .item.active{border-color:var(--mid); box-shadow:0 2px 8px rgba(46,125,50,0.1);}
-  .item-top{display:flex; align-items:center; gap:10px;}
-  .item-thumb{flex:0 0 54px; width:54px; height:54px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:24px;}
-  .item-thumb img{width:100%; height:100%; object-fit:cover;}
-  .item-info{flex:1; min-width:0;}
-  .item-name{font-size:14.5px; font-weight:600;}
-  .item-meta{font-size:11.5px; color:var(--muted); margin-top:2px;}
-  .item-meta b{color:var(--price);}
-  
-  .item-bottom{display:flex; justify-content:space-between; align-items:center;}
-  .unit-select{flex:1; border:1.5px solid var(--mid); border-radius:8px; padding:6px; font-size:12px; font-weight:600; background:#fff; color:var(--dark); margin-left:8px;}
-  
-  .qty-box{display:flex; align-items:center; gap:6px;}
-  .qty-box button{width:30px; height:30px; border-radius:8px; border:none; background:var(--leaf); color:var(--dark); font-size:16px; font-weight:700; cursor:pointer;}
-  .qty-box button.plus{background:var(--dark); color:#fff;}
-  .qty-box input{width:34px; text-align:center; border:1px solid var(--line); border-radius:6px; font-size:14px; font-weight:700; padding:4px;}
-
-  /* Top Deals Transition Slider */
-  .featured-section{margin:8px 0 12px; padding:8px 0; background:linear-gradient(180deg, rgba(201,162,39,0.12) 0%, transparent 100%); border-radius:14px;}
-  .section-title{font-size:15px; font-weight:800; color:var(--dark); margin:0 16px 8px; border-right:4px solid var(--gold); padding-right:8px;}
-  .deal-container{position:relative; max-width:280px; margin:0 auto; height:180px; overflow:hidden; border-radius:14px;}
-  .deal-slide{position:absolute; inset:0; background:#fff; border:2px solid rgba(201,162,39,0.5); border-radius:14px; padding:10px; text-align:center; cursor:pointer; opacity:0; transform:scale(0.9) translateY(10px); transition:all 0.5s ease; display:flex; flex-direction:column; align-items:center; justify-content:center;}
-  .deal-slide.active{opacity:1; transform:scale(1) translateY(0);}
-  .deal-slide img{width:90px; height:90px; object-fit:cover; border-radius:10px; background:var(--leaf); margin:0 auto;}
-  .deal-slide .d-name{font-size:13px; font-weight:700; margin-top:6px; color:var(--ink);}
-  .deal-slide .d-rate{font-size:13.5px; font-weight:800; color:var(--price); margin-top:2px;}
-
-  /* Cart Bar */
-  #billbar{position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line); border-radius:18px 18px 0 0; padding:12px 16px; box-shadow:0 -6px 20px rgba(0,0,0,0.1); z-index:100;}
-  #billbar.collapsed .cart-details{display:none;}
-  .bill-summary{display:flex; justify-content:space-between; align-items:center; cursor:pointer;}
-  .bill-summary .total{font-size:22px; font-weight:800; color:var(--dark);}
-  .cart-details{max-height:60vh; overflow-y:auto; margin-top:10px; border-top:1px dashed var(--line); padding-top:8px;}
-  
-  .checkout-box{background:var(--leaf); border-radius:12px; padding:10px; margin-top:10px;}
-  .checkout-box input, .checkout-box select{width:10px; width:100%; border:1px solid #cfe8d1; border-radius:8px; padding:8px; font-size:12.5px; margin-bottom:6px; background:#fff; font-family:inherit;}
-  
-  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:10px; padding:11px; font-size:14px; font-weight:700; width:100%; cursor:pointer; margin-top:8px;}
-  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150;}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:100;}
   .toast.show{opacity:1;}
 </style>
 </head>
 <body>
 
 <header>
-  <button class="share-btn" id="shareBtn" title="Share">🔗</button>
-  <h1>🟢 ایس جے فوڈز مینگورہ</h1>
-  <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
+  <h1>⚙️ SJ Foods — لائیو آرڈرز پینل</h1>
 </header>
 
-<div class="search-wrap">
-  <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
-</div>
-
-<div class="cat-section">
-  <div class="cat-container" id="chips"></div>
-</div>
-
-<div class="featured-section hidden" id="featuredSection">
-  <div class="section-title">⭐ ٹرینڈنگ ڈیلز</div>
-  <div class="deal-container" id="dealBox"></div>
-</div>
-
-<main id="list"></main>
-
-<div id="billbar" class="collapsed">
-  <div class="bill-summary" id="summary">
-    <div>🛒 کار트 (<span id="itemCount">0</span> آئٹمز)</div>
-    <div class="total" id="summaryTotal">Rs. 0</div>
-  </div>
-  <div class="cart-details">
-    <div id="billLines" style="font-size:12.5px; margin-bottom:8px;"></div>
-    <div class="checkout-box">
-      <input id="custName" type="text" placeholder="آپ کا نام">
-      <input id="custPhone" type="tel" placeholder="رابطہ نمبر / واٹس ایپ">
-      <input id="custAddr" type="text" placeholder="مکمل پتہ (مینگورہ شہر)">
-      <select id="custArea">
-        <option value="">📍 اپنا علاقہ منتخب کریں</option>
-        <option value="inside">مینگورہ شہر کے اندر</option>
-        <option value="outside">مینگورہ سے باہر</option>
-      </select>
+<div class="wrap">
+  <div class="card">
+    <h3>🔔 کسٹمرز کے آرڈرز</h3>
+    <div style="display:flex; gap:8px; margin-top:8px;">
+      <button class="btn" style="background:var(--leaf); color:var(--dark);" onclick="testSound()">🔊 ٹیسٹ بیل</button>
+      <button class="btn" style="background:#E8F5E9; color:#1B5E20;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
+      <button class="btn" style="background:#FFEBEE; color:#B71C1C;" onclick="clearAll()">🗑️ صاف کریں</button>
     </div>
-    <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
   </div>
+
+  <div id="ordersArea"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-let CATEGORIES_META = [];
-let ITEMS = [];
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2000);
+}
 
-function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
-
-async function loadData(){
+function playSound(){
   try{
-    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
-    const index = await idxRes.json();
-    const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
-    
-    CATEGORIES_META = index.map(e => ({name: e.category, icon: e.icon}));
-    ITEMS = [];
-    catResults.forEach((res, ci) => {
-      res.forEach((it, ii) => {
-        ITEMS.push({
-          id: ci+"-"+ii, cat: CATEGORIES_META[ci].name, icon: CATEGORIES_META[ci].icon,
-          name: it.name, units: it.units || [{label: it.unit, rate: it.rate}], unitIndex: 0,
-          available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
-        });
-      });
-    });
-    renderChips();
-    renderList("");
-    renderFeatured();
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.6);
   }catch(e){}
 }
 
-function renderChips(){
-  document.getElementById("chips").innerHTML = CATEGORIES_META.map(c => 
-    `<button class="cat-chip" onclick="scrollToCat('${c.name}')">${c.icon} ${c.name}</button>`
-  ).join("");
-}
+function testSound(){ playSound(); showToast("🔊 ساؤنڈ ٹھیک کام کر رہا ہے"); }
 
-function scrollToCat(name){
-  const el = document.getElementById("cat-"+name);
-  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
-}
-
-function renderList(filter){
-  const main = document.getElementById("list");
-  main.innerHTML = "";
-  CATEGORIES_META.forEach(cat => {
-    const items = ITEMS.filter(i => i.cat === cat.name && (!filter || i.name.includes(filter)));
-    if(items.length === 0) return;
-    
-    const title = document.createElement("div");
-    title.className = "cat-title";
-    title.id = "cat-"+cat.name;
-    title.textContent = cat.icon + " " + cat.name;
-    main.appendChild(title);
-
-    items.forEach(it => {
-      const u = it.units[it.unitIndex];
-      const row = document.createElement("div");
-      row.className = "item" + (it.qty>0 ? " active":"");
-      row.id = "row-"+it.id;
-      row.innerHTML = `
-        <div class="item-top">
-          <div class="item-thumb">${it.image ? `<img src="${it.image}">` : it.icon}</div>
-          <div class="item-info">
-            <div class="item-name">${it.name}</div>
-            <div class="item-meta">فی ${u.label} — <b>${fmt(u.rate)}</b></div>
-          </div>
-        </div>
-        <div class="item-bottom">
-          ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
-          <div class="qty-box">
-            <button onclick="changeQty('${it.id}', -1)">−</button>
-            <input type="number" value="${it.qty}" readonly>
-            <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
-          </div>
-        </div>
-      `;
-      main.appendChild(row);
-    });
-  });
-}
-
-function changeUnit(id, idx){
-  const it = ITEMS.find(x => x.id === id);
-  it.unitIndex = parseInt(idx);
-  renderList(document.getElementById("search").value);
-  renderBill();
-}
-
-function changeQty(id, delta){
-  const it = ITEMS.find(x => x.id === id);
-  if(!it.available) return;
-  it.qty = Math.max(0, it.qty + delta);
-  renderList(document.getElementById("search").value);
-  renderBill();
-}
-
-function renderBill(){
-  const chosen = ITEMS.filter(i => i.qty > 0);
-  let subtotal = 0;
-  document.getElementById("billLines").innerHTML = chosen.map(it => {
-    const u = it.units[it.unitIndex];
-    const total = it.qty * u.rate;
-    subtotal += total;
-    return `<div>${it.name} × ${it.qty} ${u.label} = <b>${fmt(total)}</b></div>`;
-  }).join("");
-
-  document.getElementById("itemCount").textContent = chosen.length;
-  document.getElementById("summaryTotal").textContent = fmt(subtotal);
-  if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
-}
-
-document.getElementById("summary").onclick = () => {
-  document.getElementById("billbar").classList.toggle("collapsed");
-};
-
-document.getElementById("search").oninput = (e) => renderList(e.target.value);
-
-document.getElementById("shareBtn").onclick = async () => {
-  if(navigator.share){
-    await navigator.share({title: "SJ Foods", url: window.location.href}).catch(()=>{});
-  } else {
-    await navigator.clipboard.writeText(window.location.href);
-    const t = document.getElementById("toast");
-    t.textContent = "✅ لنک کاپی ہو گیا!";
-    t.classList.add("show");
-    setTimeout(()=> t.classList.remove("show"), 2000);
-  }
-};
-
-document.getElementById("waBtn").onclick = () => {
-  const chosen = ITEMS.filter(i => i.qty > 0);
-  if(chosen.length === 0){ alert("کارٹ خالی ہے"); return; }
-  const name = document.getElementById("custName").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
-  const addr = document.getElementById("custAddr").value.trim();
-  const area = document.getElementById("custArea").value;
-  if(!name || !phone || !addr || !area){ alert("براہ کرم تمام معلومات درج کریں"); return; }
-
-  const code = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let subtotal = 0;
-  let summaryHtml = "";
-  let msg = `🛒 نیا آرڈر [${code}] — SJ Foods\nنام: ${name}\nفون: ${phone}\nپتہ: ${addr}\n\n`;
-  
-  chosen.forEach(it => {
-    const u = it.units[it.unitIndex];
-    const t = it.qty * u.rate;
-    subtotal += t;
-    msg += `${it.name} — ${it.qty} ${u.label} — ${fmt(t)}\n`;
-    summaryHtml += `${it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
-  });
-  msg += `\nکل رقم: ${fmt(subtotal)}`;
-
-  // ایڈمن کے لیے لوکل اسٹوریج میں سیو کرنا
+function fakeOrder(){
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   orders.unshift({
-    code, name, phone, address: addr, area: area === 'inside' ? 'شہر کے اندر' : 'باہر',
-    payMethod: 'کیش آن ڈیلیوری', itemsSummary: summaryHtml, total: Math.round(subtotal),
+    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
+    name: "محمد خان (ٹیسٹ)", phone: "03155166034", address: "مینگورہ", area: "شہر کے اندر",
+    payMethod: "کیش آن ڈیلیوری", itemsSummary: "ٹماٹر (1 کلو) — Rs. 150", total: 150,
     timestamp: Date.now(), date: new Date().toLocaleTimeString('ur-PK'), status: 'pending'
   });
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  playSound();
+  renderOrders();
+  showToast("✅ فرضی آرڈر آگیا!");
+}
 
-  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
-};
+function renderOrders(){
+  const area = document.getElementById("ordersArea");
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  
+  // 24 گھنٹے پرانے خود بخود ہٹانا
+  const now = Date.now();
+  orders = orders.filter(o => !o.timestamp || (now - o.timestamp < 24*60*60*1000));
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
 
-function renderFeatured(){
-  const feat = ITEMS.filter(i => i.featured && i.available);
-  const box = document.getElementById("dealBox");
-  const sec = document.getElementById("featuredSection");
-  if(feat.length === 0) return;
-  sec.classList.remove("hidden");
+  if(orders.length === 0){
+    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+    return;
+  }
 
-  box.innerHTML = feat.map((it, idx) => `
-    <div class="deal-slide ${idx===0?'active':''}" onclick="scrollToItem('${it.id}')">
-      ${it.image ? `<img src="${it.image}">` : it.icon}
-      <div class="d-name">${it.name}</div>
-      <div class="d-rate">${fmt(it.units[0].rate)}</div>
+  area.innerHTML = orders.map((o, idx) => `
+    <div class="order-card ${o.status==='completed'?'completed':'pending'}">
+      <button class="btn-danger" style="position:absolute; top:10px; left:12px;" onclick="delOrder(${idx})">✕ حذف</button>
+      <div style="font-weight:700; font-size:15px; margin-bottom:4px;">📌 ${o.code} — ${o.name}</div>
+      <div style="font-size:12.5px; line-height:1.6;">
+        📞 فون: ${o.phone}<br>
+        📍 پتہ: ${o.address} (${o.area})<br>
+        🛒 اشیاء: <div style="background:#fff; padding:6px; border-radius:6px; margin-top:2px;">${o.itemsSummary}</div>
+        💰 کل رقم: <b>Rs. ${o.total}</b>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:6px;">
+        <button class="btn-success" style="flex:1;" onclick="markDelivered(${idx})">✅ ڈیلیورڈ (واٹس ایپ شکریہ)</button>
+      </div>
     </div>
   `).join("");
-
-  const slides = box.querySelectorAll(".deal-slide");
-  if(slides.length > 1){
-    let i = 0;
-    setInterval(() => {
-      slides[i].classList.remove("active");
-      i = (i + 1) % slides.length;
-      slides[i].classList.add("active");
-    }, 3000);
-  }
 }
 
-function scrollToItem(id){
-  const el = document.getElementById("row-"+id);
-  if(el){
-    el.scrollIntoView({behavior:"smooth", block:"center"});
-    el.style.backgroundColor = "#FFF3CD";
-    setTimeout(()=> el.style.backgroundColor = "", 1000);
-  }
+function markDelivered(idx){
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders[idx].status = 'completed';
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  renderOrders();
+  
+  const o = orders[idx];
+  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] پہنچا دیا گیا ہے۔ SJ Foods کو منتخب کرنے کا شکریہ! 🌿`;
+  let phone = o.phone.replace(/[^0-9]/g, "");
+  if(phone.startsWith("0")) phone = "92" + phone.slice(1);
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
-loadData();
+function delOrder(idx){
+  if(!confirm("حذف کریں؟")) return;
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders.splice(idx, 1);
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  renderOrders();
+}
+
+function clearAll(){
+  if(!confirm("تمام ہسٹری صاف کریں؟")) return;
+  localStorage.removeItem("sj_admin_orders");
+  renderOrders();
+}
+
+renderOrders();
 </script>
 </body>
 </html>

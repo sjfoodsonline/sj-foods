@@ -3,52 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SJ Foods — ایڈمن پینل</title>
+<title>SJ Foods — مکمل ایڈمن پینل</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --line:#E5E4DA; }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",sans-serif; direction:rtl; padding-bottom:40px;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",sans-serif; direction:rtl; padding-bottom:70px;}
   header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 16px 16px;}
   header h1{margin:0; font-size:17px; font-family:"Noto Nastaliq Urdu",serif;}
+  
   .wrap{padding:14px;}
-  .card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px;}
+  .card h3{margin:0 0 8px; font-size:14px; color:var(--dark);}
+  
+  input[type=text], input[type=password], input[type=number], select{
+    width:100%; border:1px solid var(--line); border-radius:8px; padding:9px; font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff;
+  }
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:2px;}
   button{cursor:pointer; border:none; font-family:inherit;}
   .btn{background:var(--dark); color:#fff; border-radius:8px; padding:10px; font-size:13px; font-weight:700; width:100%;}
   .btn-success{background:#E8F5E9; color:#1B5E20; border:1px solid var(--mid); border-radius:8px; padding:8px; font-weight:700;}
   .btn-danger{background:#FFEBEE; color:#B71C1C; border-radius:8px; padding:6px 10px; font-size:11px;}
   
+  .tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .tab{flex:1; padding:10px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:8px; font-weight:700; font-size:12.5px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+
   .order-card{background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; position:relative;}
   .order-card.pending{animation: blink 1.8s infinite;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
   @keyframes blink{ 0%{border-color:#E53935;background:#FFEBEE;} 50%{border-color:#FFE082;background:#FFFDE7;} 100%{border-color:#E53935;background:#FFEBEE;} }
   
-  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:100;}
+  .product-row{background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:8px; display:flex; flex-direction:column; gap:6px;}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150;}
   .toast.show{opacity:1;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — لائیو آرڈرز پینل</h1>
+  <h1>⚙️ SJ Foods — ایڈمن پینل و مینجمنٹ</h1>
 </header>
 
 <div class="wrap">
-  <div class="card">
-    <h3>🔔 کسٹمرز کے آرڈرز</h3>
-    <div style="display:flex; gap:8px; margin-top:8px;">
-      <button class="btn" style="background:var(--leaf); color:var(--dark);" onclick="testSound()">🔊 ٹیسٹ بیل</button>
-      <button class="btn" style="background:#E8F5E9; color:#1B5E20;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
-      <button class="btn" style="background:#FFEBEE; color:#B71C1C;" onclick="clearAll()">🗑️ صاف کریں</button>
+  
+  <!-- سیٹ اپ کارڈ -->
+  <div class="card" id="setupCard">
+    <h3>🔑 گিট ہب (GitHub) سیٹ اپ</h3>
+    <label>يوزر نیم</label><input type="text" id="cfgOwner" value="sjfoodsonline">
+    <label>ریپازٹری نام</label><input type="text" id="cfgRepo" value="sj-foods">
+    <label>ٹوکن (Token)</label><input type="password" id="cfgToken" placeholder="ghp_xxxxxxxx">
+    <button class="btn" onclick="saveCfg()">محفوظ کریں</button>
+  </div>
+
+  <div id="adminPanel" style="display:none;">
+    <div class="tabs">
+      <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
+      <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
+    </div>
+
+    <!-- آرڈرز ٹیب -->
+    <div id="secOrders">
+      <div class="card">
+        <h3>🔔 کسٹمرز کے آرڈرز</h3>
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <button class="btn" style="background:var(--leaf); color:var(--dark); font-size:12px;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
+          <button class="btn" style="background:#E8F5E9; color:#1B5E20; font-size:12px;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
+          <button class="btn" style="background:#FFEBEE; color:#B71C1C; font-size:12px;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
+        </div>
+      </div>
+      <div id="ordersArea"></div>
+    </div>
+
+    <!-- پروڈکٹس و ریٹس ٹیب -->
+    <div id="secProducts" style="display:none;">
+      <div class="card">
+        <label>کیٹگری منتخب کریں:</label>
+        <select id="catSelect" onchange="loadCategoryProducts()"></select>
+      </div>
+      
+      <!-- کور پکچر سیٹنگ -->
+      <div class="card">
+        <h3>🖼️ کور پکچر (بینر)</h3>
+        <input type="text" id="coverImgUrl" placeholder="کور پکچر کا لنک (URL)">
+        <button class="btn" style="font-size:12px; padding:8px;" onclick="saveCoverImg()">کور پکچر محفوظ کریں</button>
+      </div>
+
+      <div id="productsArea"></div>
+      <button class="btn" style="background:var(--mid); margin-top:10px;" onclick="addNewProduct()">➕ نیا پروڈکٹ شامل کریں</button>
+      <button class="btn" style="margin-top:10px;" onclick="saveGitHubChanges()">💾 تمام تبدیلیاں گিট ہب پر محفوظ کریں</button>
     </div>
   </div>
 
-  <div id="ordersArea"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+let CFG = null;
+let CATEGORIES_INDEX = [];
+let currentFile = "";
+let currentItems = [];
+let currentSha = "";
+
 function showToast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg; t.classList.add("show");
@@ -65,8 +122,155 @@ function playSound(){
     osc.start(); osc.stop(ctx.currentTime + 0.6);
   }catch(e){}
 }
+function testSound(){ playSound(); showToast("🔊 ساؤنڈ ایکٹیو ہے"); }
 
-function testSound(){ playSound(); showToast("🔊 ساؤنڈ ٹھیک کام کر رہا ہے"); }
+function saveCfg(){
+  const owner = document.getElementById("cfgOwner").value.trim();
+  const repo = document.getElementById("cfgRepo").value.trim();
+  const token = document.getElementById("cfgToken").value.trim();
+  if(!owner || !repo || !token){ showToast("تمام خانے پُر کریں"); return; }
+  CFG = {owner, repo, token};
+  localStorage.setItem("sj_admin_cfg", JSON.stringify(CFG));
+  initAdmin();
+}
+
+async function ghReq(path, options){
+  const res = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`, Object.assign({
+    headers: {"Authorization": "token " + CFG.token, "Accept": "application/vnd.github+json"}
+  }, options || {}));
+  if(!res.ok) throw new Error("GitHub error");
+  return res.json();
+}
+
+async function initAdmin(){
+  const raw = localStorage.getItem("sj_admin_cfg");
+  if(!raw) return;
+  CFG = JSON.parse(raw);
+  document.getElementById("setupCard").style.display = "none";
+  document.getElementById("adminPanel").style.display = "block";
+  renderOrders();
+
+  try{
+    const idx = await ghReq("categories_index.json");
+    CATEGORIES_INDEX = JSON.parse(atob(idx.content.replace(/\n/g,"")));
+    const sel = document.getElementById("catSelect");
+    sel.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
+    loadCategoryProducts();
+    loadSettingsJson();
+  }catch(e){
+    showToast("❌ گিট ہب کنکشن ناکام یا ٹوکن غلط ہے");
+  }
+}
+
+async function loadSettingsJson(){
+  try{
+    const res = await ghReq("settings.json");
+    const s = JSON.parse(atob(res.content.replace(/\n/g,"")));
+    if(s.cover_image) document.getElementById("coverImgUrl").value = s.cover_image;
+  }catch(e){}
+}
+
+async function saveCoverImg(){
+  try{
+    const imgUrl = document.getElementById("coverImgUrl").value.trim();
+    const res = await ghReq("settings.json");
+    const s = JSON.parse(atob(res.content.replace(/\n/g,"")));
+    s.cover_image = imgUrl;
+    
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(s, null, 2))));
+    await ghReq("settings.json", {
+      method: "PUT",
+      body: JSON.stringify({message: "Update cover image", content, sha: res.sha, branch: "main"})
+    });
+    showToast("✅ کور پکچر محفوظ ہو گئی!");
+  }catch(e){
+    showToast("❌ محفوظ نہیں ہو سکی");
+  }
+}
+
+async function loadCategoryProducts(){
+  currentFile = document.getElementById("catSelect").value;
+  document.getElementById("productsArea").innerHTML = "⏳ لوڈ ہو رہا ہے...";
+  try{
+    const res = await ghReq(currentFile);
+    currentSha = res.sha;
+    currentItems = JSON.parse(atob(res.content.replace(/\n/g,"")));
+    renderProductsEditor();
+  }catch(e){
+    document.getElementById("productsArea").innerHTML = "❌ لوڈنگ میں خرابی";
+  }
+}
+
+function renderProductsEditor(){
+  const area = document.getElementById("productsArea");
+  area.innerHTML = currentItems.map((it, idx) => `
+    <div class="product-row">
+      <div style="display:flex; gap:6px;">
+        <input type="text" value="${it.name}" placeholder="پروڈکٹ کا نام" oninput="currentItems[${idx}].name=this.value" style="margin-bottom:0;">
+        <button class="btn-danger" onclick="delProduct(${idx})">حذف</button>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <input type="text" value="${it.image||''}" placeholder="تصویر کا لنک (URL)" oninput="currentItems[${idx}].image=this.value" style="margin-bottom:0; font-size:11px;">
+        <label style="display:flex; align-items:center; gap:4px; white-space:nowrap;"><input type="checkbox" ${it.available!==false?'checked':''} onchange="currentItems[${idx}].available=this.checked"> دستیاب</label>
+        <label style="display:flex; align-items:center; gap:4px; white-space:nowrap;"><input type="checkbox" ${it.featured===true?'checked':''} onchange="currentItems[${idx}].featured=this.checked"> ⭐ نمایاں</label>
+      </div>
+      <div style="background:#f9f9f6; padding:6px; border-radius:6px; font-size:12px;">
+        <b>یونٹس اور ریٹس:</b>
+        ${(it.units || [{label: it.unit, rate: it.rate}]).map((u, ui) => `
+          <div style="display:flex; gap:4px; margin-top:4px;">
+            <input type="text" value="${u.label}" placeholder="یونٹ (مثلاً کلو)" oninput="updateUnit(${idx}, ${ui}, 'label', this.value)" style="margin-bottom:0; padding:5px;">
+            <input type="number" value="${u.rate}" placeholder="قیمت" oninput="updateUnit(${idx}, ${ui}, 'rate', this.value)" style="margin-bottom:0; padding:5px;">
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function updateUnit(pi, ui, field, val){
+  if(!currentItems[pi].units) currentItems[pi].units = [{label: "کلو", rate: 0}];
+  currentItems[pi].units[ui][field] = field === 'rate' ? (parseFloat(val)||0) : val;
+}
+
+function addNewProduct(){
+  currentItems.push({name: "", units: [{label: "کلو", rate: 0}], available: true, featured: false, image: ""});
+  renderProductsEditor();
+}
+
+function delProduct(idx){
+  currentItems.splice(idx, 1);
+  renderProductsEditor();
+}
+
+async function saveGitHubChanges(){
+  try{
+    showToast("⏳ محفوظ ہو رہا ہے...");
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(currentItems, null, 2))));
+    const res = await ghReq(currentFile, {
+      method: "PUT",
+      body: JSON.stringify({message: "Update rates via admin panel", content, sha: currentSha, branch: "main"})
+    });
+    currentSha = res.content.sha;
+    showToast("✅ تمام ریٹس گিট ہب پر محفوظ ہو گئے!");
+  }catch(e){
+    showToast("❌ محفوظ نہیں ہو سکے");
+  }
+}
+
+function switchTab(tab){
+  if(tab === 'orders'){
+    document.getElementById('secOrders').style.display = 'block';
+    document.getElementById('secProducts').style.display = 'none';
+    document.getElementById('tabOrdersBtn').className = 'tab active';
+    document.getElementById('tabProductsBtn').className = 'tab';
+    renderOrders();
+  } else {
+    document.getElementById('secOrders').style.display = 'none';
+    document.getElementById('secProducts').style.display = 'block';
+    document.getElementById('tabOrdersBtn').className = 'tab';
+    document.getElementById('tabProductsBtn').className = 'tab active';
+  }
+}
 
 function fakeOrder(){
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
@@ -86,7 +290,6 @@ function renderOrders(){
   const area = document.getElementById("ordersArea");
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   
-  // 24 گھنٹے پرانے خود بخود ہٹانا
   const now = Date.now();
   orders = orders.filter(o => !o.timestamp || (now - o.timestamp < 24*60*60*1000));
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
@@ -134,13 +337,16 @@ function delOrder(idx){
   renderOrders();
 }
 
-function clearAll(){
+function clearAllOrders(){
   if(!confirm("تمام ہسٹری صاف کریں؟")) return;
   localStorage.removeItem("sj_admin_orders");
   renderOrders();
 }
 
-renderOrders();
+(function init(){
+  const raw = localStorage.getItem("sj_admin_cfg");
+  if(raw) initAdmin();
+})();
 </script>
 </body>
 </html>

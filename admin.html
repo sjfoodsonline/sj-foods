@@ -341,6 +341,13 @@
     display:flex; align-items:center; justify-content:center;
   }
 
+  /* شیئر آئیکن اوپر ہیڈر میں */
+  .share-header-btn{
+    position:absolute; right:0; top:-46px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.35);
+    color:#fff; border-radius:10px; width:34px; height:34px; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; text-decoration:none;
+  }
+
   .features-scroll{display:flex; gap:10px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
   .features-scroll::-webkit-scrollbar{display:none;}
   .feature-card{
@@ -459,6 +466,7 @@
 
 <header>
   <button class="theme-toggle" id="themeToggle" title="Theme" style="left:0;">🌙</button>
+  <button class="share-header-btn" id="shareHeaderBtn" title="Share Store">🔗</button>
   <h1>🟢 ایس جے فوڈز مینگورہ سوات</h1>
   <p style="opacity:.85; font-size:11px; margin:2px 0 4px;">SJ Foods Mingora Swat — Fresh Groceries, Delivered Fast</p>
   <p>تازہ سبزیاں، پھل، کریانہ اور روزمرہ اشیاء — اپنی پسند کی چیزیں منتخب کریں، کارٹ میں ڈالیں، اور آرڈر بھیج دیں</p>
@@ -1142,6 +1150,24 @@ themeToggle.onclick = ()=>{
   localStorage.setItem("sjfoods-theme", next);
 };
 
+// ---------------- SHARE STORE BUTTON ----------------
+const shareHeaderBtn = document.getElementById("shareHeaderBtn");
+shareHeaderBtn.onclick = async () => {
+  const shareData = {
+    title: "SJ Foods Mingora Swat",
+    text: "تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آن لائن آرڈر کریں! 🌿🛒",
+    url: window.location.href
+  };
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast("✅ اسٹور کا لنک کاپی ہو گیا!");
+    }
+  } catch(e) {}
+};
+
 function refreshHeroLinks(){
   const greet = encodeURIComponent("السلام علیکم! مجھے SJ Foods سے آرڈر کرنا ہے 🛒");
   document.getElementById("heroWaBtn").href = `https://wa.me/${SHOP_WHATSAPP}?text=${greet}`;
@@ -1229,7 +1255,6 @@ function renderFeatured(){
 
   sectionEl.classList.remove("hidden");
   
-  // شفل کرنا تاکہ رینڈم ٹرینڈنگ ڈیلز آئیں
   for (let i = featuredItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [featuredItems[i], featuredItems[j]] = [featuredItems[j], featuredItems[i]];
@@ -1247,7 +1272,6 @@ function renderFeatured(){
     `;
   }).join("");
 
-  // کلک کرنے پر مین لسٹ میں متعلقہ آئٹم پر لے جانا
   container.querySelectorAll(".deal-transition-slide").forEach(slide => {
     slide.onclick = () => {
       const el = document.getElementById("row-"+slide.dataset.id);
@@ -1260,7 +1284,6 @@ function renderFeatured(){
     };
   });
 
-  // ٹرانزیشن لوپ (خودکار سلائیڈ شو ود فڈ اینڈ سلائیڈ ایفیکٹ)
   let currentIndex = 0;
   const slides = container.querySelectorAll(".deal-transition-slide");
   if(slides.length > 1){
@@ -1268,7 +1291,7 @@ function renderFeatured(){
       slides[currentIndex].classList.remove("active");
       currentIndex = (currentIndex + 1) % slides.length;
       slides[currentIndex].classList.add("active");
-    }, 3500); // ہر 3.5 سیکنڈ بعد بہترین ٹرانزیشن کے ساتھ نئی ڈیل ظاہر ہوگی
+    }, 3500);
   }
 }
 </script>

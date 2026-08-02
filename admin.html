@@ -32,12 +32,10 @@
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
 
-  /* ٹیبز ڈیزائن */
   .tabs{display:flex; gap:8px; margin-bottom:14px;}
   .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* آرڈر کارڈز */
   .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: blink 1.8s infinite;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
@@ -99,7 +97,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>لائیو آرڈرز، پروڈکٹس اور قیمتیں یہاں سے مینج کریں</p>
+  <p>لائیو آرڈرز، پروڈکٹس اور خودکار قیمتیں یہاں سے مینج کریں</p>
 </header>
 
 <div class="wrap">
@@ -122,7 +120,6 @@
 
   <div id="mainPanel" style="display:none;">
     
-    <!-- اوپر کیٹیگری سلیکشن کے ساتھ ٹیبز (لائیو آرڈرز اور پروڈکٹس) -->
     <div class="tabs">
       <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
@@ -142,14 +139,14 @@
       <div id="ordersArea"></div>
     </div>
 
-    <!-- 2. پروڈکٹس اور ریٹس سیکشن (آپ کا پرانا اور اصل ڈیزائن) -->
+    <!-- 2. پروڈکٹس اور ریٹس سیکشن (خودکار حساب کتاب کے ساتھ) -->
     <div id="secProducts" style="display:none;">
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker"></select>
           <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
         </div>
-        <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔ ہر پروڈکٹ میں سائز اور قیمتیں شامل کر سکتے ہیں۔</div>
+        <div class="hint">💡 <b>ٹپ:</b> جب آپ 1 KG یا کلو کا ریٹ لکھیں گے، تو دوسرے یونٹس (آدھا کلو، پاؤ، دڑی وغیرہ) خود بخود ایڈجسٹ ہو جائیں گے!</div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
@@ -289,7 +286,6 @@ document.getElementById("changeAccountBtn").onclick = ()=>{
   location.reload();
 };
 
-// ٹیبز سوئچ کرنے کا فنکشن
 function switchTab(tab){
   if(tab === 'orders'){
     document.getElementById('secOrders').style.display = 'block';
@@ -305,7 +301,6 @@ function switchTab(tab){
   }
 }
 
-// فرضی آرڈر چیک کرنے کے لیے
 function fakeOrder(){
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   orders.unshift({
@@ -432,6 +427,38 @@ function normalizeItem(it){
   };
 }
 
+// خودکار حساب کتاب (پاؤ، ادھا کلو، دڑی وغیرہ کے لیے)
+function isBaseKgLabel(label){
+  const t = (label||"").trim().toLowerCase();
+  return t === "kg" || t === "کلو";
+}
+
+function parseUnitMultiplier(label){
+  const t = (label||"").trim();
+  if(isBaseKgLabel(t)) return 1;
+  if(t.includes("آدھا") || t.includes("0.5")) return 0.5;
+  if(t.includes("پاؤ") || t.includes("0.25")) return 0.25;
+  const m = t.match(/\(?\s*(\d+(?:\.\d+)?)\s*(?:KG|کلو)\s*\)?/i);
+  if(m) return parseFloat(m[1]);
+  return null;
+}
+
+function applyAutoLink(it, kgRate, currentRowEl){
+  const unitsBox = currentRowEl.parentElement;
+  const offset = unitsBox.querySelector(".auto-link-chk") ? 1 : 0;
+  it.units.forEach((u, ui) => {
+    if(isBaseKgLabel(u.label)) return;
+    const mult = parseUnitMultiplier(u.label);
+    if(mult === null) return;
+    u.rate = Math.round((kgRate * mult) / 5) * 5; // قریبی 5 روپے پر راؤنڈ کرنا
+    const rowEl = unitsBox.children[offset + ui];
+    if(rowEl){
+      const rateInput = rowEl.querySelector(".u-rate");
+      if(rateInput) rateInput.value = u.rate;
+    }
+  });
+}
+
 function renderProducts(){
   const area = document.getElementById("productsArea");
   area.innerHTML = "";
@@ -476,6 +503,15 @@ function buildRow(it, idx){
   const unitsBox = row.querySelector(".units-box");
   function renderUnits(){
     unitsBox.innerHTML = "";
+
+    if(it.units.length > 1){
+      const linkRow = document.createElement("div");
+      linkRow.style.cssText = "display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); margin-bottom:6px;";
+      linkRow.innerHTML = `<label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" class="auto-link-chk" ${it._autoLink !== false ? "checked" : ""}> 🔗 1 کلو بدلنے پر باقی سائز خودکار حساب ہوں</label>`;
+      linkRow.querySelector(".auto-link-chk").onchange = (e)=>{ it._autoLink = e.target.checked; };
+      unitsBox.appendChild(linkRow);
+    }
+
     it.units.forEach((u, ui) => {
       const ur = document.createElement("div");
       ur.className = "unit-row";
@@ -485,7 +521,13 @@ function buildRow(it, idx){
         ${it.units.length > 1 ? `<button class="remove-unit-btn">✕</button>` : ""}
       `;
       ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
-      ur.querySelector(".u-rate").oninput = (e)=>{ u.rate = parseFloat(e.target.value)||0; markDirty(); };
+      ur.querySelector(".u-rate").oninput = (e)=>{
+        u.rate = parseFloat(e.target.value)||0;
+        markDirty();
+        if(it._autoLink !== false && isBaseKgLabel(u.label)){
+          applyAutoLink(it, u.rate, ur);
+        }
+      };
       const rmBtn = ur.querySelector(".remove-unit-btn");
       if(rmBtn) rmBtn.onclick = ()=>{ it.units.splice(ui,1); renderUnits(); markDirty(); };
       unitsBox.appendChild(ur);

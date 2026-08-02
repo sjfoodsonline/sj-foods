@@ -108,7 +108,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
-  <p>محفوظ ریکارڈ، لائیو آرڈرز اور پروفیشنل آٹو میسج</p>
+  <p>محفوظ ریکارڈ، لائیو آرڈرز اور 5 منٹ خودکار ریمائنڈر</p>
 </header>
 
 <div class="wrap">
@@ -140,7 +140,7 @@
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
-        <p>آرڈر مکمل کرنے یا واٹس ایپ پر شکریہ کا پروفیشنل میسج بھیجنے کے لیے نیچے دیے گئے بٹن استعمال کریں۔</p>
+        <p>جب تک کوئی آرڈر پینڈنگ رہے گا، ہر 5 منٹ بعد گھنٹی یاد دہانی کے لیے بجتی رہے گی۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
           <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں</button>
           <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
@@ -338,6 +338,7 @@ function fakeOrder(){
   showToast("🚨 نیا آرڈر محفوظ ہو گیا!");
 }
 
+// 1. نئے آرڈر کی لائیو چیکنگ (ہر 3 سیکنڈ بعد)
 let lastOrderCount = 0;
 setInterval(() => {
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
@@ -349,6 +350,16 @@ setInterval(() => {
   }
   lastOrderCount = orders.length;
 }, 3000);
+
+// 2. ہر 5 منٹ بعد ریمائنڈر گھنٹی (جب تک کوئی بھی آرڈر پینڈنگ ہو)
+setInterval(() => {
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  let hasPending = orders.some(o => o.status !== 'completed');
+  if(hasPending){
+    playBeepTech();
+    showToast("⏰ ریمائنڈر: پینڈنگ آرڈرز موجود ہیں!");
+  }
+}, 5 * 60 * 1000); // 5 منٹ
 
 function renderOrders(){
   const area = document.getElementById("ordersArea");
@@ -411,7 +422,6 @@ function printOrderReceipt(code, name, phone, address, items, total){
   setTimeout(()=> { w.print(); w.close(); }, 500);
 }
 
-// کسٹمر کو واٹس ایپ پر پروفیشنل شکریہ اور آٹو میسج بھیجنے اور آرڈر مکمل کرنے کا فنکشن
 function sendProfessionalThankYou(idx){
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   const o = orders[idx];

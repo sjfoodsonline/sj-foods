@@ -48,7 +48,6 @@
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
 
-  /* ٹاپ ڈیلز - نیا بہتر اور نفاست والا ڈیپ براؤن فریم ڈیزائن */
   .featured-section{
     margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
     border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
@@ -122,35 +121,30 @@
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px;}
   .item .meta b{color:var(--price); font-weight:800; font-size:14.5px;}
 
-  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
+  /* نیچے والا حصہ جہاں یونٹ سلیکٹر، کوانٹٹی اور بالکل اوپر خالی جگہ میں گرین ٹک مارک ہے */
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px; position:relative;}
+  
   .unit-select{
     flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:700;
     background:#fff; color:var(--dark); font-family:inherit;
   }
   
-  /* گرین ٹک مارک اب بالکل پلس (+) والے بٹن کے اوپر فریم میں نفاست سے فٹ ہے */
-  .qty-box{display:flex; align-items:center; gap:6px;}
+  .qty-box{display:flex; align-items:center; gap:6px; position:relative;}
   .qty-box button{
     width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:800; cursor:pointer;
   }
-  
-  .plus-wrap {
-    position: relative;
-    display: inline-block;
-  }
-  .qty-box button.plus{background:var(--dark); color:#fff; display:block;}
-  
-  .avail-badge{
-    position: absolute; top: -8px; right: -6px; width: 20px; height: 20px; border-radius: 50%;
-    background: var(--mid); display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 2px solid #fff; z-index: 5;
-    pointer-events: none;
-  }
-  .avail-badge.no{ background: #B71C1C; }
-
+  .qty-box button.plus{background:var(--dark); color:#fff;}
   .qty-box input{
     width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:700; padding:4px;
   }
+
+  /* گرین ٹک مارک جو پلس کے بالکل اوپر والی خالی جگہ پر نفاست سے موجود ہے */
+  .avail-badge{
+    position: absolute; top: -26px; right: 0px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--mid); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25); border: 2px solid #fff; z-index: 5;
+  }
+  .avail-badge.no{ background: #B71C1C; }
 
   /* Cart Bar */
   #billbar{
@@ -352,16 +346,14 @@ function renderList(filter){
           </div>
         </div>
         <div class="item-row-bottom">
+          <div class="avail-badge ${it.available ? 'yes' : 'no'}">
+            ${it.available ? `<svg width="11" height="11" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="10" height="10" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>`}
+          </div>
           ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
           <div class="qty-box">
             <button onclick="changeQty('${it.id}', -1)">−</button>
             <input type="number" value="${it.qty}" readonly>
-            <div class="plus-wrap">
-              <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
-              <div class="avail-badge ${it.available ? 'yes' : 'no'}">
-                ${it.available ? `<svg width="10" height="10" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="9" height="9" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>`}
-              </div>
-            </div>
+            <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
           </div>
         </div>
       `;

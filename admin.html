@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — لائیو آرڈرز پینل</title>
+<title>SJ Foods — محفوظ لائیو آرڈرز پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -42,7 +42,6 @@
   .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* انتہائی تیز اور واضح ریڈ بلنکنگ الرٹ */
   .order-card{background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: superBlinking 0.8s infinite ease-in-out;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
@@ -108,8 +107,8 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>لائیو آرڈرز، تیز گھنٹی الرٹ اور مینجمنٹ</p>
+  <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
+  <p>محفوظ ریکارڈ، لائیو آرڈرز اور بیپ ٹیک الرٹ</p>
 </header>
 
 <div class="wrap">
@@ -137,15 +136,14 @@
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <!-- 1. لائیو آرڈرز سیکشن -->
+    <!-- 1. لائیو آرڈرز سیکشن (حذف کرنے والے بٹن مکمل ختم، صرف محفوظ ریکارڈ) -->
     <div id="secOrders">
       <div class="card">
-        <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-        <p>جب بھی نیا آرڈر آئے گا، تیز گھنٹی بجے گی اور سکرین پر واضح سرخ چمکتا ہوا الرٹ آئے گا۔</p>
+        <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
+        <p>کوئی بھی آرڈر بغیر آپ کی اجازت یا ڈلیوری مکمل کیے بغیر ڈیلیور/ختم نہیں ہو سکتا۔ ریکارڈ ہمیشہ محفوظ رہے گا۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں (کلک کریں)</button>
+          <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں</button>
           <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
-          <button class="btn-danger" style="flex:1;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
         </div>
       </div>
       <div id="ordersArea"></div>
@@ -193,32 +191,29 @@ function showToast(msg, isErr){
   setTimeout(()=> t.className = "toast", 2600);
 }
 
-// زور دار اور تیز گھنٹی بجانے کا فنکشن (تین بار مسلسل بیپ)
-function playLoudAlarm(){
+function playBeepTech(){
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     let time = ctx.currentTime;
-    for(let i = 0; i < 3; i++){
+    for(let i = 0; i < 4; i++){
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(950, time);
-      gain.gain.setValueAtTime(1, time);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+      osc.type = "square";
+      osc.frequency.setValueAtTime(1200, time);
+      gain.gain.setValueAtTime(0.8, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(time);
-      osc.stop(time + 0.4);
-      time += 0.5;
+      osc.stop(time + 0.15);
+      time += 0.2;
     }
-  }catch(e){
-    console.log("Audio not allowed yet");
-  }
+  }catch(e){}
 }
 
 function enableAudioAndTest(){
-  playLoudAlarm();
-  showToast("✅ گھنٹی ایکٹیو ہو گئی ہے!");
+  playBeepTech();
+  showToast("✅ بیپ ٹیک گھنٹی ایکٹیو ہو گئی ہے!");
 }
 
 function markDirty(){
@@ -338,17 +333,16 @@ function fakeOrder(){
     timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
   });
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
-  playLoudAlarm();
+  playBeepTech();
   renderOrders();
-  showToast("🚨 نیا آرڈر موصول ہوا!");
+  showToast("🚨 نیا آرڈر محفوظ ہو گیا!");
 }
 
-// خودکار لائیو چیکنگ (ہر 3 سیکنڈ بعد چیک کرے گا کہ کوئی نیا آرڈر تو نہیں آیا)
 let lastOrderCount = 0;
 setInterval(() => {
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   if(orders.length > lastOrderCount && lastOrderCount !== 0){
-    playLoudAlarm();
+    playBeepTech();
     if(document.getElementById('secOrders').style.display !== 'none'){
       renderOrders();
     }
@@ -360,10 +354,6 @@ function renderOrders(){
   const area = document.getElementById("ordersArea");
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   lastOrderCount = orders.length;
-  
-  const now = Date.now();
-  orders = orders.filter(o => !o.timestamp || (now - o.timestamp < 24*60*60*1000));
-  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
 
   if(orders.length === 0){
     area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
@@ -372,19 +362,22 @@ function renderOrders(){
 
   area.innerHTML = orders.map((o, idx) => `
     <div class="order-card ${o.status==='completed'?'completed':'pending'}">
-      <button class="btn-danger" style="position:absolute; top:12px; left:14px;" onclick="delOrder(${idx})">✕ حذف</button>
-      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name}</div>
+      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
       <div style="font-size:13.5px; line-height:1.7;">
         📞 فون: ${o.phone}<br>
         📍 پتہ: ${o.address} (${o.area})<br>
         💳 ادائیگی: ${o.payMethod}<br>
-        🛒 اشیاء (کیٹگری سمیت): <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-        💰 کل رقم: <b>Rs. ${o.total}</b>
+        🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+        💰 کل رقم: <b>Rs. ${o.total}</b><br>
+        وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
       </div>
       
       <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printOrderReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total})">🖨️ پرنٹ (تھرمل / A4)</button>
-        <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="verifyAndComplete(${idx})">✅ کوڈ کی تصدیق اور آرڈر مکمل</button>
+        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printOrderReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total})">🖨️ پرنٹ</button>
+        ${o.status !== 'completed' ? `
+          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="verifyAndComplete(${idx})">✅ کوڈ کی تصدیق اور مکمل</button>
+          <button class="btn-secondary" style="flex:1; background:#FFCDD2; color:#B71C1C; font-weight:700;" onclick="manualCloseOrder(${idx})">❌ آرڈر کلوز کریں</button>
+        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
       </div>
     </div>
   `).join("");
@@ -438,21 +431,23 @@ function verifyAndComplete(idx){
   let phone = o.phone.replace(/[^0-9]/g, "");
   if(phone.startsWith("0")) phone = "92" + phone.slice(1);
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ کوڈ درست ہے — آرڈر کامیابی سے مکمل ہو گیا!");
+  showToast("✅ کوڈ درست ہے — آرڈر محفوظ اور مکمل ہو گیا!");
 }
 
-function delOrder(idx){
-  if(!confirm("حذف کریں؟")) return;
+function manualCloseOrder(idx){
+  if(!confirm("کیا آپ واقعی اس آرڈر کو کلوز اور محفوظ کرنا چاہتے ہیں؟")) return;
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  orders.splice(idx, 1);
+  const o = orders[idx];
+  
+  orders[idx].status = 'completed';
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   renderOrders();
-}
-
-function clearAllOrders(){
-  if(!confirm("تمام ہسٹری صاف کریں؟")) return;
-  localStorage.removeItem("sj_admin_orders");
-  renderOrders();
+  
+  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] مکمل کر دیا گیا ہے۔ SJ Foods کے ساتھ تعاون کرنے کا شکریہ! 🌿`;
+  let phone = o.phone.replace(/[^0-9]/g, "");
+  if(phone.startsWith("0")) phone = "92" + phone.slice(1);
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
 }
 
 const ALLOWED_FILES = null;

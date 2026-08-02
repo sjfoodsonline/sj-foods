@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — ایڈمن پینل و لائیو آرڈرز</title>
+<title>SJ Foods — لائیو آرڈرز پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -42,14 +42,14 @@
   .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* جب تک آرڈر ڈیلیور نہ ہو، کارڈ سرخ رنگ میں چمکتا (بلنک) رہے گا */
-  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
-  .order-card.pending{animation: urgentBlinking 1.2s infinite ease-in-out;}
+  /* انتہائی تیز اور واضح ریڈ بلنکنگ الرٹ */
+  .order-card{background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
+  .order-card.pending{animation: superBlinking 0.8s infinite ease-in-out;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
-  @keyframes urgentBlinking{ 
-    0%{border-color:#E53935; background:#FFEBEE; box-shadow:0 0 10px rgba(229,57,53,0.4);} 
-    50%{border-color:#FFC107; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
-    100%{border-color:#E53935; background:#FFEBEE; box-shadow:0 0 10px rgba(229,57,53,0.4);} 
+  @keyframes superBlinking{ 
+    0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 15px rgba(211,47,47,0.7);} 
+    50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
+    100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 15px rgba(211,47,47,0.7);} 
   }
 
   .cat-select{display:flex; gap:8px; margin-bottom:10px;}
@@ -109,7 +109,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>لائیو آرڈرز، سکیورٹی کوڈ تصدیق اور پرنٹنگ مینجمنٹ</p>
+  <p>لائیو آرڈرز، تیز گھنٹی الرٹ اور مینجمنٹ</p>
 </header>
 
 <div class="wrap">
@@ -141,9 +141,9 @@
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-        <p>جب باہر سے کوئی گاہک آرڈر کرے گا یا آپ ٹیسٹ کریں گے، یہاں ریڈ بلنکنگ کے ساتھ شو ہو گا[cite: 1]۔</p>
+        <p>جب بھی نیا آرڈر آئے گا، تیز گھنٹی بجے گی اور سکرین پر واضح سرخ چمکتا ہوا الرٹ آئے گا۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-secondary" style="flex:1;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
+          <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں (کلک کریں)</button>
           <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
           <button class="btn-danger" style="flex:1;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
         </div>
@@ -193,17 +193,33 @@ function showToast(msg, isErr){
   setTimeout(()=> t.className = "toast", 2600);
 }
 
-function playSound(){
+// زور دار اور تیز گھنٹی بجانے کا فنکشن (تین بار مسلسل بیپ)
+function playLoudAlarm(){
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(); osc.stop(ctx.currentTime + 0.6);
-  }catch(e){}
+    let time = ctx.currentTime;
+    for(let i = 0; i < 3; i++){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(950, time);
+      gain.gain.setValueAtTime(1, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(time);
+      osc.stop(time + 0.4);
+      time += 0.5;
+    }
+  }catch(e){
+    console.log("Audio not allowed yet");
+  }
 }
-function testSound(){ playSound(); showToast("🔊 ساؤنڈ ایکٹیو ہے"); }
+
+function enableAudioAndTest(){
+  playLoudAlarm();
+  showToast("✅ گھنٹی ایکٹیو ہو گئی ہے!");
+}
 
 function markDirty(){
   dirty = true;
@@ -322,14 +338,28 @@ function fakeOrder(){
     timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
   });
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
-  playSound();
+  playLoudAlarm();
   renderOrders();
-  showToast("✅ فرضی آرڈر آگیا!");
+  showToast("🚨 نیا آرڈر موصول ہوا!");
 }
+
+// خودکار لائیو چیکنگ (ہر 3 سیکنڈ بعد چیک کرے گا کہ کوئی نیا آرڈر تو نہیں آیا)
+let lastOrderCount = 0;
+setInterval(() => {
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  if(orders.length > lastOrderCount && lastOrderCount !== 0){
+    playLoudAlarm();
+    if(document.getElementById('secOrders').style.display !== 'none'){
+      renderOrders();
+    }
+  }
+  lastOrderCount = orders.length;
+}, 3000);
 
 function renderOrders(){
   const area = document.getElementById("ordersArea");
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  lastOrderCount = orders.length;
   
   const now = Date.now();
   orders = orders.filter(o => !o.timestamp || (now - o.timestamp < 24*60*60*1000));

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — ایڈمن پینل</title>
+<title>SJ Foods — ایڈمن پینل و لائیو آرڈرز</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -42,10 +42,15 @@
   .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
+  /* جب تک آرڈر ڈیلور نہ ہو، تب تک کارڈ ریڈ کلر میں بلنک (चमकता) رہے گا */
   .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
-  .order-card.pending{animation: blink 1.8s infinite;}
+  .order-card.pending{animation: urgentBlinking 1.2s infinite ease-in-out;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
-  @keyframes blink{ 0%{border-color:#E53935;background:#FFEBEE;} 50%{border-color:#FFE082;background:#FFFDE7;} 100%{border-color:#E53935;background:#FFEBEE;} }
+  @keyframes urgentBlinking{ 
+    0%{border-color:#E53935; background:#FFEBEE; box-shadow:0 0 10px rgba(229,57,53,0.4);} 
+    50%{border-color:#FFC107; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
+    100%{border-color:#E53935; background:#FFEBEE; box-shadow:0 0 10px rgba(229,57,53,0.4);} 
+  }
 
   .cat-select{display:flex; gap:8px; margin-bottom:10px;}
   .cat-select select{flex:1; margin-bottom:0;}
@@ -98,13 +103,20 @@
   .toast.err{background:#B71C1C;}
 
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+
+  /* پرنٹنگ کے لیے اسٹائل (تھرمل یا A4) */
+  @media print {
+    body { background: #fff; box-shadow: none; width: 100%; max-width: none; padding: 0; }
+    header, .tabs, .savebar, .card:not(.print-receipt), .btn-danger, button { display: none !important; }
+    .print-receipt { display: block !important; border: none; box-shadow: none; padding: 10px; font-family: monospace; }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>لائیو آرڈرز، پروڈکٹس اور خودکار قیمتیں یہاں سے مینج کریں</p>
+  <p>لائیو آرڈرز، سکیورٹی کوڈ تصدیق اور پرنٹنگ مینجمنٹ</p>
 </header>
 
 <div class="wrap">
@@ -132,10 +144,11 @@
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
+    <!-- 1. لائیو آرڈرز سیکشن (ریڈ بلنکنگ اور پرنٹنگ کے ساتھ) -->
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-        <p>گاہک جیسے ہی آرڈر بھیجے گا، اس کا کوڈ (`SJ-XXXX`) اور تمام تفصیلات یہاں آئیں گی۔</p>
+        <p>جب تک آرڈر ڈیلیور نہ ہو، کارڈ سرخ رنگ میں بلنک کرتا رہے گا۔ ڈیلیوری کے وقت گاہک سے اس کا <b>آرڈر کوڈ</b> پوچھ کر تصدیق کریں۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
           <button class="btn-secondary" style="flex:1;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
           <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
@@ -145,13 +158,14 @@
       <div id="ordersArea"></div>
     </div>
 
+    <!-- 2. پروڈکٹس اور ریٹس سیکشن -->
     <div id="secProducts" style="display:none;">
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker"></select>
           <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
         </div>
-        <div class="hint">💡 <b>ٹپ:</b> جب آپ 1 KG یا کلو کا ریٹ لکھیں گے، تو دوسرے یونٹس خود بخود ایڈجسٹ ہو جائیں گے!</div>
+        <div class="hint">💡 <b>ٹپ:</b> 1 KG یا کلو کا ریٹ بدلے جانے پر دوسرے یونٹس خود بخود ایڈجسٹ ہو جائیں گے۔</div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
@@ -344,24 +358,67 @@ function renderOrders(){
         🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
         💰 کل رقم: <b>Rs. ${o.total}</b>
       </div>
-      <div style="margin-top:12px; display:flex; gap:6px;">
-        <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="markDelivered(${idx})">✅ ڈیلیورڈ (واٹس ایپ شکریہ)</button>
+      
+      <!-- پرنٹنگ اور تصدیق کے بٹن -->
+      <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printOrderReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total})">🖨️ پرنٹ (تھرمل / A4)</button>
+        <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="verifyAndComplete(${idx})">✅ کوڈ کی تصدیق اور آرڈر مکمل</button>
       </div>
     </div>
   `).join("");
 }
 
-function markDelivered(idx){
+// تھرمل یا A4 پرنٹ کے لیے
+function printOrderReceipt(code, name, phone, address, items, total){
+  const w = window.open('', '_blank');
+  w.document.write(`
+    <html dir="rtl">
+    <head><title>Receipt ${code}</title></head>
+    <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto;">
+      <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
+      <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
+      <hr style="border:dashed 1px #000;">
+      <p><b>آرڈر کوڈ:</b> ${code}</p>
+      <p><b>نام:</b> ${name}</p>
+      <p><b>فون:</b> ${phone}</p>
+      <p><b>پتہ:</b> ${address}</p>
+      <hr style="border:dashed 1px #000;">
+      <p><b>آرڈر کی تفصیل:</b></p>
+      <div>${items}</div>
+      <hr style="border:dashed 1px #000;">
+      <h3 style="text-align:center;">کل رقم: Rs. ${total}</h3>
+      <br><br>
+      <div style="border-top: 1px solid #000; text-align:center; padding-top:5px; font-size:11px;">گاہک کے دستخط (Customer Signature):</div>
+    </body>
+    </html>
+  `);
+  w.document.close();
+  w.focus();
+  setTimeout(()=> { w.print(); w.close(); }, 500);
+}
+
+// گاہک کے بتائے گئے کوڈ کی تصدیق اور آرڈر مکمل کرنے پر شکریہ کا میسج
+function verifyAndComplete(idx){
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  const o = orders[idx];
+  
+  const enteredCode = prompt(`تصدیق کے لیے گاہک کا آرڈر کوڈ درج کریں (مثلاً ${o.code}):`);
+  if(!enteredCode) return;
+  
+  if(enteredCode.trim().toUpperCase() !== o.code.toUpperCase()){
+    alert("❌ غلط کوڈ! تصدیق ناکام ہو گئی، سامان اس شخص کو نہ دیں۔");
+    return;
+  }
+  
   orders[idx].status = 'completed';
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   renderOrders();
   
-  const o = orders[idx];
-  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] پہنچا دیا گیا ہے۔ SJ Foods کو منتخب کرنے کا شکریہ! 🌿`;
+  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] کامیابی کے ساتھ آپ کے حوالے کر دیا گیا ہے۔ ہمارے ساتھ تعاون کرنے اور SJ Foods کو منتخب کرنے کا تہہ دل سے شکریہ! 🌿`;
   let phone = o.phone.replace(/[^0-9]/g, "");
   if(phone.startsWith("0")) phone = "92" + phone.slice(1);
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ کوڈ درست ہے — آرڈر کامیابی سے مکمل ہو گیا!");
 }
 
 function delOrder(idx){

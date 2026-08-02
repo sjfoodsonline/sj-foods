@@ -48,7 +48,6 @@
 
 <div class="wrap">
   
-  <!-- سیٹ اپ کارڈ -->
   <div class="card" id="setupCard">
     <h3>🔑 گিট ہب (GitHub) سیٹ اپ</h3>
     <label>يوزر نیم</label><input type="text" id="cfgOwner" value="sjfoodsonline">
@@ -63,7 +62,6 @@
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <!-- آرڈرز ٹیب -->
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے آرڈرز</h3>
@@ -76,18 +74,10 @@
       <div id="ordersArea"></div>
     </div>
 
-    <!-- پروڈکٹس و ریٹس ٹیب -->
     <div id="secProducts" style="display:none;">
       <div class="card">
         <label>کیٹگری منتخب کریں:</label>
         <select id="catSelect" onchange="loadCategoryProducts()"></select>
-      </div>
-      
-      <!-- کور پکچر سیٹنگ -->
-      <div class="card">
-        <h3>🖼️ کور پکچر (بینر)</h3>
-        <input type="text" id="coverImgUrl" placeholder="کور پکچر کا لنک (URL)">
-        <button class="btn" style="font-size:13px; padding:10px;" onclick="saveCoverImg()">کور پکچر محفوظ کریں</button>
       </div>
 
       <div id="productsArea"></div>
@@ -157,35 +147,8 @@ async function initAdmin(){
     const sel = document.getElementById("catSelect");
     sel.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
     loadCategoryProducts();
-    loadSettingsJson();
   }catch(e){
     showToast("❌ گিট ہب کنکشن ناکام یا ٹوکن غلط ہے");
-  }
-}
-
-async function loadSettingsJson(){
-  try{
-    const res = await ghReq("settings.json");
-    const s = JSON.parse(atob(res.content.replace(/\n/g,"")));
-    if(s.cover_image) document.getElementById("coverImgUrl").value = s.cover_image;
-  }catch(e){}
-}
-
-async function saveCoverImg(){
-  try{
-    const imgUrl = document.getElementById("coverImgUrl").value.trim();
-    const res = await ghReq("settings.json");
-    const s = JSON.parse(atob(res.content.replace(/\n/g,"")));
-    s.cover_image = imgUrl;
-    
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(s, null, 2))));
-    await ghReq("settings.json", {
-      method: "PUT",
-      body: JSON.stringify({message: "Update cover image", content, sha: res.sha, branch: "main"})
-    });
-    showToast("✅ کور پکچر محفوظ ہو گئی!");
-  }catch(e){
-    showToast("❌ محفوظ نہیں ہو سکی");
   }
 }
 

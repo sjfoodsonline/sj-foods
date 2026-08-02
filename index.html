@@ -13,21 +13,23 @@
     --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF; --brown:#795548;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; }
   body{
-    background:var(--paper); color:var(--ink);
-    font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right; padding-bottom:90px;
+    margin:0 auto; padding:0 0 90px 0; background:var(--paper); color:var(--ink);
+    font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right;
+    width:100%; max-width:480px; min-height:100vh; position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden;
   }
-  :root{ --app-w: 480px; }
-  @media (min-width: 640px){
-    body{ max-width:var(--app-w); margin:0 auto; min-height:100vh; box-shadow:0 0 40px rgba(0,0,0,0.15); }
-    #billbar{ left:50% !important; transform:translateX(-50%); width:100%; max-width:var(--app-w); }
-  }
+
   header{ background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 22px 22px; position:relative; }
   header h1{margin:0 0 4px; font-size:22px; font-weight:700; font-family:"Noto Nastaliq Urdu",serif;}
   header p{margin:0; font-size:12.5px; opacity:.92;}
 
   .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+  /* کور پکچر بینر */
+  .cover-banner{width:100%; overflow:hidden; display:none; margin-bottom:10px; border-radius:0 0 16px 16px;}
+  .cover-banner img{width:100%; height:auto; display:block;}
 
   .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
   #search{
@@ -47,7 +49,7 @@
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
 
-  /* ٹاپ ڈیلز - براؤن فریم، دو دو آئٹمز، مربع فریم (1:1) اور پاپ اپ انیمیشن */
+  /* ٹاپ ڈیلز - سنگل رو، براؤن فریم، مربع فریم اور فلوئڈ مختلف ٹرانزیشنز */
   .featured-section{
     margin:6px 16px 12px; padding:14px; background:linear-gradient(135deg, rgba(121,85,72,0.1), rgba(232,245,233,0.6));
     border-radius:20px; border:3px solid var(--brown); position:relative; overflow:hidden;
@@ -66,18 +68,19 @@
   }
   
   .deal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 10px;
+    justify-content: center;
   }
 
   .deal-card{
-    background:#fff; border:2px solid var(--brown); border-radius:14px; padding:8px; text-align:center; cursor:pointer;
+    flex: 1; background:#fff; border:2px solid var(--brown); border-radius:14px; padding:8px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
     box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* مربع فریم 1:1 تاکہ مرغی وغیرہ کا سر نہ کٹے */
+  /* مربع فریم 1:1 */
   .deal-card img, .deal-card .deal-icon-box{
     width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; background: var(--leaf);
     display: flex; align-items:center; justify-content:center; font-size: 38px;
@@ -91,7 +94,6 @@
     font-family:"Noto Nastaliq Urdu",serif;
   }
   
-  /* عام آئٹمز - اردو ٹیکسٹ بالکل صاف اور خوبصورت نعلین فاؤنٹ میں */
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
     padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
@@ -122,7 +124,7 @@
     background:#fff; color:var(--dark); font-family:inherit;
   }
   
-  /* گرین ٹک مارک اب سامنے پلس والے نشان کے اوپر ہے */
+  /* گرین ٹک مارک اب پلس کے اوپر والی خالی جگہ پر ہے */
   .qty-box{display:flex; align-items:center; gap:6px; position:relative;}
   .qty-box button{
     width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:800; cursor:pointer;
@@ -130,7 +132,7 @@
   .qty-box button.plus{background:var(--dark); color:#fff; position:relative;}
   
   .avail-badge{
-    position: absolute; top: -10px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+    position: absolute; top: -11px; right: 2px; width: 20px; height: 20px; border-radius: 50%;
     background: var(--mid); display: flex; align-items: center; justify-content: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 2px solid #fff; z-index: 5;
   }
@@ -144,6 +146,7 @@
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
     border-radius:20px 20px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
+    width:100%; max-width:480px; margin:0 auto;
   }
   #billbar.collapsed .cart-details{display:none;}
   .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
@@ -172,6 +175,10 @@
   <h1>🟢 SJ Foods Mingora</h1>
   <p>Fresh Groceries, Fruits & Vegetables Delivered Fast</p>
 </header>
+
+<div class="cover-banner" id="coverBanner">
+  <img id="coverImg" src="" alt="SJ Foods">
+</div>
 
 <div class="search-wrap">
   <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -225,6 +232,20 @@ let ITEMS = [];
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
+// سمارٹ یونٹ کنورٹر (کلو کو KG، پاؤ، دڑی وغیرہ کو رومن اردو میں)
+function formatUnitLabel(label){
+  if(!label) return "";
+  let l = label.toLowerCase();
+  if(l.includes("کلو") || l.includes("kg")) return "KG";
+  if(l.includes("پاؤ") || l.includes("pao")) return "Pao";
+  if(l.includes("دڑی") || l.includes("dari")) return "Dri";
+  if(l.includes("گرام") || l.includes("g")) return "g";
+  if(l.includes("لیٹر") || l.includes("litre") || l.includes("liter")) return "Ltr";
+  if(l.includes("پیکٹ") || l.includes("packet")) return "Pkt";
+  if(l.includes("درجن") || l.includes("dozen")) return "Dzn";
+  return label;
+}
+
 function formatItemName(it){
   const roman = it.name_roman || it.name;
   const urdu = it.name_roman ? ` (${it.name})` : '';
@@ -241,10 +262,14 @@ async function loadData(){
     ITEMS = [];
     catResults.forEach((res, ci) => {
       res.forEach((it, ii) => {
+        let cleanUnits = (it.units && it.units.length)
+          ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
+          : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
+
         ITEMS.push({
           id: ci+"-"+ii, cat: CATEGORIES_META[ci].name, icon: CATEGORIES_META[ci].icon,
           name: it.name, name_roman: it.name_roman || "",
-          units: it.units || [{label: it.unit, rate: it.rate}], unitIndex: 0,
+          units: cleanUnits, unitIndex: 0,
           available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
         });
       });
@@ -257,6 +282,17 @@ async function loadData(){
   }catch(e){
     document.getElementById("loadingMsg").textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی";
   }
+}
+
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    if(s.cover_image){
+      document.getElementById("coverImg").src = s.cover_image;
+      document.getElementById("coverBanner").style.display = "block";
+    }
+  }catch(e){}
 }
 
 function renderChips(){
@@ -406,7 +442,7 @@ document.getElementById("waBtn").onclick = () => {
   window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
 };
 
-// ٹاپ ڈیلز: وقت تین گنا بڑھا دیا گیا ہے (تقریباً 6.5 سیکنڈ اسٹیبل ٹائم)، مربع فریم (1:1) اور پاپ اپ انیمیشن
+// ٹاپ ڈیلز: ہر بار مختلف اور بہترین فلوئڈ ٹرانزیشن کے ساتھ ڈبل آئٹمز اور کلک کرنے پر اصل جگہ جمپ کرنا
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
@@ -415,33 +451,58 @@ function renderFeatured(){
   sec.classList.remove("hidden");
 
   let currentIndex = 0;
+  const animations = [
+    'opacity: 0; transform: scale(0.8) rotate(-5deg);',
+    'opacity: 0; transform: translateY(30px) scale(0.9);',
+    'opacity: 0; transform: translateX(-40px) scale(0.85);',
+    'opacity: 0; transform: rotateY(90deg);'
+  ];
   
   const updateFeaturedGrid = () => {
     if(feat.length === 0) return;
     let first = feat[currentIndex % feat.length];
     let second = feat[(currentIndex + 1) % feat.length];
+    let randAnim = animations[Math.floor(Math.random() * animations.length)];
     
-    box.innerHTML = `
-      <div class="deal-card" onclick="openLightbox('${first.image||''}', '${first.name}')">
-        ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
-        <div class="d-name">${first.name_roman || first.name}</div>
-        <div class="d-rate">${fmt(first.units[0].rate)}</div>
-      </div>
-      <div class="deal-card" onclick="openLightbox('${second.image||''}', '${second.name}')">
-        ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
-        <div class="d-name">${second.name_roman || second.name}</div>
-        <div class="d-rate">${fmt(second.units[0].rate)}</div>
-      </div>
-    `;
+    box.style.cssText = `transition: all 0.4s ease; ${randAnim}`;
+    
+    setTimeout(() => {
+      box.innerHTML = `
+        <div class="deal-card" onclick="scrollToMainItem('${first.id}')">
+          ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
+          <div class="d-name">${first.name_roman || first.name}</div>
+          <div class="d-rate">${fmt(first.units[0].rate)}</div>
+        </div>
+        <div class="deal-card" onclick="scrollToMainItem('${second.id}')">
+          ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
+          <div class="d-name">${second.name_roman || second.name}</div>
+          <div class="d-rate">${fmt(second.units[0].rate)}</div>
+        </div>
+      `;
+      box.style.cssText = 'transition: all 0.5s ease; opacity: 1; transform: scale(1) rotate(0deg) translate(0);';
+    }, 200);
+
     currentIndex += 2;
   };
 
   updateFeaturedGrid();
   if(feat.length > 2){
-    setInterval(updateFeaturedGrid, 6500); // 3 گنا زیادہ وقت تک رکنے کے لیے
+    setInterval(updateFeaturedGrid, 6500);
   }
 }
 
+// ٹاپ ڈیلز سے کلک کرنے پر مین لسٹ کی اصل جگہ پر لے جانا
+function scrollToMainItem(id){
+  const el = document.getElementById("row-"+id);
+  if(el){
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.style.transition = "background 0.4s";
+    el.style.backgroundColor = "#FFF3CD";
+    setTimeout(()=> { el.style.backgroundColor = ""; }, 1500);
+  }
+}
+
+// صرف گیلری کی تصویر پر کلک کرنے پر زوم (لائٹ باکس) کھولنا
 function openLightbox(src, name){
   if(!src) return;
   document.getElementById("lightboxImg").src = src;

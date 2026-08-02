@@ -27,9 +27,6 @@
 
   .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
-  .cover-banner{width:100%; overflow:hidden; display:none; margin-bottom:10px; border-radius:0 0 16px 16px;}
-  .cover-banner img{width:100%; height:auto; display:block;}
-
   .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
   #search{
     width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
@@ -99,7 +96,6 @@
   
   .item-row-top{display:flex; align-items:center; gap:12px;}
 
-  /* گرین ٹک مارک اب تصویر سے بالکل باہر بائیں طرف نفاست سے موجود ہے */
   .avail-checkbox{
     flex:0 0 32px; width:32px; height:32px; border-radius:10px; background:var(--mid);
     display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(46,125,50,0.25);
@@ -143,7 +139,6 @@
     width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:700; padding:4px;
   }
 
-  /* Cart Bar & Complete Checkout Section */
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
     border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
@@ -154,7 +149,6 @@
   .bill-summary .total{font-size:24px; font-weight:800; color:var(--dark);}
   .cart-details{overflow-y:auto; max-height:65vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
   
-  /* ایزی پیسہ کارڈ */
   .pay-card{
     background:linear-gradient(135deg,#1B5E20,#2E7D32);
     border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff;
@@ -178,7 +172,6 @@
     width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:13.5px; margin-bottom:8px; background:#fff; font-family:inherit;
   }
   
-  /* پیمنٹ سلیکشن بکس (کیش آن ڈیلیوری / ایزی پیسہ) */
   .pay-method{display:flex; gap:8px; margin-bottom:8px;}
   .pay-method label{
     flex:1; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700;
@@ -207,10 +200,6 @@
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<div class="cover-banner" id="coverBanner">
-  <img id="coverImg" src="" alt="SJ Foods">
-</div>
-
 <div class="search-wrap">
   <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
 </div>
@@ -237,7 +226,6 @@
   <div class="cart-details">
     <div id="billLines" style="font-size:13.5px; margin-bottom:10px;"></div>
     
-    <!-- ایزی پیسہ ایڈوانس کارڈ -->
     <div class="pay-card" id="payCard">
       <div class="pay-card-title">📲 ایزی پیسہ ایڈوانس (ترجیحی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
@@ -259,7 +247,6 @@
         <option value="outside">مینگورہ سے باہر / سائیڈ ایریا (Outside City)</option>
       </select>
 
-      <!-- ادائیگی کا طریقہ (کیش آن ڈیلیوری اور ایزی پیسہ سلیکشن) -->
       <div class="pay-method" id="payMethodBox">
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈیلیوری</label>
         <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ</label>
@@ -344,10 +331,6 @@ async function loadSettings(){
     if(s.pay_number){
       SHOP_PAY_NUMBER = s.pay_number;
       document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
-    }
-    if(s.cover_image){
-      document.getElementById("coverImg").src = s.cover_image;
-      document.getElementById("coverBanner").style.display = "block";
     }
   }catch(e){}
 }
@@ -491,7 +474,6 @@ document.getElementById("shareBtn").onclick = async () => {
   }
 };
 
-// واٹس ایپ پر آرڈر بھیجنے اور آٹو ریپلائی / یقین دہانی کا نظام
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
@@ -507,7 +489,6 @@ document.getElementById("waBtn").onclick = () => {
   let subtotal = 0;
   let summaryHtml = "";
   
-  // آٹو ریپلائی و یقین دہانی کا پیغام جو گاہک کو اور ایڈمن کو ملے گا
   let msg = `🛒 *نیا آرڈر موصول ہوا [${orderCode}]* — SJ Foods Mingora\n\n`;
   msg += `👤 نام: ${name}\n`;
   msg += `📞 فون: ${phone}\n`;
@@ -527,7 +508,6 @@ document.getElementById("waBtn").onclick = () => {
   msg += `🌿 *آٹو ریپلائی / یقین دہانی:* محترم گاہک! آپ کا آرڈر نمبر [${orderCode}] ہمیں مل گیا ہے۔ ہم آپ کے لیے بہترین، تازہ، معیاری اور کم وقت میں اشیاء پہنچانے کے لیے پرعزم ہیں۔ اب ہم اس آرڈر پر کام شروع کر رہے ہیں!\n\n`;
   msg += `✍️ (ترسیل کے وقت تھرمل رسید پر دستخط / Signature کے لیے تیار رہیں)`;
 
-  // ایڈمن پینل کے لیے لوکل اسٹوریج میں سیو کرنا
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   orders.unshift({
     code: orderCode, name, phone, address: addr, area: area === 'inside' ? 'شہر کے اندر' : 'باہر',

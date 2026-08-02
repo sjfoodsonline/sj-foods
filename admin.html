@@ -108,7 +108,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
-  <p>محفوظ ریکارڈ، لائیو آرڈرز اور بیپ ٹیک الرٹ</p>
+  <p>محفوظ ریکارڈ، لائیو آرڈرز اور پروفیشنل آٹو میسج</p>
 </header>
 
 <div class="wrap">
@@ -136,11 +136,11 @@
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <!-- 1. لائیو آرڈرز سیکشن (حذف کرنے والے بٹن مکمل ختم، صرف محفوظ ریکارڈ) -->
+    <!-- 1. لائیو آرڈرز سیکشن -->
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
-        <p>کوئی بھی آرڈر بغیر آپ کی اجازت یا ڈلیوری مکمل کیے بغیر ڈیلیور/ختم نہیں ہو سکتا۔ ریکارڈ ہمیشہ محفوظ رہے گا۔</p>
+        <p>آرڈر مکمل کرنے یا واٹس ایپ پر شکریہ کا پروفیشنل میسج بھیجنے کے لیے نیچے دیے گئے بٹن استعمال کریں۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
           <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں</button>
           <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
@@ -276,12 +276,12 @@ async function ghPutBinary(path, base64Content, message){
 }
 
 function loadConfig(){
-  const raw = localStorage.getItem("sjfoods-admin-config");
+  const raw = localStorage.getItem("sj_admin_config");
   if(!raw) return null;
   try{ return JSON.parse(raw); }catch(e){ return null; }
 }
 function saveConfig(cfg){
-  localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg));
+  localStorage.setItem("sj_admin_config", JSON.stringify(cfg));
 }
 
 document.getElementById("saveConfigBtn").onclick = async ()=>{
@@ -305,7 +305,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
 
 document.getElementById("changeAccountBtn").onclick = ()=>{
   if(!confirm("اکاؤنٹ کی معلومات صاف کر کے دوبارہ سیٹ اپ کریں؟")) return;
-  localStorage.removeItem("sjfoods-admin-config");
+  localStorage.removeItem("sj_admin_config");
   location.reload();
 };
 
@@ -375,7 +375,7 @@ function renderOrders(){
       <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
         <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printOrderReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total})">🖨️ پرنٹ</button>
         ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="verifyAndComplete(${idx})">✅ کوڈ کی تصدیق اور مکمل</button>
+          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff; font-weight:700;" onclick="sendProfessionalThankYou(${idx})">📲 واٹس ایپ آٹو شکریہ میسج</button>
           <button class="btn-secondary" style="flex:1; background:#FFCDD2; color:#B71C1C; font-weight:700;" onclick="manualCloseOrder(${idx})">❌ آرڈر کلوز کریں</button>
         ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
       </div>
@@ -411,43 +411,32 @@ function printOrderReceipt(code, name, phone, address, items, total){
   setTimeout(()=> { w.print(); w.close(); }, 500);
 }
 
-function verifyAndComplete(idx){
+// کسٹمر کو واٹس ایپ پر پروفیشنل شکریہ اور آٹو میسج بھیجنے اور آرڈر مکمل کرنے کا فنکشن
+function sendProfessionalThankYou(idx){
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   const o = orders[idx];
-  
-  const enteredCode = prompt(`تصدیق کے لیے گاہک کا آرڈر کوڈ درج کریں (مثلاً ${o.code}):`);
-  if(!enteredCode) return;
-  
-  if(enteredCode.trim().toUpperCase() !== o.code.toUpperCase()){
-    alert("❌ غلط کوڈ! تصدیق ناکام ہو گئی، سامان اس شخص کو نہ دیں۔");
-    return;
-  }
   
   orders[idx].status = 'completed';
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   renderOrders();
   
-  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] کامیابی کے ساتھ آپ کے حوالے کر دیا گیا ہے۔ ہمارے ساتھ تعاون کرنے اور SJ Foods کو منتخب کرنے کا تہہ دل سے شکریہ! 🌿`;
+  const msg = `السلام علیکم محترم *${o.name}* صاحب! 🙏\n\nآپ کا آرڈر *[${o.code}]* کامیابی کے ساتھ آپ تک پہنچا دیا گیا ہے۔ SJ Foods Mingora کو منتخب کرنے اور ہمارے ساتھ تعاون کرنے کا تہہ دل سے شکریہ! 🌿\n\nہم آئندہ بھی آپ کو بہترین اور تازہ اشیاء فراہم کرنے کے لیے پرعزم ہیں۔ آپ کے قیمتی وقت کا شکریہ! ⭐`;
+  
   let phone = o.phone.replace(/[^0-9]/g, "");
   if(phone.startsWith("0")) phone = "92" + phone.slice(1);
+  
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ کوڈ درست ہے — آرڈر محفوظ اور مکمل ہو گیا!");
+  showToast("✅ شکریہ کا پروفیشنل میسج بھیج دیا گیا اور آرڈر کلوز ہو گیا!");
 }
 
 function manualCloseOrder(idx){
-  if(!confirm("کیا آپ واقعی اس آرڈر کو کلوز اور محفوظ کرنا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ واقعی اس آرڈر کو بغیر واٹس ایپ میسج کے کلوز کرنا چاہتے ہیں؟")) return;
   let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  const o = orders[idx];
   
   orders[idx].status = 'completed';
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   renderOrders();
-  
-  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] مکمل کر دیا گیا ہے۔ SJ Foods کے ساتھ تعاون کرنے کا شکریہ! 🌿`;
-  let phone = o.phone.replace(/[^0-9]/g, "");
-  if(phone.startsWith("0")) phone = "92" + phone.slice(1);
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
+  showToast("✅ آرڈر کامیابی سے کلوز کر دیا گیا!");
 }
 
 const ALLOWED_FILES = null;
@@ -737,7 +726,7 @@ document.getElementById("saveBtn").onclick = async ()=>{
     document.getElementById("cfgRepo").value = CFG.repo;
     startMainPanel().catch(()=>{
       showToast("❌ کنکشن ناکام، دوبارہ لاگ اِن کریں", true);
-      localStorage.removeItem("sjfoods-admin-config");
+      localStorage.removeItem("sj_admin_config");
     });
   }
 })();

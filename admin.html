@@ -4,18 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods — مکمل ایڈمن پینل و مینجمنٹ</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<title>SJ Foods — ایڈمن پینل (موبائل فریم)</title>
+<link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --line:#E5E4DA; --price:#B71C1C; }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:70px;}
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 20px 20px;}
-  header h1{margin:0; font-size:18px; font-family:"Noto Nastaliq Urdu",serif;}
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; }
+  body{
+    margin:0 auto; padding:0 0 90px 0; background:var(--paper); color:var(--ink);
+    font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right;
+    width:100%; max-width:480px; min-height:100vh; position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden;
+  }
+
+  header{ background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 20px 20px; }
+  header h1{margin:0; font-size:18px; font-family:"Jameel Noori Nastaleeq",serif;}
   
   .wrap{padding:14px;}
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.03);}
-  .card h3{margin:0 0 8px; font-size:15px; color:var(--dark);}
+  .card h3{margin:0 0 8px; font-size:15px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   
   input[type=text], input[type=password], input[type=number], select{
     width:100%; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; font-size:14px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff;
@@ -43,7 +50,7 @@
 <body translate="no">
 
 <header>
-  <h1>⚙️ SJ Foods — مکمل ایڈمن پینل و مینجمنٹ</h1>
+  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
 </header>
 
 <div class="wrap">
@@ -310,6 +317,7 @@ function renderOrders(){
       <div style="font-size:13.5px; line-height:1.7;">
         📞 فون: ${o.phone}<br>
         📍 پتہ: ${o.address} (${o.area})<br>
+        💳 ادائیگی: ${o.payMethod}<br>
         🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
         💰 کل رقم: <b>Rs. ${o.total}</b>
       </div>

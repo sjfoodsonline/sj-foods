@@ -1,38 +1,38 @@
 [
   {
-    "name": "آلو",
+    "name": "Ø¢ÙÙ",
     "units": [
       {
         "label": "KG",
         "rate": 50
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 25
       },
       {
-        "label": "دڑی (5 KG)",
+        "label": "Ø¯ÚÛ (5 KG)",
         "rate": 250
       }
     ],
-    "available": true,
+    "available": false,
     "image": "products/sabzi-0-1785052638035.jpg",
     "featured": false,
     "name_roman": "Aloo"
   },
   {
-    "name": "پیاز",
+    "name": "Ù¾ÛØ§Ø²",
     "units": [
       {
         "label": "KG",
         "rate": 120
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 60
       },
       {
-        "label": "دڑی (5 KG)",
+        "label": "Ø¯ÚÛ (5 KG)",
         "rate": 600
       }
     ],
@@ -42,14 +42,14 @@
     "name_roman": "Pyaz"
   },
   {
-    "name": "ٹماٹر",
+    "name": "Ù¹ÙØ§Ù¹Ø±",
     "units": [
       {
         "label": "KG",
         "rate": 300
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 150
       }
     ],
@@ -59,14 +59,14 @@
     "name_roman": "Tamatar"
   },
   {
-    "name": "کچالو",
+    "name": "Ú©ÚØ§ÙÙ",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -76,14 +76,14 @@
     "name_roman": "Kachalu"
   },
   {
-    "name": "بھنڈی",
+    "name": "Ø¨Ú¾ÙÚÛ",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -93,14 +93,14 @@
     "name_roman": "Bhindi"
   },
   {
-    "name": "مٹر",
+    "name": "ÙÙ¹Ø±",
     "units": [
       {
         "label": "KG",
         "rate": 500
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 250
       }
     ],
@@ -110,14 +110,14 @@
     "name_roman": "Matar"
   },
   {
-    "name": "توری",
+    "name": "ØªÙØ±Û",
     "units": [
       {
         "label": "KG",
         "rate": 300
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 150
       }
     ],
@@ -127,14 +127,14 @@
     "name_roman": "Tori"
   },
   {
-    "name": "کدو",
+    "name": "Ú©Ø¯Ù",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -144,14 +144,14 @@
     "name_roman": "Kaddu"
   },
   {
-    "name": "کریلا",
+    "name": "Ú©Ø±ÛÙØ§",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -161,14 +161,14 @@
     "name_roman": "Karela"
   },
   {
-    "name": "بینگن",
+    "name": "Ø¨ÛÙÚ¯Ù",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -178,14 +178,14 @@
     "name_roman": "Baingan"
   },
   {
-    "name": "شملہ مرچ",
+    "name": "Ø´ÙÙÛ ÙØ±Ú",
     "units": [
       {
         "label": "KG",
         "rate": 280
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 140
       }
     ],
@@ -195,14 +195,14 @@
     "name_roman": "Shimla Mirch"
   },
   {
-    "name": "بند گوبھی",
+    "name": "Ø¨ÙØ¯ Ú¯ÙØ¨Ú¾Û",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -212,14 +212,14 @@
     "name_roman": "Band Gobhi"
   },
   {
-    "name": "گاجر",
+    "name": "Ú¯Ø§Ø¬Ø±",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -229,14 +229,14 @@
     "name_roman": "Gajar"
   },
   {
-    "name": "کھیرا",
+    "name": "Ú©Ú¾ÛØ±Ø§",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -246,14 +246,14 @@
     "name_roman": "Kheera"
   },
   {
-    "name": "پھول گوبھی",
+    "name": "Ù¾Ú¾ÙÙ Ú¯ÙØ¨Ú¾Û",
     "units": [
       {
         "label": "KG",
         "rate": 180
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 90
       }
     ],
@@ -263,14 +263,14 @@
     "name_roman": "Phool Gobhi"
   },
   {
-    "name": "شلغم",
+    "name": "Ø´ÙØºÙ",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -280,14 +280,14 @@
     "name_roman": "Shalgham"
   },
   {
-    "name": "فراش بین",
+    "name": "ÙØ±Ø§Ø´ Ø¨ÛÙ",
     "units": [
       {
         "label": "KG",
         "rate": 250
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 125
       }
     ],
@@ -297,14 +297,14 @@
     "name_roman": "Farash Been"
   },
   {
-    "name": "پمنکے",
+    "name": "Ù¾ÙÙÚ©Û",
     "units": [
       {
         "label": "KG",
         "rate": 1000
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 500
       }
     ],
@@ -314,14 +314,14 @@
     "name_roman": "Pamnkay"
   },
   {
-    "name": "ہری مرچ",
+    "name": "ÛØ±Û ÙØ±Ú",
     "units": [
       {
         "label": "KG",
         "rate": 180
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 90
       }
     ],
@@ -331,18 +331,18 @@
     "name_roman": "Hari Mirch"
   },
   {
-    "name": "ادرک",
+    "name": "Ø§Ø¯Ø±Ú©",
     "units": [
       {
         "label": "KG",
         "rate": 600
       },
       {
-        "label": "پاؤ (250 گرام)",
+        "label": "Ù¾Ø§Ø¤ (250 Ú¯Ø±Ø§Ù)",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 300
       }
     ],
@@ -352,18 +352,18 @@
     "name_roman": "Adrak"
   },
   {
-    "name": "لہسن",
+    "name": "ÙÛØ³Ù",
     "units": [
       {
         "label": "KG",
         "rate": 320
       },
       {
-        "label": "پاؤ (250 گرام)",
+        "label": "Ù¾Ø§Ø¤ (250 Ú¯Ø±Ø§Ù)",
         "rate": 80
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 160
       }
     ],
@@ -373,18 +373,18 @@
     "name_roman": "Lehsan"
   },
   {
-    "name": "لیموں",
+    "name": "ÙÛÙÙÚº",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "پاؤ (250 گرام)",
+        "label": "Ù¾Ø§Ø¤ (250 Ú¯Ø±Ø§Ù)",
         "rate": 50
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 100
       }
     ],
@@ -394,14 +394,14 @@
     "name_roman": "Lemon"
   },
   {
-    "name": "گول ٹینڈے",
+    "name": "Ú¯ÙÙ Ù¹ÛÙÚÛ",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -411,14 +411,14 @@
     "name_roman": "Gol Tinday"
   },
   {
-    "name": "چقندر",
+    "name": "ÚÙÙØ¯Ø±",
     "units": [
       {
         "label": "KG",
         "rate": 150
       },
       {
-        "label": "آدھا KG",
+        "label": "Ø¢Ø¯Ú¾Ø§ KG",
         "rate": 75
       }
     ],
@@ -428,10 +428,10 @@
     "name_roman": "Chuqandar"
   },
   {
-    "name": "سبز دھنیا",
+    "name": "Ø³Ø¨Ø² Ø¯Ú¾ÙÛØ§",
     "units": [
       {
-        "label": "گڈی",
+        "label": "Ú¯ÚÛ",
         "rate": 30
       }
     ],
@@ -441,10 +441,10 @@
     "name_roman": "Sabz Dhania"
   },
   {
-    "name": "پودینہ",
+    "name": "Ù¾ÙØ¯ÛÙÛ",
     "units": [
       {
-        "label": "گڈی",
+        "label": "Ú¯ÚÛ",
         "rate": 10
       }
     ],
@@ -454,10 +454,10 @@
     "name_roman": "Pudina"
   },
   {
-    "name": "سلاد پتی",
+    "name": "Ø³ÙØ§Ø¯ Ù¾ØªÛ",
     "units": [
       {
-        "label": "گیڈی",
+        "label": "Ú¯ÛÚÛ",
         "rate": 20
       }
     ],
@@ -467,7 +467,7 @@
     "name_roman": "Salad Patti"
   },
   {
-    "name": "مولی",
+    "name": "ÙÙÙÛ",
     "units": [
       {
         "label": "KG",
@@ -480,7 +480,7 @@
     "name_roman": "Mooli"
   },
   {
-    "name": "لمبے ٹینڈے",
+    "name": "ÙÙØ¨Û Ù¹ÛÙÚÛ",
     "units": [
       {
         "label": "KG",
@@ -493,10 +493,10 @@
     "name_roman": "Lambay Tinday"
   },
   {
-    "name": "ساگ",
+    "name": "Ø³Ø§Ú¯",
     "units": [
       {
-        "label": "گڈی ",
+        "label": "Ú¯ÚÛ ",
         "rate": 50
       }
     ],
@@ -506,10 +506,10 @@
     "name_roman": "Saag"
   },
   {
-    "name": "ہری پیاز",
+    "name": "ÛØ±Û Ù¾ÛØ§Ø²",
     "units": [
       {
-        "label": "گڈی",
+        "label": "Ú¯ÚÛ",
         "rate": 60
       }
     ],

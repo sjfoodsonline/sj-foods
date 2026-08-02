@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods Mingora — Fresh Groceries & Vegetables Online</title>
+<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -35,7 +35,6 @@
     background:#fff; font-family:inherit; direction:rtl; text-align:right; outline:none;
   }
 
-  /* کیٹیگری بار - ٹاپ ڈیلز کے نیچے اور اسکرول پر چپکی رہے گی */
   .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
@@ -48,22 +47,16 @@
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
 
-  /* ٹاپ ڈیلز - براؤن فریم، دو دو آئٹمز، پاپ اپ انیمیشن اور تیز ٹرانزیشن */
+  /* ٹاپ ڈیلز - براؤن فریم، دو دو آئٹمز، مربع فریم (1:1) اور پاپ اپ انیمیشن */
   .featured-section{
     margin:6px 16px 12px; padding:14px; background:linear-gradient(135deg, rgba(121,85,72,0.1), rgba(232,245,233,0.6));
     border-radius:20px; border:3px solid var(--brown); position:relative; overflow:hidden;
     box-shadow:0 8px 25px rgba(121,85,72,0.2);
   }
 
-  /* دکان دار کی طرح چیخ مارتا ہوا بولڈ انگلش اینیمیٹڈ ٹائٹل */
   .shout-title {
-    font-size: 19px;
-    font-weight: 900;
-    color: var(--brown);
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
+    font-size: 19px; font-weight: 900; color: var(--brown); text-transform: uppercase;
+    text-align: center; margin-bottom: 12px; letter-spacing: 1px;
     animation: shoutBounce 0.6s ease-in-out infinite alternate;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
@@ -82,26 +75,23 @@
     background:#fff; border:2px solid var(--brown); border-radius:14px; padding:8px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
     box-shadow:0 6px 20px rgba(0,0,0,0.08);
-    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
   }
 
+  /* مربع فریم 1:1 تاکہ مرغی وغیرہ کا سر نہ کٹے */
   .deal-card img, .deal-card .deal-icon-box{
-    width: 100%; height: 95px; object-fit: cover; border-radius: 10px; background: var(--leaf);
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; background: var(--leaf);
     display: flex; align-items:center; justify-content:center; font-size: 38px;
   }
-  .deal-card .d-name{ font-size: 13.5px; font-weight: 800; margin-top: 6px; color: var(--ink); line-height: 1.2; }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: 800; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family:"Noto Nastaliq Urdu",serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: 900; color: var(--price); margin-top: 2px; }
 
   main{padding:6px 16px 90px;}
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
+    font-family:"Noto Nastaliq Urdu",serif;
   }
   
-  /* عام آئٹمز - سبز ٹک مارک دوبارہ بحال اور سائز فریم کے اندر */
+  /* عام آئٹمز - اردو ٹیکسٹ بالکل صاف اور خوبصورت نعلین فاؤنٹ میں */
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
     padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
@@ -110,24 +100,19 @@
   @keyframes gentlePulse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1px); } }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
   
-  .item-row-top{display:flex; align-items:center; gap:12px; position:relative;}
+  .item-row-top{display:flex; align-items:center; gap:12px;}
   .item-thumb{
     flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
     display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; cursor:pointer;
     box-shadow:0 2px 8px rgba(0,0,0,0.06); position:relative;
   }
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
-  
-  /* سبز ٹک مارک جو پراڈکٹ کی اویلیبلٹی ظاہر کرتا ہے */
-  .avail-badge{
-    position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--mid); display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 2px solid #fff; z-index: 2;
-  }
-  .avail-badge.no{ background: #B71C1C; }
 
   .item .info{min-width:0; flex:1;}
-  .item .name{font-size:17px; font-weight:700; color:var(--ink); line-height:1.3;}
+  .item .name{
+    font-size:16.5px; font-weight:700; color:var(--ink); line-height:1.4;
+    font-family:"Noto Nastaliq Urdu",system-ui,sans-serif;
+  }
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px;}
   .item .meta b{color:var(--price); font-weight:800; font-size:14.5px;}
 
@@ -136,11 +121,21 @@
     flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:700;
     background:#fff; color:var(--dark); font-family:inherit;
   }
-  .qty-box{display:flex; align-items:center; gap:6px;}
+  
+  /* گرین ٹک مارک اب سامنے پلس والے نشان کے اوپر ہے */
+  .qty-box{display:flex; align-items:center; gap:6px; position:relative;}
   .qty-box button{
     width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:800; cursor:pointer;
   }
-  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box button.plus{background:var(--dark); color:#fff; position:relative;}
+  
+  .avail-badge{
+    position: absolute; top: -10px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--mid); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 2px solid #fff; z-index: 5;
+  }
+  .avail-badge.no{ background: #B71C1C; }
+
   .qty-box input{
     width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:700; padding:4px;
   }
@@ -182,13 +177,11 @@
   <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
 </div>
 
-<!-- ٹاپ ڈیلز - براؤن فریم، دو دو آئٹمز اور تیز پاپ اپ سلائیڈر -->
 <div class="featured-section hidden" id="featuredSection">
   <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- کیٹیگری بار - ٹاپ ڈیلز کے نیچے اور اسکرول پر چپکی رہے گی -->
 <div class="cat-section">
   <div class="cat-marquee-wrap" id="chips"></div>
 </div>
@@ -235,7 +228,7 @@ function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 function formatItemName(it){
   const roman = it.name_roman || it.name;
   const urdu = it.name_roman ? ` (${it.name})` : '';
-  return `<span dir="ltr">${roman}</span>${urdu}`;
+  return `<span dir="ltr">${roman}</span><span style="font-family:'Noto Nastaliq Urdu',serif; font-size:0.9em;">${urdu}</span>`;
 }
 
 async function loadData(){
@@ -307,9 +300,6 @@ function renderList(filter){
         <div class="item-row-top">
           <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
             ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
-            <div class="avail-badge ${it.available ? 'yes' : 'no'}">
-              ${it.available ? `<svg width="12" height="12" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="11" height="11" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
-            </div>
           </div>
           <div class="info">
             <div class="name">${formatItemName(it)}</div>
@@ -319,6 +309,9 @@ function renderList(filter){
         <div class="item-row-bottom">
           ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
           <div class="qty-box">
+            <div class="avail-badge ${it.available ? 'yes' : 'no'}">
+              ${it.available ? `<svg width="10" height="10" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="9" height="9" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>`}
+            </div>
             <button onclick="changeQty('${it.id}', -1)">−</button>
             <input type="number" value="${it.qty}" readonly>
             <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
@@ -413,7 +406,7 @@ document.getElementById("waBtn").onclick = () => {
   window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
 };
 
-// دو دو آئٹمز اور تیز پاپ اپ ٹرانزیشن کے ساتھ ٹاپ ڈیلز رینڈر کرنا
+// ٹاپ ڈیلز: وقت تین گنا بڑھا دیا گیا ہے (تقریباً 6.5 سیکنڈ اسٹیبل ٹائم)، مربع فریم (1:1) اور پاپ اپ انیمیشن
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
@@ -445,7 +438,7 @@ function renderFeatured(){
 
   updateFeaturedGrid();
   if(feat.length > 2){
-    setInterval(updateFeaturedGrid, 2200); // انتہائی تیز ٹرانزیشن
+    setInterval(updateFeaturedGrid, 6500); // 3 گنا زیادہ وقت تک رکنے کے لیے
   }
 }
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
 <title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
@@ -22,12 +22,11 @@
   }
 
   header{ background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 22px 22px; position:relative; }
-  header h1{margin:0 0 4px; font-size:22px; font-weight:700; font-family:"Noto Nastaliq Urdu",serif;}
+  header h1{margin:0 0 4px; font-size:22px; font-weight:700; font-family:"Jameel Noori Nastaleeq",serif;}
   header p{margin:0; font-size:12.5px; opacity:.92;}
 
   .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
-  /* کور پکچر بینر */
   .cover-banner{width:100%; overflow:hidden; display:none; margin-bottom:10px; border-radius:0 0 16px 16px;}
   .cover-banner img{width:100%; height:auto; display:block;}
 
@@ -49,7 +48,6 @@
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
 
-  /* ٹاپ ڈیلز - سنگل رو، براؤن فریم، مربع فریم اور فلوئڈ مختلف ٹرانزیشنز */
   .featured-section{
     margin:6px 16px 12px; padding:14px; background:linear-gradient(135deg, rgba(121,85,72,0.1), rgba(232,245,233,0.6));
     border-radius:20px; border:3px solid var(--brown); position:relative; overflow:hidden;
@@ -80,18 +78,17 @@
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* مربع فریم 1:1 */
   .deal-card img, .deal-card .deal-icon-box{
     width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; background: var(--leaf);
     display: flex; align-items:center; justify-content:center; font-size: 38px;
   }
-  .deal-card .d-name{ font-size: 13.5px; font-weight: 800; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family:"Noto Nastaliq Urdu",serif; }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: 800; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family:"Jameel Noori Nastaleeq",serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: 900; color: var(--price); margin-top: 2px; }
 
   main{padding:6px 16px 90px;}
   .cat-title{
-    font-size:16px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    font-family:"Noto Nastaliq Urdu",serif;
+    font-size:17px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
+    font-family:"Jameel Noori Nastaleeq",serif;
   }
   
   .item{
@@ -111,10 +108,18 @@
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
 
   .item .info{min-width:0; flex:1;}
+  
+  /* نام کا انداز: رومن بڑا، اور اردو نعلین فونٹ میں بالکل چھوٹا (رومن کے سائز کا آدھا) */
   .item .name{
-    font-size:16.5px; font-weight:700; color:var(--ink); line-height:1.4;
-    font-family:"Noto Nastaliq Urdu",system-ui,sans-serif;
+    font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3;
   }
+  .item .name .roman-part {
+    font-size: 17px; font-weight: 800; font-family: "Segoe UI", sans-serif;
+  }
+  .item .name .urdu-part {
+    font-size: 11px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px;
+  }
+
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px;}
   .item .meta b{color:var(--price); font-weight:800; font-size:14.5px;}
 
@@ -124,7 +129,6 @@
     background:#fff; color:var(--dark); font-family:inherit;
   }
   
-  /* گرین ٹک مارک اب پلس کے اوپر والی خالی جگہ پر ہے */
   .qty-box{display:flex; align-items:center; gap:6px; position:relative;}
   .qty-box button{
     width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:800; cursor:pointer;
@@ -172,8 +176,8 @@
 
 <header>
   <button class="share-btn" id="shareBtn" title="Share">🔗</button>
-  <h1>🟢 SJ Foods Mingora</h1>
-  <p>Fresh Groceries, Fruits & Vegetables Delivered Fast</p>
+  <h1>🟢 ایس جے فوڈز مینگورہ</h1>
+  <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
 <div class="cover-banner" id="coverBanner">
@@ -232,7 +236,6 @@ let ITEMS = [];
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-// سمارٹ یونٹ کنورٹر (کلو کو KG، پاؤ، دڑی وغیرہ کو رومن اردو میں)
 function formatUnitLabel(label){
   if(!label) return "";
   let l = label.toLowerCase();
@@ -249,7 +252,7 @@ function formatUnitLabel(label){
 function formatItemName(it){
   const roman = it.name_roman || it.name;
   const urdu = it.name_roman ? ` (${it.name})` : '';
-  return `<span dir="ltr">${roman}</span><span style="font-family:'Noto Nastaliq Urdu',serif; font-size:0.9em;">${urdu}</span>`;
+  return `<span class="roman-part" dir="ltr">${roman}</span><span class="urdu-part">${urdu}</span>`;
 }
 
 async function loadData(){
@@ -442,7 +445,6 @@ document.getElementById("waBtn").onclick = () => {
   window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
 };
 
-// ٹاپ ڈیلز: ہر بار مختلف اور بہترین فلوئڈ ٹرانزیشن کے ساتھ ڈبل آئٹمز اور کلک کرنے پر اصل جگہ جمپ کرنا
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
@@ -491,7 +493,6 @@ function renderFeatured(){
   }
 }
 
-// ٹاپ ڈیلز سے کلک کرنے پر مین لسٹ کی اصل جگہ پر لے جانا
 function scrollToMainItem(id){
   const el = document.getElementById("row-"+id);
   if(el){
@@ -502,7 +503,6 @@ function scrollToMainItem(id){
   }
 }
 
-// صرف گیلری کی تصویر پر کلک کرنے پر زوم (لائٹ باکس) کھولنا
 function openLightbox(src, name){
   if(!src) return;
   document.getElementById("lightboxImg").src = src;

@@ -32,10 +32,12 @@
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
 
+  /* ٹیبز ڈیزائن */
   .tabs{display:flex; gap:8px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
+  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
+  /* آرڈر کارڈز */
   .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: blink 1.8s infinite;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
@@ -120,33 +122,34 @@
 
   <div id="mainPanel" style="display:none;">
     
+    <!-- اوپر کیٹیگری سلیکشن کے ساتھ ٹیبز (لائیو آرڈرز اور پروڈکٹس) -->
     <div class="tabs">
       <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
       <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <!-- آرڈرز ٹیب -->
+    <!-- 1. لائیو آرڈرز سیکشن -->
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-        <p>گاہک جیسے ہی واٹس ایپ پر آرڈر بھیجے گا، اس کا یونیک کوڈ (`SJ-XXXX`) اور مکمل تفصیلات یہاں شو ہوں گی۔</p>
+        <p>گاہک جیسے ہی آرڈر بھیجے گا، اس کا کوڈ (`SJ-XXXX`) اور تمام تفصیلات یہاں آئیں گی۔</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
           <button class="btn-secondary" style="flex:1;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
-          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
+          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
           <button class="btn-danger" style="flex:1;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
         </div>
       </div>
       <div id="ordersArea"></div>
     </div>
 
-    <!-- پروڈکٹس ٹیب -->
+    <!-- 2. پروڈکٹس اور ریٹس سیکشن (آپ کا پرانا اور اصل ڈیزائن) -->
     <div id="secProducts" style="display:none;">
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker"></select>
           <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
         </div>
-        <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔</div>
+        <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔ ہر پروڈکٹ میں سائز اور قیمتیں شامل کر سکتے ہیں۔</div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
@@ -286,6 +289,7 @@ document.getElementById("changeAccountBtn").onclick = ()=>{
   location.reload();
 };
 
+// ٹیبز سوئچ کرنے کا فنکشن
 function switchTab(tab){
   if(tab === 'orders'){
     document.getElementById('secOrders').style.display = 'block';
@@ -301,6 +305,7 @@ function switchTab(tab){
   }
 }
 
+// فرضی آرڈر چیک کرنے کے لیے
 function fakeOrder(){
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   orders.unshift({
@@ -500,7 +505,7 @@ function buildRow(it, idx){
   row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
 
   row.querySelector(".remove-row-btn").onclick = ()=>{
-    if(!confirm(`"${it.name || 'آئٹم'}" حذف कर दें؟`)) return;
+    if(!confirm(`"${it.name || 'آئٹم'}" حذف کر دیں؟`)) return;
     const i = currentItems.indexOf(it);
     currentItems.splice(i,1);
     renderProducts();

@@ -32,6 +32,15 @@
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
 
+  .tabs{display:flex; gap:8px; margin-bottom:14px;}
+  .tab{flex:1; padding:10px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+
+  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
+  .order-card.pending{animation: blink 1.8s infinite;}
+  .order-card.completed{background:#F1F8E9; border-color:#81C784;}
+  @keyframes blink{ 0%{border-color:#E53935;background:#FFEBEE;} 50%{border-color:#FFE082;background:#FFFDE7;} 100%{border-color:#E53935;background:#FFEBEE;} }
+
   .cat-select{display:flex; gap:8px; margin-bottom:10px;}
   .cat-select select{flex:1; margin-bottom:0;}
 
@@ -88,7 +97,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>یہاں سے پروڈکٹس، قیمتیں اور تصویریں بغیر کوڈ کے بدلیں</p>
+  <p>لائیو آرڈرز، پروڈکٹس اور قیمتیں یہاں سے مینج کریں</p>
 </header>
 
 <div class="wrap">
@@ -110,17 +119,41 @@
   </div>
 
   <div id="mainPanel" style="display:none;">
-    <div class="card">
-      <div class="cat-select">
-        <select id="categoryPicker"></select>
-        <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
-      </div>
-      <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔ ہر پروڈکٹ میں ایک یا زیادہ سائز/قیمت شامل کر سکتے ہیں۔</div>
+    
+    <div class="tabs">
+      <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
+      <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
     </div>
 
-    <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
+    <!-- آرڈرز ٹیب -->
+    <div id="secOrders">
+      <div class="card">
+        <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+        <p>گاہک جیسے ہی واٹس ایپ پر آرڈر بھیجے گا، اس کا یونیک کوڈ (`SJ-XXXX`) اور مکمل تفصیلات یہاں شو ہوں گی۔</p>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn-secondary" style="flex:1;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
+          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
+          <button class="btn-danger" style="flex:1;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
+        </div>
+      </div>
+      <div id="ordersArea"></div>
+    </div>
 
-    <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
+    <!-- پروڈکٹس ٹیب -->
+    <div id="secProducts" style="display:none;">
+      <div class="card">
+        <div class="cat-select">
+          <select id="categoryPicker"></select>
+          <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
+        </div>
+        <div class="hint">جس کیٹگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں۔</div>
+      </div>
+
+      <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
+
+      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
+    </div>
+
   </div>
 
 </div>
@@ -147,6 +180,19 @@ function showToast(msg, isErr){
   t.className = "toast show" + (isErr ? " err" : "");
   setTimeout(()=> t.className = "toast", 2600);
 }
+
+function playSound(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.6);
+  }catch(e){}
+}
+function testSound(){ playSound(); showToast("🔊 ساؤنڈ ایکٹیو ہے"); }
+
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
@@ -240,6 +286,93 @@ document.getElementById("changeAccountBtn").onclick = ()=>{
   location.reload();
 };
 
+function switchTab(tab){
+  if(tab === 'orders'){
+    document.getElementById('secOrders').style.display = 'block';
+    document.getElementById('secProducts').style.display = 'none';
+    document.getElementById('tabOrdersBtn').className = 'tab active';
+    document.getElementById('tabProductsBtn').className = 'tab';
+    renderOrders();
+  } else {
+    document.getElementById('secOrders').style.display = 'none';
+    document.getElementById('secProducts').style.display = 'block';
+    document.getElementById('tabOrdersBtn').className = 'tab';
+    document.getElementById('tabProductsBtn').className = 'tab active';
+  }
+}
+
+function fakeOrder(){
+  const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders.unshift({
+    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
+    name: "محمد خان (ٹیسٹ)", phone: "03155166034", address: "مینگورہ", area: "شہر کے اندر",
+    payMethod: "کیش آن ڈیلیوری", itemsSummary: "Tomato / ٹماٹر (1 KG) — Rs. 150", total: 150,
+    timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
+  });
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  playSound();
+  renderOrders();
+  showToast("✅ فرضی آرڈر آگیا!");
+}
+
+function renderOrders(){
+  const area = document.getElementById("ordersArea");
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  
+  const now = Date.now();
+  orders = orders.filter(o => !o.timestamp || (now - o.timestamp < 24*60*60*1000));
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+
+  if(orders.length === 0){
+    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+    return;
+  }
+
+  area.innerHTML = orders.map((o, idx) => `
+    <div class="order-card ${o.status==='completed'?'completed':'pending'}">
+      <button class="btn-danger" style="position:absolute; top:12px; left:14px;" onclick="delOrder(${idx})">✕ حذف</button>
+      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name}</div>
+      <div style="font-size:13.5px; line-height:1.7;">
+        📞 فون: ${o.phone}<br>
+        📍 پتہ: ${o.address} (${o.area})<br>
+        💳 ادائیگی: ${o.payMethod}<br>
+        🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+        💰 کل رقم: <b>Rs. ${o.total}</b>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:6px;">
+        <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="markDelivered(${idx})">✅ ڈیلیورڈ (واٹس ایپ شکریہ)</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function markDelivered(idx){
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders[idx].status = 'completed';
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  renderOrders();
+  
+  const o = orders[idx];
+  const msg = `السلام علیکم محترم ${o.name}! 🙏\nآپ کا آرڈر [${o.code}] پہنچا دیا گیا ہے۔ SJ Foods کو منتخب کرنے کا شکریہ! 🌿`;
+  let phone = o.phone.replace(/[^0-9]/g, "");
+  if(phone.startsWith("0")) phone = "92" + phone.slice(1);
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+function delOrder(idx){
+  if(!confirm("حذف کریں؟")) return;
+  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
+  orders.splice(idx, 1);
+  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  renderOrders();
+}
+
+function clearAllOrders(){
+  if(!confirm("تمام ہسٹری صاف کریں؟")) return;
+  localStorage.removeItem("sj_admin_orders");
+  renderOrders();
+}
+
 const ALLOWED_FILES = null;
 
 async function startMainPanel(){
@@ -259,6 +392,7 @@ async function startMainPanel(){
   picker.onchange = ()=> loadCategory(picker.value);
 
   await loadCategory(CATEGORIES_INDEX[0].file);
+  renderOrders();
 }
 
 async function loadCategory(file){
@@ -275,7 +409,6 @@ async function loadCategory(file){
     currentSha = sha;
     renderProducts();
     markClean();
-    document.getElementById("saveBar").style.display = "flex";
     document.getElementById("addProductBtn").style.display = "block";
   }catch(e){
     document.getElementById("productsArea").innerHTML = `<div class="loading">❌ لوڈ نہیں ہو سکا: ${e.message}</div>`;
@@ -367,7 +500,7 @@ function buildRow(it, idx){
   row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
 
   row.querySelector(".remove-row-btn").onclick = ()=>{
-    if(!confirm(`"${it.name || 'آئٹم'}" حذف کر دیں؟`)) return;
+    if(!confirm(`"${it.name || 'آئٹم'}" حذف कर दें؟`)) return;
     const i = currentItems.indexOf(it);
     currentItems.splice(i,1);
     renderProducts();

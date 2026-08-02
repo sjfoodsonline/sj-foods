@@ -4,16 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods Mingora — Fresh Groceries & Vegetables Online</title>
+<title>SJ Foods Mingora — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر | Swat</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
     --gold:#C9A227; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86;
     --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF;
-  }
-  body.dark{
-    --paper:#0F1A12; --ink:#EAF3EA; --muted:#9AA79A; --line:#233826; --card:#17251A; --leaf:#16301C;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -32,13 +29,16 @@
 
   .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
+  .cover-banner{width:100%; overflow:hidden; display:none; margin-bottom:12px;}
+  .cover-banner img{width:100%; height:auto; display:block;}
+
   .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
   #search{
     width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
     background:#fff; font-family:inherit; direction:rtl; text-align:right; outline:none;
   }
 
-  /* کیٹیگری بار جو اب ٹاپ ڈیلز سے نیچے ہوگی اور اسکرول پر اوپر چپکی رہے گی */
+  /* کیٹیگری بار - اسکرول پر اوپر چپکی رہے گی */
   .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
@@ -51,11 +51,11 @@
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
 
-  /* ٹاپ ڈیلز (Trending Deals) - بڑی تصویر، بہترین فریم اور ہلکی لائٹ شائن مومنٹ */
+  /* ٹاپ ڈیلز */
   .featured-section{
-    margin:6px 16px 12px; padding:14px; background:linear-gradient(135deg, rgba(201,162,39,0.18), rgba(232,245,233,0.6));
-    border-radius:20px; border:2px solid var(--gold); position:relative; overflow:hidden;
-    box-shadow:0 8px 25px rgba(201,162,39,0.25);
+    margin:6px 16px 12px; padding:12px; background:linear-gradient(135deg, rgba(201,162,39,0.18), rgba(232,245,233,0.6));
+    border-radius:16px; border:2px solid var(--gold); position:relative; overflow:hidden;
+    box-shadow:0 6px 20px rgba(201,162,39,0.2);
   }
   .featured-section::after{
     content:""; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
@@ -64,27 +64,27 @@
   }
   @keyframes shineLight { 0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); } 100% { transform: translateX(100%) translateY(100%) rotate(30deg); } }
 
-  .section-title{ font-size:17px; font-weight:800; color:var(--dark); margin-bottom:10px; border-right:4px solid var(--gold); padding-right:8px; text-align:right; }
+  .section-title{ font-size:16px; font-weight:800; color:var(--dark); margin-bottom:8px; border-right:4px solid var(--gold); padding-right:8px; text-align:right; }
   
-  .deal-container{ position:relative; height:240px; overflow:hidden; border-radius:14px; }
+  .deal-container{ position:relative; height:190px; overflow:hidden; border-radius:12px; }
   .deal-slide{
-    position:absolute; inset:0; background:#fff; border-radius:14px; padding:10px; text-align:center; cursor:pointer;
+    position:absolute; inset:0; background:#fff; border-radius:12px; padding:6px; text-align:center; cursor:pointer;
     opacity:0; transform:scale(0.95) translateY(10px); transition:all 0.6s ease; display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .deal-slide.active{ opacity:1; transform:scale(1) translateY(0); }
   .deal-slide img, .deal-slide .deal-icon-box{
-    width:150px; height:150px; object-fit:cover; border-radius:14px; background:var(--leaf); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:60px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    width:110px; height:110px; object-fit:cover; border-radius:10px; background:var(--leaf); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:45px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1); border:1px solid var(--line);
   }
-  .deal-slide .d-name{ font-size:17px; font-weight:800; margin-top:8px; color:var(--ink); }
-  .deal-slide .d-rate{ font-size:18px; font-weight:800; color:var(--price); margin-top:2px; }
+  .deal-slide .d-name{ font-size:15px; font-weight:800; margin-top:6px; color:var(--ink); }
+  .deal-slide .d-rate{ font-size:15.5px; font-weight:800; color:var(--price); margin-top:2px; }
 
   main{padding:6px 16px 90px;}
   .cat-title{
     font-size:16px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
   }
   
-  /* عام آئٹمز - ہلکی موومنٹ اور بڑے صاف نام */
+  /* عام آئٹمز */
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
     padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
@@ -148,21 +148,25 @@
 
 <header>
   <button class="share-btn" id="shareBtn" title="Share">🔗</button>
-  <h1>🟢 SJ Foods Mingora</h1>
-  <p>Fresh Groceries, Fruits & Vegetables Delivered Fast</p>
+  <h1>🟢 ایس جے فوڈز مینگورہ</h1>
+  <p>تازہ سبزیاں، پھل، کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<div class="search-wrap">
-  <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+<div class="cover-banner" id="coverBanner">
+  <img id="coverImg" src="" alt="SJ Foods">
 </div>
 
-<!-- ٹاپ ڈیلز (Trending Deals) - اب اوپر ہے -->
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="🔍 آئٹم تلاش کریں... مثلاً ٹماٹر">
+</div>
+
+<!-- ٹاپ ڈیلز -->
 <div class="featured-section hidden" id="featuredSection">
-  <div class="section-title">⭐ Trending Deals (Khas Offers)</div>
+  <div class="section-title">⭐ خاص آفرز و ٹاپ ڈیلز</div>
   <div class="deal-container" id="dealBox"></div>
 </div>
 
-<!-- کیٹیگری بار - اب ٹاپ ڈیلز سے نیچے ہے اور اسکرول پر چپکی رہے گی -->
+<!-- کیٹیگری بار -->
 <div class="cat-section">
   <div class="cat-marquee-wrap" id="chips"></div>
 </div>
@@ -174,22 +178,22 @@
 
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-summary" id="summary">
-    <div>🛒 Cart (<span id="itemCount">0</span> items)</div>
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز)</div>
     <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
   <div class="cart-details">
     <div id="billLines" style="font-size:13.5px; margin-bottom:10px;"></div>
     <div class="checkout-box">
-      <input id="custName" type="text" placeholder="Your Name">
-      <input id="custPhone" type="tel" placeholder="WhatsApp / Phone Number">
-      <input id="custAddr" type="text" placeholder="Complete Address (Mingora)">
+      <input id="custName" type="text" placeholder="آپ کا نام">
+      <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر">
+      <input id="custAddr" type="text" placeholder="مکمل پتہ (مینگورہ شہر)">
       <select id="custArea">
-        <option value="">📍 Select Area</option>
-        <option value="inside">Inside Mingora City</option>
-        <option value="outside">Outside Mingora / Suburbs</option>
+        <option value="">📍 اپنا علاقہ منتخب کریں</option>
+        <option value="inside">مینگورہ شہر کے اندر</option>
+        <option value="outside">مینگورہ سے باہر</option>
       </select>
     </div>
-    <button class="wa-btn" id="waBtn">✅ Send Order via WhatsApp</button>
+    <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
   </div>
 </div>
 
@@ -206,7 +210,6 @@ let ITEMS = [];
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-// رومن اردو نام (بریکٹ میں اردو)
 function formatItemName(it){
   const roman = it.name_roman || it.name;
   const urdu = it.name_roman ? ` (${it.name})` : '';
@@ -241,6 +244,17 @@ async function loadData(){
   }
 }
 
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    if(s.cover_image){
+      document.getElementById("coverImg").src = s.cover_image;
+      document.getElementById("coverBanner").style.display = "block";
+    }
+  }catch(e){}
+}
+
 function renderChips(){
   const chips = CATEGORIES_META.map(c => 
     `<button class="cat-chip" onclick="scrollToCat('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
@@ -255,6 +269,16 @@ function renderChips(){
 function scrollToCat(name){
   const el = document.getElementById("cat-"+name);
   if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function scrollToItem(id){
+  const el = document.getElementById("row-"+id);
+  if(el){
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.style.transition = "background 0.4s";
+    el.style.backgroundColor = "#FFF3CD";
+    setTimeout(()=> { el.style.backgroundColor = ""; }, 1200);
+  }
 }
 
 function renderList(filter){
@@ -280,12 +304,12 @@ function renderList(filter){
       row.id = "row-"+it.id;
       row.innerHTML = `
         <div class="item-row-top">
-          <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
+          <div class="item-thumb" onclick="openLightbox('${it.image||''}')">
             ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
           </div>
           <div class="info">
             <div class="name">${formatItemName(it)}</div>
-            <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
+            <div class="meta">فی ${u.label} — <b>${fmt(u.rate)}</b></div>
           </div>
         </div>
         <div class="item-row-bottom">
@@ -345,7 +369,7 @@ document.getElementById("shareBtn").onclick = async () => {
   } else {
     await navigator.clipboard.writeText(window.location.href);
     const t = document.getElementById("toast");
-    t.textContent = "✅ Link Copied!";
+    t.textContent = "✅ لنک کاپی ہو گیا!";
     t.classList.add("show");
     setTimeout(()=> t.classList.remove("show"), 2000);
   }
@@ -353,17 +377,17 @@ document.getElementById("shareBtn").onclick = async () => {
 
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
-  if(chosen.length === 0){ alert("Cart is empty"); return; }
+  if(chosen.length === 0){ alert("کارٹ خالی ہے"); return; }
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
   const area = document.getElementById("custArea").value;
-  if(!name || !phone || !addr || !area){ alert("Please fill all details"); return; }
+  if(!name || !phone || !addr || !area){ alert("براہ کرم تمام معلومات درج کریں"); return; }
 
   const code = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
   let summaryHtml = "";
-  let msg = `🛒 New Order [${code}] — SJ Foods\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n`;
+  let msg = `🛒 نیا آرڈر [${code}] — SJ Foods\nنام: ${name}\nفون: ${phone}\nپتہ: ${addr}\n\n`;
   
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
@@ -372,12 +396,12 @@ document.getElementById("waBtn").onclick = () => {
     msg += `${it.name_roman || it.name} — ${it.qty} ${u.label} — ${fmt(t)}\n`;
     summaryHtml += `${it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
-  msg += `\nTotal: ${fmt(subtotal)}`;
+  msg += `\nکل رقم: ${fmt(subtotal)}`;
 
   const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
   orders.unshift({
-    code, name, phone, address: addr, area: area === 'inside' ? 'Inside City' : 'Outside City',
-    payMethod: 'Cash on Delivery', itemsSummary: summaryHtml, total: Math.round(subtotal),
+    code, name, phone, address: addr, area: area === 'inside' ? 'شہر کے اندر' : 'باہر',
+    payMethod: 'کیش آن ڈیلیوری', itemsSummary: summaryHtml, total: Math.round(subtotal),
     timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
   });
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
@@ -393,7 +417,7 @@ function renderFeatured(){
   sec.classList.remove("hidden");
 
   box.innerHTML = feat.map((it, idx) => `
-    <div class="deal-slide ${idx===0?'active':''}" onclick="openLightbox('${it.image||''}', '${it.name}')">
+    <div class="deal-slide ${idx===0?'active':''}" onclick="scrollToItem('${it.id}')">
       ${it.image ? `<img src="${it.image}" loading="lazy">` : `<div class="deal-icon-box">${it.icon}</div>`}
       <div class="d-name">${it.name_roman || it.name}</div>
       <div class="d-rate">${fmt(it.units[0].rate)}</div>
@@ -411,7 +435,7 @@ function renderFeatured(){
   }
 }
 
-function openLightbox(src, name){
+function openLightbox(src){
   if(!src) return;
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");

@@ -1,48 +1,49 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="ur" dir="rtl" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SJ Foods — مکمل ایڈمن پینل</title>
+<meta name="google" content="notranslate">
+<title>SJ Foods — مکمل ایڈمن پینل و مینجمنٹ</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --line:#E5E4DA; }
+  :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --line:#E5E4DA; --price:#B71C1C; }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",sans-serif; direction:rtl; padding-bottom:70px;}
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 16px 16px;}
-  header h1{margin:0; font-size:17px; font-family:"Noto Nastaliq Urdu",serif;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:70px;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 20px 20px;}
+  header h1{margin:0; font-size:18px; font-family:"Noto Nastaliq Urdu",serif;}
   
   .wrap{padding:14px;}
-  .card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px;}
-  .card h3{margin:0 0 8px; font-size:14px; color:var(--dark);}
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.03);}
+  .card h3{margin:0 0 8px; font-size:15px; color:var(--dark);}
   
   input[type=text], input[type=password], input[type=number], select{
-    width:100%; border:1px solid var(--line); border-radius:8px; padding:9px; font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff;
+    width:100%; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; font-size:14px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff;
   }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:2px;}
+  label{font-size:12px; color:var(--muted); display:block; margin-bottom:3px;}
   button{cursor:pointer; border:none; font-family:inherit;}
-  .btn{background:var(--dark); color:#fff; border-radius:8px; padding:10px; font-size:13px; font-weight:700; width:100%;}
-  .btn-success{background:#E8F5E9; color:#1B5E20; border:1px solid var(--mid); border-radius:8px; padding:8px; font-weight:700;}
-  .btn-danger{background:#FFEBEE; color:#B71C1C; border-radius:8px; padding:6px 10px; font-size:11px;}
+  .btn{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:14px; font-weight:700; width:100%;}
+  .btn-success{background:#E8F5E9; color:#1B5E20; border:1px solid var(--mid); border-radius:10px; padding:9px 12px; font-weight:700;}
+  .btn-danger{background:#FFEBEE; color:#B71C1C; border-radius:10px; padding:6px 12px; font-size:12px; font-weight:700;}
   
-  .tabs{display:flex; gap:6px; margin-bottom:12px;}
-  .tab{flex:1; padding:10px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:8px; font-weight:700; font-size:12.5px; color:var(--muted); cursor:pointer;}
+  .tabs{display:flex; gap:8px; margin-bottom:14px;}
+  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1.5px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; position:relative;}
+  .order-card{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: blink 1.8s infinite;}
   .order-card.completed{background:#F1F8E9; border-color:#81C784;}
   @keyframes blink{ 0%{border-color:#E53935;background:#FFEBEE;} 50%{border-color:#FFE082;background:#FFFDE7;} 100%{border-color:#E53935;background:#FFEBEE;} }
   
-  .product-row{background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:8px; display:flex; flex-direction:column; gap:6px;}
-  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150;}
+  .product-row{background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 20px; border-radius:24px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150;}
   .toast.show{opacity:1;}
 </style>
 </head>
-<body>
+<body translate="no">
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن پینل و مینجمنٹ</h1>
+  <h1>⚙️ SJ Foods — مکمل ایڈمن پینل و مینجمنٹ</h1>
 </header>
 
 <div class="wrap">
@@ -66,10 +67,10 @@
     <div id="secOrders">
       <div class="card">
         <h3>🔔 کسٹمرز کے آرڈرز</h3>
-        <div style="display:flex; gap:6px; margin-top:6px;">
-          <button class="btn" style="background:var(--leaf); color:var(--dark); font-size:12px;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
-          <button class="btn" style="background:#E8F5E9; color:#1B5E20; font-size:12px;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
-          <button class="btn" style="background:#FFEBEE; color:#B71C1C; font-size:12px;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn" style="background:var(--leaf); color:var(--dark); font-size:12.5px;" onclick="testSound()">🔊 بیل ٹیسٹ</button>
+          <button class="btn" style="background:#E8F5E9; color:#1B5E20; font-size:12.5px;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
+          <button class="btn" style="background:#FFEBEE; color:#B71C1C; font-size:12.5px;" onclick="clearAllOrders()">🗑️ صاف کریں</button>
         </div>
       </div>
       <div id="ordersArea"></div>
@@ -86,12 +87,12 @@
       <div class="card">
         <h3>🖼️ کور پکچر (بینر)</h3>
         <input type="text" id="coverImgUrl" placeholder="کور پکچر کا لنک (URL)">
-        <button class="btn" style="font-size:12px; padding:8px;" onclick="saveCoverImg()">کور پکچر محفوظ کریں</button>
+        <button class="btn" style="font-size:13px; padding:10px;" onclick="saveCoverImg()">کور پکچر محفوظ کریں</button>
       </div>
 
       <div id="productsArea"></div>
-      <button class="btn" style="background:var(--mid); margin-top:10px;" onclick="addNewProduct()">➕ نیا پروڈکٹ شامل کریں</button>
-      <button class="btn" style="margin-top:10px;" onclick="saveGitHubChanges()">💾 تمام تبدیلیاں گিট ہب پر محفوظ کریں</button>
+      <button class="btn" style="background:var(--mid); margin-top:12px;" onclick="addNewProduct()">➕ نیا پروڈکٹ شامل کریں</button>
+      <button class="btn" style="margin-top:12px;" onclick="saveGitHubChanges()">💾 تمام تبدیلیاں گিট ہب پر محفوظ کریں</button>
     </div>
   </div>
 
@@ -205,21 +206,24 @@ function renderProductsEditor(){
   const area = document.getElementById("productsArea");
   area.innerHTML = currentItems.map((it, idx) => `
     <div class="product-row">
-      <div style="display:flex; gap:6px;">
-        <input type="text" value="${it.name}" placeholder="پروڈکٹ کا نام" oninput="currentItems[${idx}].name=this.value" style="margin-bottom:0;">
+      <div style="display:flex; gap:8px;">
+        <input type="text" value="${it.name}" placeholder="پروڈکٹ کا نام (اردو)" oninput="currentItems[${idx}].name=this.value" style="margin-bottom:0;">
         <button class="btn-danger" onclick="delProduct(${idx})">حذف</button>
       </div>
-      <div style="display:flex; gap:6px; align-items:center;">
-        <input type="text" value="${it.image||''}" placeholder="تصویر کا لنک (URL)" oninput="currentItems[${idx}].image=this.value" style="margin-bottom:0; font-size:11px;">
+      <div style="display:flex; gap:8px;">
+        <input type="text" value="${it.name_roman||''}" placeholder="Roman Urdu name (e.g. Tomato)" oninput="currentItems[${idx}].name_roman=this.value" style="margin-bottom:0; direction:ltr; text-align:left;">
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="text" value="${it.image||''}" placeholder="تصویر کا لنک (URL)" oninput="currentItems[${idx}].image=this.value" style="margin-bottom:0; font-size:12px;">
         <label style="display:flex; align-items:center; gap:4px; white-space:nowrap;"><input type="checkbox" ${it.available!==false?'checked':''} onchange="currentItems[${idx}].available=this.checked"> دستیاب</label>
         <label style="display:flex; align-items:center; gap:4px; white-space:nowrap;"><input type="checkbox" ${it.featured===true?'checked':''} onchange="currentItems[${idx}].featured=this.checked"> ⭐ نمایاں</label>
       </div>
-      <div style="background:#f9f9f6; padding:6px; border-radius:6px; font-size:12px;">
+      <div style="background:#f9f9f6; padding:8px; border-radius:8px; font-size:12.5px;">
         <b>یونٹس اور ریٹس:</b>
         ${(it.units || [{label: it.unit, rate: it.rate}]).map((u, ui) => `
-          <div style="display:flex; gap:4px; margin-top:4px;">
-            <input type="text" value="${u.label}" placeholder="یونٹ (مثلاً کلو)" oninput="updateUnit(${idx}, ${ui}, 'label', this.value)" style="margin-bottom:0; padding:5px;">
-            <input type="number" value="${u.rate}" placeholder="قیمت" oninput="updateUnit(${idx}, ${ui}, 'rate', this.value)" style="margin-bottom:0; padding:5px;">
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <input type="text" value="${u.label}" placeholder="یونٹ (مثلاً KG)" oninput="updateUnit(${idx}, ${ui}, 'label', this.value)" style="margin-bottom:0; padding:6px;">
+            <input type="number" value="${u.rate}" placeholder="قیمت" oninput="updateUnit(${idx}, ${ui}, 'rate', this.value)" style="margin-bottom:0; padding:6px;">
           </div>
         `).join("")}
       </div>
@@ -228,12 +232,12 @@ function renderProductsEditor(){
 }
 
 function updateUnit(pi, ui, field, val){
-  if(!currentItems[pi].units) currentItems[pi].units = [{label: "کلو", rate: 0}];
+  if(!currentItems[pi].units) currentItems[pi].units = [{label: "KG", rate: 0}];
   currentItems[pi].units[ui][field] = field === 'rate' ? (parseFloat(val)||0) : val;
 }
 
 function addNewProduct(){
-  currentItems.push({name: "", units: [{label: "کلو", rate: 0}], available: true, featured: false, image: ""});
+  currentItems.push({name: "", name_roman: "", units: [{label: "KG", rate: 0}], available: true, featured: false, image: ""});
   renderProductsEditor();
 }
 
@@ -251,9 +255,9 @@ async function saveGitHubChanges(){
       body: JSON.stringify({message: "Update rates via admin panel", content, sha: currentSha, branch: "main"})
     });
     currentSha = res.content.sha;
-    showToast("✅ تمام ریٹس گিট ہب پر محفوظ ہو گئے!");
+    showToast("✅ تمام تبدیلیاں گিট ہب پر محفوظ ہو گئیں!");
   }catch(e){
-    showToast("❌ محفوظ نہیں ہو سکے");
+    showToast("❌ محفوظ نہیں ہو سکیں");
   }
 }
 
@@ -277,8 +281,8 @@ function fakeOrder(){
   orders.unshift({
     code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
     name: "محمد خان (ٹیسٹ)", phone: "03155166034", address: "مینگورہ", area: "شہر کے اندر",
-    payMethod: "کیش آن ڈیلیوری", itemsSummary: "ٹماٹر (1 کلو) — Rs. 150", total: 150,
-    timestamp: Date.now(), date: new Date().toLocaleTimeString('ur-PK'), status: 'pending'
+    payMethod: "کیش آن ڈیلیوری", itemsSummary: "Tomato / ٹماٹر (1 KG) — Rs. 150", total: 150,
+    timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
   });
   localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
   playSound();
@@ -301,15 +305,15 @@ function renderOrders(){
 
   area.innerHTML = orders.map((o, idx) => `
     <div class="order-card ${o.status==='completed'?'completed':'pending'}">
-      <button class="btn-danger" style="position:absolute; top:10px; left:12px;" onclick="delOrder(${idx})">✕ حذف</button>
-      <div style="font-weight:700; font-size:15px; margin-bottom:4px;">📌 ${o.code} — ${o.name}</div>
-      <div style="font-size:12.5px; line-height:1.6;">
+      <button class="btn-danger" style="position:absolute; top:12px; left:14px;" onclick="delOrder(${idx})">✕ حذف</button>
+      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name}</div>
+      <div style="font-size:13.5px; line-height:1.7;">
         📞 فون: ${o.phone}<br>
         📍 پتہ: ${o.address} (${o.area})<br>
-        🛒 اشیاء: <div style="background:#fff; padding:6px; border-radius:6px; margin-top:2px;">${o.itemsSummary}</div>
+        🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
         💰 کل رقم: <b>Rs. ${o.total}</b>
       </div>
-      <div style="margin-top:10px; display:flex; gap:6px;">
+      <div style="margin-top:12px; display:flex; gap:6px;">
         <button class="btn-success" style="flex:1;" onclick="markDelivered(${idx})">✅ ڈیلیورڈ (واٹس ایپ شکریہ)</button>
       </div>
     </div>

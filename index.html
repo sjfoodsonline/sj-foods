@@ -109,15 +109,15 @@
 
   .item .info{min-width:0; flex:1;}
   
-  /* نام کا انداز: رومن بڑا، اور اردو نعلین فونٹ میں بالکل چھوٹا (رومن کے سائز کا آدھا) */
+  /* رومن نام بڑا اور اردو نام نعلین فونٹ میں چھوٹا (آدھا سائز) */
   .item .name{
     font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3;
   }
   .item .name .roman-part {
-    font-size: 17px; font-weight: 800; font-family: "Segoe UI", sans-serif;
+    font-size: 16px; font-weight: 800; font-family: "Segoe UI", sans-serif;
   }
   .item .name .urdu-part {
-    font-size: 11px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px;
+    font-size: 12px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 6px;
   }
 
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px;}
@@ -251,7 +251,7 @@ function formatUnitLabel(label){
 
 function formatItemName(it){
   const roman = it.name_roman || it.name;
-  const urdu = it.name_roman ? ` (${it.name})` : '';
+  const urdu = it.name ? ` (${it.name})` : '';
   return `<span class="roman-part" dir="ltr">${roman}</span><span class="urdu-part">${urdu}</span>`;
 }
 

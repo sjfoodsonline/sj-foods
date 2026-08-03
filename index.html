@@ -53,9 +53,11 @@
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
   .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
-  .cat-marquee-wrap{ overflow-x:auto; position:relative; padding:4px 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .cat-marquee-wrap{ overflow-x:auto; position:relative; padding:4px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .cat-marquee-wrap::-webkit-scrollbar { display: none; }
-  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
+  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
+  @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
@@ -277,7 +279,9 @@
 </div>
 
 <div class="cat-section">
-  <div class="cat-marquee-wrap" id="chips"></div>
+  <div class="cat-marquee-wrap" id="catScrollContainer">
+    <div class="cat-marquee-track" id="chipsTrack"></div>
+  </div>
 </div>
 
 <main id="list"></main>
@@ -440,12 +444,11 @@ function renderChips(){
   const chips = CATEGORIES_META.map(c => 
     `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
-  document.getElementById("chips").innerHTML = `
-    <div class="cat-marquee-wrap" id="catScrollContainer">
-      <div class="cat-marquee-track">${chips}</div>
-    </div>`;
   
-  // Enable touch drag / swipe scrolling for categories
+  const track = document.getElementById("chipsTrack");
+  track.innerHTML = `<div style="display:flex; gap:10px;">${chips}</div><div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>`;
+  
+  // Enable touch drag / swipe scrolling for categories along with continuous marquee
   const slider = document.getElementById('catScrollContainer');
   let isDown = false;
   let startX;
@@ -465,6 +468,20 @@ function renderChips(){
     const walk = (x - startX) * 2;
     slider.scrollLeft = scrollLeft - walk;
   });
+
+  // Touch events for mobile dragging
+  slider.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  });
+  slider.addEventListener('touchend', () => { isDown = false; });
+  slider.addEventListener('touchmove', (e) => {
+    if(!isDown) return;
+    const x = e.touches[0].pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2;
+    slider.scrollLeft = scrollLeft - walk;
+  }, {passive: true});
 }
 
 function selectCategory(catName){
@@ -694,9 +711,9 @@ document.getElementById("waBtn").onclick = () => {
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
   
-  let payMethodText = "کیش آن ڈلیوری (COD)";
+  let payMethodText = "کیش آن ڈلیوری (COD - سامان پر ادائیگی)";
   if(payEasy.checked){
-    payMethodText = "ایزی پیسہ / بینک ٹرانسفر (رقم پہلے ہی وصول ہو چکی ہے ✅)";
+    payMethodText = "ایزی پیسہ / بینک ٹرانسفر (رقم ایڈوانس وصول ہو چکی ہے ✅)";
   }
 
   if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
@@ -707,12 +724,12 @@ document.getElementById("waBtn").onclick = () => {
   let summaryHtml = "";
   
   let msg = `🟢 *SJ Foods Online — آرڈر ریسیوڈ & کنفرمیشن* [${orderCode}]\n\n`;
-  msg += `محترم *${name}* صاحب! آپ کا آرڈر ہمیں کامیابی سے موصول ہو گیا ہے۔ ہم ہر چیز سو فیصد معیار اور تول کے ساتھ تیار کرنے کے لیے پرعزم ہیں۔ آپ کے اعتماد کا شکریہ! 🌿\n\n`;
+  msg += `محترم *${name}* صاحب! آپ کا آرڈر ہمیں کامیابی سے موصول ہو گیا ہے۔ آپ کے اعتماد کا شکریہ! 🌿\n\n`;
   msg += `👤 نام: ${name}\n`;
   msg += `📞 فون: ${phone}\n`;
   msg += `📍 پتہ: ${addr}\n`;
   msg += `💳 ادائیگی: ${payMethodText}\n`;
-  msg += `🔐 سیکیورٹی OTP کوڈ: *${otpCode}* \n*(نوٹ: یہ ذاتی کوڈ صرف آپ کے پاس محفوظ ہونا چاہیے؛ سامان وصول کرتے وقت صرف اس ڈلیوری بوائے/سواری والے کو بتائیں جو آپ کا سامان لے کر آیا ہے)*\n\n`;
+  msg += `🔐 سیکیورٹی OTP کوڈ: *${otpCode}* \n*(نوٹ: یہ کوڈ صرف آپ کے پاس رہے گا؛ سامان وصول کرتے وقت صرف ڈلیوری والے کو بتائیں)*\n\n`;
   msg += `📋 *آرڈر کی تفصیلات:*\n`;
   
   chosen.forEach(it => {
@@ -723,13 +740,10 @@ document.getElementById("waBtn").onclick = () => {
     summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
   
-  msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
-  if(payEasy.checked){
-    msg += `✅ *پیمنٹ نوٹس:* اس آرڈر کی ادائیگی ایزی پیسہ / بینک کے ذریعے پہلے ہی ایڈوانس موصول ہو چکی ہے۔\n\n`;
-  }
-  msg += `🚚 *ڈلیوری اور پیمنٹ کی ہدایات:*\n`;
-  msg += `• ڈلیوری سواری (بائیک یا رکشہ) اور چارجز کے حوالے سے آپ سے واٹس ایپ پر باہمی رضامندی طے کی جائے گی۔\n\n`;
-  msg += `ہماری کوشش ہے کہ آپ کو بہترین اور معیاری سروس ملے!`;
+  msg += `\n💰 *کل رقم:* ${fmt(subtotal)}\n\n`;
+  msg += `🚚 *ڈلیوری ہدایات:*\n`;
+  msg += `• اشیاء کی بہترین قیمت برقرار رکھنے کے لیے، ڈلیوری چارجز سواری (بائیک/رکشہ) والے کو موقع پر الگ سے ادا کیے جائیں گے۔\n\n`;
+  msg += `معیاری اور بروقت سروس ہماری ترجیح ہے!`;
 
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({

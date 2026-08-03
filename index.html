@@ -21,7 +21,6 @@
     box-shadow:0 0 50px rgba(0,0,0,0.5); overflow-x:hidden; font-weight: bold;
   }
 
-  /* Luxury Header */
   header{ 
     background: linear-gradient(135deg, var(--bg-dark), var(--primary)); 
     color:#fff; padding:22px 18px; border-radius:0 0 28px 28px; position:relative; 
@@ -33,13 +32,11 @@
   .share-btn{ position:absolute; left:18px; top:22px; background:rgba(212,175,55,0.2); border:1px solid var(--gold); color:var(--gold-light); border-radius:14px; width:40px; height:40px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter: blur(6px); transition: all 0.3s; }
   .share-btn:hover { background:var(--gold); color:var(--bg-dark); }
 
-  /* Luxury Cover Slider */
   .cover-banner{width:100%; overflow:hidden; margin:12px 0 8px; border-radius:18px; display:none; box-shadow: var(--shadow); position: relative; border: 1.5px solid var(--gold);}
   .cover-slider-track{ display:flex; width:100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
   .cover-slide{ min-width:100%; width:100%; }
   .cover-slide img{width:100%; height:auto; display:block; max-height:210px; object-fit:cover;}
 
-  /* Luxury Marquee Features */
   .features-scroll-wrap{ overflow:hidden; position:relative; padding:12px 0; background:#F4F1EA; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .features-scroll{ display:flex; width:max-content; gap:14px; animation: smoothMarquee 25s linear infinite; }
   .features-scroll-wrap:hover .features-scroll{ animation-play-state: paused; }
@@ -56,7 +53,6 @@
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--primary); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
-  /* 3D Featured Section */
   .featured-section{
     margin:14px 16px; padding:18px; background:linear-gradient(135deg, #1A3021, #0B1F12);
     border-radius:24px; border:2px solid var(--gold); position:relative; overflow:hidden;
@@ -82,7 +78,7 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 8px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 15px; font-weight: bold; color: var(--price); margin-top: 4px; font-family: Arial, sans-serif; }
 
-  /* STICKY SEARCH & CATEGORY BAR (Never moves on scroll) */
+  /* STICKY SEARCH & CATEGORY BAR */
   .sticky-top-container{
     position: sticky;
     top: 0;
@@ -103,9 +99,7 @@
   .cat-section{padding:4px 0 12px; background:var(--paper);}
   .cat-marquee-wrap{ overflow-x:auto; position:relative; padding:4px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .cat-marquee-wrap::-webkit-scrollbar { display: none; }
-  .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
-  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
-  @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:#fff; color:var(--primary);
@@ -116,15 +110,11 @@
   .cat-chip:hover { transform: translateY(-2px); border-color: var(--emerald); }
   .cat-chip.active{ background:linear-gradient(135deg, var(--primary), var(--emerald)); color:#fff; border-color:var(--gold); box-shadow:0 6px 18px rgba(46,125,50,0.3); }
 
-  /* Home Category Grid with 3D Luxury Cards */
   .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 14px 16px; }
   .home-cat-card{
     background: #fff; border: 1.5px solid var(--line); border-radius: 20px; padding: 14px; text-align: center;
     cursor: pointer; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative; overflow: hidden;
-  }
-  .home-cat-card::after {
-    content: ""; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%); pointer-events: none;
   }
   .home-cat-card:hover{ transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 15px 35px rgba(212,175,55,0.25); }
   
@@ -153,7 +143,6 @@
     font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:space-between;
   }
   
-  /* Luxury Product Cards */
   .item{
     display:flex; flex-direction:column; gap:10px; background:#fff; border:1.5px solid var(--line); border-radius:20px;
     padding:16px; margin-bottom:14px; transition:all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); text-align:right; cursor: pointer;
@@ -221,7 +210,6 @@
   }
   .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 16px; }
 
-  /* Luxury Glassmorphism Cart Bar */
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:rgba(255, 255, 255, 0.96); 
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -309,7 +297,6 @@
   <p>تازہ سبزیاں، پھل اور پریمیم کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<!-- Luxury Cover 6-Image Slider -->
 <div class="cover-banner" id="coverBanner">
   <div class="cover-slider-track" id="coverSliderTrack"></div>
 </div>
@@ -330,7 +317,6 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- STICKY TOP CONTAINER (Search bar + Category chips stay fixed securely on scroll) -->
 <div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 سرچ کریں (e.g. Tomato / ٹماٹر / گھی)">
@@ -460,7 +446,7 @@ async function loadData(){
         if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
         let cleanUnits = (it.units && it.units.length)
           ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
-          : [{label: formatUnitLabel(it.unit || "KG"), rate: u.rate}];
+          : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
 
         ITEMS.push({
           id: i+"-"+ii, cat: catName, icon: entry.icon,
@@ -525,7 +511,7 @@ function renderChips(){
   ).join("");
   
   const track = document.getElementById("chipsTrack");
-  track.innerHTML = `<div style="display:flex; gap:10px;">${chips}</div><div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>`;
+  track.innerHTML = chips;
   
   const slider = document.getElementById('catScrollContainer');
   let isDown = false, startX, scrollLeft;

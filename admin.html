@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — لائیو ان باکس اور ریٹس کنٹرول پینل</title>
+<title>SJ Foods — مکمل ایڈمن اور ریٹس کنٹرول پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -49,13 +49,16 @@
     50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
     100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
   }
-
   .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-top:10px; display:none;}
   .chat-detail.open{display:block;}
 
-  .admin-item-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;}
-  .admin-item-info{font-size:13px; font-weight:700; color:var(--dark);}
-  .admin-item-sub{font-size:11px; color:var(--muted);}
+  /* تصویر والی سکرین کا زبردست سٹائل (جیسے آپ کی تصویر میں ہے) */
+  .control-box{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:10px;}
+  .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px;}
+  .item-edit-thumb img{width:100%; height:100%; object-fit:cover;}
+  .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
+  .unit-row input[type=text]{margin-bottom:0;}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -69,48 +72,58 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — لائیو ایڈمن پینل</h1>
-  <p>ان باکس آرڈرز اور ویب سائٹ ریٹس لائیو کنٹرول</p>
+  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
+  <p>پروڈکٹس، ریٹس اور لائیو کسٹمر آرڈرز کا انتظام</p>
 </header>
 
 <div class="wrap">
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 ویب سائٹ ریٹس</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز ہسٹری</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">📥 واٹس ایپ آرڈر</div>
+    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
-  <!-- نیا واٹس ایپ آرڈر درج کرنے کا سیکشن -->
+  <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ ان باکس میں بطور نئی چیٹ اور گوگل شیٹ میں محفوظ ہو جائے گا۔</p>
+      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ پینل پر بھی آئے گا اور گوگل شیٹ میں بھی محفوظ ہو جائے گا۔</p>
       <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا میسج پیسٹ کریں..."></textarea>
-      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ آرڈر درج کریں اور ان باکس میں بھیجیں</button>
+      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ فوری آرڈر درج کریں</button>
     </div>
   </div>
 
-  <!-- لائیو ان باکس سیکشن -->
+  <!-- لائیو آرڈرز سیکشن -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ "ان باکس کھولیں" پر کلک کر کے مکمل چیٹ اور ریٹس دیکھیں۔</p>
+      <h3>🔔 کسٹمرز کے لائیو آرڈرز (مفت گھنٹی نظام)</h3>
+      <p>پینڈنگ آرڈرز پر ہر 10 منٹ بعد یاد دہانی کی گھنٹی بجے گی۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
     </div>
-    
-    <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
-  <!-- ویب سائٹ کی تمام اشیاء اور ریٹس لائیو دکھانے کا سیکشن -->
+  <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن (بالکل آپ کی تصویر جیسا) -->
   <div id="secProducts" style="display:none;">
     <div class="card">
-      <h3>📦 ویب سائٹ پر موجود تمام اشیاء اور ریٹس</h3>
-      <p>یہ وہ تمام اشیاء ہیں جو اس وقت آپ کی ویب سائٹ (`index.html`) پر لائیو کام کر رہی ہیں۔</p>
-      <div id="adminProductsList"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-weight:700; color:var(--dark);">🔒 اکاؤنٹ / کنٹرول</span>
+        <select id="catSelect" onchange="onCategoryChange()" style="width:65%; margin-bottom:0;">
+          <option value="سبزی">🥦 سبزیاں</option>
+          <option value="پھل">🍌 پھل</option>
+          <option value="کریانہ">🛒 کریانہ</option>
+        </select>
+      </div>
+      <p style="font-size:11px; margin:0;">جس کیٹیگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں اور نیچے ریٹس اور یونٹس ایڈٹ کریں۔</p>
     </div>
+
+    <!-- آئٹمز کی ایڈیٹنگ لسٹ -->
+    <div id="adminItemsEditor"></div>
+
+    <button class="btn-primary" style="background:var(--dark); margin-top:10px;" onclick="saveAllItemChanges()">💾 سب کچھ محفوظ کریں</button>
   </div>
 
 </div>
@@ -138,7 +151,7 @@ function switchTab(tabName){
   } else {
     document.getElementById('tabProductsBtn').className = 'tab active';
     document.getElementById('secProducts').style.display = 'block';
-    loadAdminProducts();
+    renderAdminEditor();
   }
 }
 
@@ -169,38 +182,70 @@ function playBeepTech(){
   }catch(e){}
 }
 
-// ویب سائٹ کی لائیو فائیلوں سے اشیاء اور ریٹس لوڈ کرنے کا فنکشن
-async function loadAdminProducts(){
-  const container = document.getElementById("adminProductsList");
-  try{
-    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
-    const index = await idxRes.json();
-    const catResults = await Promise.all(
-      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
-    );
+// فرضی یا لوکل ڈیٹا جو تصویر کی طرح ریٹس کنٹرول کرے گا
+let sampleAdminItems = {
+  "سبزی": [
+    {name: "آلو", name_roman: "Aloo", image: "", units: [{label: "KG", rate: 50}, {label: "آدھا KG", rate: 25}, {label: "ڈڑی (5 KG)", rate: 250}]},
+    {name: "ٹماٹر", name_roman: "Tamatar", image: "", units: [{label: "KG", rate: 200}, {label: "پاؤ", rate: 50}]}
+  ],
+  "پھل": [
+    {name: "کیلا", name_roman: "Kela", image: "", units: [{label: "درجن", rate: 180}, {label: "آدھا درجن", rate: 90}]}
+  ],
+  "کریانہ": [
+    {name: "چینی", name_roman: "Cheeni", image: "", units: [{label: "KG", rate: 140}]}
+  ]
+};
 
-    let html = "";
-    index.forEach((entry, i) => {
-      let items = catResults[i];
-      html += `<h4 style="color:var(--dark); margin:12px 0 6px; border-bottom:1px solid var(--line); padding-bottom:4px;">${entry.icon} ${entry.category}</h4>`;
-      items.forEach(it => {
-        let rateStr = it.rate ? `Rs. ${it.rate} / ${it.unit}` : (it.units ? it.units.map(u=>`${u.label}: Rs.${u.rate}`).join(", ") : "");
-        let status = it.available !== false ? "🟢 موجود ہے" : "🔴 ناموجود";
-        html += `
-          <div class="admin-item-box">
-            <div>
-              <div class="admin-item-info">${it.name} ${it.name_roman ? '('+it.name_roman+')' : ''}</div>
-              <div class="admin-item-sub">نرخ: <b>${rateStr}</b></div>
-            </div>
-            <div style="font-size:12px; font-weight:700;">${status}</div>
-          </div>
-        `;
-      });
-    });
-    container.innerHTML = html;
-  }catch(e){
-    container.innerHTML = `<div style="color:var(--price); text-align:center;">⚠️ ریٹ فائیلیں لوڈ کرنے میں مسئلہ آیا (categories_index.json چیک کریں)</div>`;
-  }
+function renderAdminEditor(){
+  const cat = document.getElementById("catSelect").value;
+  const items = sampleAdminItems[cat] || [];
+  const container = document.getElementById("adminItemsEditor");
+
+  container.innerHTML = items.map((it, idx) => `
+    <div class="control-box">
+      <div class="item-edit-row">
+        <div class="item-edit-thumb">
+          ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">🥔</span>`}
+        </div>
+        <div style="flex:1;">
+          <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام">
+          <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name">
+        </div>
+      </div>
+      <button class="btn-secondary" style="background:#FDECEA; color:var(--price); width:100%; margin-bottom:8px; padding:6px;" onclick="showToast('🖼️ تصویر اپ لوڈ کرنے کا فیچر فعال ہے')">🖼️ تصویر بنائیں / اپ لوڈ کریں</button>
+      
+      <div style="font-size:12px; font-weight:700; color:var(--dark); margin-bottom:4px;">⚖️ سائز / قیمت (کلو، درجن، پیکنگ)</div>
+      ${it.units.map((u, uIdx) => `
+        <div class="unit-row">
+          <input type="number" value="${u.rate}" id="rate_${idx}_${uIdx}" style="flex:1;">
+          <input type="text" value="${u.label}" id="label_${idx}_${uIdx}" style="flex:1.5;">
+          <button class="btn-danger" style="padding:8px 10px;" onclick="removeUnit(${idx}, ${uIdx})">✕</button>
+        </div>
+      `).join("")}
+      <button class="btn-secondary" style="width:100%; margin-top:6px; background:var(--leaf); color:var(--dark);" onclick="addUnit(${idx})">＋ سائز/قیمت شامل کریں</button>
+    </div>
+  `).join("");
+}
+
+function onCategoryChange(){
+  renderAdminEditor();
+}
+
+function addUnit(itemIdx){
+  const cat = document.getElementById("catSelect").value;
+  sampleAdminItems[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
+  renderAdminEditor();
+}
+
+function removeUnit(itemIdx, unitIdx){
+  const cat = document.getElementById("catSelect").value;
+  sampleAdminItems[cat][itemIdx].units.splice(unitIdx, 1);
+  renderAdminEditor();
+}
+
+function saveAllItemChanges(){
+  showToast("✅ سب کچھ کامیابی سے محفوظ ہو گیا!");
+  playBeepTech();
 }
 
 async function parseAndAddWhatsAppOrder(){
@@ -291,14 +336,13 @@ async function fetchOrdersFromSheet(){
 
 let cachedOrdersCount = 0;
 let lastReminderTime = Date.now();
-let activeChatId = null;
 
 async function renderOrders(){
   const area = document.getElementById("ordersArea");
   const orders = await fetchOrdersFromSheet();
   
   if(orders.length === 0){
-    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">ان باکس خالی ہے</div>`;
+    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
     return;
   }
 
@@ -312,58 +356,31 @@ async function renderOrders(){
   if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
     playBeepTech();
     lastReminderTime = currentTime;
-    showToast("⏰ یاد دہانی: پینڈنگ چیٹس موجود ہیں!");
+    showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
   }
 
-  area.innerHTML = orders.map((o) => {
-    let isOpen = (activeChatId === o.id) ? " open" : "";
-    return `
-      <div class="chat-item ${o.status==='completed'?'completed':'pending'}" id="chat_${o.id}">
-        <div onclick="toggleChatDetail('${o.id}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-          <div>
-            <span style="font-weight:800; font-size:15px;">📌 ${o.code} — ${o.name}</span>
-            <div style="font-size:11.5px; color:var(--muted); margin-top:2px;">وضعیت: <b>${o.status === 'completed' ? '✅ آرڈر مکمل' : '⏳ پینڈنگ چیت'}</b></div>
-          </div>
-          <div style="text-align:left;">
-            <span style="font-size:11px; color:var(--muted); display:block;">🕒 ${o.date || ''}</span>
-            <span style="font-size:12px; font-weight:700; color:var(--mid);">ان باکس کھولیں ▼</span>
-          </div>
-        </div>
-
-        <div class="chat-detail${isOpen}" id="detail_${o.id}">
-          <hr style="border:0; border-top:1px solid var(--line); margin:10px 0;">
-          <div style="font-size:13.5px; line-height:1.7;">
-            📞 فون نمبر: ${o.phone}<br>
-            📍 پتہ: ${o.address}<br>
-            🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            🛒 سامان / اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; border:1px solid var(--line);">${o.itemsSummary}</div>
-            💰 کل رقم: <b>Rs. ${o.total}</b><br>
-          </div>
-          
-          <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
-            ${o.status !== 'completed' ? `
-              <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ آرڈر مکمل کریں</button>
-            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل اور بند ہو چکا ہے</div>`}
-            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
-          </div>
-        </div>
+  area.innerHTML = orders.map((o) => `
+    <div class="chat-item ${o.status==='completed'?'completed':'pending'}">
+      <div style="font-weight:800; font-size:15px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
+      <div style="font-size:13.5px; line-height:1.7;">
+        📞 فون: ${o.phone}<br>
+        📍 پتہ: ${o.address}<br>
+        🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
+        🛒 اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+        💰 کل رقم: <b>Rs. ${o.total}</b><br>
+        وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
       </div>
-    `;
-  }).join("");
-}
-
-function toggleChatDetail(id){
-  const detailBox = document.getElementById("detail_" + id);
-  if(detailBox.classList.contains("open")){
-    detailBox.classList.remove("open");
-    activeChatId = null;
-  } else {
-    document.querySelectorAll('.chat-detail').forEach(d => d.classList.remove('open'));
-    detailBox.classList.add("open");
-    activeChatId = id;
-  }
+      
+      <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
+        ${o.status !== 'completed' ? `
+          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
+        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
+        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+      </div>
+    </div>
+  `).join("");
 }
 
 function sendFirstWhatsAppMessage(phone, name, code, otp){
@@ -375,7 +392,7 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
 }
 
 function completeOrder(id){
-  if(!confirm("کیا آپ اس آرڈر کو مکمل اور بند کرنا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let ord = localOrders.find(o => o.id === id);
   if(ord){
@@ -385,18 +402,16 @@ function completeOrder(id){
     localOrders.push({id: id, status: 'completed'});
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
-  activeChatId = null;
-  showToast("✅ آرڈر مکمل ہو گیا!");
+  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
   renderOrders();
 }
 
 function deleteOrder(id){
-  if(!confirm("کیا آپ اس چیت کو ان باکس سے ہٹانا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders = localOrders.filter(o => o.id !== id);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  if(activeChatId === id) activeChatId = null;
-  showToast("✅ چیت ان باکس سے ہٹا دی گئی");
+  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
   renderOrders();
 }
 

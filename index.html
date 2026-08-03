@@ -13,7 +13,7 @@
     --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF; --brown:#5D4037;
   }
   *{box-sizing:border-box;}
-  html{ background:#EDEAE0; height:100%; overflow-x:hidden; }
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
     margin:0 auto; padding:0 0 110px 0; background:var(--paper); color:var(--ink);
     font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
@@ -27,7 +27,6 @@
 
   .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
-  /* کور پکچر ہوم پیج کے لیے */
   .cover-banner{width:100%; overflow:hidden; margin-bottom:8px; border-radius:0 0 16px 16px; display:none;}
   .cover-banner img{width:100%; height:auto; display:block; max-height:200px; object-fit:cover;}
 
@@ -37,7 +36,6 @@
     background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
   }
 
-  /* فیچرز والی پٹی جو اب باری باری سلائیڈ یا موو کرے گی */
   .features-scroll-wrap{overflow:hidden; position:relative; padding:10px 0;}
   .features-scroll{display:flex; gap:10px; width:max-content; animation: features-move 20s linear infinite;}
   .features-scroll-wrap:hover .features-scroll{animation-play-state:paused;}
@@ -63,7 +61,7 @@
   }
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
-  /* کیٹگریز کے خوبصورت کارڈز جن میں تصویریں اور نیچے اردو/رومن نام ہیں */
+  /* کیٹگریز کارڈز اور ان کی تصویروں کا انتہائی سموتھ فینڈ ایفیکٹ */
   .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 16px; }
   .home-cat-card{
     background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 12px; text-align: center;
@@ -75,7 +73,9 @@
     width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; background: var(--leaf); overflow: hidden;
     display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative;
   }
-  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; }
+  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; opacity: 1; }
+  .home-cat-img-wrap img.fade-out { opacity: 0; }
+
   .home-cat-name { font-size: 14px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
   .home-cat-urdu { font-size: 11.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
 
@@ -93,11 +93,6 @@
   .shout-title {
     font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
     text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
-    animation: shoutBounce 0.6s ease-in-out infinite alternate;
-  }
-  @keyframes shoutBounce {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.04); color: var(--accent); }
   }
   
   .deal-grid { display: flex; gap: 12px; justify-content: center; }
@@ -165,7 +160,6 @@
     width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; font-family: Arial, sans-serif;
   }
 
-  /* ایس او پیز اور شرائط و ضوابط کا باکس */
   .sops-box{
     background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12px; color: var(--muted); line-height: 1.6; text-align: right; font-family: Arial, sans-serif;
   }
@@ -211,7 +205,6 @@
 
   .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:15px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; font-family: Arial, sans-serif;}
   
-  /* فوٹر اور سوشل میڈیا کے خوبصورت بٹنز */
   footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 20px; font-family: Arial, sans-serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
   .social-btn{
@@ -221,7 +214,7 @@
   .social-btn.fb{background:#1877F2;}
   .social-btn.tk{background:#000000;}
   .social-btn.yt{background:#FF0000;}
-  .social-btn.ig{background:radial-gradient(circle at 30% 107%, #fdf497 0%, #df4996 45%, #to right, #833ab4 60%, #fd1d1d 100%); background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
+  .social-btn.ig{background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
 
   .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:130; display:flex; align-items:center; justify-content:center; padding:24px; }
   .lightbox.hidden{display:none;}
@@ -240,7 +233,6 @@
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<!-- کور پکچر بینر -->
 <div class="cover-banner" id="coverBanner">
   <img id="coverImg" src="" alt="SJ Foods Cover">
 </div>
@@ -249,7 +241,6 @@
   <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
 </div>
 
-<!-- فیچرز والی سلائیڈنگ پٹی -->
 <div class="features-scroll-wrap">
   <div class="features-scroll" id="featuresTrack">
     <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
@@ -259,7 +250,6 @@
     <div class="feature-card"><div class="ic">💬</div><div class="tx">WhatsApp Order</div></div>
     <div class="feature-card"><div class="ic">📲</div><div class="tx">EasyPaisa</div></div>
     <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
-    <!-- آٹو لوپ کے لیے ڈپلیکیٹ -->
     <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
     <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
     <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
@@ -326,12 +316,11 @@
   📍 Al Basit Plaza, Haji Baba Road, Mingora Swat<br>
   🕙 Hours: 10:00 AM - 8:00 PM
   
-  <!-- سوشل میڈیا بٹنز -->
-  <div class="social-links">
-    <a href="https://facebook.com" target="_blank" class="social-btn fb">📘 فیس بک</a>
-    <a href="https://tiktok.com" target="_blank" class="social-btn tk">🎵 ٹک ٹاک</a>
-    <a href="https://youtube.com" target="_blank" class="social-btn yt">▶️ یوٹیوب</a>
-    <a href="https://instagram.com" target="_blank" class="social-btn ig">📸 انسٹاگرام</a>
+  <div class="social-links" id="socialLinksBox">
+    <a href="https://facebook.com" target="_blank" class="social-btn fb" id="linkFb">📘 فیس بک</a>
+    <a href="https://tiktok.com" target="_blank" class="social-btn tk" id="linkTk">🎵 ٹک ٹاک</a>
+    <a href="https://youtube.com" target="_blank" class="social-btn yt" id="linkYt">▶️ یوٹیوب</a>
+    <a href="https://instagram.com" target="_blank" class="social-btn ig" id="linkIg">📸 انسٹاگرام</a>
   </div>
 </footer>
 
@@ -343,7 +332,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-let CATEGORIES_DATA = {}; // ہر کیٹگری کے اندر موجود اشیاء اور تصویریں
+let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
 let SHOP_WHATSAPP = "923155166034";
@@ -423,6 +412,11 @@ async function loadSettings(){
       document.getElementById("coverImg").src = s.cover_image;
       document.getElementById("coverBanner").style.display = "block";
     }
+    // سوشل میڈیا لنکس سیٹنگز سے لوڈ کرنا
+    if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
+    if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
+    if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
+    if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
   }catch(e){}
 }
 
@@ -441,7 +435,7 @@ function selectCategory(catName){
   currentSelectedCategory = catName;
   renderChips();
   renderMainView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  // اب صفحہ جھٹکے سے اوپر نہیں جائے گا، بلکہ صرف کیٹگری کا سیکشن سمتھلی نظر آئےगा
 }
 
 function resetToHome(){
@@ -476,7 +470,6 @@ function renderMainView(filter=""){
       main.appendChild(titleDiv);
       items.forEach(it => main.appendChild(createItemRow(it)));
 
-      // کیٹگری کے نیچے ایس او پیز / شرائط و ضوابط کا باکس
       let sopsDiv = document.createElement("div");
       sopsDiv.className = "sops-box";
       sopsDiv.innerHTML = `
@@ -499,7 +492,6 @@ function renderMainView(filter=""){
       card.className = "home-cat-card";
       card.onclick = () => selectCategory(cat.name);
       
-      // کیٹگری کے اندر موجود اشیاء کی تصاویر کا سلائیڈر
       let catItems = CATEGORIES_DATA[cat.name] || [];
       let imagesList = catItems.filter(it => it.image).map(it => it.image);
       let defaultImg = cat.image || (imagesList.length > 0 ? imagesList[0] : "");
@@ -513,20 +505,20 @@ function renderMainView(filter=""){
       `;
       grid.appendChild(card);
 
-      // اگر اس کیٹگری میں ایک سے زیادہ تصویریں ہیں تو انہیں باری باری سلائیڈ کریں
+      // تصویروں کی تبدیلی پر انتہائی سموتھ فینڈ (Fade) ایفیکٹ
       if(imagesList.length > 1){
         let imgIdx = 0;
         setInterval(() => {
           imgIdx = (imgIdx + 1) % imagesList.length;
           let imgEl = document.getElementById(`cat_img_${cat.name}`);
           if(imgEl){
-            imgEl.style.opacity = 0;
+            imgEl.classList.add("fade-out");
             setTimeout(() => {
               imgEl.src = imagesList[imgIdx];
-              imgEl.style.opacity = 1;
+              imgEl.classList.remove("fade-out");
             }, 400);
           }
-        }, 3000);
+        }, 3500);
       }
     });
     main.appendChild(grid);

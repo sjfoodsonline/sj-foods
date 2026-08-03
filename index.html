@@ -33,6 +33,15 @@
     background:#fff; font-family:inherit; direction:rtl; text-align:right; outline:none;
   }
 
+  .features-scroll{display:flex; gap:8px; overflow-x:auto; padding:10px 16px; scrollbar-width:none;}
+  .features-scroll::-webkit-scrollbar{display:none;}
+  .feature-card{
+    flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:8px 10px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.03);
+  }
+  .feature-card .ic{font-size:18px;}
+  .feature-card .tx{font-size:10px; color:var(--ink); margin-top:2px; font-weight:700; white-space:nowrap;}
+
   .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
@@ -43,6 +52,21 @@
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
     border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:700;
     white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 2px 8px rgba(21,58,32,0.06);
+  }
+  .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
+
+  .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 16px; }
+  .home-cat-card{
+    background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 14px; text-align: center;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+  }
+  .home-cat-card:hover{ transform: translateY(-4px); border-color: var(--mid); box-shadow: 0 8px 25px rgba(46,125,50,0.15); }
+  .home-cat-icon { font-size: 38px; margin-bottom: 6px; }
+  .home-cat-name { font-size: 15px; font-weight: 800; color: var(--dark); font-family:"Jameel Noori Nastaleeq",serif; }
+
+  .back-cat-btn{
+    background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
+    padding: 8px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px;
   }
 
   .featured-section{
@@ -63,16 +87,16 @@
   }
   
   .deal-grid { display: flex; gap: 12px; justify-content: center; }
-
-  /* سموتھ ٹرانزیشن اور فیڈ ایفیکٹ کے لیے */
+  
+  /* انتہائی سموتھ ٹرانزیشن اور فیڈ ایفیکٹ */
   .deal-card{
     flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
     box-shadow:0 4px 15px rgba(0,0,0,0.06); 
-    transition: opacity 0.6s ease-in-out, transform 0.4s ease;
-    opacity: 1;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1; transform: translateY(0);
   }
-  .deal-card.fade-out { opacity: 0; transform: scale(0.95); }
+  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
 
   .deal-card img, .deal-card .deal-icon-box{
     width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
@@ -83,8 +107,8 @@
 
   main{padding:6px 16px 100px;}
   .cat-title{
-    font-size:17px; font-weight:700; color:var(--dark); margin:20px 2px 8px; padding-right:10px; border-right:4px solid var(--dark);
-    font-family:"Jameel Noori Nastaleeq",serif;
+    font-size:18px; font-weight:700; color:var(--dark); margin:10px 2px 14px; padding-right:10px; border-right:4px solid var(--dark);
+    font-family:"Jameel Noori Nastaleeq",serif; display:flex; align-items:center; justify-content:space-between;
   }
   
   .item{
@@ -95,11 +119,11 @@
   
   .item-row-top{display:flex; align-items:center; gap:12px;}
 
-  /* دستیابی کا گرین/ریڈ چیک مارک اب بالکل بائیں جانب منتقل کر دیا گیا ہے */
+  /* 🟢 چیک مارک بٹن اب بالکل بائیں جانب فکس کر دیا گیا ہے */
   .avail-checkbox{
     flex:0 0 32px; width:32px; height:32px; border-radius:10px; background:var(--mid);
     display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(46,125,50,0.25);
-    order: -1; /* بائیں طرف لانے کے لیے */
+    order: -1; margin-left: 2px;
   }
   .avail-checkbox.no{ background:#B71C1C; }
 
@@ -194,6 +218,16 @@
   <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
 </div>
 
+<div class="features-scroll">
+  <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
+  <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
+  <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
+  <div class="feature-card"><div class="ic">🔒</div><div class="tx">Secure Payment</div></div>
+  <div class="feature-card"><div class="ic">💬</div><div class="tx">WhatsApp Order</div></div>
+  <div class="feature-card"><div class="ic">📲</div><div class="tx">EasyPaisa</div></div>
+  <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
+</div>
+
 <div class="featured-section hidden" id="featuredSection">
   <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
   <div class="deal-grid" id="dealBox"></div>
@@ -259,6 +293,7 @@ let CATEGORIES_META = [];
 let ITEMS = [];
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
+let currentSelectedCategory = null;
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
@@ -287,7 +322,7 @@ async function loadData(){
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
     
-    CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon}));
+    CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
     ITEMS = [];
     catResults.forEach((res, ci) => {
       res.forEach((it, ii) => {
@@ -304,7 +339,7 @@ async function loadData(){
       });
     });
     renderChips();
-    renderList("");
+    renderMainView();
     renderFeatured();
     document.getElementById("loadingMsg").style.display = "none";
     document.getElementById("billbar").style.display = "flex";
@@ -327,75 +362,112 @@ async function loadSettings(){
 
 function renderChips(){
   const chips = CATEGORIES_META.map(c => 
-    `<button class="cat-chip" onclick="scrollToCat('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
+    `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
   document.getElementById("chips").innerHTML = `
-    <div class="cat-marquee-track">
+    <div class="cat-marquee-track" style="${currentSelectedCategory ? 'animation:none; justify-content:center; flex-wrap:wrap;' : ''}">
       <div style="display:flex; gap:10px;">${chips}</div>
       <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
     </div>`;
 }
 
-function scrollToCat(name){
-  const el = document.getElementById("cat-"+name);
-  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+function selectCategory(catName){
+  currentSelectedCategory = catName;
+  renderChips();
+  renderMainView();
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-function renderList(filter){
+function resetToHome(){
+  currentSelectedCategory = null;
+  renderChips();
+  renderMainView();
+}
+
+function renderMainView(filter=""){
   const main = document.getElementById("list");
   main.innerHTML = "";
   let anyShown = false;
 
-  CATEGORIES_META.forEach(cat => {
-    const items = ITEMS.filter(i => i.cat === cat.name && (!filter || i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase()))));
-    if(items.length === 0) return;
+  if(filter){
+    let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    if(filteredItems.length > 0){
+      anyShown = true;
+      let container = document.createElement("div");
+      container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+      filteredItems.forEach(it => container.appendChild(createItemRow(it)));
+      main.appendChild(container);
+    }
+  } 
+  else if(currentSelectedCategory){
+    let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
+    let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
+    if(items.length > 0){
+      anyShown = true;
+      let titleDiv = document.createElement("div");
+      titleDiv.className = "cat-title";
+      titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ واپس تمام کیٹگریز</button>`;
+      main.appendChild(titleDiv);
+      items.forEach(it => main.appendChild(createItemRow(it)));
+    }
+  } 
+  else {
     anyShown = true;
+    let grid = document.createElement("div");
+    grid.className = "home-cats-grid";
     
-    const title = document.createElement("div");
-    title.className = "cat-title";
-    title.id = "cat-"+cat.name;
-    title.textContent = cat.icon + " " + (cat.name_roman || cat.name);
-    main.appendChild(title);
-
-    items.forEach(it => {
-      const u = it.units[it.unitIndex];
-      const row = document.createElement("div");
-      row.className = "item" + (it.qty>0 ? " active":"");
-      row.id = "row-"+it.id;
-      row.innerHTML = `
-        <div class="item-row-top">
-          <!-- گرین/ریڈ چیک مارک اب بالکل بائیں طرف ہے -->
-          <div class="avail-checkbox ${it.available ? 'yes' : 'no'}">
-            ${it.available ? `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
-          </div>
-          <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
-            ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
-          </div>
-          <div class="info">
-            <div class="name">${formatItemName(it)}</div>
-            <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
-          </div>
-        </div>
-        <div class="item-row-bottom">
-          ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
-          <div class="qty-box">
-            <button onclick="changeQty('${it.id}', -1)">−</button>
-            <input type="number" value="${it.qty}" readonly>
-            <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
-          </div>
-        </div>
+    CATEGORIES_META.forEach(cat => {
+      let card = document.createElement("div");
+      card.className = "home-cat-card";
+      card.onclick = () => selectCategory(cat.name);
+      card.innerHTML = `
+        <div class="home-cat-icon">${cat.image ? `<img src="${cat.image}" style="width:55px;height:55px;object-fit:cover;border-radius:12px;">` : cat.icon}</div>
+        <div class="home-cat-name">${cat.name_roman || cat.name}</div>
+        <div style="font-size:11px; color:var(--muted); margin-top:2px;">آرڈر کرنے کے لیے کلک کریں</div>
       `;
-      main.appendChild(row);
+      grid.appendChild(card);
     });
-  });
+    main.appendChild(grid);
+  }
+
   document.getElementById("noResult").style.display = anyShown ? "none" : "block";
 }
 
+function createItemRow(it){
+  const u = it.units[it.unitIndex];
+  const row = document.createElement("div");
+  row.className = "item" + (it.qty>0 ? " active":"");
+  row.id = "row-"+it.id;
+  row.innerHTML = `
+    <div class="item-row-top">
+      <div class="avail-checkbox ${it.available ? 'yes' : 'no'}">
+        ${it.available ? `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
+      </div>
+      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
+        ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
+      </div>
+      <div class="info">
+        <div class="name">${formatItemName(it)}</div>
+        <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
+      </div>
+    </div>
+    <div class="item-row-bottom">
+      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      <div class="qty-box">
+        <button onclick="changeQty('${it.id}', -1)">−</button>
+        <input type="number" value="${it.qty}" readonly>
+        <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+      </div>
+    </div>
+  `;
+  return row;
+}
+
 function changeUnit(id, idx){
-  const catItem = ITEMS.find(x => x.id === id);
-  if(catItem){
-    catItem.unitIndex = parseInt(idx);
-    renderList(document.getElementById("search").value);
+  const it = ITEMS.find(x => x.id === id);
+  if(it){
+    it.unitIndex = parseInt(idx);
+    renderMainView(document.getElementById("search").value);
     renderBill();
   }
 }
@@ -404,7 +476,7 @@ function changeQty(id, delta){
   const it = findItem(id);
   if(!it || !it.available) return;
   it.qty = Math.max(0, it.qty + delta);
-  renderList(document.getElementById("search").value);
+  renderMainView(document.getElementById("search").value);
   renderBill();
 }
 
@@ -430,7 +502,7 @@ document.getElementById("summary").onclick = () => {
   document.getElementById("billbar").classList.toggle("collapsed");
 };
 
-document.getElementById("search").oninput = (e) => renderList(e.target.value);
+document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
 document.getElementById("copyNumBtn").onclick = async ()=>{
   try{
@@ -537,7 +609,6 @@ document.getElementById("waBtn").onclick = () => {
   showToast("✅ آرڈر ایڈمن ان باکس میں درج ہو گیا!");
 };
 
-/* ٹاپ ڈیلز کی سموتھ ٹرانزیشن اور فیڈ اینیمیشن کے ساتھ */
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
@@ -548,8 +619,6 @@ function renderFeatured(){
   let currentIndex = 0;
   const updateFeaturedGrid = () => {
     if(feat.length === 0) return;
-    
-    // پرانی کارڈز پر فیڈ آؤٹ کلاس لگائیں
     const cards = box.querySelectorAll('.deal-card');
     cards.forEach(c => c.classList.add('fade-out'));
 
@@ -570,13 +639,12 @@ function renderFeatured(){
         </div>
       `;
 
-      // تھوڑی دیر بعد فیڈ ان کرنے کے لیے کلاس ہٹائیں
       setTimeout(() => {
         box.querySelectorAll('.deal-card').forEach(c => c.classList.remove('fade-out'));
       }, 50);
 
       currentIndex += 2;
-    }, 400); // ٹرانزیشن کا وقت
+    }, 400);
   };
 
   updateFeaturedGrid();

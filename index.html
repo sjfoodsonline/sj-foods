@@ -36,17 +36,21 @@
     background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
   }
 
-  .features-scroll-wrap{overflow:hidden; position:relative; padding:10px 0;}
-  .features-scroll{display:flex; gap:10px; width:max-content; animation: features-move 20s linear infinite;}
-  .features-scroll-wrap:hover .features-scroll{animation-play-state:paused;}
-  @keyframes features-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+  .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
+  .features-scroll-wrap:hover .features-scroll{ animation-play-state: paused; }
+  @keyframes smoothMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
 
   .feature-card{
     flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
-    padding:8px 14px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.03);
+    padding:8px 16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    display:flex; align-items:center; gap:6px;
   }
-  .feature-card .ic{font-size:18px;}
-  .feature-card .tx{font-size:11px; color:var(--ink); margin-top:2px; font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
+  .feature-card .ic{font-size:16px;}
+  .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
   .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
@@ -61,7 +65,6 @@
   }
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
-  /* کیٹگریز کارڈز اور ان کی تصویروں کا انتہائی سموتھ فینڈ ایفیکٹ */
   .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 16px; }
   .home-cat-card{
     background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 12px; text-align: center;
@@ -165,6 +168,11 @@
   }
   .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif; }
 
+  #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary {
+    font-family: "Jameel Noori Nastaleeq", serif !important;
+  }
+  .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15px; }
+
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
     border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
@@ -172,38 +180,38 @@
   }
   #billbar.collapsed .cart-details{display:none;}
   .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
-  .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark); font-family: Arial, sans-serif;}
+  .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
   .cart-details{overflow-y:auto; max-height:65vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
   
   .pay-card{
     background:linear-gradient(135deg,#1B5E20,#2E7D32);
-    border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff; font-family: Arial, sans-serif;
+    border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff;
   }
-  .pay-card-title{font-size:12.5px; font-weight:bold; opacity:.95;}
+  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95;}
   .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
   .pay-number-row{
     display:flex; align-items:center; justify-content:center; gap:8px;
     background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
     border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px;
   }
-  .pay-number{font-size:16px; font-weight:bold; direction:ltr;}
+  .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
   #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
-  .pay-hint{color:#FFF3CD; font-size:10.5px; margin-top:6px; line-height:1.4; text-align:right;}
+  .pay-hint{color:#FFF3CD; font-size:12px; margin-top:8px; line-height:1.6; text-align:right;}
 
-  .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px; font-family: Arial, sans-serif;}
-  .checkout-box input, .checkout-box select{
-    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:13.5px; margin-bottom:8px; background:#fff; font-family: Arial, sans-serif; font-weight: bold;
+  .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
+  .checkout-box input{
+    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold;
   }
   
   .pay-method{display:flex; gap:8px; margin-bottom:8px;}
   .pay-method label{
-    flex:1; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:bold;
-    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); font-family: Arial, sans-serif;
+    flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold;
+    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark);
   }
   .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
   .pay-method input{width:15px; height:15px;}
 
-  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:15px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; font-family: Arial, sans-serif;}
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
   
   footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 20px; font-family: Arial, sans-serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
@@ -243,17 +251,20 @@
 
 <div class="features-scroll-wrap">
   <div class="features-scroll" id="featuresTrack">
-    <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
-    <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
-    <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
-    <div class="feature-card"><div class="ic">🔒</div><div class="tx">Secure Payment</div></div>
-    <div class="feature-card"><div class="ic">💬</div><div class="tx">WhatsApp Order</div></div>
-    <div class="feature-card"><div class="ic">📲</div><div class="tx">EasyPaisa</div></div>
-    <div class="feature-card"><div class="ic">🕙</div><div class="tx">10AM-8PM Support</div></div>
-    <div class="feature-card"><div class="ic">🌿</div><div class="tx">Fresh & Quality</div></div>
-    <div class="feature-card"><div class="ic">💰</div><div class="tx">Best Rates</div></div>
-    <div class="feature-card"><div class="ic">🚚</div><div class="tx">Fast Delivery</div></div>
-    <div class="feature-card"><div class="ic">🔒</div><div class="tx">Secure Payment</div></div>
+    <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+    <div class="feature-card"><span class="ic">💰</span><span class="tx">Best Rates</span></div>
+    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fast Delivery</span></div>
+    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payment</span></div>
+    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
+    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa</span></div>
+    <div class="feature-card"><span class="ic">🕙</span><span class="tx">10AM-8PM Support</span></div>
+    <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+    <div class="feature-card"><span class="ic">💰</span><span class="tx">Best Rates</span></div>
+    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fast Delivery</span></div>
+    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payment</span></div>
+    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
+    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa</span></div>
+    <div class="feature-card"><span class="ic">🕙</span><span class="tx">10AM-8PM Support</span></div>
   </div>
 </div>
 
@@ -277,32 +288,27 @@
     <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
   <div class="cart-details">
-    <div id="billLines" style="font-size:13.5px; margin-bottom:10px;"></div>
+    <div id="billLines" style="margin-bottom:10px;"></div>
     
     <div class="pay-card" id="payCard">
-      <div class="pay-card-title">📲 ایزی پیسہ ایڈوانس (ترجیحی)</div>
+      <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
       <div class="pay-number-row">
         <span class="pay-number" id="payNumber">0315-5166034</span>
         <button id="copyNumBtn">📋 کاپی</button>
       </div>
-      <div class="pay-hint">✅ کیش آن ڈیلیوری بھی دستیاب ہے — مگر اگر آپ ایزی پیسہ پر ایڈوانس ادائیگی کر سکیں تو ہماری ترجیح ہوگی۔</div>
+      <div class="pay-hint">✅ اگر آپ کوئیک اور فاسٹ رسپانس چاہتے ہیں، تو اس نمبر پر ایزی پیسہ یا بینک ٹرانسفر کریں۔ آپ بے فکر رہیں، آپ کا سامان فوری طور پر روانہ کر دیا جائے گا۔</div>
     </div>
 
     <div class="checkout-box">
-      <div style="font-size:13px; font-weight:bold; color:var(--dark); margin-bottom:6px;">📦 ڈیلیوری کی تفصیلات دیں</div>
+      <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px;">📦 ڈلیوری کی تفصیلات دیں</div>
       <input id="custName" type="text" placeholder="آپ کا نام (Your Name)">
       <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر (Phone Number)">
-      <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address)">
-      <select id="custArea">
-        <option value="">📍 اپنا علاقہ منتخب کریں (Select Area)</option>
-        <option value="inside">مینگورہ شہر کے اندر (Inside City)</option>
-        <option value="outside">مینگورہ سے باہر / سائیڈ ایریا (Outside City)</option>
-      </select>
+      <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address / علاقہ)">
 
-      <div class="pay-method" id="payMethodBox">
-        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈیلیوری</label>
-        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ</label>
+      <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
+        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈلیوری</label>
+        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ / بینک</label>
       </div>
     </div>
 
@@ -412,7 +418,6 @@ async function loadSettings(){
       document.getElementById("coverImg").src = s.cover_image;
       document.getElementById("coverBanner").style.display = "block";
     }
-    // سوشل میڈیا لنکس سیٹنگز سے لوڈ کرنا
     if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
     if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
     if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
@@ -435,7 +440,6 @@ function selectCategory(catName){
   currentSelectedCategory = catName;
   renderChips();
   renderMainView();
-  // اب صفحہ جھٹکے سے اوپر نہیں جائے گا، بلکہ صرف کیٹگری کا سیکشن سمتھلی نظر آئےगा
 }
 
 function resetToHome(){
@@ -474,10 +478,11 @@ function renderMainView(filter=""){
       sopsDiv.className = "sops-box";
       sopsDiv.innerHTML = `
         <h4>📜 شرائط و ضوابط و ایس او پیز (Terms & SOPs)</h4>
-        • تمام اشیاء سو فیصد تازہ اور معیاری فراہم کی جاتی ہیں۔<br>
-        • ریٹس مارکیٹ کی صورتحال کے مطابق تبدیل ہو سکتے ہیں۔<br>
-        • گھر پہنچنے پر آرڈر چیک کریں اور ڈلیوری مین کو کیش یا ایزی پیسہ کریں۔<br>
-        • کسی بھی شکایت کی صورت میں فوری ہمارے واٹس ایپ پر رابطہ کریں۔
+        • تمام اشیاء سو فیصد تازہ، معیاری اور ناپ تول میں پوری فراہم کی جاتی ہیں۔<br>
+        • ڈلیوری سواری (بائیک یا رکشہ) اور اس کے چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی سے طے کیا جائے گا۔<br>
+        • رسید پر باہمی اتفاق سے ڈلیوری وصول رقم درج کی جا سکتی ہے۔<br>
+        • شہر سے باہر کے آرڈرز کے لیے ایڈوانس پیمنٹ لازمی ہوگی۔<br>
+        • سامان وصول کرتے وقت ڈلیوری والے کو اپنا سیکیورٹی OTP کوڈ لازمی بتائیں۔
       `;
       main.appendChild(sopsDiv);
     }
@@ -505,7 +510,6 @@ function renderMainView(filter=""){
       `;
       grid.appendChild(card);
 
-      // تصویروں کی تبدیلی پر انتہائی سموتھ فینڈ (Fade) ایفیکٹ
       if(imagesList.length > 1){
         let imgIdx = 0;
         setInterval(() => {
@@ -579,11 +583,14 @@ function findItem(id){ return ITEMS.find(i=>i.id===id); }
 function renderBill(){
   const chosen = ITEMS.filter(i => i.qty > 0);
   let subtotal = 0;
+  
   document.getElementById("billLines").innerHTML = chosen.map(it => {
     const u = it.units[it.unitIndex];
     const total = it.qty * u.rate;
     subtotal += total;
-    return `<div>${it.name_roman || it.name} (${it.name}) × ${it.qty} ${u.label} = <b>${fmt(total)}</b></div>`;
+    return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px;">
+      📦 <b style="color:var(--dark);">[${it.cat}]</b> ${it.name_roman || it.name} (${it.name}) × ${it.qty} ${u.label} = <b>${fmt(total)}</b>
+    </div>`;
   }).join("");
 
   document.getElementById("itemCount").textContent = chosen.length;
@@ -641,12 +648,12 @@ document.getElementById("waBtn").onclick = () => {
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  const area = document.getElementById("custArea").value;
-  const payMethod = payEasy.checked ? "ایزی پیسہ (EasyPaisa)" : (payCod.checked ? "کیش آن ڈیلیوری (COD)" : "نامعلوم");
+  const payMethod = payEasy.checked ? "ایزی پیسہ / بینک ٹرانسفر (EasyPaisa/Bank)" : (payCod.checked ? "کیش آن ڈلیوری (COD)" : "نامعلوم");
 
-  if(!name || !phone || !addr || !area){ alert("براہ کرم تمام معلومات پُر کریں"); return; }
+  if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  const otpCode = Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
   let summaryHtml = "";
   
@@ -654,28 +661,28 @@ document.getElementById("waBtn").onclick = () => {
   msg += `👤 نام: ${name}\n`;
   msg += `📞 فون: ${phone}\n`;
   msg += `📍 پتہ: ${addr}\n`;
-  msg += `💳 ادائیگی: ${payMethod}\n\n`;
-  msg += `📋 *آرڈر کی تفصیلات:*\n`;
+  msg += `💳 ادائیگی: ${payMethod}\n`;
+  msg += `🔐 سیکیورٹی OTP کوڈ: *${otpCode}* (سامان لیتے وقت ڈلیوری والے کو بتانا لازمی ہے)\n\n`;
+  msg += `📋 *آرڈر کی تفصیلات (کیٹگری سمیت):*\n`;
   
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
     const t = it.qty * u.rate;
     subtotal += t;
-    msg += `• ${it.name_roman || it.name} (${it.name}) — ${it.qty} ${u.label} = ${fmt(t)}\n`;
-    summaryHtml += `${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
+    msg += `• [${it.cat}] ${it.name_roman || it.name} (${it.name}) — ${it.qty} ${u.label} = ${fmt(t)}\n`;
+    summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
   
-  msg += `\n💰 *کل رقم:* ${fmt(subtotal)}\n\n`;
-  msg += `🌿 *آٹو ریپلائی / یقین دہانی:* محترم گاہک! آپ کا آرڈر نمبر [${orderCode}] ہمیں مل گیا ہے۔ ہم آپ کے لیے بہترین، تازہ، معیاری اور کم وقت میں اشیاء پہنچانے کے لیے پرعزم ہیں۔\n\n`;
+  msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
+  msg += `🚚 *نوٹ:* ڈلیوری سواری (بائیک/رکشہ) اور چارجز کے حوالے سے اب واٹس ایپ پر بات چیت کی جائے گی۔ رسید پر باہمی رضامندی سے ڈلیوری وصول درج ہوگی۔ سامان وصول کرتے وقت OTP کوڈ لازمی بتائیں۔ شکریہ! 🌿`;
 
-  const otpCode = Math.floor(1000 + Math.random() * 9000);
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({
     id: "wa_" + Date.now(),
     code: orderCode,
     name: name,
     phone: phone,
-    address: addr + " (" + (area==='inside'?'شہر کے اندر':'باہر') + ")",
+    address: addr,
     itemsSummary: summaryHtml,
     total: Math.round(subtotal),
     otpCode: otpCode,
@@ -759,7 +766,7 @@ function scrollToMainItem(id){
 function openLightbox(src, name){
   if(!src) return;
   document.getElementById("lightboxImg").src = src;
-  document.getElementById("lightbox").classList.remove("hidden");
+  document.getElementById("lightbox").classList.add("hidden");
 }
 document.getElementById("closeLightbox").onclick = () => {
   document.getElementById("lightbox").classList.add("hidden");

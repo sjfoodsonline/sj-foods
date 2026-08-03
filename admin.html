@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — لائیو ایڈمن پینل</title>
+<title>SJ Foods — لائیو ان باکس پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -37,18 +37,23 @@
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   
-  .tabs{display:flex; gap:8px; margin-bottom:14px;}
-  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
+  .tabs{display:flex; gap:6px; margin-bottom:14px;}
+  .tab{flex:1; padding:10px 6px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:12px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  .order-card{background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
-  .order-card.pending{animation: superBlinking 0.8s infinite ease-in-out;}
-  .order-card.completed{background:#F1F8E9; border-color:#81C784;}
+  /* ان باکس چیট لسٹ اسٹائل */
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px; cursor:pointer; transition:all .2s;}
+  .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
+  .chat-item.completed{background:#F1F8E9; border-color:#81C784;}
   @keyframes superBlinking{ 
-    0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 15px rgba(211,47,47,0.7);} 
+    0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
     50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
-    100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 15px rgba(211,47,47,0.7);} 
+    100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
   }
+
+  /* چیٹ ڈیٹیل ماڈل / ویو */
+  .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-bottom:12px; display:none;}
+  .chat-detail.open{display:block;}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -62,44 +67,46 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — لائیو ایڈمن پینل</h1>
-  <p>فوری ریکارڈ، واٹس ایپ ڈائریکٹ انٹری اور گوگل شیٹ مطابقت</p>
+  <h1>⚙️ SJ Foods — ان باکس لائیو پینل</h1>
+  <p>واٹس ایپ ان باکس چیٹس اور گوگل شیٹ مطابقت</p>
 </header>
 
 <div class="wrap">
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ نیا واٹس ایپ آرڈر</div>
     <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
-  <!-- لائیو آرڈرز سیکشن -->
-  <div id="secOrders">
-    
-    <!-- واٹس ایپ میسج یہاں پیسٹ کریں (گوگل شیٹ میں بھی محفوظ ہوگا) -->
+  <!-- نیا واٹس ایپ آرڈر درج کرنے کا سیکشن (دوسرا بٹن) -->
+  <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ پینل پر بھی آئے گا اور خودکار گوگل شیٹ میں بھی محفوظ ہو جائے گا۔</p>
-      <textarea id="waRawText" rows="3" placeholder="یہاں کسٹمر کا میسج پیسٹ کریں..."></textarea>
-      <button class="btn-primary" style="background:var(--mid);" onclick="parseAndAddWhatsAppOrder()">➕ فوری آرڈر درج کریں اور شیٹ میں بھیجیں</button>
+      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ ان باکس میں بطور نئی چیٹ اور گوگل شیٹ میں محفوظ ہو جائے گا۔</p>
+      <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا میسج پیسٹ کریں..."></textarea>
+      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ آرڈر درج کریں اور ان باکس میں بھیجیں</button>
     </div>
+  </div>
 
+  <!-- لائیو ان باکس سیکشن -->
+  <div id="secOrders">
     <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
-      <p>پینڈنگ آرڈرز پر ہر 10 منٹ بعد یاد دہانی کی گھنٹی بجے گی۔</p>
+      <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
+      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ کسی بھی چیٹ پر کلک کر کے اس کا مکمل ان باکس کھولیں۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
     </div>
     
-    <div id="ordersArea"><div class="loading">⏳ آرڈرز لوڈ ہو رہے ہیں...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
   </div>
 
   <!-- پروڈکٹس اور ریٹس سیکشن -->
   <div id="secProducts" style="display:none;">
     <div class="card">
       <h3>📦 پروڈکٹس کی قیمتیں اور سیٹنگ</h3>
-      <p>یہاں سے آپ اپنی اشیاء کے ریٹس تبدیل اور مینج کر سکتے ہیں۔</p>
+      <p>یہاں سے آپ اپنی اشیاء کے ریٹس تبدیل اور چیک کر سکتے ہیں۔</p>
       <label>ٹماٹر ریٹس (فی کلو)</label>
       <input type="text" id="pTomato" value="Rs. 200">
       <label>پیاز ریٹس (فی کلو)</label>
@@ -118,15 +125,22 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
 
 function switchTab(tabName){
+  document.getElementById('tabOrdersBtn').className = 'tab';
+  document.getElementById('tabAddBtn').className = 'tab';
+  document.getElementById('tabProductsBtn').className = 'tab';
+  
+  document.getElementById('secOrders').style.display = 'none';
+  document.getElementById('secAddWA').style.display = 'none';
+  document.getElementById('secProducts').style.display = 'none';
+
   if(tabName === 'orders'){
     document.getElementById('tabOrdersBtn').className = 'tab active';
-    document.getElementById('tabProductsBtn').className = 'tab';
     document.getElementById('secOrders').style.display = 'block';
-    document.getElementById('secProducts').style.display = 'none';
+  } else if(tabName === 'addwa'){
+    document.getElementById('tabAddBtn').className = 'tab active';
+    document.getElementById('secAddWA').style.display = 'block';
   } else {
-    document.getElementById('tabOrdersBtn').className = 'tab';
     document.getElementById('tabProductsBtn').className = 'tab active';
-    document.getElementById('secOrders').style.display = 'none';
     document.getElementById('secProducts').style.display = 'block';
   }
 }
@@ -158,7 +172,6 @@ function playBeepTech(){
   }catch(e){}
 }
 
-// واٹس ایپ میسج پینل میں ڈالنا اور گوگل شیٹ کو بھی بھیجنا
 async function parseAndAddWhatsAppOrder(){
   const rawText = document.getElementById("waRawText").value.trim();
   if(!rawText){
@@ -179,7 +192,6 @@ async function parseAndAddWhatsAppOrder(){
     status: "pending"
   };
 
-  // گوگل شیٹ کو ڈیٹا بھیجنا
   if(SHEET_URL){
     try{
       await fetch(SHEET_URL, {
@@ -193,7 +205,6 @@ async function parseAndAddWhatsAppOrder(){
     }
   }
 
-  // لوکل اسٹوریج میں فوراً شو کرنے کے لیے محفوظ کرنا
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({
     id: "wa_" + Date.now(),
@@ -210,8 +221,9 @@ async function parseAndAddWhatsAppOrder(){
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
   document.getElementById("waRawText").value = "";
-  showToast("✅ آرڈر درج اور گوگل شیٹ میں محفوظ ہو گیا!");
+  showToast("✅ آرڈر درج اور ان باکس میں آ گیا!");
   playBeepTech();
+  switchTab('orders');
   renderOrders();
 }
 
@@ -254,7 +266,7 @@ async function renderOrders(){
   const orders = await fetchOrdersFromSheet();
   
   if(orders.length === 0){
-    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
+    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">ان باکس خالی ہے</div>`;
     return;
   }
 
@@ -268,31 +280,55 @@ async function renderOrders(){
   if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
     playBeepTech();
     lastReminderTime = currentTime;
-    showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
+    showToast("⏰ یاد دہانی: پینڈنگ چیٹس موجود ہیں!");
   }
 
   area.innerHTML = orders.map((o) => `
-    <div class="order-card ${o.status==='completed'?'completed':'pending'}">
-      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
-      <div style="font-size:13.5px; line-height:1.7;">
-        📞 فون: ${o.phone}<br>
-        📍 پتہ: ${o.address}<br>
-        🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-        🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-        💰 کل رقم: <b>Rs. ${o.total}</b><br>
-        وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
+    <div class="chat-item ${o.status==='completed'?'completed':'pending'}" id="chat_${o.id}">
+      <div onclick="toggleChatDetail('${o.id}')" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-weight:800; font-size:15px;">📌 ${o.code} — ${o.name}</span>
+          <div style="font-size:11.5px; color:var(--muted); margin-top:2px;">وضعیت: <b>${o.status === 'completed' ? '✅ آرڈر مکمل' : '⏳ پینڈنگ چیت'}</b></div>
+        </div>
+        <div style="text-align:left;">
+          <span style="font-size:11px; color:var(--muted); display:block;">🕒 ${o.date || ''}</span>
+          <span style="font-size:12px; font-weight:700; color:var(--mid);">ان باکس کھولیں ▼</span>
+        </div>
       </div>
-      
-      <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
-        ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
-        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
-        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+
+      <!-- ان باکس ڈیٹیل جو کلک کرنے پر کھلے گی -->
+      <div class="chat-detail" id="detail_${o.id}">
+        <hr style="border:0; border-top:1px solid var(--line); margin:10px 0;">
+        <div style="font-size:13.5px; line-height:1.7;">
+          📞 فون نمبر: ${o.phone}<br>
+          📍 پتہ: ${o.address}<br>
+          🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
+          🛒 سامان / اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; border:1px solid var(--line);">${o.itemsSummary}</div>
+          💰 کل رقم: <b>Rs. ${o.total}</b><br>
+        </div>
+        
+        <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
+          ${o.status !== 'completed' ? `
+            <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+            <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ آرڈر مکمل کریں</button>
+          ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل اور بند ہو چکا ہے</div>`}
+          <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+        </div>
       </div>
     </div>
   `).join("");
+}
+
+function toggleChatDetail(id){
+  const detailBox = document.getElementById("detail_" + id);
+  if(detailBox.classList.contains("open")){
+    detailBox.classList.remove("open");
+  } else {
+    // باقی سارے بند کر کے صرف یہی کھولیں
+    document.querySelectorAll('.chat-detail').forEach(d => d.classList.remove('open'));
+    detailBox.classList.add("open");
+  }
 }
 
 function sendFirstWhatsAppMessage(phone, name, code, otp){
@@ -304,7 +340,7 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
 }
 
 function completeOrder(id){
-  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ اس آرڈر کو مکمل اور بند کرنا چاہتے ہیں؟")) return;
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let ord = localOrders.find(o => o.id === id);
   if(ord){
@@ -314,16 +350,16 @@ function completeOrder(id){
     localOrders.push({id: id, status: 'completed'});
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
-  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
+  showToast("✅ آرڈر مکمل ہو گیا!");
   renderOrders();
 }
 
 function deleteOrder(id){
-  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ اس چیت کو ان باکس سے ہٹانا چاہتے ہیں؟")) return;
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders = localOrders.filter(o => o.id !== id);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
+  showToast("✅ چیت ان باکس سے ہٹا دی گئی");
   renderOrders();
 }
 

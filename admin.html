@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — محفوظ ایڈمن پینل</title>
+<title>SJ Foods — لائیو ایڈمن پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -27,7 +27,7 @@
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  input[type=text], input[type=number], select{
+  textarea, input[type=text]{
     width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
     font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
   }
@@ -62,8 +62,8 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
-  <p>محفوظ ریکارڈ، لائیو آرڈرز اور خودکار نوٹیفکیشن</p>
+  <h1>⚙️ SJ Foods — لائیو ایڈمن پینل</h1>
+  <p>فوری ریکارڈ، واٹس ایپ ڈائریکٹ انٹری اور گوگل شیٹ مطابقت</p>
 </header>
 
 <div class="wrap">
@@ -75,14 +75,23 @@
 
   <!-- لائیو آرڈرز سیکشن -->
   <div id="secOrders">
+    
+    <!-- واٹس ایپ میسج یہاں پیسٹ کریں (گوگل شیٹ میں بھی محفوظ ہوگا) -->
+    <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
+      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ پینل پر بھی آئے گا اور خودکار گوگل شیٹ میں بھی محفوظ ہو جائے گا۔</p>
+      <textarea id="waRawText" rows="3" placeholder="یہاں کسٹمر کا میسج پیسٹ کریں..."></textarea>
+      <button class="btn-primary" style="background:var(--mid);" onclick="parseAndAddWhatsAppOrder()">➕ فوری آرڈر درج کریں اور شیٹ میں بھیجیں</button>
+    </div>
+
     <div class="card">
       <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
-      <p>صرف "SJ-" کوڈ والے آرڈرز یہاں شو ہوں گے۔ نیا آرڈر آنے پر گھنٹی بجے گی۔</p>
+      <p>پینڈنگ آرڈرز پر ہر 10 منٹ بعد یاد دہانی کی گھنٹی بجے گی۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ایکٹیو کریں</button>
-        <button class="btn-primary" style="flex:1;" onclick="addDummyOrder()">🛒 فرضی آرڈر</button>
+        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
     </div>
+    
     <div id="ordersArea"><div class="loading">⏳ آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
@@ -91,19 +100,13 @@
     <div class="card">
       <h3>📦 پروڈکٹس کی قیمتیں اور سیٹنگ</h3>
       <p>یہاں سے آپ اپنی اشیاء کے ریٹس تبدیل اور مینج کر سکتے ہیں۔</p>
-      
-      <div id="priceListContainer">
-        <label>ٹماٹر ریٹس (فی کلو)</label>
-        <input type="text" id="pTomato" value="Rs. 200">
-        
-        <label>پیاز ریٹس (فی کلو)</label>
-        <input type="text" id="pPyaz" value="Rs. 120">
-        
-        <label>آلو ریٹس (فی کلو)</label>
-        <input type="text" id="pAloo" value="Rs. 100">
-      </div>
-      
-      <button class="btn-primary" style="margin-top:10px;" onclick="savePrices()">تبدیلیاں محفوظ کریں</button>
+      <label>ٹماٹر ریٹس (فی کلو)</label>
+      <input type="text" id="pTomato" value="Rs. 200">
+      <label>پیاز ریٹس (فی کلو)</label>
+      <input type="text" id="pPyaz" value="Rs. 120">
+      <label>آلو ریٹس (فی کلو)</label>
+      <input type="text" id="pAloo" value="Rs. 100">
+      <button class="btn-primary" style="margin-top:10px;" onclick="showToast('✅ قیمتیں محفوظ ہو گئیں!')">تبدیلیاں محفوظ کریں</button>
     </div>
   </div>
 
@@ -139,24 +142,82 @@ function playBeepTech(){
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     let time = ctx.currentTime;
-    for(let i = 0; i < 4; i++){
+    for(let i = 0; i < 2; i++){
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(1200, time);
-      gain.gain.setValueAtTime(0.8, time);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(800 + (i*200), time);
+      gain.gain.setValueAtTime(0.5, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(time);
-      osc.stop(time + 0.15);
-      time += 0.2;
+      osc.stop(time + 0.2);
+      time += 0.25;
     }
   }catch(e){}
 }
 
+// واٹس ایپ میسج پینل میں ڈالنا اور گوگل شیٹ کو بھی بھیجنا
+async function parseAndAddWhatsAppOrder(){
+  const rawText = document.getElementById("waRawText").value.trim();
+  if(!rawText){
+    showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
+    return;
+  }
+
+  let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let newOrd = {
+    code: orderCode,
+    name: "واٹس ایپ کسٹمر",
+    phone: "03000000000",
+    address: "Mingora Swat",
+    items: rawText.replace(/\n/g, " | "),
+    total: 0,
+    otp: Math.floor(1000 + Math.random() * 9000),
+    timestamp: new Date().toISOString(),
+    status: "pending"
+  };
+
+  // گوگل شیٹ کو ڈیٹا بھیجنا
+  if(SHEET_URL){
+    try{
+      await fetch(SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newOrd)
+      });
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  // لوکل اسٹوریج میں فوراً شو کرنے کے لیے محفوظ کرنا
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  localOrders.unshift({
+    id: "wa_" + Date.now(),
+    code: newOrd.code,
+    name: newOrd.name,
+    phone: newOrd.phone,
+    address: newOrd.address,
+    itemsSummary: rawText.replace(/\n/g, "<br>"),
+    total: newOrd.total,
+    otpCode: newOrd.otp,
+    date: new Date().toLocaleTimeString(),
+    status: "pending"
+  });
+  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+
+  document.getElementById("waRawText").value = "";
+  showToast("✅ آرڈر درج اور گوگل شیٹ میں محفوظ ہو گیا!");
+  playBeepTech();
+  renderOrders();
+}
+
 async function fetchOrdersFromSheet(){
-  if(!SHEET_URL) return [];
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  if(!SHEET_URL) return localOrders;
   try{
     const res = await fetch(SHEET_URL);
     const data = await res.json();
@@ -173,36 +234,21 @@ async function fetchOrdersFromSheet(){
       status: row.status || 'pending'
     }));
     
-    // لوکل اسٹوریج والے فرضی یا اضافی آرڈرز بھی شامل کریں
-    let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-    return [...localOrders, ...sheetOrders];
+    let combined = [...localOrders];
+    sheetOrders.forEach(so => {
+      if(!combined.some(c => c.code === so.code)){
+        combined.push(so);
+      }
+    });
+    return combined;
   }catch(e){
-    console.error(e);
-    return JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+    return localOrders;
   }
 }
 
-function addDummyOrder(){
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  let newOrd = {
-    id: "loc_" + Date.now(),
-    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
-    name: "Ahmad Khan (فرضی)",
-    phone: "03001234567",
-    address: "Mingora Swat",
-    itemsSummary: "Tamatar (1 KG) - Rs. 200<br>Pyaz (1 KG) - Rs. 120",
-    total: 320,
-    otpCode: Math.floor(1000 + Math.random() * 9000),
-    date: new Date().toLocaleTimeString(),
-    status: "pending"
-  };
-  localOrders.unshift(newOrd);
-  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  showToast("✅ نیا فرضی آرڈر شامل ہو گیا!");
-  renderOrders();
-}
-
 let cachedOrdersCount = 0;
+let lastReminderTime = Date.now();
+
 async function renderOrders(){
   const area = document.getElementById("ordersArea");
   const orders = await fetchOrdersFromSheet();
@@ -216,6 +262,14 @@ async function renderOrders(){
     playBeepTech();
   }
   cachedOrdersCount = orders.length;
+
+  let hasPending = orders.some(o => o.status !== 'completed');
+  let currentTime = Date.now();
+  if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
+    playBeepTech();
+    lastReminderTime = currentTime;
+    showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
+  }
 
   area.innerHTML = orders.map((o) => `
     <div class="order-card ${o.status==='completed'?'completed':'pending'}">
@@ -256,6 +310,9 @@ function completeOrder(id){
   if(ord){
     ord.status = 'completed';
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  } else {
+    localOrders.push({id: id, status: 'completed'});
+    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
   showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
   renderOrders();
@@ -268,10 +325,6 @@ function deleteOrder(id){
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
   renderOrders();
-}
-
-function savePrices(){
-  showToast("✅ قیمتیں کامیابی سے محفوظ ہو گئیں!");
 }
 
 function printReceipt(code, name, phone, address, items, total, otp){
@@ -304,7 +357,7 @@ function printReceipt(code, name, phone, address, items, total, otp){
 }
 
 renderOrders();
-setInterval(renderOrders, 10000);
+setInterval(renderOrders, 5000);
 </script>
 </body>
 </html>

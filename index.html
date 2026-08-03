@@ -46,7 +46,6 @@
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
-  /* Fixed frame height for Top Deals to prevent any shaking/jumping */
   .featured-section{
     margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
     border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
@@ -73,7 +72,6 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* Sticky Top Container for Search & Category Bar */
   .sticky-top-container{
     position: sticky;
     top: 0;
@@ -135,11 +133,22 @@
   }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
   
-  .item-row-top{display:flex; align-items:center; gap:12px;}
+  .item-row-top{display:flex; align-items:center; gap:12px; position:relative;}
+  
+  /* Left side availability checkmark badge positioned above/near top-left */
   .avail-checkbox{
-    flex:0 0 32px; width:32px; height:32px; border-radius:10px; background:var(--mid);
-    display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(46,125,50,0.25);
-    margin-left: 10px;
+    position: absolute;
+    top: -8px;
+    left: -6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(46,125,50,0.25);
+    z-index: 5;
   }
   .avail-checkbox.no{ background:#B71C1C; }
 
@@ -591,7 +600,7 @@ function createItemRow(it){
   row.innerHTML = `
     <div class="item-row-top">
       <div class="avail-checkbox ${it.available ? 'yes' : 'no'}">
-        ${it.available ? `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
+        ${it.available ? `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="12" height="12" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
       </div>
       <div class="item-thumb" onclick="event.stopPropagation(); openLightbox('${it.image||''}', '${it.name}')">
         ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}

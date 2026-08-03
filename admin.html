@@ -54,8 +54,8 @@
   .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-top:10px; display:none;}
   .chat-detail.open{display:block;}
 
-  .cat-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;}
-  .cat-box h4{margin:0 0 6px; font-size:13px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
+  .cat-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:12px;}
+  .cat-box h4{margin:0 0 8px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif; border-bottom:1px dashed var(--line); padding-bottom:4px;}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -70,7 +70,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — لائیو ان باکس پینل</h1>
-  <p>محفوظ ان باکس، پروڈکٹس اور مکمل ریٹس لسٹ</p>
+  <p>محفوظ ان باکس، واٹس ایپ ڈائریکٹ اور مکمل پروڈکٹ ریٹس</p>
 </header>
 
 <div class="wrap">
@@ -104,54 +104,87 @@
     <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
   </div>
 
-  <!-- پروڈکٹس اور ریٹس سیکشن (مکمل بحال شدہ کیٹگریز اور نام) -->
+  <!-- پروڈکٹس اور ریٹس سیکشن (تمام کیٹگریز اور مکمل اشیاء کے ساتھ بحال) -->
   <div id="secProducts" style="display:none;">
     <div class="card">
       <h3>📦 پروڈکٹس کی قیمتیں اور کیٹگریز (مکمل لسٹ)</h3>
-      <p>یہاں سے آپ اپنی تمام اشیاء کے ریٹس چیک اور اپ ڈیٹ کر سکتے ہیں۔</p>
+      <p>یہاں سے آپ اپنی دکان کی تمام اشیاء اور سب کیٹگریز کے ریٹس کنٹرول کرتے ہیں۔</p>
       
       <!-- کیٹگری 1: تازہ سبزیاں -->
       <div class="cat-box">
         <h4>🍅 تازہ سبزیاں (Fresh Vegetables)</h4>
         <label>ٹماٹر (1 کلو)</label>
-        <input type="text" id="pTomato" value="Rs. 200">
+        <input type="text" id="p_tamatar" value="Rs. 200">
         <label>پیاز (1 کلو)</label>
-        <input type="text" id="pPyaz" value="Rs. 120">
+        <input type="text" id="p_pyaz" value="Rs. 120">
         <label>آلو (1 کلو)</label>
-        <input type="text" id="pAloo" value="Rs. 100">
+        <input type="text" id="p_aloo" value="Rs. 100">
         <label>سبز مرچ (پاؤ)</label>
-        <input type="text" id="pMirch" value="Rs. 50">
-        <label>ادرک و لہسن سیٹ</label>
-        <input type="text" id="pAdrakLehsan" value="Rs. 150">
+        <input type="text" id="p_mirch" value="Rs. 50">
+        <label>ادرک (پاؤ)</label>
+        <input type="text" id="p_adrak" value="Rs. 120">
+        <label>لہسن (پاؤ)</label>
+        <input type="text" id="p_lehsan" value="Rs. 100">
+        <label>کھیرا (1 کلو)</label>
+        <input type="text" id="p_kheera" value="Rs. 90">
+        <label>لیموں (پاؤ)</label>
+        <input type="text" id="p_lemo" value="Rs. 70">
+        <label>بند گوبھی (عدد)</label>
+        <input type="text" id="p_gobhi" value="Rs. 80">
+        <label>مٹر (1 کلو)</label>
+        <input type="text" id="p_matar" value="Rs. 250">
       </div>
 
-      <!-- کیٹگری 2: پھل اور سلاد -->
+      <!-- کیٹگری 2: پھل -->
       <div class="cat-box">
-        <h4>🍌 پھل اور سلاد (Fruits & Salad)</h4>
+        <h4>🍌 تازہ پھل (Fresh Fruits)</h4>
         <label>کیلا (درجن)</label>
-        <input type="text" id="pKela" value="Rs. 180">
+        <input type="text" id="p_kela" value="Rs. 180">
         <label>سیب کالا کلو (1 کلو)</label>
-        <input type="text" id="pSeeb" value="Rs. 300">
-        <label>کھیرا (1 کلو)</label>
-        <input type="text" id="pKheera" value="Rs. 100">
-        <label>لیموں (پاؤ)</label>
-        <input type="text" id="pLemo" value="Rs. 80">
+        <input type="text" id="p_seeb" value="Rs. 300">
+        <label>انار (1 کلو)</label>
+        <input type="text" id="p_anar" value="Rs. 350">
+        <label>انگور (1 کلو)</label>
+        <input type="text" id="p_angoor" value="Rs. 300">
       </div>
 
       <!-- کیٹگری 3: کریانہ اور ضروری اشیاء -->
       <div class="cat-box">
-        <h4>🛒 کریانہ اور روزمرہ اشیاء (Grocery)</h4>
+        <h4>🛒 کریانہ اور روزمرہ اشیاء (Grocery & Essentials)</h4>
         <label>سفید آٹا (10 کلو تھیلا)</label>
-        <input type="text" id="pAtta" value="Rs. 1450">
+        <input type="text" id="p_atta" value="Rs. 1450">
         <label>چینی (1 کلو)</label>
-        <input type="text" id="pCheeni" value="Rs. 140">
+        <input type="text" id="p_cheeni" value="Rs. 140">
         <label>کوکنگ آئل (1 لیٹر)</label>
-        <input type="text" id="pOil" value="Rs. 550">
+        <input type="text" id="p_oil" value="Rs. 550">
         <label>دال چنا (1 کلو)</label>
-        <input type="text" id="pDaal" value="Rs. 320">
+        <input type="text" id="p_daalchana" value="Rs. 320">
+        <label>دال مسور (1 کلو)</label>
+        <input type="text" id="p_daalmasoor" value="Rs. 300">
+        <label>چاول باسمتی (1 کلو)</label>
+        <input type="text" id="p_chawal" value="Rs. 280">
+        <label>چائے کی پتی (پیکٹ)</label>
+        <input type="text" id="p_tea" value="Rs. 450">
+        <label>انڈے (درجن)</label>
+        <input type="text" id="p_eggs" value="Rs. 320">
+        <label>خالص دودھ (1 لیٹر)</label>
+        <input type="text" id="p_milk" value="Rs. 220">
       </div>
 
-      <button class="btn-primary" style="margin-top:10px;" onclick="saveAllPrices()">تمام قیمتیں محفوظ کریں</button>
+      <!-- کیٹگری 4: مصالحہ جات اور دیگر -->
+      <div class="cat-box">
+        <h4>🌶️ مصالحہ جات و دیگر (Spices & Others)</h4>
+        <label>لال مرچ پاؤڈر (پیکٹ)</label>
+        <input type="text" id="p_redchili" value="Rs. 120">
+        <label>ہلدی پاؤڈر (پیکٹ)</label>
+        <input type="text" id="p_haldi" value="Rs. 90">
+        <label>نمک (پیکٹ)</label>
+        <input type="text" id="p_salt" value="Rs. 50">
+        <label>مکس گرم مصالحہ (پاؤ)</label>
+        <input type="text" id="p_garmmasala" value="Rs. 200">
+      </div>
+
+      <button class="btn-primary" style="margin-top:10px;" onclick="saveAllPrices()">تمام قیمتیں اور کیٹگریز محفوظ کریں</button>
     </div>
   </div>
 
@@ -212,41 +245,45 @@ function playBeepTech(){
 
 function saveAllPrices(){
   let prices = {
-    tomato: document.getElementById("pTomato").value,
-    pyaz: document.getElementById("pPyaz").value,
-    aloo: document.getElementById("pAloo").value,
-    mirch: document.getElementById("pMirch").value,
-    adrakLehsan: document.getElementById("pAdrakLehsan").value,
-    kela: document.getElementById("pKela").value,
-    seeb: document.getElementById("pSeeb").value,
-    kheera: document.getElementById("pKheera").value,
-    lemo: document.getElementById("pLemo").value,
-    atta: document.getElementById("pAtta").value,
-    cheeni: document.getElementById("pCheeni").value,
-    oil: document.getElementById("pOil").value,
-    daal: document.getElementById("pDaal").value
+    tamatar: document.getElementById("p_tamatar").value,
+    pyaz: document.getElementById("p_pyaz").value,
+    aloo: document.getElementById("p_aloo").value,
+    mirch: document.getElementById("p_mirch").value,
+    adrak: document.getElementById("p_adrak").value,
+    lehsan: document.getElementById("p_lehsan").value,
+    kheera: document.getElementById("p_kheera").value,
+    lemo: document.getElementById("p_lemo").value,
+    gobhi: document.getElementById("p_gobhi").value,
+    matar: document.getElementById("p_matar").value,
+    kela: document.getElementById("p_kela").value,
+    seeb: document.getElementById("p_seeb").value,
+    anar: document.getElementById("p_anar").value,
+    angoor: document.getElementById("p_angoor").value,
+    atta: document.getElementById("p_atta").value,
+    cheeni: document.getElementById("p_cheeni").value,
+    oil: document.getElementById("p_oil").value,
+    daalchana: document.getElementById("p_daalchana").value,
+    daalmasoor: document.getElementById("p_daalmasoor").value,
+    chawal: document.getElementById("p_chawal").value,
+    tea: document.getElementById("p_tea").value,
+    eggs: document.getElementById("p_eggs").value,
+    milk: document.getElementById("p_milk").value,
+    redchili: document.getElementById("p_redchili").value,
+    haldi: document.getElementById("p_haldi").value,
+    salt: document.getElementById("p_salt").value,
+    garmmasala: document.getElementById("p_garmmasala").value
   };
   localStorage.setItem("sj_shop_prices", JSON.stringify(prices));
-  showToast("✅ تمام پروڈکٹس اور ریٹس کامیابی سے محفوظ ہو گئے!");
+  showToast("✅ تمام پروڈکٹس اور ریٹس محفوظ ہو گئے!");
 }
 
-// لوڈ ہوتے وقت محفوظ قیمتیں واپس شو کرنا
 window.addEventListener('DOMContentLoaded', () => {
   let savedPrices = JSON.parse(localStorage.getItem("sj_shop_prices"));
   if(savedPrices){
-    if(savedPrices.tomato) document.getElementById("pTomato").value = savedPrices.tomato;
-    if(savedPrices.pyaz) document.getElementById("pPyaz").value = savedPrices.pyaz;
-    if(savedPrices.aloo) document.getElementById("pAloo").value = savedPrices.aloo;
-    if(savedPrices.mirch) document.getElementById("pMirch").value = savedPrices.mirch;
-    if(savedPrices.adrakLehsan) document.getElementById("pAdrakLehsan").value = savedPrices.adrakLehsan;
-    if(savedPrices.kela) document.getElementById("pKela").value = savedPrices.kela;
-    if(savedPrices.seeb) document.getElementById("pSeeb").value = savedPrices.seeb;
-    if(savedPrices.kheera) document.getElementById("pKheera").value = savedPrices.kheera;
-    if(savedPrices.lemo) document.getElementById("pLemo").value = savedPrices.lemo;
-    if(savedPrices.atta) document.getElementById("pAtta").value = savedPrices.atta;
-    if(savedPrices.cheeni) document.getElementById("pCheeni").value = savedPrices.cheeni;
-    if(savedPrices.oil) document.getElementById("pOil").value = savedPrices.oil;
-    if(savedPrices.daal) document.getElementById("pDaal").value = savedPrices.daal;
+    for(let key in savedPrices){
+      let el = document.getElementById("p_" + key);
+      if(el) el.value = savedPrices[key];
+    }
   }
 });
 
@@ -338,7 +375,6 @@ async function fetchOrdersFromSheet(){
 
 let cachedOrdersCount = 0;
 let lastReminderTime = Date.now();
-// کھلا ہوا ان باکس یاد رکھنے کے لیے ویری ایبل
 let activeChatId = null;
 
 async function renderOrders(){
@@ -378,7 +414,6 @@ async function renderOrders(){
           </div>
         </div>
 
-        <!-- ان باکس ڈیٹیل جو خود بند نہیں ہوگی -->
         <div class="chat-detail${isOpen}" id="detail_${o.id}">
           <hr style="border:0; border-top:1px solid var(--line); margin:10px 0;">
           <div style="font-size:13.5px; line-height:1.7;">

@@ -79,8 +79,8 @@
   .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; opacity: 1; }
   .home-cat-img-wrap img.fade-out { opacity: 0; }
 
-  .home-cat-name { font-size: 14px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
-  .home-cat-urdu { font-size: 11.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
+  .home-cat-name { font-size: 15px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
+  .home-cat-urdu { font-size: 12.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
 
   .back-cat-btn{
     background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
@@ -263,13 +263,6 @@
     <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
     <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa</span></div>
     <div class="feature-card"><span class="ic">🕙</span><span class="tx">10AM-8PM Support</span></div>
-    <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
-    <div class="feature-card"><span class="ic">💰</span><span class="tx">Best Rates</span></div>
-    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fast Delivery</span></div>
-    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payment</span></div>
-    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
-    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa</span></div>
-    <div class="feature-card"><span class="ic">🕙</span><span class="tx">10AM-8PM Support</span></div>
   </div>
 </div>
 
@@ -443,7 +436,7 @@ function renderChips(){
     `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
   document.getElementById("chips").innerHTML = `
-    <div class="cat-marquee-track" style="${currentSelectedCategory ? 'animation:none; justify-content:center; flex-wrap:wrap;' : ''}">
+    <div class="cat-marquee-track">
       <div style="display:flex; gap:10px;">${chips}</div>
       <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
     </div>`;
@@ -670,7 +663,6 @@ document.getElementById("waBtn").onclick = () => {
   let subtotal = 0;
   let summaryHtml = "";
   
-  // یہاں کسٹمر کا نام خود بخود آ گیا ہے (محترم [نام] صاحب!)
   let msg = `🟢 *SJ Foods Online — آرڈر ریسیوڈ & کنفرمیشن* [${orderCode}]\n\n`;
   msg += `محترم *${name}* صاحب! آپ کا آرڈر ہمیں کامیابی سے موصول ہو گیا ہے۔ ہم ہر چیز سو فیصد معیار اور تول کے ساتھ تیار کرنے کے لیے پرعزم ہیں۔ آپ کے اعتماد کا شکریہ! 🌿\n\n`;
   msg += `👤 نام: ${name}\n`;

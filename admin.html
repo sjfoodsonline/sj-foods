@@ -53,10 +53,9 @@
   .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-top:10px; display:none;}
   .chat-detail.open{display:block;}
 
-  .cat-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:12px;}
-  .cat-box h4{margin:0 0 8px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif; border-bottom:1px dashed var(--line); padding-bottom:4px;}
-  .row-flex{display:flex; gap:8px;}
-  .row-flex > div{flex:1;}
+  .admin-item-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;}
+  .admin-item-info{font-size:13px; font-weight:700; color:var(--dark);}
+  .admin-item-sub{font-size:11px; color:var(--muted);}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -71,7 +70,7 @@
 
 <header>
   <h1>⚙️ SJ Foods — لائیو ایڈمن پینل</h1>
-  <p>مکمل ان باکس، کیٹگریز، ریٹس اور دستیابی کنٹرول</p>
+  <p>ان باکس آرڈرز اور ویب سائٹ ریٹس لائیو کنٹرول</p>
 </header>
 
 <div class="wrap">
@@ -79,7 +78,7 @@
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
     <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
+    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 ویب سائٹ ریٹس</div>
   </div>
 
   <!-- نیا واٹس ایپ آرڈر درج کرنے کا سیکشن -->
@@ -105,100 +104,12 @@
     <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
   </div>
 
-  <!-- پروڈکٹس، ریٹس، پیکنگ اور دستیابی کا مکمل سیکشن -->
+  <!-- ویب سائٹ کی تمام اشیاء اور ریٹس لائیو دکھانے کا سیکشن -->
   <div id="secProducts" style="display:none;">
     <div class="card">
-      <h3>📦 پروڈکٹس، کیٹگریز، ریٹس اور دستیابی</h3>
-      <p>یہاں سے آپ اپنی تمام پرانی کیٹگریز اور اشیاء کے ریٹس اور دستیابی کنٹرول کرتے ہیں۔</p>
-      
-      <!-- کیٹگری 1: تازہ سبزیاں -->
-      <div class="cat-box">
-        <h4>🍅 تازہ سبزیاں (Fresh Vegetables)</h4>
-        
-        <label>ٹماٹر (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_tamatar" value="Rs. 200 / کلو">
-          <select id="av_tamatar"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>پیاز (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_pyaz" value="Rs. 120 / کلو">
-          <select id="av_pyaz"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>آلو (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_aloo" value="Rs. 100 / کلو">
-          <select id="av_aloo"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>سبز مرچ (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_mirch" value="Rs. 50 / پاؤ">
-          <select id="av_mirch"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>ادرک و لہسن سیٹ (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_adraklehsan" value="Rs. 150 / سیٹ">
-          <select id="av_adraklehsan"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-      </div>
-
-      <!-- کیٹگری 2: پھل اور سلاد -->
-      <div class="cat-box">
-        <h4>🍌 پھل اور سلاد (Fruits & Salad)</h4>
-        
-        <label>کیلا (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_kela" value="Rs. 180 / درجن">
-          <select id="av_kela"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>سیب کالا کلو (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_seeb" value="Rs. 300 / کلو">
-          <select id="av_seeb"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>کھیرا (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_kheera" value="Rs. 100 / کلو">
-          <select id="av_kheera"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-      </div>
-
-      <!-- کیٹگری 3: کریانہ اور ضروری اشیاء -->
-      <div class="cat-box">
-        <h4>🛒 کریانہ اور روزمرہ اشیاء (Grocery)</h4>
-        
-        <label>سفید آٹا (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_atta" value="Rs. 1450 / 10 کلو پیکنگ">
-          <select id="av_atta"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>چینی (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_cheeni" value="Rs. 140 / کلو">
-          <select id="av_cheeni"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>کوکنگ آئل (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_oil" value="Rs. 550 / لیٹر">
-          <select id="av_oil"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-
-        <label>دال چنا (ریٹ اور دستیابی)</label>
-        <div class="row-flex">
-          <input type="text" id="p_daal" value="Rs. 320 / کلو">
-          <select id="av_daal"><option value="موجود ہے">موجود ہے</option><option value="خالی / ختم">خالی / ختم</option></select>
-        </div>
-      </div>
-
-      <button class="btn-primary" style="margin-top:10px;" onclick="saveAllPrices()">تمام قیمتیں اور دستیابی محفوظ کریں</button>
+      <h3>📦 ویب سائٹ پر موجود تمام اشیاء اور ریٹس</h3>
+      <p>یہ وہ تمام اشیاء ہیں جو اس وقت آپ کی ویب سائٹ (`index.html`) پر لائیو کام کر رہی ہیں۔</p>
+      <div id="adminProductsList"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
     </div>
   </div>
 
@@ -227,6 +138,7 @@ function switchTab(tabName){
   } else {
     document.getElementById('tabProductsBtn').className = 'tab active';
     document.getElementById('secProducts').style.display = 'block';
+    loadAdminProducts();
   }
 }
 
@@ -257,28 +169,39 @@ function playBeepTech(){
   }catch(e){}
 }
 
-function saveAllPrices(){
-  let items = ['tamatar', 'pyaz', 'aloo', 'mirch', 'adraklehsan', 'kela', 'seeb', 'kheera', 'atta', 'cheeni', 'oil', 'daal'];
-  let shopData = {};
-  items.forEach(item => {
-    shopData[item] = {
-      price: document.getElementById("p_" + item).value,
-      av: document.getElementById("av_" + item).value
-    };
-  });
-  localStorage.setItem("sj_shop_full_data", JSON.stringify(shopData));
-  showToast("✅ تمام قیمتیں، پیکنگ اور دستیابی محفوظ ہو گئی!");
-}
+// ویب سائٹ کی لائیو فائیلوں سے اشیاء اور ریٹس لوڈ کرنے کا فنکشن
+async function loadAdminProducts(){
+  const container = document.getElementById("adminProductsList");
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+    const catResults = await Promise.all(
+      index.map(entry => fetch(entry.file, {cache:"no-store"}).then(r=>r.json()))
+    );
 
-window.addEventListener('DOMContentLoaded', () => {
-  let savedData = JSON.parse(localStorage.getItem("sj_shop_full_data"));
-  if(savedData){
-    for(let key in savedData){
-      if(document.getElementById("p_" + key)) document.getElementById("p_" + key).value = savedData[key].price;
-      if(document.getElementById("av_" + key)) document.getElementById("av_" + key).value = savedData[key].av;
-    }
+    let html = "";
+    index.forEach((entry, i) => {
+      let items = catResults[i];
+      html += `<h4 style="color:var(--dark); margin:12px 0 6px; border-bottom:1px solid var(--line); padding-bottom:4px;">${entry.icon} ${entry.category}</h4>`;
+      items.forEach(it => {
+        let rateStr = it.rate ? `Rs. ${it.rate} / ${it.unit}` : (it.units ? it.units.map(u=>`${u.label}: Rs.${u.rate}`).join(", ") : "");
+        let status = it.available !== false ? "🟢 موجود ہے" : "🔴 ناموجود";
+        html += `
+          <div class="admin-item-box">
+            <div>
+              <div class="admin-item-info">${it.name} ${it.name_roman ? '('+it.name_roman+')' : ''}</div>
+              <div class="admin-item-sub">نرخ: <b>${rateStr}</b></div>
+            </div>
+            <div style="font-size:12px; font-weight:700;">${status}</div>
+          </div>
+        `;
+      });
+    });
+    container.innerHTML = html;
+  }catch(e){
+    container.innerHTML = `<div style="color:var(--price); text-align:center;">⚠️ ریٹ فائیلیں لوڈ کرنے میں مسئلہ آیا (categories_index.json چیک کریں)</div>`;
   }
-});
+}
 
 async function parseAndAddWhatsAppOrder(){
   const rawText = document.getElementById("waRawText").value.trim();

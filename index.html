@@ -72,15 +72,23 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* Search bar positioned directly below Top Deals & Special Offers */
-  .search-wrap{padding:10px 16px; background:var(--paper); z-index:20;}
+  /* Sticky Search Bar Container at Top */
+  .sticky-top-container{
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--paper);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+
+  .search-wrap{padding:10px 16px; background:var(--paper);}
   #search{
     width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
     background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
   }
 
-  /* Sticky Category Bar */
-  .cat-section{padding:8px 0; position:sticky; top:0; background:var(--paper); z-index:25; box-shadow:0 4px 10px rgba(0,0,0,0.05);}
+  /* Sticky Category Bar inside sticky container */
+  .cat-section{padding:6px 0 8px; background:var(--paper);}
   .cat-marquee-wrap{ overflow-x:auto; position:relative; padding:4px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .cat-marquee-wrap::-webkit-scrollbar { display: none; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
@@ -117,7 +125,7 @@
     padding: 8px 16px; font-size: 13.5px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
   }
 
-  main{padding:6px 16px 100px;}
+  main{padding:10px 16px 100px;}
   .cat-title{
     font-size:18px; font-weight:bold; color:var(--dark); margin:10px 2px 14px; padding-right:10px; border-right:4px solid var(--dark);
     font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:space-between;
@@ -276,15 +284,15 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- Search bar positioned directly below Top Deals -->
-<div class="search-wrap">
-  <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-</div>
-
-<!-- Sticky Category Bar -->
-<div class="cat-section">
-  <div class="cat-marquee-wrap" id="catScrollContainer">
-    <div class="cat-marquee-track" id="chipsTrack"></div>
+<!-- Sticky Container wrapping Search Bar and Category Marquee together -->
+<div class="sticky-top-container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap" id="catScrollContainer">
+      <div class="cat-marquee-track" id="chipsTrack"></div>
+    </div>
   </div>
 </div>
 
@@ -518,7 +526,6 @@ function renderMainView(filter=""){
       container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج (کلک کرنے پر کیٹگری میں جائیں)</div>`;
       filteredItems.forEach(it => {
         let row = createItemRow(it);
-        // Clicking search result jumps directly to its category view
         row.onclick = () => jumpToCategory(it.cat);
         container.appendChild(row);
       });

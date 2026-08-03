@@ -64,11 +64,15 @@
   
   .deal-grid { display: flex; gap: 12px; justify-content: center; }
 
+  /* سموتھ ٹرانزیشن اور فیڈ ایفیکٹ کے لیے */
   .deal-card{
     flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:0 4px 15px rgba(0,0,0,0.06); 
+    transition: opacity 0.6s ease-in-out, transform 0.4s ease;
+    opacity: 1;
   }
+  .deal-card.fade-out { opacity: 0; transform: scale(0.95); }
 
   .deal-card img, .deal-card .deal-icon-box{
     width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
@@ -91,9 +95,11 @@
   
   .item-row-top{display:flex; align-items:center; gap:12px;}
 
+  /* دستیابی کا گرین/ریڈ چیک مارک اب بالکل بائیں جانب منتقل کر دیا گیا ہے */
   .avail-checkbox{
     flex:0 0 32px; width:32px; height:32px; border-radius:10px; background:var(--mid);
     display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(46,125,50,0.25);
+    order: -1; /* بائیں طرف لانے کے لیے */
   }
   .avail-checkbox.no{ background:#B71C1C; }
 
@@ -358,6 +364,7 @@ function renderList(filter){
       row.id = "row-"+it.id;
       row.innerHTML = `
         <div class="item-row-top">
+          <!-- گرین/ریڈ چیک مارک اب بالکل بائیں طرف ہے -->
           <div class="avail-checkbox ${it.available ? 'yes' : 'no'}">
             ${it.available ? `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
           </div>
@@ -385,15 +392,17 @@ function renderList(filter){
 }
 
 function changeUnit(id, idx){
-  const it = ITEMS.find(x => x.id === id);
-  it.unitIndex = parseInt(idx);
-  renderList(document.getElementById("search").value);
-  renderBill();
+  const catItem = ITEMS.find(x => x.id === id);
+  if(catItem){
+    catItem.unitIndex = parseInt(idx);
+    renderList(document.getElementById("search").value);
+    renderBill();
+  }
 }
 
 function changeQty(id, delta){
   const it = findItem(id);
-  if(!it.available) return;
+  if(!it || !it.available) return;
   it.qty = Math.max(0, it.qty + delta);
   renderList(document.getElementById("search").value);
   renderBill();
@@ -494,7 +503,6 @@ document.getElementById("waBtn").onclick = () => {
   msg += `🌿 *آٹو ریپلائی / یقین دہانی:* محترم گاہک! آپ کا آرڈر نمبر [${orderCode}] ہمیں مل گیا ہے۔ ہم آپ کے لیے بہترین، تازہ، معیاری اور کم وقت میں اشیاء پہنچانے کے لیے پرعزم ہیں۔ اب ہم اس آرڈر پر کام شروع کر رہے ہیں!\n\n`;
   msg += `✍️ (ترسیل کے وقت تھرمل رسید پر دستخط / Signature کے لیے تیار رہیں)`;
 
-  // سب سے اہم تبدیلی: براہ راست sj_local_orders میں محفوظ کرنا تاکہ ایڈمن پینل کو فوراً گھنٹی کے ساتھ نظر آئے
   const otpCode = Math.floor(1000 + Math.random() * 9000);
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({
@@ -511,7 +519,6 @@ document.getElementById("waBtn").onclick = () => {
   });
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
-  // گوگل شیٹ پر بھی بیک گراؤنڈ میں بھیجنا
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
     fetch(SHEET_URL, {
@@ -530,6 +537,7 @@ document.getElementById("waBtn").onclick = () => {
   showToast("✅ آرڈر ایڈمن ان باکس میں درج ہو گیا!");
 };
 
+/* ٹاپ ڈیلز کی سموتھ ٹرانزیشن اور فیڈ اینیمیشن کے ساتھ */
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
@@ -540,27 +548,40 @@ function renderFeatured(){
   let currentIndex = 0;
   const updateFeaturedGrid = () => {
     if(feat.length === 0) return;
-    let first = feat[currentIndex % feat.length];
-    let second = feat[(currentIndex + 1) % feat.length];
     
-    box.innerHTML = `
-      <div class="deal-card" onclick="scrollToMainItem('${first.id}')">
-        ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
-        <div class="d-name">${first.name_roman || first.name} (${first.name})</div>
-        <div class="d-rate">${fmt(first.units[0].rate)}</div>
-      </div>
-      <div class="deal-card" onclick="scrollToMainItem('${second.id}')">
-        ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
-        <div class="d-name">${second.name_roman || second.name} (${second.name})</div>
-        <div class="d-rate">${fmt(second.units[0].rate)}</div>
-      </div>
-    `;
-    currentIndex += 2;
+    // پرانی کارڈز پر فیڈ آؤٹ کلاس لگائیں
+    const cards = box.querySelectorAll('.deal-card');
+    cards.forEach(c => c.classList.add('fade-out'));
+
+    setTimeout(() => {
+      let first = feat[currentIndex % feat.length];
+      let second = feat[(currentIndex + 1) % feat.length];
+      
+      box.innerHTML = `
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${first.id}')">
+          ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
+          <div class="d-name">${first.name_roman || first.name} (${first.name})</div>
+          <div class="d-rate">${fmt(first.units[0].rate)}</div>
+        </div>
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${second.id}')">
+          ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
+          <div class="d-name">${second.name_roman || second.name} (${second.name})</div>
+          <div class="d-rate">${fmt(second.units[0].rate)}</div>
+        </div>
+      `;
+
+      // تھوڑی دیر بعد فیڈ ان کرنے کے لیے کلاس ہٹائیں
+      setTimeout(() => {
+        box.querySelectorAll('.deal-card').forEach(c => c.classList.remove('fade-out'));
+      }, 50);
+
+      currentIndex += 2;
+    }, 400); // ٹرانزیشن کا وقت
   };
 
   updateFeaturedGrid();
   if(feat.length > 2){
-    setInterval(updateFeaturedGrid, 3500);
+    setInterval(updateFeaturedGrid, 4000);
   }
 }
 

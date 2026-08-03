@@ -27,7 +27,7 @@
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  textarea, input[type=text]{
+  textarea, input[type=text], select{
     width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
     font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
   }
@@ -38,11 +38,11 @@
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   
   .tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px 6px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:12px; color:var(--muted); cursor:pointer;}
+  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11.5px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* ان باکس چیট لسٹ اسٹائل */
-  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px; cursor:pointer; transition:all .2s;}
+  /* ان باکس چیٹ لسٹ اسٹائل */
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;}
   .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
   .chat-item.completed{background:#F1F8E9; border-color:#81C784;}
   @keyframes superBlinking{ 
@@ -51,9 +51,11 @@
     100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
   }
 
-  /* چیٹ ڈیٹیل ماڈل / ویو */
-  .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-bottom:12px; display:none;}
+  .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-top:10px; display:none;}
   .chat-detail.open{display:block;}
+
+  .cat-box{background:#F9F8F3; border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px;}
+  .cat-box h4{margin:0 0 6px; font-size:13px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -67,19 +69,19 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ان باکس لائیو پینل</h1>
-  <p>واٹس ایپ ان باکس چیٹس اور گوگل شیٹ مطابقت</p>
+  <h1>⚙️ SJ Foods — لائیو ان باکس پینل</h1>
+  <p>محفوظ ان باکس، پروڈکٹس اور مکمل ریٹس لسٹ</p>
 </header>
 
 <div class="wrap">
 
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ نیا واٹس ایپ آرڈر</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ واٹس ایپ آرڈر</div>
     <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
-  <!-- نیا واٹس ایپ آرڈر درج کرنے کا سیکشن (دوسرا بٹن) -->
+  <!-- نیا واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
@@ -93,7 +95,7 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ کسی بھی چیٹ پر کلک کر کے اس کا مکمل ان باکس کھولیں۔</p>
+      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ "ان باکس کھولیں" پر کلک کر کے مکمل چیٹ اور ریٹس دیکھیں (چیٹ خود بند نہیں ہوگی)</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
@@ -102,18 +104,54 @@
     <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
   </div>
 
-  <!-- پروڈکٹس اور ریٹس سیکشن -->
+  <!-- پروڈکٹس اور ریٹس سیکشن (مکمل بحال شدہ کیٹگریز اور نام) -->
   <div id="secProducts" style="display:none;">
     <div class="card">
-      <h3>📦 پروڈکٹس کی قیمتیں اور سیٹنگ</h3>
-      <p>یہاں سے آپ اپنی اشیاء کے ریٹس تبدیل اور چیک کر سکتے ہیں۔</p>
-      <label>ٹماٹر ریٹس (فی کلو)</label>
-      <input type="text" id="pTomato" value="Rs. 200">
-      <label>پیاز ریٹس (فی کلو)</label>
-      <input type="text" id="pPyaz" value="Rs. 120">
-      <label>آلو ریٹس (فی کلو)</label>
-      <input type="text" id="pAloo" value="Rs. 100">
-      <button class="btn-primary" style="margin-top:10px;" onclick="showToast('✅ قیمتیں محفوظ ہو گئیں!')">تبدیلیاں محفوظ کریں</button>
+      <h3>📦 پروڈکٹس کی قیمتیں اور کیٹگریز (مکمل لسٹ)</h3>
+      <p>یہاں سے آپ اپنی تمام اشیاء کے ریٹس چیک اور اپ ڈیٹ کر سکتے ہیں۔</p>
+      
+      <!-- کیٹگری 1: تازہ سبزیاں -->
+      <div class="cat-box">
+        <h4>🍅 تازہ سبزیاں (Fresh Vegetables)</h4>
+        <label>ٹماٹر (1 کلو)</label>
+        <input type="text" id="pTomato" value="Rs. 200">
+        <label>پیاز (1 کلو)</label>
+        <input type="text" id="pPyaz" value="Rs. 120">
+        <label>آلو (1 کلو)</label>
+        <input type="text" id="pAloo" value="Rs. 100">
+        <label>سبز مرچ (پاؤ)</label>
+        <input type="text" id="pMirch" value="Rs. 50">
+        <label>ادرک و لہسن سیٹ</label>
+        <input type="text" id="pAdrakLehsan" value="Rs. 150">
+      </div>
+
+      <!-- کیٹگری 2: پھل اور سلاد -->
+      <div class="cat-box">
+        <h4>🍌 پھل اور سلاد (Fruits & Salad)</h4>
+        <label>کیلا (درجن)</label>
+        <input type="text" id="pKela" value="Rs. 180">
+        <label>سیب کالا کلو (1 کلو)</label>
+        <input type="text" id="pSeeb" value="Rs. 300">
+        <label>کھیرا (1 کلو)</label>
+        <input type="text" id="pKheera" value="Rs. 100">
+        <label>لیموں (پاؤ)</label>
+        <input type="text" id="pLemo" value="Rs. 80">
+      </div>
+
+      <!-- کیٹگری 3: کریانہ اور ضروری اشیاء -->
+      <div class="cat-box">
+        <h4>🛒 کریانہ اور روزمرہ اشیاء (Grocery)</h4>
+        <label>سفید آٹا (10 کلو تھیلا)</label>
+        <input type="text" id="pAtta" value="Rs. 1450">
+        <label>چینی (1 کلو)</label>
+        <input type="text" id="pCheeni" value="Rs. 140">
+        <label>کوکنگ آئل (1 لیٹر)</label>
+        <input type="text" id="pOil" value="Rs. 550">
+        <label>دال چنا (1 کلو)</label>
+        <input type="text" id="pDaal" value="Rs. 320">
+      </div>
+
+      <button class="btn-primary" style="margin-top:10px;" onclick="saveAllPrices()">تمام قیمتیں محفوظ کریں</button>
     </div>
   </div>
 
@@ -171,6 +209,46 @@ function playBeepTech(){
     }
   }catch(e){}
 }
+
+function saveAllPrices(){
+  let prices = {
+    tomato: document.getElementById("pTomato").value,
+    pyaz: document.getElementById("pPyaz").value,
+    aloo: document.getElementById("pAloo").value,
+    mirch: document.getElementById("pMirch").value,
+    adrakLehsan: document.getElementById("pAdrakLehsan").value,
+    kela: document.getElementById("pKela").value,
+    seeb: document.getElementById("pSeeb").value,
+    kheera: document.getElementById("pKheera").value,
+    lemo: document.getElementById("pLemo").value,
+    atta: document.getElementById("pAtta").value,
+    cheeni: document.getElementById("pCheeni").value,
+    oil: document.getElementById("pOil").value,
+    daal: document.getElementById("pDaal").value
+  };
+  localStorage.setItem("sj_shop_prices", JSON.stringify(prices));
+  showToast("✅ تمام پروڈکٹس اور ریٹس کامیابی سے محفوظ ہو گئے!");
+}
+
+// لوڈ ہوتے وقت محفوظ قیمتیں واپس شو کرنا
+window.addEventListener('DOMContentLoaded', () => {
+  let savedPrices = JSON.parse(localStorage.getItem("sj_shop_prices"));
+  if(savedPrices){
+    if(savedPrices.tomato) document.getElementById("pTomato").value = savedPrices.tomato;
+    if(savedPrices.pyaz) document.getElementById("pPyaz").value = savedPrices.pyaz;
+    if(savedPrices.aloo) document.getElementById("pAloo").value = savedPrices.aloo;
+    if(savedPrices.mirch) document.getElementById("pMirch").value = savedPrices.mirch;
+    if(savedPrices.adrakLehsan) document.getElementById("pAdrakLehsan").value = savedPrices.adrakLehsan;
+    if(savedPrices.kela) document.getElementById("pKela").value = savedPrices.kela;
+    if(savedPrices.seeb) document.getElementById("pSeeb").value = savedPrices.seeb;
+    if(savedPrices.kheera) document.getElementById("pKheera").value = savedPrices.kheera;
+    if(savedPrices.lemo) document.getElementById("pLemo").value = savedPrices.lemo;
+    if(savedPrices.atta) document.getElementById("pAtta").value = savedPrices.atta;
+    if(savedPrices.cheeni) document.getElementById("pCheeni").value = savedPrices.cheeni;
+    if(savedPrices.oil) document.getElementById("pOil").value = savedPrices.oil;
+    if(savedPrices.daal) document.getElementById("pDaal").value = savedPrices.daal;
+  }
+});
 
 async function parseAndAddWhatsAppOrder(){
   const rawText = document.getElementById("waRawText").value.trim();
@@ -260,6 +338,8 @@ async function fetchOrdersFromSheet(){
 
 let cachedOrdersCount = 0;
 let lastReminderTime = Date.now();
+// کھلا ہوا ان باکس یاد رکھنے کے لیے ویری ایبل
+let activeChatId = null;
 
 async function renderOrders(){
   const area = document.getElementById("ordersArea");
@@ -283,51 +363,55 @@ async function renderOrders(){
     showToast("⏰ یاد دہانی: پینڈنگ چیٹس موجود ہیں!");
   }
 
-  area.innerHTML = orders.map((o) => `
-    <div class="chat-item ${o.status==='completed'?'completed':'pending'}" id="chat_${o.id}">
-      <div onclick="toggleChatDetail('${o.id}')" style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <span style="font-weight:800; font-size:15px;">📌 ${o.code} — ${o.name}</span>
-          <div style="font-size:11.5px; color:var(--muted); margin-top:2px;">وضعیت: <b>${o.status === 'completed' ? '✅ آرڈر مکمل' : '⏳ پینڈنگ چیت'}</b></div>
+  area.innerHTML = orders.map((o) => {
+    let isOpen = (activeChatId === o.id) ? " open" : "";
+    return `
+      <div class="chat-item ${o.status==='completed'?'completed':'pending'}" id="chat_${o.id}">
+        <div onclick="toggleChatDetail('${o.id}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+          <div>
+            <span style="font-weight:800; font-size:15px;">📌 ${o.code} — ${o.name}</span>
+            <div style="font-size:11.5px; color:var(--muted); margin-top:2px;">وضعیت: <b>${o.status === 'completed' ? '✅ آرڈر مکمل' : '⏳ پینڈنگ چیت'}</b></div>
+          </div>
+          <div style="text-align:left;">
+            <span style="font-size:11px; color:var(--muted); display:block;">🕒 ${o.date || ''}</span>
+            <span style="font-size:12px; font-weight:700; color:var(--mid);">ان باکس کھولیں ▼</span>
+          </div>
         </div>
-        <div style="text-align:left;">
-          <span style="font-size:11px; color:var(--muted); display:block;">🕒 ${o.date || ''}</span>
-          <span style="font-size:12px; font-weight:700; color:var(--mid);">ان باکس کھولیں ▼</span>
-        </div>
-      </div>
 
-      <!-- ان باکس ڈیٹیل جو کلک کرنے پر کھلے گی -->
-      <div class="chat-detail" id="detail_${o.id}">
-        <hr style="border:0; border-top:1px solid var(--line); margin:10px 0;">
-        <div style="font-size:13.5px; line-height:1.7;">
-          📞 فون نمبر: ${o.phone}<br>
-          📍 پتہ: ${o.address}<br>
-          🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-          🛒 سامان / اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; border:1px solid var(--line);">${o.itemsSummary}</div>
-          💰 کل رقم: <b>Rs. ${o.total}</b><br>
-        </div>
-        
-        <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-          <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
-          ${o.status !== 'completed' ? `
-            <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-            <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ آرڈر مکمل کریں</button>
-          ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل اور بند ہو چکا ہے</div>`}
-          <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+        <!-- ان باکس ڈیٹیل جو خود بند نہیں ہوگی -->
+        <div class="chat-detail${isOpen}" id="detail_${o.id}">
+          <hr style="border:0; border-top:1px solid var(--line); margin:10px 0;">
+          <div style="font-size:13.5px; line-height:1.7;">
+            📞 فون نمبر: ${o.phone}<br>
+            📍 پتہ: ${o.address}<br>
+            🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
+            🛒 سامان / اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; border:1px solid var(--line);">${o.itemsSummary}</div>
+            💰 کل رقم: <b>Rs. ${o.total}</b><br>
+          </div>
+          
+          <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
+            ${o.status !== 'completed' ? `
+              <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ آرڈر مکمل کریں</button>
+            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل اور بند ہو چکا ہے</div>`}
+            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
 
 function toggleChatDetail(id){
   const detailBox = document.getElementById("detail_" + id);
   if(detailBox.classList.contains("open")){
     detailBox.classList.remove("open");
+    activeChatId = null;
   } else {
-    // باقی سارے بند کر کے صرف یہی کھولیں
     document.querySelectorAll('.chat-detail').forEach(d => d.classList.remove('open'));
     detailBox.classList.add("open");
+    activeChatId = id;
   }
 }
 
@@ -350,6 +434,7 @@ function completeOrder(id){
     localOrders.push({id: id, status: 'completed'});
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
+  activeChatId = null;
   showToast("✅ آرڈر مکمل ہو گیا!");
   renderOrders();
 }
@@ -359,6 +444,7 @@ function deleteOrder(id){
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders = localOrders.filter(o => o.id !== id);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  if(activeChatId === id) activeChatId = null;
   showToast("✅ چیت ان باکس سے ہٹا دی گئی");
   renderOrders();
 }

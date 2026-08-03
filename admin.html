@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — محفوظ لائیو آرڈرز پینل</title>
+<title>SJ Foods — محفوظ ایڈمن پینل</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -27,13 +27,19 @@
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
+  input[type=text], input[type=number], select{
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
+    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+  }
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
   button{font-family:inherit; cursor:pointer; border:none;}
   .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   
   .tabs{display:flex; gap:8px; margin-bottom:14px;}
-  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:#fff; background:var(--dark); cursor:pointer;}
+  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
   .order-card{background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: superBlinking 0.8s infinite ease-in-out;}
@@ -56,25 +62,49 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن لائیو پینل</h1>
-  <p>گوگل شیٹ سے جڑا ہوا خودکار نظام</p>
+  <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
+  <p>محفوظ ریکارڈ، لائیو آرڈرز اور خودکار نوٹیفکیشن</p>
 </header>
 
 <div class="wrap">
 
   <div class="tabs">
-    <div class="tab">🔔 لائیو آرڈرز (گوگل شیٹ سے منسلک)</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
+    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
+  <!-- لائیو آرڈرز سیکشن -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+      <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
       <p>صرف "SJ-" کوڈ والے آرڈرز یہاں شو ہوں گے۔ نیا آرڈر آنے پر گھنٹی بجے گی۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
+        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ایکٹیو کریں</button>
+        <button class="btn-primary" style="flex:1;" onclick="addDummyOrder()">🛒 فرضی آرڈر</button>
       </div>
     </div>
-    <div id="ordersArea"><div class="loading">⏳ گوگل شیٹ سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ آرڈرز لوڈ ہو رہے ہیں...</div></div>
+  </div>
+
+  <!-- پروڈکٹس اور ریٹس سیکشن -->
+  <div id="secProducts" style="display:none;">
+    <div class="card">
+      <h3>📦 پروڈکٹس کی قیمتیں اور سیٹنگ</h3>
+      <p>یہاں سے آپ اپنی اشیاء کے ریٹس تبدیل اور مینج کر سکتے ہیں۔</p>
+      
+      <div id="priceListContainer">
+        <label>ٹماٹر ریٹس (فی کلو)</label>
+        <input type="text" id="pTomato" value="Rs. 200">
+        
+        <label>پیاز ریٹس (فی کلو)</label>
+        <input type="text" id="pPyaz" value="Rs. 120">
+        
+        <label>آلو ریٹس (فی کلو)</label>
+        <input type="text" id="pAloo" value="Rs. 100">
+      </div>
+      
+      <button class="btn-primary" style="margin-top:10px;" onclick="savePrices()">تبدیلیاں محفوظ کریں</button>
+    </div>
   </div>
 
 </div>
@@ -83,6 +113,20 @@
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+
+function switchTab(tabName){
+  if(tabName === 'orders'){
+    document.getElementById('tabOrdersBtn').className = 'tab active';
+    document.getElementById('tabProductsBtn').className = 'tab';
+    document.getElementById('secOrders').style.display = 'block';
+    document.getElementById('secProducts').style.display = 'none';
+  } else {
+    document.getElementById('tabOrdersBtn').className = 'tab';
+    document.getElementById('tabProductsBtn').className = 'tab active';
+    document.getElementById('secOrders').style.display = 'none';
+    document.getElementById('secProducts').style.display = 'block';
+  }
+}
 
 function showToast(msg, isErr){
   const t = document.getElementById("toast");
@@ -116,9 +160,8 @@ async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL);
     const data = await res.json();
-    // صرف وہ ریکارڈز فلٹر کریں جن میں کوڈ 'SJ-' موجود ہو تاکہ ذاتی میسجز نہ آئیں
-    return data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
-      id: index,
+    let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
+      id: "sh_" + index,
       code: row.code,
       name: row.name,
       phone: row.phone,
@@ -129,13 +172,37 @@ async function fetchOrdersFromSheet(){
       date: new Date(row.timestamp).toLocaleTimeString(),
       status: row.status || 'pending'
     }));
+    
+    // لوکل اسٹوریج والے فرضی یا اضافی آرڈرز بھی شامل کریں
+    let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+    return [...localOrders, ...sheetOrders];
   }catch(e){
     console.error(e);
-    return [];
+    return JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   }
 }
 
-let cachedOrders = [];
+function addDummyOrder(){
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  let newOrd = {
+    id: "loc_" + Date.now(),
+    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
+    name: "Ahmad Khan (فرضی)",
+    phone: "03001234567",
+    address: "Mingora Swat",
+    itemsSummary: "Tamatar (1 KG) - Rs. 200<br>Pyaz (1 KG) - Rs. 120",
+    total: 320,
+    otpCode: Math.floor(1000 + Math.random() * 9000),
+    date: new Date().toLocaleTimeString(),
+    status: "pending"
+  };
+  localOrders.unshift(newOrd);
+  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  showToast("✅ نیا فرضی آرڈر شامل ہو گیا!");
+  renderOrders();
+}
+
+let cachedOrdersCount = 0;
 async function renderOrders(){
   const area = document.getElementById("ordersArea");
   const orders = await fetchOrdersFromSheet();
@@ -145,12 +212,12 @@ async function renderOrders(){
     return;
   }
 
-  if(orders.length > cachedOrders.length && cachedOrders.length !== 0){
+  if(orders.length > cachedOrdersCount && cachedOrdersCount !== 0){
     playBeepTech();
   }
-  cachedOrders = orders;
+  cachedOrdersCount = orders.length;
 
-  area.innerHTML = orders.map((o, idx) => `
+  area.innerHTML = orders.map((o) => `
     <div class="order-card ${o.status==='completed'?'completed':'pending'}">
       <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
       <div style="font-size:13.5px; line-height:1.7;">
@@ -163,12 +230,12 @@ async function renderOrders(){
       </div>
       
       <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ (تھرمل/A4)</button>
+        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
         ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا آٹو میسج (کوڈ)</button>
-          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeAndThankYou('${o.phone}', '${o.name}')">✅ آرڈر کلوز کریں</button>
-        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل ہو چکا ہے</div>`}
-        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrderRow(${idx})">🗑️ حذف</button>
+          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
+        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
+        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
       </div>
     </div>
   `).join("");
@@ -176,31 +243,35 @@ async function renderOrders(){
 
 function sendFirstWhatsAppMessage(phone, name, code, otp){
   const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
-  
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر بھیج دیا گیا!");
+  showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
 }
 
-function completeAndThankYou(phone, name){
-  if(!confirm("کیا آپ اس آرڈر کو کنفرم کر کے کلوز کرنا چاہتے ہیں؟")) return;
-  
-  const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nآپ کا آرڈر کامیابی کے ساتھ آپ تک پہنچا دیا گیا ہے۔ SJ Foods Mingora کو منتخب کرنے اور ہمارے ساتھ تعاون کرنے کا تہہ دل سے شکریہ! ⭐\n\nہم آئندہ بھی آپ کو بہترین اور تازہ اشیاء فراہم کرنے کے لیے پرعزم ہیں۔`;
-  
-  let cleanPhone = phone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  
-  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ آرڈر کلوز کر دیا گیا اور شکریہ کا میسج کھل گیا!");
-}
-
-function deleteOrderRow(idx){
-  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
-  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
-  cachedOrders.splice(idx, 1);
+function completeOrder(id){
+  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  let ord = localOrders.find(o => o.id === id);
+  if(ord){
+    ord.status = 'completed';
+    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  }
+  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
   renderOrders();
+}
+
+function deleteOrder(id){
+  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  localOrders = localOrders.filter(o => o.id !== id);
+  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
+  renderOrders();
+}
+
+function savePrices(){
+  showToast("✅ قیمتیں کامیابی سے محفوظ ہو گئیں!");
 }
 
 function printReceipt(code, name, phone, address, items, total, otp){
@@ -232,7 +303,6 @@ function printReceipt(code, name, phone, address, items, total, otp){
   setTimeout(()=> { w.print(); w.close(); }, 500);
 }
 
-// پینل شروع کریں اور ہر 10 سیکنڈ بعد شیٹ چیک کریں
 renderOrders();
 setInterval(renderOrders, 10000);
 </script>

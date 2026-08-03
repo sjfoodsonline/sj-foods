@@ -62,17 +62,12 @@
     100% { transform: scale(1.04); color: var(--accent); }
   }
   
-  .deal-grid {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-  }
+  .deal-grid { display: flex; gap: 12px; justify-content: center; }
 
   .deal-card{
     flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    box-shadow:0 4px 15px rgba(0,0,0,0.06);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .deal-card img, .deal-card .deal-icon-box{
@@ -110,16 +105,9 @@
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
 
   .item .info{min-width:0; flex:1;}
-  
-  .item .name{
-    font-size: 16.5px; font-weight: 700; color: var(--ink); line-height: 1.3;
-  }
-  .item .name .roman-part {
-    font-size: 16px; font-weight: 800; font-family: "Segoe UI", sans-serif;
-  }
-  .item .name .urdu-part {
-    font-size: 11px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px;
-  }
+  .item .name{ font-size: 16.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+  .item .name .roman-part { font-size: 16px; font-weight: 800; font-family: "Segoe UI", sans-serif; }
+  .item .name .urdu-part { font-size: 11px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px; }
 
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px;}
   .item .meta b{color:var(--price); font-weight:800; font-size:14.5px;}
@@ -161,10 +149,7 @@
     border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px;
   }
   .pay-number{font-size:16px; font-weight:700; direction:ltr;}
-  #copyNumBtn{
-    background:#fff; color:var(--dark); border:none; border-radius:6px;
-    padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer;
-  }
+  #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer; }
   .pay-hint{color:#FFF3CD; font-size:10.5px; margin-top:6px; line-height:1.4; text-align:right;}
 
   .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
@@ -175,8 +160,7 @@
   .pay-method{display:flex; gap:8px; margin-bottom:8px;}
   .pay-method label{
     flex:1; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700;
-    background:#fff; border:1.5px solid var(--line); border-radius:9px;
-    padding:8px; cursor:pointer; color:var(--dark);
+    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark);
   }
   .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
   .pay-method input{width:15px; height:15px;}
@@ -408,12 +392,14 @@ function changeUnit(id, idx){
 }
 
 function changeQty(id, delta){
-  const it = ITEMS.find(x => x.id === id);
+  const it = findItem(id);
   if(!it.available) return;
   it.qty = Math.max(0, it.qty + delta);
   renderList(document.getElementById("search").value);
   renderBill();
 }
+
+function findItem(id){ return ITEMS.find(i=>i.id===id); }
 
 function renderBill(){
   const chosen = ITEMS.filter(i => i.qty > 0);
@@ -508,15 +494,40 @@ document.getElementById("waBtn").onclick = () => {
   msg += `🌿 *آٹو ریپلائی / یقین دہانی:* محترم گاہک! آپ کا آرڈر نمبر [${orderCode}] ہمیں مل گیا ہے۔ ہم آپ کے لیے بہترین، تازہ، معیاری اور کم وقت میں اشیاء پہنچانے کے لیے پرعزم ہیں۔ اب ہم اس آرڈر پر کام شروع کر رہے ہیں!\n\n`;
   msg += `✍️ (ترسیل کے وقت تھرمل رسید پر دستخط / Signature کے لیے تیار رہیں)`;
 
-  const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  orders.unshift({
-    code: orderCode, name, phone, address: addr, area: area === 'inside' ? 'شہر کے اندر' : 'باہر',
-    payMethod: payMethod, itemsSummary: summaryHtml, total: Math.round(subtotal),
-    timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
+  // سب سے اہم تبدیلی: براہ راست sj_local_orders میں محفوظ کرنا تاکہ ایڈمن پینل کو فوراً گھنٹی کے ساتھ نظر آئے
+  const otpCode = Math.floor(1000 + Math.random() * 9000);
+  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
+  localOrders.unshift({
+    id: "wa_" + Date.now(),
+    code: orderCode,
+    name: name,
+    phone: phone,
+    address: addr + " (" + (area==='inside'?'شہر کے اندر':'باہر') + ")",
+    itemsSummary: summaryHtml,
+    total: Math.round(subtotal),
+    otpCode: otpCode,
+    date: new Date().toLocaleTimeString(),
+    status: "pending"
   });
-  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
+  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+
+  // گوگل شیٹ پر بھی بیک گراؤنڈ میں بھیجنا
+  try {
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+    fetch(SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: orderCode, name: name, phone: phone, address: addr,
+        items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
+        timestamp: new Date().toISOString(), status: "pending"
+      })
+    });
+  } catch(e){}
 
   window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ آرڈر ایڈمن ان باکس میں درج ہو گیا!");
 };
 
 function renderFeatured(){

@@ -27,20 +27,13 @@
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  input[type=text], input[type=password], input[type=number], select{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
-  }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
   button{font-family:inherit; cursor:pointer; border:none;}
   .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
-  .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
-
+  
   .tabs{display:flex; gap:8px; margin-bottom:14px;}
-  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:var(--muted); cursor:pointer;}
-  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+  .tab{flex:1; padding:11px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:13px; color:#fff; background:var(--dark); cursor:pointer;}
 
   .order-card{background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative;}
   .order-card.pending{animation: superBlinking 0.8s infinite ease-in-out;}
@@ -51,138 +44,45 @@
     100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 15px rgba(211,47,47,0.7);} 
   }
 
-  .cat-select{display:flex; gap:8px; margin-bottom:10px;}
-  .cat-select select{flex:1; margin-bottom:0;}
-
-  .product-row{
-    background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px;
-    display:flex; flex-direction:column; gap:8px;
-  }
-  .product-row.dragging{opacity:.4;}
-  .row-top{display:flex; align-items:center; gap:8px;}
-  .drag-handle{cursor:grab; font-size:22px; color:var(--muted); flex:0 0 34px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; touch-action:none; user-select:none;}
-  .thumb-box{
-    flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf);
-    display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; cursor:pointer;
-  }
-  .thumb-box img{width:100%; height:100%; object-fit:cover;}
-  .thumb-box .ic{font-size:24px;}
-  .thumb-box input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
-  .thumb-actions{display:flex; gap:4px; flex:0 0 auto;}
-  .thumb-actions button{font-size:10px; padding:4px 6px; border-radius:6px;}
-  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
-  .row-fields input{margin-bottom:0;}
-  .row-flags{display:flex; align-items:center; gap:10px; font-size:11.5px;}
-  .row-flags label{display:flex; align-items:center; gap:4px; margin:0; color:var(--ink);}
-
-  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
-  .unit-row input{margin-bottom:0;}
-  .unit-row input.u-label{flex:2;}
-  .unit-row input.u-rate{flex:1;}
-  .unit-row button{flex:0 0 auto; font-size:14px; background:none; color:var(--price); padding:2px 6px;}
-  .add-unit-btn{font-size:11px; background:none; color:var(--mid); font-weight:700; padding:2px 4px;}
-
-  .row-bottom{display:flex; justify-content:space-between; align-items:center;}
-  #addProductBtn{margin:6px 0 16px;}
-
-  .savebar{
-    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
-    padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;
-    width:100%; max-width:480px; margin:0 auto;
-  }
-  .savebar .status{flex:1; font-size:11.5px; color:var(--muted);}
-  .savebar button{flex:0 0 auto; border-radius:10px; padding:11px 18px; font-size:13px; font-weight:700;}
-
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
     padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:100;
   }
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
-
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — محفوظ ایڈمن پینل</h1>
-  <p>محفوظ ریکارڈ، لائیو آرڈرز اور 5 منٹ خودکار ریمائنڈر</p>
+  <h1>⚙️ SJ Foods — ایڈمن لائیو پینل</h1>
+  <p>گوگل شیٹ سے جڑا ہوا خودکار نظام</p>
 </header>
 
 <div class="wrap">
 
-  <div class="card" id="setupCard">
-    <h3>🔑 ایک بار سیٹ اپ کریں</h3>
-    <p>یہ صرف پہلی بار کرنا ہے۔ آپ کا ٹوکن صرف اسی فون کے براؤزر میں محفوظ رہے گا، کہیں اور نہیں جاتا۔</p>
-
-    <label>GitHub یوزر نیم (Owner)</label>
-    <input type="text" id="cfgOwner" value="sjfoodsonline">
-
-    <label>ریپازٹری کا نام (Repository)</label>
-    <input type="text" id="cfgRepo" value="sj-foods">
-
-    <label>Personal Access Token</label>
-    <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-    <br>
-    <button class="btn-primary" id="saveConfigBtn">محفوظ کریں اور شروع کریں</button>
+  <div class="tabs">
+    <div class="tab">🔔 لائیو آرڈرز (گوگل شیٹ سے منسلک)</div>
   </div>
 
-  <div id="mainPanel" style="display:none;">
-    
-    <div class="tabs">
-      <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">🔔 لائیو آرڈرز</div>
-      <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
-    </div>
-
-    <!-- 1. لائیو آرڈرز سیکشن -->
-    <div id="secOrders">
-      <div class="card">
-        <h3>🔔 کسٹمرز کے لائیو آرڈرز (محفوظ ریکارڈ)</h3>
-        <p>جب تک کوئی آرڈر پینڈنگ رہے گا، ہر 5 منٹ بعد گھنٹی یاد دہانی کے لیے بجتی رہے گی۔</p>
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="enableAudioAndTest()">🔊 گھنٹی ایکٹیو کریں</button>
-          <button class="btn-secondary" style="flex:1; background:#E8F5E9; color:#1B5E20; font-weight:700;" onclick="fakeOrder()">🧪 فرضی آرڈر</button>
-        </div>
+  <div id="secOrders">
+    <div class="card">
+      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+      <p>صرف "SJ-" کوڈ والے آرڈرز یہاں شو ہوں گے۔ نیا آرڈر آنے پر گھنٹی بجے گی۔</p>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
-      <div id="ordersArea"></div>
     </div>
-
-    <!-- 2. پروڈکٹس اور ریٹس سیکشن -->
-    <div id="secProducts" style="display:none;">
-      <div class="card">
-        <div class="cat-select">
-          <select id="categoryPicker"></select>
-          <button class="btn-secondary" id="changeAccountBtn">🔓 اکاؤنٹ بدلیں</button>
-        </div>
-        <div class="hint">💡 <b>ٹپ:</b> 1 KG یا کلو کا ریٹ بدلنے پر دوسرے یونٹس خود بخود ایڈجسٹ ہو جائیں گے۔</div>
-      </div>
-
-      <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-
-      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;">➕ نیا پروڈکٹ شامل کریں</button>
-    </div>
-
+    <div id="ordersArea"><div class="loading">⏳ گوگل شیٹ سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
-</div>
-
-<div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">تبدیلیاں محفوظ نہیں ہوئیں</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;">💾 محفوظ کریں</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const CATEGORIES_INDEX_FILE = "categories_index.json";
-let CFG = null;
-let CATEGORIES_INDEX = [];
-let currentCategoryFile = null;
-let currentItems = [];
-let currentSha = null;
-let dirty = false;
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
 
 function showToast(msg, isErr){
   const t = document.getElementById("toast");
@@ -211,190 +111,99 @@ function playBeepTech(){
   }catch(e){}
 }
 
-function enableAudioAndTest(){
-  playBeepTech();
-  showToast("✅ بیپ ٹیک گھنٹی ایکٹیو ہو گئی ہے!");
-}
-
-function markDirty(){
-  dirty = true;
-  document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہوئیں — نیچے 'محفوظ کریں' دبائیں";
-}
-function markClean(){
-  dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
-}
-
-function utf8ToBase64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = "";
-  bytes.forEach(b => bin += String.fromCharCode(b));
-  return btoa(bin);
-}
-function base64ToUtf8(b64){
-  const bin = atob(b64.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
-}
-
-async function ghRequest(path, options){
-  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
-  const res = await fetch(url, Object.assign({
-    headers: {
-      "Authorization": "token " + CFG.token,
-      "Accept": "application/vnd.github+json"
-    }
-  }, options || {}));
-  if(!res.ok){
-    const errText = await res.text().catch(()=> "");
-    throw new Error(`GitHub API error (${res.status}): ${errText.slice(0,200)}`);
-  }
-  return res.json();
-}
-async function ghGetJson(path){
-  const data = await ghRequest(path);
-  return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
-}
-async function ghPutJson(path, obj, sha, message){
-  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content, sha, branch: "main" })
-  });
-}
-async function ghPutBinary(path, base64Content, message){
-  let sha;
+async function fetchOrdersFromSheet(){
+  if(!SHEET_URL) return [];
   try{
-    const existing = await ghRequest(path);
-    sha = existing.sha;
-  }catch(e){}
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content: base64Content, sha, branch: "main" })
-  });
-}
-
-function loadConfig(){
-  const raw = localStorage.getItem("sj_admin_config");
-  if(!raw) return null;
-  try{ return JSON.parse(raw); }catch(e){ return null; }
-}
-function saveConfig(cfg){
-  localStorage.setItem("sj_admin_config", JSON.stringify(cfg));
-}
-
-document.getElementById("saveConfigBtn").onclick = async ()=>{
-  const owner = document.getElementById("cfgOwner").value.trim();
-  const repo = document.getElementById("cfgRepo").value.trim();
-  const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){
-    showToast("براہ کرم تینوں خانے پُر کریں", true);
-    return;
-  }
-  CFG = { owner, repo, token };
-  try{
-    await ghRequest(CATEGORIES_INDEX_FILE);
-    saveConfig(CFG);
-    showToast("✅ کنکشن کامیاب!");
-    startMainPanel();
+    const res = await fetch(SHEET_URL);
+    const data = await res.json();
+    // صرف وہ ریکارڈز فلٹر کریں جن میں کوڈ 'SJ-' موجود ہو تاکہ ذاتی میسجز نہ آئیں
+    return data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
+      id: index,
+      code: row.code,
+      name: row.name,
+      phone: row.phone,
+      address: row.address,
+      itemsSummary: row.items,
+      total: row.total,
+      otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
+      date: new Date(row.timestamp).toLocaleTimeString(),
+      status: row.status || 'pending'
+    }));
   }catch(e){
-    showToast("❌ ٹوکن یا نام غلط ہے، دوبارہ چیک کریں", true);
-  }
-};
-
-document.getElementById("changeAccountBtn").onclick = ()=>{
-  if(!confirm("اکاؤنٹ کی معلومات صاف کر کے دوبارہ سیٹ اپ کریں؟")) return;
-  localStorage.removeItem("sj_admin_config");
-  location.reload();
-};
-
-function switchTab(tab){
-  if(tab === 'orders'){
-    document.getElementById('secOrders').style.display = 'block';
-    document.getElementById('secProducts').style.display = 'none';
-    document.getElementById('tabOrdersBtn').className = 'tab active';
-    document.getElementById('tabProductsBtn').className = 'tab';
-    renderOrders();
-  } else {
-    document.getElementById('secOrders').style.display = 'none';
-    document.getElementById('secProducts').style.display = 'block';
-    document.getElementById('tabOrdersBtn').className = 'tab';
-    document.getElementById('tabProductsBtn').className = 'tab active';
+    console.error(e);
+    return [];
   }
 }
 
-function fakeOrder(){
-  const orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  orders.unshift({
-    code: "SJ-" + Math.floor(1000 + Math.random() * 9000),
-    name: "محمد خان (ٹیسٹ)", phone: "03155166034", address: "مینگورہ", area: "شہر کے اندر",
-    payMethod: "کیش آن ڈیلیوری", itemsSummary: "<b>[Sabziyan]</b> Tomato / ٹماٹر (1 KG) — Rs. 150", total: 150,
-    timestamp: Date.now(), date: new Date().toLocaleTimeString(), status: 'pending'
-  });
-  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
-  playBeepTech();
-  renderOrders();
-  showToast("🚨 نیا آرڈر محفوظ ہو گیا!");
-}
-
-// 1. نئے آرڈر کی لائیو چیکنگ (ہر 3 سیکنڈ بعد)
-let lastOrderCount = 0;
-setInterval(() => {
-  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  if(orders.length > lastOrderCount && lastOrderCount !== 0){
-    playBeepTech();
-    if(document.getElementById('secOrders').style.display !== 'none'){
-      renderOrders();
-    }
-  }
-  lastOrderCount = orders.length;
-}, 3000);
-
-// 2. ہر 5 منٹ بعد ریمائنڈر گھنٹی (جب تک کوئی بھی آرڈر پینڈنگ ہو)
-setInterval(() => {
-  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  let hasPending = orders.some(o => o.status !== 'completed');
-  if(hasPending){
-    playBeepTech();
-    showToast("⏰ ریمائنڈر: پینڈنگ آرڈرز موجود ہیں!");
-  }
-}, 5 * 60 * 1000); // 5 منٹ
-
-function renderOrders(){
+let cachedOrders = [];
+async function renderOrders(){
   const area = document.getElementById("ordersArea");
-  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  lastOrderCount = orders.length;
-
+  const orders = await fetchOrdersFromSheet();
+  
   if(orders.length === 0){
-    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
     return;
   }
+
+  if(orders.length > cachedOrders.length && cachedOrders.length !== 0){
+    playBeepTech();
+  }
+  cachedOrders = orders;
 
   area.innerHTML = orders.map((o, idx) => `
     <div class="order-card ${o.status==='completed'?'completed':'pending'}">
       <div style="font-weight:800; font-size:16px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
       <div style="font-size:13.5px; line-height:1.7;">
         📞 فون: ${o.phone}<br>
-        📍 پتہ: ${o.address} (${o.area})<br>
-        💳 ادائیگی: ${o.payMethod}<br>
+        📍 پتہ: ${o.address}<br>
+        🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
         🛒 اشیاء: <div style="background:#fff; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
         💰 کل رقم: <b>Rs. ${o.total}</b><br>
         وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
       </div>
       
       <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printOrderReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total})">🖨️ پرنٹ</button>
+        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ (تھرمل/A4)</button>
         ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff; font-weight:700;" onclick="sendProfessionalThankYou(${idx})">📲 واٹس ایپ آٹو شکریہ میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#FFCDD2; color:#B71C1C; font-weight:700;" onclick="manualCloseOrder(${idx})">❌ آرڈر کلوز کریں</button>
-        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
+          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا آٹو میسج (کوڈ)</button>
+          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeAndThankYou('${o.phone}', '${o.name}')">✅ آرڈر کلوز کریں</button>
+        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر مکمل ہو چکا ہے</div>`}
+        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrderRow(${idx})">🗑️ حذف</button>
       </div>
     </div>
   `).join("");
 }
 
-function printOrderReceipt(code, name, phone, address, items, total){
+function sendFirstWhatsAppMessage(phone, name, code, otp){
+  const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
+  
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر بھیج دیا گیا!");
+}
+
+function completeAndThankYou(phone, name){
+  if(!confirm("کیا آپ اس آرڈر کو کنفرم کر کے کلوز کرنا چاہتے ہیں؟")) return;
+  
+  const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nآپ کا آرڈر کامیابی کے ساتھ آپ تک پہنچا دیا گیا ہے۔ SJ Foods Mingora کو منتخب کرنے اور ہمارے ساتھ تعاون کرنے کا تہہ دل سے شکریہ! ⭐\n\nہم آئندہ بھی آپ کو بہترین اور تازہ اشیاء فراہم کرنے کے لیے پرعزم ہیں۔`;
+  
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ آرڈر کلوز کر دیا گیا اور شکریہ کا میسج کھل گیا!");
+}
+
+function deleteOrderRow(idx){
+  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
+  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
+  cachedOrders.splice(idx, 1);
+  renderOrders();
+}
+
+function printReceipt(code, name, phone, address, items, total, otp){
   const w = window.open('', '_blank');
   w.document.write(`
     <html dir="rtl">
@@ -407,13 +216,14 @@ function printOrderReceipt(code, name, phone, address, items, total){
       <p><b>نام:</b> ${name}</p>
       <p><b>فون:</b> ${phone}</p>
       <p><b>پتہ:</b> ${address}</p>
+      <p><b>ڈیلیوری کوڈ (OTP):</b> <span style="font-size:18px;"><b>${otp}</b></span></p>
       <hr style="border:dashed 1px #000;">
       <p><b>آرڈر کی تفصیل:</b></p>
       <div>${items}</div>
       <hr style="border:dashed 1px #000;">
       <h3 style="text-align:center;">کل رقم: Rs. ${total}</h3>
-      <br><br>
-      <div style="border-top: 1px solid #000; text-align:center; padding-top:5px; font-size:11px;">گاہک کے دستخط (Customer Signature):</div>
+      <br>
+      <div style="text-align:center; font-size:11px;">ڈلیوری کے وقت OTP کوڈ لازمی بتائیں۔</div>
     </body>
     </html>
   `);
@@ -422,324 +232,9 @@ function printOrderReceipt(code, name, phone, address, items, total){
   setTimeout(()=> { w.print(); w.close(); }, 500);
 }
 
-function sendProfessionalThankYou(idx){
-  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  const o = orders[idx];
-  
-  orders[idx].status = 'completed';
-  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
-  renderOrders();
-  
-  const msg = `السلام علیکم محترم *${o.name}* صاحب! 🙏\n\nآپ کا آرڈر *[${o.code}]* کامیابی کے ساتھ آپ تک پہنچا دیا گیا ہے۔ SJ Foods Mingora کو منتخب کرنے اور ہمارے ساتھ تعاون کرنے کا تہہ دل سے شکریہ! 🌿\n\nہم آئندہ بھی آپ کو بہترین اور تازہ اشیاء فراہم کرنے کے لیے پرعزم ہیں۔ آپ کے قیمتی وقت کا شکریہ! ⭐`;
-  
-  let phone = o.phone.replace(/[^0-9]/g, "");
-  if(phone.startsWith("0")) phone = "92" + phone.slice(1);
-  
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ شکریہ کا پروفیشنل میسج بھیج دیا گیا اور آرڈر کلوز ہو گیا!");
-}
-
-function manualCloseOrder(idx){
-  if(!confirm("کیا آپ واقعی اس آرڈر کو بغیر واٹس ایپ میسج کے کلوز کرنا چاہتے ہیں؟")) return;
-  let orders = JSON.parse(localStorage.getItem("sj_admin_orders") || "[]");
-  
-  orders[idx].status = 'completed';
-  localStorage.setItem("sj_admin_orders", JSON.stringify(orders));
-  renderOrders();
-  showToast("✅ آرڈر کامیابی سے کلوز کر دیا گیا!");
-}
-
-const ALLOWED_FILES = null;
-
-async function startMainPanel(){
-  document.getElementById("setupCard").style.display = "none";
-  document.getElementById("mainPanel").style.display = "block";
-
-  const { json } = await ghGetJson(CATEGORIES_INDEX_FILE);
-  CATEGORIES_INDEX = ALLOWED_FILES ? json.filter(c => ALLOWED_FILES.includes(c.file)) : json;
-
-  if(CATEGORIES_INDEX.length === 0){
-    document.getElementById("productsArea").innerHTML = `<div class="loading">⚠️ کوئی کیٹگری موجود نہیں</div>`;
-    return;
-  }
-
-  const picker = document.getElementById("categoryPicker");
-  picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
-  picker.onchange = ()=> loadCategory(picker.value);
-
-  await loadCategory(CATEGORIES_INDEX[0].file);
-  renderOrders();
-}
-
-async function loadCategory(file){
-  if(dirty && !confirm("موجودہ کیٹگری میں غیر محفوظ تبدیلیاں ہیں۔ آگے بڑھیں؟")) {
-    document.getElementById("categoryPicker").value = currentCategoryFile;
-    return;
-  }
-  currentCategoryFile = file;
-  document.getElementById("productsArea").innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
-  document.getElementById("addProductBtn").style.display = "none";
-  try{
-    const { json, sha } = await ghGetJson(file);
-    currentItems = json.map(normalizeItem);
-    currentSha = sha;
-    renderProducts();
-    markClean();
-    document.getElementById("addProductBtn").style.display = "block";
-  }catch(e){
-    document.getElementById("productsArea").innerHTML = `<div class="loading">❌ لوڈ نہیں ہو سکا: ${e.message}</div>`;
-  }
-}
-
-function normalizeItem(it){
-  const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}];
-  return {
-    name: it.name || "",
-    name_roman: it.name_roman || "",
-    available: it.available !== false,
-    image: it.image || "",
-    featured: it.featured === true,
-    units
-  };
-}
-
-function isBaseKgLabel(label){
-  const t = (label||"").trim().toLowerCase();
-  return t === "kg" || t === "کلو";
-}
-
-function parseUnitMultiplier(label){
-  const t = (label||"").trim();
-  if(isBaseKgLabel(t)) return 1;
-  if(t.includes("آدھا") || t.includes("0.5")) return 0.5;
-  if(t.includes("پاؤ") || t.includes("0.25")) return 0.25;
-  const m = t.match(/\(?\s*(\d+(?:\.\d+)?)\s*(?:KG|کلو)\s*\)?/i);
-  if(m) return parseFloat(m[1]);
-  return null;
-}
-
-function applyAutoLink(it, kgRate, currentRowEl){
-  const unitsBox = currentRowEl.parentElement;
-  const offset = unitsBox.querySelector(".auto-link-chk") ? 1 : 0;
-  it.units.forEach((u, ui) => {
-    if(isBaseKgLabel(u.label)) return;
-    const mult = parseUnitMultiplier(u.label);
-    if(mult === null) return;
-    u.rate = Math.round((kgRate * mult) / 5) * 5;
-    const rowEl = unitsBox.children[offset + ui];
-    if(rowEl){
-      const rateInput = rowEl.querySelector(".u-rate");
-      if(rateInput) rateInput.value = u.rate;
-    }
-  });
-}
-
-function renderProducts(){
-  const area = document.getElementById("productsArea");
-  area.innerHTML = "";
-  currentItems.forEach((it, idx) => area.appendChild(buildRow(it, idx)));
-}
-
-function buildRow(it, idx){
-  const row = document.createElement("div");
-  row.className = "product-row";
-  row.dataset.idx = idx;
-
-  const thumbHtml = it.image
-    ? `<img src="${it.image}" alt="${it.name}">`
-    : `<span class="ic">🛒</span>`;
-
-  row.innerHTML = `
-    <div class="row-top">
-      <span class="drag-handle">↕️</span>
-      <div class="thumb-box" title="تصویر بدلنے کے لیے دبائیں">
-        ${thumbHtml}
-        <input type="file" accept="image/*" class="img-input">
-      </div>
-      <div class="row-fields">
-        <input type="text" class="f-name" placeholder="پروڈکٹ کا نام (اردو)" value="${it.name}">
-        <input type="text" class="f-name-en" placeholder="Roman Urdu name (e.g. Tamatar)" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
-      </div>
-    </div>
-    <div class="thumb-actions" style="justify-content:flex-end;">
-      ${it.image ? `<button class="btn-danger remove-img-btn">🗑️ تصویر ہٹائیں</button>` : ""}
-    </div>
-    <div class="units-box"></div>
-    <button class="add-unit-btn">➕ سائز/قیمت شامل کریں</button>
-    <div class="row-bottom">
-      <div class="row-flags">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
-        <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
-      </div>
-      <button class="btn-danger remove-row-btn">🗑️ حذف کریں</button>
-    </div>
-  `;
-
-  const unitsBox = row.querySelector(".units-box");
-  function renderUnits(){
-    unitsBox.innerHTML = "";
-
-    if(it.units.length > 1){
-      const linkRow = document.createElement("div");
-      linkRow.style.cssText = "display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); margin-bottom:6px;";
-      linkRow.innerHTML = `<label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" class="auto-link-chk" ${it._autoLink !== false ? "checked" : ""}> 🔗 1 کلو بدلنے پر باقی سائز خودکار حساب ہوں</label>`;
-      linkRow.querySelector(".auto-link-chk").onchange = (e)=>{ it._autoLink = e.target.checked; };
-      unitsBox.appendChild(linkRow);
-    }
-
-    it.units.forEach((u, ui) => {
-      const ur = document.createElement("div");
-      ur.className = "unit-row";
-      ur.innerHTML = `
-        <input type="text" class="u-label" placeholder="یونٹ (مثلاً KG)" value="${u.label}">
-        <input type="number" class="u-rate" placeholder="قیمت" value="${u.rate}">
-        ${it.units.length > 1 ? `<button class="remove-unit-btn">✕</button>` : ""}
-      `;
-      ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
-      ur.querySelector(".u-rate").oninput = (e)=>{
-        u.rate = parseFloat(e.target.value)||0;
-        markDirty();
-        if(it._autoLink !== false && isBaseKgLabel(u.label)){
-          applyAutoLink(it, u.rate, ur);
-        }
-      };
-      const rmBtn = ur.querySelector(".remove-unit-btn");
-      if(rmBtn) rmBtn.onclick = ()=>{ it.units.splice(ui,1); renderUnits(); markDirty(); };
-      unitsBox.appendChild(ur);
-    });
-  }
-  renderUnits();
-
-  row.querySelector(".add-unit-btn").onclick = ()=>{
-    it.units.push({label:"", rate:0});
-    renderUnits();
-    markDirty();
-  };
-
-  row.querySelector(".f-name").oninput = (e)=>{ it.name = e.target.value; markDirty(); };
-  row.querySelector(".f-name-en").oninput = (e)=>{ it.name_roman = e.target.value.trim(); markDirty(); };
-  row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
-  row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
-
-  row.querySelector(".remove-row-btn").onclick = ()=>{
-    if(!confirm(`"${it.name || 'آئٹم'}" حذف کر دیں؟`)) return;
-    const i = currentItems.indexOf(it);
-    currentItems.splice(i,1);
-    renderProducts();
-    markDirty();
-  };
-
-  const removeImgBtn = row.querySelector(".remove-img-btn");
-  if(removeImgBtn) removeImgBtn.onclick = ()=>{
-    it.image = "";
-    renderProducts();
-    markDirty();
-  };
-
-  row.querySelector(".img-input").onchange = async (e)=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    showToast("⏳ تصویر اپ لوڈ ہو رہی ہے...");
-    try{
-      const base64 = await fileToBase64(file);
-      const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}.jpg`;
-      await ghPutBinary(path, base64, `Upload image for product`);
-      it.image = path;
-      renderProducts();
-      markDirty();
-      showToast("✅ تصویر اپ لوڈ ہو گئی — محفوظ کریں دبائیں");
-    }catch(err){
-      showToast("❌ تصویر اپ لوڈ نہیں ہو سکی: " + err.message, true);
-    }
-  };
-
-  row._item = it;
-
-  const handle = row.querySelector(".drag-handle");
-  handle.addEventListener("pointerdown", (e)=>{
-    e.preventDefault();
-    row.classList.add("dragging");
-    handle.setPointerCapture(e.pointerId);
-
-    function onMove(ev){
-      const area = document.getElementById("productsArea");
-      const after = [...area.querySelectorAll(".product-row:not(.dragging)")].find(el=>{
-        const box = el.getBoundingClientRect();
-        return ev.clientY < box.top + box.height/2;
-      });
-      if(after) area.insertBefore(row, after);
-      else area.appendChild(row);
-    }
-    function onUp(ev){
-      row.classList.remove("dragging");
-      handle.releasePointerCapture(e.pointerId);
-      handle.removeEventListener("pointermove", onMove);
-      handle.removeEventListener("pointerup", onUp);
-      syncOrderFromDom();
-      markDirty();
-    }
-    handle.addEventListener("pointermove", onMove);
-    handle.addEventListener("pointerup", onUp);
-    handle.addEventListener("pointercancel", onUp);
-  });
-
-  return row;
-}
-
-function syncOrderFromDom(){
-  const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item);
-}
-
-function fileToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = ()=> resolve(reader.result.split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-document.getElementById("addProductBtn").onclick = ()=>{
-  currentItems.push({ name:"", name_roman:"", available:true, image:"", featured:false, units:[{label:"KG", rate:0}] });
-  renderProducts();
-  markDirty();
-  window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"});
-};
-
-document.getElementById("saveBtn").onclick = async ()=>{
-  syncOrderFromDom();
-  document.getElementById("saveStatus").textContent = "⏳ محفوظ ہو رہا ہے...";
-  try{
-    const fresh = await ghRequest(currentCategoryFile);
-    const payload = currentItems.map(it => ({
-      name: it.name,
-      name_roman: it.name_roman,
-      units: it.units,
-      available: it.available,
-      image: it.image,
-      featured: it.featured
-    }));
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update ${currentCategoryFile} via admin panel`);
-    markClean();
-    showToast("✅ محفوظ ہو گیا — ویب سائٹ پر تبدیلیاں آ گئی ہیں");
-  }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ محفوظ نہیں ہو سکا";
-    showToast("❌ خرابی: " + e.message, true);
-  }
-};
-
-(function init(){
-  CFG = loadConfig();
-  if(CFG){
-    document.getElementById("cfgOwner").value = CFG.owner;
-    document.getElementById("cfgRepo").value = CFG.repo;
-    startMainPanel().catch(()=>{
-      showToast("❌ کنکشن ناکام، دوبارہ لاگ اِن کریں", true);
-      localStorage.removeItem("sj_admin_config");
-    });
-  }
-})();
+// پینل شروع کریں اور ہر 10 سیکنڈ بعد شیٹ چیک کریں
+renderOrders();
+setInterval(renderOrders, 10000);
 </script>
 </body>
 </html>

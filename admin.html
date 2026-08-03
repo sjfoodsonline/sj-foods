@@ -52,10 +52,9 @@
   .chat-detail{background:#fff; border:2px solid var(--mid); border-radius:14px; padding:14px; margin-top:10px; display:none;}
   .chat-detail.open{display:block;}
 
-  /* تصویر والی سکرین کا زبردست سٹائل */
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
-  .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px;}
+  .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px; cursor:pointer;}
   .item-edit-thumb img{width:100%; height:100%; object-fit:cover;}
   .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
   .unit-row input[type=text], .unit-row input[type=number]{margin-bottom:0;}
@@ -107,26 +106,24 @@
     <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
   </div>
 
-  <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن (بالکل آپ کی تصویر جیسا) -->
+  <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن (تمام لائیو کیٹگریز اور اشیاء کے ساتھ) -->
   <div id="secProducts" style="display:none;">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-weight:700; color:var(--dark);">🔒 اکاؤنٹ / کنٹرول</span>
+        <span style="font-weight:700; color:var(--dark);">🔒 کیٹگری کنٹرول</span>
         <select id="catSelect" onchange="renderAdminEditor()" style="width:65%; margin-bottom:0;">
-          <option value="سبزی">🥦 سبزیاں (Vegetables)</option>
-          <option value="پھل">🍌 پھل (Fruits)</option>
-          <option value="کریانہ">🛒 کریانہ (Grocery)</option>
+          <option value="">⏳ کیٹگریز لوڈ ہو رہی ہیں...</option>
         </select>
       </div>
-      <p style="font-size:11px; margin:0;">جس کیٹیگری کے پروڈکٹس بدلنے ہیں وہ منتخب کریں اور نیچے ریٹس اور یونٹس ایڈٹ کریں۔</p>
+      <p style="font-size:11px; margin:0;">اپنی مرضی کی کیٹگری منتخب کریں اور تمام اشیاء کے نام، تصویریں اور ریٹس ایڈٹ کریں۔</p>
     </div>
 
     <!-- آئٹمز کی ایڈیٹنگ لسٹ -->
-    <div id="adminItemsEditor"></div>
+    <div id="adminItemsEditor"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
-      <button class="btn-primary" style="background:var(--dark); flex:1;" onclick="saveAllItemChanges()">💾 سب کچھ محفوظ کریں</button>
-      <span id="saveStatus" style="font-size:11.5px; color:var(--mid); font-weight:700; margin-right:10px;">🟢 سب کچھ محفوظ ہے</span>
+      <button class="btn-primary" style="background:var(--dark); flex:1;" onclick="saveAllItemChanges()">💾 تمام تبدیلیاں محفوظ کریں</button>
+      <span id="saveStatus" style="font-size:11.5px; color:var(--mid); font-weight:700; margin-right:10px;">🟢 محفوظ ہے</span>
     </div>
   </div>
 
@@ -155,7 +152,7 @@ function switchTab(tabName){
   } else {
     document.getElementById('tabProductsBtn').className = 'tab active';
     document.getElementById('secProducts').style.display = 'block';
-    renderAdminEditor();
+    initAdminCategories();
   }
 }
 
@@ -186,30 +183,69 @@ function playBeepTech(){
   }catch(e){}
 }
 
-// کیٹیگریز اور پروڈکٹس کا ڈیٹا جو لوکل اسٹوریج یا ڈیفولت سے چلے گا
-let adminShopData = JSON.parse(localStorage.getItem("sj_admin_shop_data")) || {
-  "سبزی": [
-    {name: "آلو", name_roman: "Aloo", image: "", autoCalc: true, units: [{label: "KG", rate: 50}, {label: "آدھا KG", rate: 25}, {label: "ڈڑی (5 KG)", rate: 250}]},
-    {name: "ٹماٹر", name_roman: "Tamatar", image: "", autoCalc: true, units: [{label: "KG", rate: 200}, {label: "پاؤ", rate: 50}]}
-  ],
-  "پھل": [
-    {name: "کیلا", name_roman: "Kela", image: "", autoCalc: false, units: [{label: "درجن", rate: 180}, {label: "آدھا درجن", rate: 90}]}
-  ],
-  "کریانہ": [
-    {name: "چینی", name_roman: "Cheeni", image: "", autoCalc: false, units: [{label: "KG", rate: 140}]}
-  ]
-};
+let globalCategoriesData = {};
+let loadedCategoriesList = [];
+
+async function initAdminCategories(){
+  const selectEl = document.getElementById("catSelect");
+  let savedData = JSON.parse(localStorage.getItem("sj_admin_all_categories"));
+  
+  if(savedData){
+    globalCategoriesData = savedData;
+    loadedCategoriesList = Object.keys(savedData);
+    populateCategoryDropdown();
+    return;
+  }
+
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+    const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
+    
+    globalCategoriesData = {};
+    index.forEach((entry, i) => {
+      let catName = entry.category;
+      globalCategoriesData[catName] = catResults[i].map(it => ({
+        name: it.name || "",
+        name_roman: it.name_roman || "",
+        image: it.image || "",
+        icon: entry.icon || "🛒",
+        autoCalc: true,
+        units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
+      }));
+    });
+
+    loadedCategoriesList = Object.keys(globalCategoriesData);
+    localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
+    populateCategoryDropdown();
+  }catch(e){
+    selectEl.innerHTML = `<option value="">⚠️ کیٹگریز لوڈ نہیں ہو سکیں</option>`;
+  }
+}
+
+function populateCategoryDropdown(){
+  const selectEl = document.getElementById("catSelect");
+  selectEl.innerHTML = loadedCategoriesList.map((cat, idx) => `
+    <option value="${cat}" ${idx===0?'selected':''}>${globalCategoriesData[cat][0]?.icon || '📂'} ${cat}</option>
+  `).join("");
+  renderAdminEditor();
+}
 
 function renderAdminEditor(){
   const cat = document.getElementById("catSelect").value;
-  const items = adminShopData[cat] || [];
+  const items = globalCategoriesData[cat] || [];
   const container = document.getElementById("adminItemsEditor");
+
+  if(items.length === 0){
+    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`;
+    return;
+  }
 
   container.innerHTML = items.map((it, idx) => `
     <div class="control-box">
       <div class="item-edit-row">
-        <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})">
-          ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">🛒</span>`}
+        <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})" title="تصویر تبدیل کریں">
+          ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}
         </div>
         <div style="flex:1;">
           <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام (مثلاً آلو)" oninput="markUnsaved()">
@@ -220,7 +256,7 @@ function renderAdminEditor(){
       <input type="file" id="file_${idx}" style="display:none;" accept="image/*" onchange="handleImageUpload(event, ${idx})">
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت (کلو، درجن، پیکنگ)</span>
+        <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت (کلو، پاؤ، ڈڑی)</span>
         <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;">
           <input type="checkbox" ${it.autoCalc ? 'checked' : ''} onchange="toggleAutoCalc(${idx}, this.checked)"> KG بدلنے پر خودکار حساب
         </label>
@@ -256,7 +292,7 @@ function handleImageUpload(event, idx){
     const reader = new FileReader();
     reader.onload = function(e){
       const cat = document.getElementById("catSelect").value;
-      adminShopData[cat][idx].image = e.target.result;
+      globalCategoriesData[cat][idx].image = e.target.result;
       renderAdminEditor();
       markUnsaved();
       showToast("✅ تصویر کامیابی سے اپ لوڈ ہو گئی!");
@@ -267,21 +303,18 @@ function handleImageUpload(event, idx){
 
 function toggleAutoCalc(idx, val){
   const cat = document.getElementById("catSelect").value;
-  adminShopData[cat][idx].autoCalc = val;
+  globalCategoriesData[cat][idx].autoCalc = val;
   markUnsaved();
 }
 
-// کلو کا ریٹ بدلنے پر خودکار حساب کتاب (Auto-calculation)
 function onRateInput(idx, uIdx){
   markUnsaved();
   const cat = document.getElementById("catSelect").value;
-  let item = adminShopData[cat][idx];
+  let item = globalCategoriesData[cat][idx];
   
-  // ویلیو اپ ڈیٹ کریں
   let val = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
   item.units[uIdx].rate = val;
 
-  // اگر خودکار حساب ان ہے اور یہ پہلا یونٹ (کلو/درجن) ہے
   if(item.autoCalc && uIdx === 0){
     let baseRate = val;
     item.units.forEach((u, i) => {
@@ -305,21 +338,21 @@ function onRateInput(idx, uIdx){
 
 function addUnit(itemIdx){
   const cat = document.getElementById("catSelect").value;
-  adminShopData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
+  globalCategoriesData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
   renderAdminEditor();
   markUnsaved();
 }
 
 function removeUnit(itemIdx, unitIdx){
   const cat = document.getElementById("catSelect").value;
-  adminShopData[cat][itemIdx].units.splice(unitIdx, 1);
+  globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
   renderAdminEditor();
   markUnsaved();
 }
 
 function saveAllItemChanges(){
   const cat = document.getElementById("catSelect").value;
-  const items = adminShopData[cat];
+  const items = globalCategoriesData[cat];
   
   items.forEach((it, idx) => {
     it.name = document.getElementById(`name_${idx}`).value;
@@ -330,8 +363,8 @@ function saveAllItemChanges(){
     });
   });
 
-  localStorage.setItem("sj_admin_shop_data", JSON.stringify(adminShopData));
-  document.getElementById("saveStatus").textContent = "🟢 سب کچھ محفوظ ہے";
+  localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
+  document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
   document.getElementById("saveStatus").style.color = "var(--mid)";
   showToast("✅ تمام تبدیلیاں اور ریٹس محفوظ ہو گئے!");
   playBeepTech();

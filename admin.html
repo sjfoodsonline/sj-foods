@@ -96,7 +96,7 @@
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ कर لے گا۔</p>
+      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
@@ -445,8 +445,9 @@ function getTimeElapsed(timestamp) {
   let past = new Date(timestamp).getTime();
   if (isNaN(past)) return "";
   let now = new Date().getTime();
-  let diffMin = Math.floor((now - past) / (1000 * 60));
-  if (diffMin < 1) return "Just now";
+  let diffSec = Math.floor((now - past) / 1000);
+  if (diffSec < 60) return "Just now";
+  let diffMin = Math.floor(diffSec / 60);
   if (diffMin < 60) return `${diffMin}m ago`;
   let diffHour = Math.floor(diffMin / 60);
   if (diffHour < 24) return `${diffHour}h ago`;
@@ -479,7 +480,7 @@ async function fetchOrdersFromSheet(){
       };
     });
 
-    // نئے آنے والے آرڈرز سب سے اوپر اور مکمل شدہ نیچے
+    // نئے آنے والے آرڈرز بالکل سب سے اوپر (سب سے بڑا ٹائم اسٹیمپ یا تازہ ترین اوپر)
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -547,7 +548,7 @@ function renderOrdersDOM(){
             Address: ${o.address}<br>
             OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
             Date & Time: <b>${o.date}</b><br>
-            Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto;" dir="auto">${o.itemsSummary}</div>
+            Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto; text-align:right;" dir="auto">${o.itemsSummary}</div>
             Total Amount: <b>Rs. ${o.total}</b><br>
             Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
           </div>
@@ -565,7 +566,7 @@ function renderOrdersDOM(){
 }
 
 async function closeAndThankOrder(id, code, phone){
-  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا चाहते ہیں؟")) return;
+  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
   let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "");

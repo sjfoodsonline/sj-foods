@@ -20,31 +20,18 @@
     width:100%; max-width:480px; min-height:100vh; position:relative;
     box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
   }
-
   header{ 
     background:linear-gradient(160deg,var(--dark),var(--mid)); 
-    color:#fff; padding:20px 16px; 
-    border-radius:0 0 24px 24px; 
-    position:relative; 
+    color:#fff; padding:20px 16px; border-radius:0 0 24px 24px; position:relative; 
     box-shadow: 0 4px 15px rgba(21,58,32,0.2);
   }
-  header h1{
-    margin:0 0 4px; font-size:23px; font-weight:700; 
-    font-family: "Jameel Noori Nastaleeq", serif, Arial; 
-    letter-spacing: 0.5px;
-  }
-  header p{
-    margin:0; font-size:13px; opacity:.95; 
-    font-family: "Jameel Noori Nastaleeq", serif;
-  }
-
+  header h1{ margin:0 0 4px; font-size:23px; font-weight:700; font-family: "Jameel Noori Nastaleeq", serif, Arial; letter-spacing: 0.5px; }
+  header p{ margin:0; font-size:13px; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif; }
   .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-
+  
   .install-banner {
-    background: linear-gradient(135deg, var(--accent), #E65100);
-    color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), #E65100); color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
+    display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
   }
   .install-banner span { font-size: 14px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
   .install-banner button { background: #fff; color: var(--accent); border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
@@ -60,39 +47,25 @@
 
   .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
-  .features-scroll-wrap:hover .features-scroll{ animation-play-state: paused; }
-  @keyframes smoothMarquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(50%); }
-  }
+  @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .feature-card{
     flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
-    padding:8px 16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);
-    display:flex; align-items:center; gap:6px;
+    padding:8px 16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; align-items:center; gap:6px;
   }
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
   .featured-section{
     margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
-    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
-    box-shadow:0 10px 30px rgba(93,64,55,0.15);
+    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden; box-shadow:0 10px 30px rgba(93,64,55,0.15);
   }
-
-  .shout-title {
-    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
-    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
-  }
-  
+  .shout-title { font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase; text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif; }
   .deal-grid { display: flex; gap: 12px; justify-content: center; }
   .deal-card{
     flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0);
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.06);
   }
-  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
-
   .deal-card img, .deal-card .deal-icon-box{
     width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
     display: flex; align-items:center; justify-content:center; font-size: 38px;
@@ -100,21 +73,9 @@
   .deal-card .d-name{ font-size: 15px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.3; font-family: "Jameel Noori Nastaleeq", serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER */
-  .sticky-top-container{
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--paper);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border-bottom: 1.5px solid var(--line);
-  }
-
+  .sticky-top-container{ position: sticky; top: 0; z-index: 10; background: var(--paper); box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-bottom: 1.5px solid var(--line); }
   .search-wrap{padding:10px 16px 6px; background:var(--paper);}
-  #search{
-    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
-    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
-  }
+  #search{ width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line); background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold; }
 
   .cat-section{padding:4px 0 10px; background:var(--paper);}
   .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:4px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; cursor: grab; }
@@ -123,9 +84,7 @@
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
-    border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold;
-    white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
-    user-select: none;
+    border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold; white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
   }
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
@@ -134,15 +93,11 @@
     background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 12px; text-align: center;
     cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
   }
-  .home-cat-card:hover{ transform: translateY(-4px); border-color: var(--mid); box-shadow: 0 8px 25px rgba(46,125,50,0.15); }
-  
   .home-cat-img-wrap{
     width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; background: var(--leaf); overflow: hidden;
     display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative;
   }
-  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; opacity: 1; }
-  .home-cat-img-wrap img.fade-out { opacity: 0; }
-
+  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; }
   .home-cat-name { font-size: 15px; font-weight: bold; color: var(--dark); font-family: "Jameel Noori Nastaleeq", serif; line-height: 1.3; }
   .home-cat-urdu { font-size: 12px; color: var(--muted); font-family: Arial, sans-serif; margin-top: 2px; }
 
@@ -159,65 +114,40 @@
   
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
-    padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
+    padding:14px; margin-bottom:10px; text-align:right;
   }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
-  
   .item-row-top{display:flex; align-items:center; gap:12px;}
-
   .item-thumb{
     flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
-    display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,0.06); position:relative;
+    display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.06);
   }
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
-
   .item .info{min-width:0; flex:1;}
   .item .name{ font-size: 17px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: "Jameel Noori Nastaleeq", serif; }
-
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px; font-weight: bold; font-family: Arial, sans-serif;}
   .item .meta b{color:var(--price); font-weight:bold; font-size:14.5px;}
 
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
-  .unit-select{
-    flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold;
-    background:#fff; color:var(--dark); font-family: Arial, sans-serif;
-  }
-  
+  .unit-select{ flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold; background:#fff; color:var(--dark); font-family: Arial, sans-serif; }
   .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-  
-  .status-label {
-    font-size: 10px; font-weight: bold; font-family: Arial, sans-serif;
-    padding: 1px 6px; border-radius: 4px; letter-spacing: 0.3px;
-  }
+  .status-label { font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; padding: 1px 6px; border-radius: 4px; }
   .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
   .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
 
   .qty-box{display:flex; align-items:center; gap:6px;}
-  .qty-box button{
-    width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif;
-  }
+  .qty-box button{ width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; }
   .qty-box button.plus{background:var(--dark); color:#fff;}
-  .qty-box input{
-    width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; font-family: Arial, sans-serif;
-  }
+  .qty-box input{ width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; }
 
-  .sops-box{
-    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: right; font-family: "Jameel Noori Nastaleeq", serif;
-  }
+  .sops-box{ background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: right; font-family: "Jameel Noori Nastaleeq", serif; }
   .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14.5px; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
 
-  .cart-sops {
-    background: #F9F8F3; border: 1px dashed var(--mid); border-radius: 10px; padding: 10px; margin: 10px 0;
-    font-size: 12px; color: var(--dark); line-height: 1.6; font-family: "Jameel Noori Nastaleeq", serif !important;
-  }
+  .cart-sops { background: #F9F8F3; border: 1px dashed var(--mid); border-radius: 10px; padding: 10px; margin: 10px 0; font-size: 12px; color: var(--dark); line-height: 1.6; font-family: "Jameel Noori Nastaleeq", serif !important; }
 
-  #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary {
-    font-family: "Jameel Noori Nastaleeq", serif !important;
-  }
+  #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary { font-family: "Jameel Noori Nastaleeq", serif !important; }
   .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
 
-  /* CART BILLBAR */
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
     border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.25); padding:14px 18px; z-index:999999; display:flex; flex-direction:column;
@@ -228,46 +158,28 @@
   .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
   .cart-details{overflow-y:auto; max-height:60vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
   
-  .pay-card{
-    background:linear-gradient(135deg,#1B5E20,#2E7D32);
-    border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff;
-  }
-  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif;}
+  .pay-card{ background:linear-gradient(135deg,#1B5E20,#2E7D32); border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff; }
+  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95;}
   .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
-  .pay-number-row{
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
-    border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px;
-  }
+  .pay-number-row{ display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px; }
   .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
   #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
-  .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right; font-family: "Jameel Noori Nastaleeq", serif;}
+  .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right;}
 
   .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
-  .checkout-box input{
-    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif;
-  }
+  .checkout-box input{ width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
   
   .pay-method{display:flex; gap:8px; margin-bottom:8px;}
-  .pay-method label{
-    flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold;
-    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); font-family: "Jameel Noori Nastaleeq", serif;
-  }
+  .pay-method label{ flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold; background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); }
   .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
   .pay-method input{width:15px; height:15px;}
 
-  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; font-family: "Jameel Noori Nastaleeq", serif;}
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
   
   footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
-  .social-btn{
-    display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff;
-    padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif;
-  }
-  .social-btn.fb{background:#1877F2;}
-  .social-btn.tk{background:#000000;}
-  .social-btn.yt{background:#FF0000;}
-  .social-btn.ig{background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
+  .social-btn{ display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif; }
+  .social-btn.fb{background:#1877F2;} .social-btn.tk{background:#000000;} .social-btn.yt{background:#FF0000;} .social-btn.ig{background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
 
   .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:130; display:flex; align-items:center; justify-content:center; padding:24px; }
   .lightbox.hidden{display:none;}
@@ -281,7 +193,6 @@
 <body translate="no">
 
 <header>
-  <!-- Arrow / Share Icon -->
   <button class="share-btn" id="shareBtn" title="Share">➦</button>
   <h1>🟢 ایس جے فوڈز آن لائن</h1>
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
@@ -292,7 +203,6 @@
   <button id="installAppBtn">انسٹال کریں</button>
 </div>
 
-<!-- Home Page Only Elements -->
 <div id="homePageWrapper">
   <div class="cover-banner" id="coverBanner">
     <div class="cover-slider-track" id="coverSliderTrack"></div>
@@ -315,7 +225,6 @@
   </div>
 </div>
 
-<!-- STICKY TOP CONTAINER -->
 <div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -332,7 +241,6 @@
 <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 
-<!-- CART BILLBAR -->
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-summary" id="summary">
     <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز) <span style="font-size:11px; color:var(--muted); margin-right:6px;">(👆 انگلی سے کھولیں/بند کریں)</span></div>
@@ -424,19 +332,20 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
   }
 });
 
+// Robust browser history back button support for categories
 window.addEventListener('popstate', (event) => {
-  currentSelectedCategory = null;
+  if (event.state && event.state.cat) {
+    currentSelectedCategory = event.state.cat;
+  } else {
+    currentSelectedCategory = null;
+  }
   renderChips();
   renderMainView();
 });
 
 const slider = document.getElementById('catSliderWrap');
 let isDown = false, startX, scrollLeft;
-slider.addEventListener('mousedown', (e) => {
-  isDown = true;
-  startX = e.pageX - slider.offsetLeft;
-  scrollLeft = slider.scrollLeft;
-});
+slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
 slider.addEventListener('mouseleave', () => { isDown = false; });
 slider.addEventListener('mouseup', () => { isDown = false; });
 slider.addEventListener('mousemove', (e) => {
@@ -446,11 +355,7 @@ slider.addEventListener('mousemove', (e) => {
   const walk = (x - startX) * 2;
   slider.scrollLeft = scrollLeft - walk;
 });
-slider.addEventListener('touchstart', (e) => {
-  isDown = true;
-  startX = e.touches[0].pageX - slider.offsetLeft;
-  scrollLeft = slider.scrollLeft;
-});
+slider.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
 slider.addEventListener('touchend', () => { isDown = false; });
 slider.addEventListener('touchmove', (e) => {
   if(!isDown) return;
@@ -506,6 +411,15 @@ async function loadData(){
     });
 
     setupCoverSlider();
+    
+    // Check initial URL hash on load
+    let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
+    if(initialHash && CATEGORIES_META.some(c => c.name === initialHash)){
+      currentSelectedCategory = initialHash;
+    } else {
+      currentSelectedCategory = null;
+    }
+
     renderChips();
     renderMainView();
     renderFeatured();
@@ -541,7 +455,6 @@ function setupCoverSlider(){
   const track = document.getElementById("coverSliderTrack");
   const banner = document.getElementById("coverBanner");
   if(coverImagesList.length === 0) return;
-
   banner.style.display = "block";
   track.innerHTML = coverImagesList.map(img => `<div class="cover-slide"><img src="${img}" alt="Cover Slide"></div>`).join("");
 
@@ -558,7 +471,6 @@ function loadSavedCustomerDetails(){
   const savedName = localStorage.getItem("sj_cust_name") || "";
   const savedPhone = localStorage.getItem("sj_cust_phone") || "";
   const savedAddr = localStorage.getItem("sj_cust_addr") || "";
-
   if(savedName) document.getElementById("custName").value = savedName;
   if(savedPhone) document.getElementById("custPhone").value = savedPhone;
   if(savedAddr) document.getElementById("custAddr").value = savedAddr;
@@ -576,34 +488,29 @@ function renderChips(){
 }
 
 function selectCategory(catName){
-  if(currentSelectedCategory === null && catName !== null){
-    history.pushState({cat: catName}, "", "#" + catName);
+  if(catName){
+    history.pushState({cat: catName}, "", "#" + encodeURIComponent(catName));
+    currentSelectedCategory = catName;
+  } else {
+    history.pushState({cat: null}, "", window.location.pathname);
+    currentSelectedCategory = null;
   }
-  currentSelectedCategory = catName;
   renderChips();
   renderMainView();
   window.scrollTo({top: 0, behavior: 'auto'});
 }
 
 function resetToHome(){
-  if(currentSelectedCategory !== null){
-    history.back();
-  } else {
-    currentSelectedCategory = null;
-    renderChips();
-    renderMainView();
-  }
+  selectCategory(null);
 }
 
 function renderMainView(filter=""){
   const main = document.getElementById("list");
   main.innerHTML = "";
-  let anyShown = false;
   const homeWrapper = document.getElementById("homePageWrapper");
 
   if(filter){
     homeWrapper.style.display = "none";
-    anyShown = true;
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
     let container = document.createElement("div");
     container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
@@ -619,7 +526,6 @@ function renderMainView(filter=""){
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
     let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
     if(items.length > 0){
-      anyShown = true;
       let titleDiv = document.createElement("div");
       titleDiv.className = "cat-title";
       titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ واپس تمام کیٹگریز</button>`;
@@ -641,7 +547,6 @@ function renderMainView(filter=""){
   } 
   else {
     homeWrapper.style.display = "block";
-    anyShown = true;
     let grid = document.createElement("div");
     grid.className = "home-cats-grid";
     
@@ -662,25 +567,9 @@ function renderMainView(filter=""){
         <div class="home-cat-urdu">${cat.name}</div>
       `;
       grid.appendChild(card);
-
-      if(imagesList.length > 1){
-        let imgIdx = 0;
-        setInterval(() => {
-          imgIdx = (imgIdx + 1) % imagesList.length;
-          let imgEl = document.getElementById(`cat_img_${cat.name}`);
-          if(imgEl){
-            imgEl.classList.add("fade-out");
-            setTimeout(() => {
-              imgEl.src = imagesList[imgIdx];
-              imgEl.classList.remove("fade-out");
-            }, 400);
-          }
-        }, 3500);
-      }
     });
     main.appendChild(grid);
   }
-
   document.getElementById("noResult").style.display = "none";
 }
 
@@ -754,24 +643,14 @@ function renderBill(){
 
 const billbarEl = document.getElementById("billbar");
 const summaryEl = document.getElementById("summary");
-
 let touchStartY = 0;
-billbarEl.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, {passive: true});
-
+billbarEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
 billbarEl.addEventListener('touchend', (e) => {
   let touchEndY = e.changedTouches[0].clientY;
-  if(touchEndY - touchStartY > 50) {
-    billbarEl.classList.add("collapsed");
-  } else if(touchStartY - touchEndY > 50) {
-    billbarEl.classList.remove("collapsed");
-  }
+  if(touchEndY - touchStartY > 50) billbarEl.classList.add("collapsed");
+  else if(touchStartY - touchEndY > 50) billbarEl.classList.remove("collapsed");
 });
-
-summaryEl.onclick = () => {
-  billbarEl.classList.toggle("collapsed");
-};
+summaryEl.onclick = () => { billbarEl.classList.toggle("collapsed"); };
 
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
@@ -779,9 +658,7 @@ document.getElementById("copyNumBtn").onclick = async ()=>{
   try{
     await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
     showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){
-    showToast("نمبر: " + SHOP_PAY_NUMBER);
-  }
+  }catch(e){ showToast("نمبر: " + SHOP_PAY_NUMBER); }
 };
 
 const payCod = document.getElementById("payCod");
@@ -793,12 +670,8 @@ const payTxId = document.getElementById("payTxId");
 function updatePayMethodUI(){
   lblCod.classList.toggle("checked", payCod.checked);
   lblEasy.classList.toggle("checked", payEasy.checked);
-  if(payEasy.checked){
-    payTxId.style.display = "block";
-  } else {
-    payTxId.style.display = "none";
-    payTxId.value = "";
-  }
+  if(payEasy.checked) payTxId.style.display = "block";
+  else { payTxId.style.display = "none"; payTxId.value = ""; }
 }
 payCod.addEventListener("change", updatePayMethodUI);
 payEasy.addEventListener("change", updatePayMethodUI);
@@ -811,12 +684,8 @@ function showToast(text){
 }
 
 document.getElementById("shareBtn").onclick = async () => {
-  if(navigator.share){
-    await navigator.share({title: "SJ Foods Online", url: window.location.href}).catch(()=>{});
-  } else {
-    await navigator.clipboard.writeText(window.location.href);
-    showToast("✅ Link Copied!");
-  }
+  if(navigator.share){ await navigator.share({title: "SJ Foods Online", url: window.location.href}).catch(()=>{}); }
+  else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
 document.getElementById("waBtn").onclick = () => {
@@ -829,14 +698,9 @@ document.getElementById("waBtn").onclick = () => {
   
   let payMethod = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
   if(payEasy.checked){
-    if(!txId){
-      alert("⚠️ Please enter EasyPaisa / Bank Transaction ID (TID)!");
-      payTxId.focus();
-      return;
-    }
+    if(!txId){ alert("⚠️ Please enter EasyPaisa / Bank Transaction ID (TID)!"); payTxId.focus(); return; }
     payMethod = `EasyPaisa / Bank Transfer (Online Payment) — TID: ${txId}`;
   }
-
   if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
@@ -858,11 +722,8 @@ document.getElementById("waBtn").onclick = () => {
     summaryHtml += `• [${it.cat}] ${it.name} ${it.name_roman ? '('+it.name_roman+')' : ''} — ${it.qty} ${u.label} = ${fmt(t)}<br>`;
   });
   
-  if(payEasy.checked) {
-    summaryHtml += `<br><b>Payment Method:</b> EasyPaisa / Bank Transfer (Online)<br><b>Transaction ID (TID):</b> ${txId}`;
-  } else {
-    summaryHtml += `<br><b>Payment Method:</b> Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]`;
-  }
+  if(payEasy.checked) summaryHtml += `<br><b>Payment Method:</b> EasyPaisa / Bank Transfer (Online)<br><b>Transaction ID (TID):</b> ${txId}`;
+  else summaryHtml += `<br><b>Payment Method:</b> Cash on Delivery (COD)`;
   
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
@@ -891,49 +752,34 @@ function renderFeatured(){
   const sec = document.getElementById("featuredSection");
   if(feat.length === 0) return;
   sec.classList.remove("hidden");
-
   let currentIndex = 0;
+
   const updateFeaturedGrid = () => {
     if(feat.length === 0) return;
-    const cards = box.querySelectorAll('.deal-card');
-    cards.forEach(c => c.classList.add('fade-out'));
-
-    setTimeout(() => {
-      let first = feat[currentIndex % feat.length];
-      let second = feat[(currentIndex + 1) % feat.length];
-      
-      box.innerHTML = `
-        <div class="deal-card fade-out" onclick="jumpToItem('${first.cat}', '${first.id}')">
-          ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
-          <div class="d-name">${first.name} ${first.name_roman ? '<span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:Arial,sans-serif;">('+first.name_roman+')</span>' : ''}</div>
-          <div class="d-rate">${fmt(first.units[0].rate)}</div>
-        </div>
-        <div class="deal-card fade-out" onclick="jumpToItem('${second.cat}', '${second.id}')">
-          ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
-          <div class="d-name">${second.name} ${second.name_roman ? '<span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:Arial,sans-serif;">('+second.name_roman+')</span>' : ''}</div>
-          <div class="d-rate">${fmt(second.units[0].rate)}</div>
-        </div>
-      `;
-
-      setTimeout(() => {
-        box.querySelectorAll('.deal-card').forEach(c => c.classList.remove('fade-out'));
-      }, 50);
-
-      currentIndex += 2;
-    }, 400);
+    let first = feat[currentIndex % feat.length];
+    let second = feat[(currentIndex + 1) % feat.length];
+    
+    box.innerHTML = `
+      <div class="deal-card" onclick="jumpToItem('${first.cat}', '${first.id}')">
+        ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
+        <div class="d-name">${first.name} ${first.name_roman ? '<span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:Arial,sans-serif;">('+first.name_roman+')</span>' : ''}</div>
+        <div class="d-rate">${fmt(first.units[0].rate)}</div>
+      </div>
+      <div class="deal-card" onclick="jumpToItem('${second.cat}', '${second.id}')">
+        ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
+        <div class="d-name">${second.name} ${second.name_roman ? '<span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:Arial,sans-serif;">('+second.name_roman+')</span>' : ''}</div>
+        <div class="d-rate">${fmt(second.units[0].rate)}</div>
+      </div>
+    `;
+    currentIndex += 2;
   };
-
   updateFeaturedGrid();
-  if(feat.length > 2){
-    setInterval(updateFeaturedGrid, 4000);
-  }
+  if(feat.length > 2) setInterval(updateFeaturedGrid, 4000);
 }
 
 function jumpToItem(catName, itemId){
   selectCategory(catName);
-  setTimeout(() => {
-    scrollToMainItem(itemId);
-  }, 100);
+  setTimeout(() => { scrollToMainItem(itemId); }, 100);
 }
 
 function scrollToMainItem(id){
@@ -951,9 +797,7 @@ function openLightbox(src, name){
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
 }
-document.getElementById("closeLightbox").onclick = () => {
-  document.getElementById("lightbox").classList.add("hidden");
-};
+document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
 
 loadData();
 loadSettings();

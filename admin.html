@@ -96,7 +96,7 @@
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ कर لے گا۔</p>
+      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
@@ -345,7 +345,7 @@ function onRateInput(idx, uIdx){
         let calculated = baseRate;
         if(lbl.includes("آدھا") || lbl.includes("half")) calculated = Math.round(baseRate / 2);
         else if(lbl.includes("پاؤ") || lbl.includes("pao")) calculated = Math.round(baseRate / 4);
-        else if(lbl.includes("ڈڑی") || lbl.includes("5") || lbl.includes("dari")) calculated = baseRate * 5;
+        else if(lbl.includes("دڑی") || lbl.includes("5") || lbl.includes("dari")) calculated = baseRate * 5;
         u.rate = calculated;
         const inputEl = document.getElementById(`rate_${idx}_${i}`);
         if(inputEl) inputEl.value = calculated;
@@ -478,7 +478,6 @@ async function fetchOrdersFromSheet(){
       };
     });
 
-    // NEWEST FIRST ORDERING (Reverse chronological)
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -567,7 +566,13 @@ async function closeAndThankOrder(id, code, phone){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
-  let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "03000000000");
+  let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "");
+  
+  if(!targetPhone || targetPhone.length < 10) {
+    targetPhone = prompt("⚠️ اس آرڈر کے لیے کسٹمر کا درست واٹس ایپ نمبر درج کریں:", "92");
+    if(!targetPhone) return;
+  }
+
   if(cacheMatch) cacheMatch.status = 'completed';
 
   try {
@@ -580,12 +585,15 @@ async function closeAndThankOrder(id, code, phone){
   } catch(e){}
 
   const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
+  
   let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  if(cleanPhone.startsWith("0")) {
+    cleanPhone = "92" + cleanPhone.slice(1);
+  }
   
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
-  showToast("✅ Order closed and WhatsApp opened!");
+  showToast("✅ Order closed and customer WhatsApp opened!");
   setTimeout(() => { renderOrders(); }, 1000);
 }
 

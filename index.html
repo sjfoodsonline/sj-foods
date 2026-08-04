@@ -15,7 +15,7 @@
   *{box-sizing:border-box;}
   html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
-    margin:0 auto; padding:150px 0 110px 0; background:var(--paper); color:var(--ink);
+    margin:0 auto; padding:0 0 110px 0; background:var(--paper); color:var(--ink);
     font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
     width:100%; max-width:480px; min-height:100vh; position:relative;
     box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
@@ -27,7 +27,6 @@
     border-radius:0 0 24px 24px; 
     position:relative; 
     box-shadow: 0 4px 15px rgba(21,58,32,0.2);
-    margin-top: -130px;
   }
   header h1{
     margin:0 0 4px; font-size:23px; font-weight:700; 
@@ -101,8 +100,13 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* 100% HARD-FIXED LAYER TOP CONTAINER (Never moves on scroll) */
+  /* STICKY TOP CONTAINER (Only becomes sticky when inside category view, normal position on home) */
   .sticky-top-container{
+    position: relative;
+    z-index: 50;
+    background: var(--paper);
+  }
+  .sticky-top-container.fixed-nav {
     position: fixed;
     top: 0;
     left: 50%;
@@ -110,7 +114,6 @@
     width: 100%;
     max-width: 480px;
     z-index: 9999;
-    background: var(--paper);
     box-shadow: 0 4px 15px rgba(0,0,0,0.12);
     border-bottom: 1.5px solid var(--line);
   }
@@ -122,15 +125,18 @@
   }
 
   .cat-section{padding:4px 0 10px; background:var(--paper);}
-  .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
-  .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
-  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
+  .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:4px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; cursor: grab; }
+  .cat-marquee-wrap::-webkit-scrollbar { display: none; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
+  .cat-marquee-wrap.auto-animate .cat-marquee-track { animation: cat-move 35s linear infinite; }
+  .cat-marquee-wrap.auto-animate:hover .cat-marquee-track{ animation-play-state: paused; }
   @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
     border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold;
     white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
+    user-select: none;
   }
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
@@ -286,18 +292,6 @@
 </head>
 <body translate="no">
 
-<!-- HARD-FIXED TOP CONTAINER: Search bar & Categories locked at the very top -->
-<div class="sticky-top-container">
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-  </div>
-  <div class="cat-section">
-    <div class="cat-marquee-wrap">
-      <div class="cat-marquee-track" id="chips"></div>
-    </div>
-  </div>
-</div>
-
 <header>
   <button class="share-btn" id="shareBtn" title="Share">🔗</button>
   <h1>🟢 ایس جے فوڈز آن لائن</h1>
@@ -328,6 +322,18 @@
 <div class="featured-section hidden" id="featuredSection">
   <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
   <div class="deal-grid" id="dealBox"></div>
+</div>
+
+<!-- STICKY TOP CONTAINER: Normal on home, fixed only when inside a category -->
+<div class="sticky-top-container" id="stickyNavContainer">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap auto-animate" id="catSliderWrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
 </div>
 
 <main id="list"></main>
@@ -428,10 +434,43 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
 window.addEventListener('popstate', (event) => {
   if(currentSelectedCategory !== null){
     currentSelectedCategory = null;
+    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
     renderChips();
     renderMainView();
   }
 });
+
+// Enable drag-to-scroll / touch swipe for categories
+const slider = document.getElementById('catSliderWrap');
+let isDown = false, startX, scrollLeft;
+slider.addEventListener('mousedown', (e) => {
+  isDown = true;
+  slider.classList.remove('auto-animate');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('mouseup', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+});
+slider.addEventListener('touchstart', (e) => {
+  isDown = true;
+  slider.classList.remove('auto-animate');
+  startX = e.touches[0].pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('touchend', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('touchmove', (e) => {
+  if(!isDown) return;
+  const x = e.touches[0].pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+}, {passive: true});
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
@@ -562,9 +601,10 @@ function selectCategory(catName){
     history.pushState({cat: catName}, "", "#" + catName);
   }
   currentSelectedCategory = catName;
+  document.getElementById('stickyNavContainer').classList.add('fixed-nav');
   renderChips();
   renderMainView();
-  // Prevent page from auto-scrolling to top abruptly
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function resetToHome(){
@@ -572,6 +612,7 @@ function resetToHome(){
     history.back();
   } else {
     currentSelectedCategory = null;
+    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
     renderChips();
     renderMainView();
   }
@@ -583,14 +624,16 @@ function renderMainView(filter=""){
   let anyShown = false;
 
   if(filter){
+    anyShown = true;
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    let container = document.createElement("div");
+    container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
     if(filteredItems.length > 0){
-      anyShown = true;
-      let container = document.createElement("div");
-      container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
       filteredItems.forEach(it => container.appendChild(createItemRow(it)));
-      main.appendChild(container);
+    } else {
+      container.innerHTML += `<div style="text-align:center; padding:20px; color:var(--muted);">کوئی آئٹم نہیں ملا</div>`;
     }
+    main.appendChild(container);
   } 
   else if(currentSelectedCategory){
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
@@ -657,7 +700,7 @@ function renderMainView(filter=""){
     main.appendChild(grid);
   }
 
-  document.getElementById("noResult").style.display = anyShown ? "none" : "block";
+  document.getElementById("noResult").style.display = (anyShown && !filter) ? "none" : "none";
 }
 
 function createItemRow(it){
@@ -805,7 +848,7 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
   msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
 
-  // Save directly to localStorage for instant admin panel detection
+  // Save to localStorage immediately so admin panel receives it 100%
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let newOrderObj = {
     id: "wa_" + Date.now(),

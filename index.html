@@ -40,7 +40,6 @@
 
   .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
-  /* Install App Banner Button */
   .install-banner {
     background: linear-gradient(135deg, var(--accent), #E65100);
     color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
@@ -101,7 +100,7 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* ABSOLUTELY FIXED STICKY TOP CONTAINER (Stays locked on scroll everywhere) */
+  /* ABSOLUTELY FIXED STICKY TOP CONTAINER */
   .sticky-top-container{
     position: -webkit-sticky;
     position: sticky;
@@ -289,7 +288,6 @@
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<!-- Install App Button Bar -->
 <div class="install-banner" id="installBanner" style="display:none;">
   <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
   <button id="installAppBtn">انسٹال کریں</button>
@@ -316,7 +314,7 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- ABSOLUTELY FIXED STICKY TOP CONTAINER (Search bar + Marquee categories fixed securely below Top Deals) -->
+<!-- ABSOLUTELY FIXED STICKY TOP CONTAINER -->
 <div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -420,6 +418,15 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
       document.getElementById('installBanner').style.display = 'none';
     }
     deferredPrompt = null;
+  }
+});
+
+// Smart Back Button History Management to prevent accidental app close
+window.addEventListener('popstate', (event) => {
+  if(currentSelectedCategory !== null){
+    currentSelectedCategory = null;
+    renderChips();
+    renderMainView();
   }
 });
 
@@ -548,15 +555,23 @@ function renderChips(){
 }
 
 function selectCategory(catName){
+  if(currentSelectedCategory === null && catName !== null){
+    history.pushState({cat: catName}, "", "#" + catName);
+  }
   currentSelectedCategory = catName;
   renderChips();
   renderMainView();
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function resetToHome(){
-  currentSelectedCategory = null;
-  renderChips();
-  renderMainView();
+  if(currentSelectedCategory !== null){
+    history.back();
+  } else {
+    currentSelectedCategory = null;
+    renderChips();
+    renderMainView();
+  }
 }
 
 function renderMainView(filter=""){
@@ -768,7 +783,6 @@ document.getElementById("waBtn").onclick = () => {
   let subtotal = 0;
   let summaryHtml = "";
   
-  /* کسٹمر کی طرف سے دکان والے کو بھیجے جانے والے واٹس ایپ میسج کا درست فارمیٹ */
   let msg = `🟢 *SJ Foods Online — نیا آرڈر* [${orderCode}]\n\n`;
   msg += `السلام علیکم! میں درج ذیل اشیاء منگوانا چاہتا ہوں:\n\n`;
   msg += `👤 میرا نام: ${name}\n`;

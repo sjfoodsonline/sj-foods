@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — مکمل ایڈمن اور ریٹس کنٹرول پینل</title>
+<title>SJ Foods — مکمل ایڈمن و آرڈر کنٹرول سینٹر</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -24,6 +24,13 @@
   header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
 
   .wrap{padding:14px;}
+  
+  /* Analytics Dashboard */
+  .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
+  .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
+  .dash-num{font-size:16px; font-weight:800; color:var(--dark); margin-top:2px;}
+  .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:700;}
+
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
   .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
@@ -76,6 +83,10 @@
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+
+  /* Rider View Mode Style */
+  body.rider-mode .dash-grid, body.rider-mode .tabs, body.rider-mode header p, body.rider-mode .card-analytics {display:none !important;}
+  body.rider-mode .chat-body {display:block !important;}
 </style>
 </head>
 <body>
@@ -86,6 +97,22 @@
 </header>
 
 <div class="wrap">
+
+  <!-- Analytics Dashboard -->
+  <div class="dash-grid card-analytics">
+    <div class="dash-card">
+      <div class="dash-lbl">📦 کل آرڈرز</div>
+      <div class="dash-num" id="statTotalOrders">0</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-lbl">⏳ پینڈنگ</div>
+      <div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-lbl">💵 کل سیلز</div>
+      <div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div>
+    </div>
+  </div>
 
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو ان باکس</div>
@@ -108,9 +135,9 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر ہمیشہ سب سے اوپر آئے گا۔ وقت لائیو چلتا رہے گا۔</p>
-      <div style="display:flex; gap:8px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
+        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="toggleRiderView()">🏍️ رائڈر موڈ</button>
       </div>
     </div>
     
@@ -143,6 +170,37 @@
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
+
+// ویب پش نوٹیفکیشن آن کرنے کی اجازت مانگنا
+function requestNotificationPermission() {
+  if ('Notification' in window) {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        showToast("🟢 نوٹیفکیشن ایکٹیو ہو گئے ہیں!");
+        new Notification("SJ Foods Admin", { body: "پینڈنگ آرڈر کے نوٹیفکیشن اب اسکرین پر آئیں گے۔", icon: "favicon.ico" });
+      } else {
+        showToast("⚠️ نوٹیفکیشن بلاک کر دیے گئے ہیں", true);
+      }
+    });
+  } else {
+    showToast("⚠️ آپ کا براؤزر نوٹیفکیشن کو سپورٹ نہیں کرتا", true);
+  }
+}
+
+// 15 منٹ سے زیادہ پرانے پینڈنگ آرڈر کے لیے پاپ اپ نوٹیفکیشن بھیجنا
+function sendPushNotification(orderCode, timeAgoStr) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification("⚠️ آرڈر میں تاخیر (SJ Foods)", {
+      body: `آرڈر ${orderCode} کو آئے ہوئے ${timeAgoStr} ہو چکے ہیں! براہ کرم فوری عمل کریں۔`,
+      requireInteraction: true
+    });
+  }
+}
+
+function toggleRiderView(){
+  document.body.classList.toggle("rider-mode");
+  showToast(document.body.classList.contains("rider-mode") ? "🏍️ رائڈر موڈ آن" : "⚙️ نارمل ایڈمن موڈ");
+}
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);
@@ -441,23 +499,22 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// وقت اور گزرتے ہوئے منٹوں کی بالکل درست لائیو کیلکولیشن
 function getTimeElapsed(timestamp) {
-  if (!timestamp) return { text: "Just now", timeStr: "" };
+  if (!timestamp) return { text: "Just now", timeStr: "", diffMin: 0 };
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return { text: "Just now", timeStr: "" };
+  if (isNaN(past)) return { text: "Just now", timeStr: "", diffMin: 0 };
   let now = new Date().getTime();
   let diffSec = Math.floor((now - past) / 1000);
+  let diffMin = Math.floor(diffSec / 60);
 
   let timeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
 
-  if (diffSec < 60) return { text: "Just now", timeStr: timeStr };
-  let diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return { text: `${diffMin}m ago`, timeStr: timeStr };
+  if (diffSec < 60) return { text: "Just now", timeStr: timeStr, diffMin: 0 };
+  if (diffMin < 60) return { text: `${diffMin}m ago`, timeStr: timeStr, diffMin: diffMin };
   let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return { text: `${diffHour}h ago`, timeStr: timeStr };
+  if (diffHour < 24) return { text: `${diffHour}h ago`, timeStr: timeStr, diffMin: diffMin };
   let diffDays = Math.floor(diffHour / 24);
-  return { text: `${diffDays}d ago`, timeStr: timeStr };
+  return { text: `${diffDays}d ago`, timeStr: timeStr, diffMin: diffMin };
 }
 
 async function fetchOrdersFromSheet(){
@@ -480,17 +537,17 @@ async function fetchOrdersFromSheet(){
         phone: row.phone || "03000000000",
         address: row.address || "Mingora Swat",
         itemsSummary: row.items,
-        total: row.total || 0,
+        total: parseFloat(row.total) || 0,
         otpCode: unifiedOtp,
         date: formattedDate,
         rawTimestamp: rawTimestamp,
         timeAgo: timeInfo.text,
         exactTimeStr: timeInfo.timeStr,
+        diffMin: timeInfo.diffMin,
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
 
-    // نئے آرڈرز سب سے اوپر اور مکمل شدہ آرڈرز سب سے نیچے
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -517,6 +574,18 @@ let latestOrdersCache = [];
 
 async function renderOrders(){
   latestOrdersCache = await fetchOrdersFromSheet();
+  
+  // Update Analytics Dashboard
+  let totalSales = 0;
+  let pendingCount = 0;
+  latestOrdersCache.forEach(o => {
+    if(o.status === 'completed') totalSales += o.total;
+    else pendingCount++;
+  });
+  document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
+  document.getElementById("statPendingOrders").textContent = pendingCount;
+  document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
+
   if(latestOrdersCache.length === 0){
     document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
     return;
@@ -526,14 +595,21 @@ async function renderOrders(){
   }
   cachedOrdersCount = latestOrdersCache.length;
 
-  let hasPending = latestOrdersCache.some(o => o.status !== 'completed');
-  let currentTime = Date.now();
-  if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
-    playBeepTech();
-    lastReminderTime = currentTime;
-    showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
-  }
+  // Check 15-minute pending orders for Notification
+  latestOrdersCache.forEach(o => {
+    if(o.status !== 'completed' && o.diffMin >= 15) {
+      sendPushNotification(o.code, o.timeAgo);
+    }
+  });
+
   renderOrdersDOM();
+}
+
+function requestLocation(phone){
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  let msg = "Mohtaram Customer! Meharbani karke apne ghar ya dukan ki Live Location WhatsApp par share kar dein taake delivery boy asani se pohnch sake. Shukriya!";
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
 function renderOrdersDOM(){
@@ -555,7 +631,8 @@ function renderOrdersDOM(){
         </div>
         <div class="chat-body" dir="auto">
           <div style="font-size:13.5px; line-height:1.7;">
-            Phone: <span dir="ltr">${o.phone}</span><br>
+            Phone: <span dir="ltr">${o.phone}</span> 
+            <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Call Direct</a><br>
             Address: ${o.address}<br>
             OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
             Date & Time: <b>${o.date}</b><br>
@@ -565,6 +642,7 @@ function renderOrdersDOM(){
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.date}')">🖨️ Print</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
@@ -642,9 +720,7 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
 }
 
 renderOrders();
-// ہر 4 سیکنڈ بعد لائیو وقت کاؤنٹ کرنے کے لیے
 setInterval(renderOrders, 4000);
-// ہر سیکنڈ صرف وقت کے لیبل اپڈیٹ کرنے کے لیے
 setInterval(renderOrdersDOM, 1000);
 </script>
 </body>

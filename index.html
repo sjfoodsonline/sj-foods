@@ -863,7 +863,7 @@ document.getElementById("waBtn").onclick = () => {
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
   try {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzmKJ1qOTHy1EwtxmePLJBsLZYFUGYNrsJSnDp_wmPQ8ErckPbsMwmt-sPIUKwDuvON/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
       items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,

@@ -100,11 +100,11 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER */
+  /* STICKY TOP CONTAINER (Low z-index so cart stays strictly on top) */
   .sticky-top-container{
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: 10;
     background: var(--paper);
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border-bottom: 1.5px solid var(--line);
@@ -217,10 +217,10 @@
   }
   .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
 
-  /* CART BILLBAR (High z-index to stay above search and categories) */
+  /* CART BILLBAR (Highest z-index so it always floats above everything else) */
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
-    border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.2); padding:14px 18px; z-index:99999; display:flex; flex-direction:column;
+    border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.25); padding:14px 18px; z-index:999999; display:flex; flex-direction:column;
     width:100%; max-width:480px; margin:0 auto; max-height:85vh; touch-action: pan-y;
   }
   #billbar.collapsed .cart-details{display:none;}

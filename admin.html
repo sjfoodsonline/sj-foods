@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -148,7 +148,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzmKJ1qOTHy1EwtxmePLJBsLZYFUGYNrsJSnDp_wmPQ8ErckPbsMwmt-sPIUKwDuvON/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQm8rRjAn7FULiVGDFWOH-41cJ2Wtl6VamL81UNTlmKfpVey-KTBZP1zBWmQ2xr0h3/exec";
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);
@@ -454,7 +454,7 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowFormatted = new Date().toLocaleString();
+  let nowFormatted = new Date().toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true});
   let formattedSummary = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
@@ -510,7 +510,7 @@ async function fetchOrdersFromSheet(){
     const data = await res.json();
     let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
       let rawTime = row.timestamp || "";
-      let formattedDate = rawTime ? new Date(rawTime).toLocaleString() : "آج";
+      let formattedDate = rawTime ? new Date(rawTime).toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true}) : "آج";
       let timeAgo = getTimeElapsed(rawTime);
       return {
         id: "sh_" + index,

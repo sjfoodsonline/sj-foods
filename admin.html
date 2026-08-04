@@ -48,7 +48,8 @@
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
-  .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
+  .chat-item.pending{border-color:#FFA000; background:#FFFDE7;}
+  .chat-item.pending.overdue{animation: superBlinking 0.8s infinite ease-in-out;}
   .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important; animation: none !important;}
   
   @keyframes superBlinking{ 
@@ -60,6 +61,23 @@
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
   .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
   .chat-item.open .chat-body{display:block;}
+
+  /* Stopwatch Counter Box */
+  .stopwatch-badge{
+    font-family: monospace, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    direction: ltr;
+  }
+  .stopwatch-badge.fresh { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .stopwatch-badge.warning { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+  .stopwatch-badge.danger { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+  .stopwatch-badge.done { background: #E8F5E9; color: #1B5E20; }
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
@@ -167,7 +185,7 @@
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
-const ADMIN_PASSWORD = "3799"; // اپڈیٹ شدہ پاسورڈ 3799
+const ADMIN_PASSWORD = "3799"; 
 
 let isAdminAuthenticated = false;
 
@@ -201,10 +219,10 @@ function requestNotificationPermission() {
   }
 }
 
-function sendPushNotification(orderCode, timeAgoStr) {
+function sendPushNotification(orderCode, elapsedStr) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification("⚠️ آرڈر میں تاخیر (SJ Foods)", {
-      body: `آرڈر ${orderCode} کو آئے ہوئے ${timeAgoStr} ہو چکے ہیں!`,
+      body: `آرڈر ${orderCode} کو آئے ہوئے ${elapsedStr} ہو چکے ہیں!`,
       requireInteraction: true
     });
   }
@@ -512,22 +530,39 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-function getTimeElapsed(timestamp) {
-  if (!timestamp) return { text: "Just now", timeStr: "", diffMin: 0 };
+// ⏱️ ریسنگ اسٹاپ واچ کاؤنٹر (روپ منٹ و سیکنڈز)
+function getStopwatchElapsed(timestamp) {
+  if (!timestamp) return { text: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return { text: "Just now", timeStr: "", diffMin: 0 };
+  if (isNaN(past)) return { text: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
+  
   let now = new Date().getTime();
-  let diffSec = Math.floor((now - past) / 1000);
-  let diffMin = Math.floor(diffSec / 60);
+  let totalSec = Math.floor((now - past) / 1000);
+  if(totalSec < 0) totalSec = 0;
 
+  let mins = Math.floor(totalSec / 60);
+  let secs = totalSec % 60;
+  let hrs = Math.floor(mins / 60);
+  mins = mins % 60;
+
+  let pad = (n) => n < 10 ? '0' + n : n;
   let timeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
 
-  if (diffSec < 60) return { text: "Just now", timeStr: timeStr, diffMin: 0 };
-  if (diffMin < 60) return { text: `${diffMin}m ago`, timeStr: timeStr, diffMin: diffMin };
-  let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return { text: `${diffHour}h ago`, timeStr: timeStr, diffMin: diffMin };
-  let diffDays = Math.floor(diffHour / 24);
-  return { text: `${diffDays}d ago`, timeStr: timeStr, diffMin: diffMin };
+  let formattedText = "";
+  if(hrs > 0) {
+    formattedText = `⏱️ ${pad(hrs)}h ${pad(mins)}m ${pad(secs)}s`;
+  } else {
+    formattedText = `⏱️ ${pad(mins)}m ${pad(secs)}s`;
+  }
+
+  let statusClass = "fresh";
+  if (totalSec >= 900) { // 15 min+
+    statusClass = "danger";
+  } else if (totalSec >= 300) { // 5 min+
+    statusClass = "warning";
+  }
+
+  return { text: formattedText, exactTimeStr: timeStr, totalSec: totalSec, class: statusClass };
 }
 
 async function fetchOrdersFromSheet(){
@@ -540,9 +575,8 @@ async function fetchOrdersFromSheet(){
       let rawTimestamp = isNaN(parsedTime) ? Date.now() : parsedTime;
       
       let formattedDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTimestamp));
-      
-      let timeInfo = getTimeElapsed(rawTimestamp);
       let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
+      
       return {
         id: "sh_" + index,
         code: row.code,
@@ -554,9 +588,6 @@ async function fetchOrdersFromSheet(){
         otpCode: unifiedOtp,
         date: formattedDate,
         rawTimestamp: rawTimestamp,
-        timeAgo: timeInfo.text,
-        exactTimeStr: timeInfo.timeStr,
-        diffMin: timeInfo.diffMin,
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
@@ -606,12 +637,6 @@ async function renderOrders(){
   }
   cachedOrdersCount = latestOrdersCache.length;
 
-  latestOrdersCache.forEach(o => {
-    if(o.status !== 'completed' && o.diffMin >= 15) {
-      sendPushNotification(o.code, o.timeAgo);
-    }
-  });
-
   renderOrdersDOM();
 }
 
@@ -629,15 +654,24 @@ function renderOrdersDOM(){
   area.innerHTML = orders.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
-    let timeInfo = getTimeElapsed(o.rawTimestamp);
+    let sw = getStopwatchElapsed(o.rawTimestamp);
+
+    if(!isCompleted && sw.totalSec >= 900) {
+      sendPushNotification(o.code, sw.text);
+    }
+
+    let isOverdue = (!isCompleted && sw.totalSec >= 900);
 
     return `
-      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOverdue ? 'overdue' : ''} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span style="font-size:14px; direction:auto;">📌 ${o.code} — ${o.name}</span>
-          <span style="font-size:11px; direction:ltr; color:${isCompleted ? 'var(--mid)' : 'var(--price)'}; background:rgba(255,255,255,0.85); padding:3px 8px; border-radius:6px; font-weight:800; display:flex; gap:4px; align-items:center;">
-            <span>${timeInfo.timeStr}</span> | <span>${timeInfo.text}</span> | <span>${isCompleted ? 'Completed' : 'Pending'}</span>
-          </span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:11px; font-weight:700; color:var(--muted);">${sw.exactTimeStr}</span>
+            <span class="stopwatch-badge ${isCompleted ? 'done' : sw.class}">
+              ${isCompleted ? '✅ Completed' : sw.text}
+            </span>
+          </div>
         </div>
         <div class="chat-body" dir="auto">
           <div style="font-size:13.5px; line-height:1.7;">
@@ -731,6 +765,7 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
 
 renderOrders();
 setInterval(renderOrders, 4000);
+// ہر 1 سیکنڈ بعد سیکنڈز کے لائیو کاؤنٹر کو اپڈیٹ کرنا (استاپ واچ)
 setInterval(renderOrdersDOM, 1000);
 </script>
 </body>

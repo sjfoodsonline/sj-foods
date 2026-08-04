@@ -142,7 +142,7 @@
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
-const BUSINESS_WHATSAPP = "923155166034"; // تیسرا واٹس ایپ بزنس نمبر
+const BUSINESS_WHATSAPP = "923155166034"; 
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);
@@ -412,13 +412,14 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
+  let nowISO = new Date().toISOString();
+  let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
   let formattedSummary = `Date & Time: ${nowFormatted}<br>Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode, name: name, phone: phone, address: address,
     items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""),
-    timestamp: new Date().toISOString(), status: "pending"
+    timestamp: nowISO, status: "pending"
   };
 
   if(SHEET_URL){
@@ -440,19 +441,23 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
+// وقت اور گزرتے ہوئے منٹوں کی بالکل درست لائیو کیلکولیشن
 function getTimeElapsed(timestamp) {
-  if (!timestamp) return "";
+  if (!timestamp) return { text: "Just now", timeStr: "" };
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return "";
+  if (isNaN(past)) return { text: "Just now", timeStr: "" };
   let now = new Date().getTime();
   let diffSec = Math.floor((now - past) / 1000);
-  if (diffSec < 120) return "Just now"; // صرف 2 منٹ تک Just now رہے گا
+
+  let timeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
+
+  if (diffSec < 60) return { text: "Just now", timeStr: timeStr };
   let diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin} منٹ پہلے`;
+  if (diffMin < 60) return { text: `${diffMin}m ago`, timeStr: timeStr };
   let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return `${diffHour} گھنٹے پہلے`;
+  if (diffHour < 24) return { text: `${diffHour}h ago`, timeStr: timeStr };
   let diffDays = Math.floor(diffHour / 24);
-  return `${diffDays} دن پہلے`;
+  return { text: `${diffDays}d ago`, timeStr: timeStr };
 }
 
 async function fetchOrdersFromSheet(){
@@ -461,8 +466,12 @@ async function fetchOrdersFromSheet(){
     const data = await res.json();
     let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
       let rawTime = row.timestamp || "";
-      let formattedDate = rawTime ? new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTime)) : "";
-      let timeAgo = getTimeElapsed(rawTime);
+      let parsedTime = Date.parse(rawTime);
+      let rawTimestamp = isNaN(parsedTime) ? Date.now() : parsedTime;
+      
+      let formattedDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTimestamp));
+      
+      let timeInfo = getTimeElapsed(rawTimestamp);
       let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
       return {
         id: "sh_" + index,
@@ -474,13 +483,14 @@ async function fetchOrdersFromSheet(){
         total: row.total || 0,
         otpCode: unifiedOtp,
         date: formattedDate,
-        rawTimestamp: rawTime ? new Date(rawTime).getTime() : 0,
-        timeAgo: timeAgo,
+        rawTimestamp: rawTimestamp,
+        timeAgo: timeInfo.text,
+        exactTimeStr: timeInfo.timeStr,
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
 
-    // نئے آنے والے آرڈرز بالکل سب سے اوپر (تازہ ترین ٹائم اسٹیمپ والے پہلے)
+    // نئے آرڈرز سب سے اوپر اور مکمل شدہ آرڈرز سب سے نیچے
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -533,13 +543,14 @@ function renderOrdersDOM(){
   area.innerHTML = orders.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
+    let timeInfo = getTimeElapsed(o.rawTimestamp);
 
     return `
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span style="font-size:14px; direction:auto;">📌 ${o.code} — ${o.name}</span>
-          <span style="font-size:10.5px; direction:ltr; color:${isCompleted ? 'var(--mid)' : 'var(--price)'}; background:rgba(255,255,255,0.7); padding:2px 6px; border-radius:6px; font-weight:700;">
-            ${o.timeAgo} | ${isCompleted ? 'Completed' : 'Pending'}
+          <span style="font-size:11px; direction:ltr; color:${isCompleted ? 'var(--mid)' : 'var(--price)'}; background:rgba(255,255,255,0.85); padding:3px 8px; border-radius:6px; font-weight:800; display:flex; gap:4px; align-items:center;">
+            <span>${timeInfo.timeStr}</span> | <span>${timeInfo.text}</span> | <span>${isCompleted ? 'Completed' : 'Pending'}</span>
           </span>
         </div>
         <div class="chat-body" dir="auto">
@@ -594,7 +605,6 @@ async function closeAndThankOrder(id, code, phone){
     cleanPhone = "92" + cleanPhone.slice(1);
   }
   
-  // تیسرے بزنس واٹس ایپ نمبر (0315-5166034) کے ذریعے کسٹمر کو شکریہ کا میسج بھیجنے کے لیے
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ Order closed and customer WhatsApp opened!");
@@ -632,7 +642,10 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
 }
 
 renderOrders();
+// ہر 4 سیکنڈ بعد لائیو وقت کاؤنٹ کرنے کے لیے
 setInterval(renderOrders, 4000);
+// ہر سیکنڈ صرف وقت کے لیبل اپڈیٹ کرنے کے لیے
+setInterval(renderOrdersDOM, 1000);
 </script>
 </body>
 </html>

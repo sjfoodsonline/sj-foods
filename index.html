@@ -30,7 +30,16 @@
   .cover-banner{width:100%; overflow:hidden; margin-bottom:8px; border-radius:0 0 16px 16px; display:none;}
   .cover-banner img{width:100%; height:auto; display:block; max-height:200px; object-fit:cover;}
 
-  .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
+  /* Sticky Top Container for Search Bar and Category Marquee together */
+  .sticky-top-container{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+
+  .search-wrap{padding:12px 16px 6px; background:var(--paper);}
   #search{
     width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
     background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
@@ -52,7 +61,8 @@
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
-  .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
+  /* Sticky Category Bar with Marquee Animation */
+  .cat-section{padding:4px 0 10px; background:var(--paper);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
   .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
@@ -134,7 +144,6 @@
   }
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
 
-  /* Right-side availability badge positioned on top of the thumbnail */
   .avail-badge{
     position: absolute;
     top: -6px;
@@ -165,6 +174,19 @@
     background:#fff; color:var(--dark); font-family: Arial, sans-serif;
   }
   
+  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  
+  .status-label {
+    font-size: 10px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+  .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
+
   .qty-box{display:flex; align-items:center; gap:6px;}
   .qty-box button{
     width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif;
@@ -261,8 +283,16 @@
   <img id="coverImg" src="" alt="SJ Foods Cover">
 </div>
 
-<div class="search-wrap">
-  <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+<!-- Sticky Top Container holding Search and Marquee Category Bar together -->
+<div class="sticky-top-container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
 </div>
 
 <div class="features-scroll-wrap">
@@ -280,10 +310,6 @@
 <div class="featured-section hidden" id="featuredSection">
   <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
   <div class="deal-grid" id="dealBox"></div>
-</div>
-
-<div class="cat-section">
-  <div class="cat-marquee-wrap" id="chips"></div>
 </div>
 
 <main id="list"></main>
@@ -447,10 +473,8 @@ function renderChips(){
     `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
   document.getElementById("chips").innerHTML = `
-    <div class="cat-marquee-track" style="${currentSelectedCategory ? 'animation:none; justify-content:center; flex-wrap:wrap;' : ''}">
-      <div style="display:flex; gap:10px;">${chips}</div>
-      <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
-    </div>`;
+    <div style="display:flex; gap:10px;">${chips}</div>
+    <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>`;
 }
 
 function selectCategory(catName){
@@ -557,9 +581,6 @@ function createItemRow(it){
     <div class="item-row-top">
       <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
         ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
-        <div class="avail-badge ${it.available ? 'yes' : 'no'}">
-          ${it.available ? `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="12" height="12" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
-        </div>
       </div>
       <div class="info">
         <div class="name">${formatItemName(it)}</div>
@@ -568,10 +589,13 @@ function createItemRow(it){
     </div>
     <div class="item-row-bottom">
       ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
-      <div class="qty-box">
-        <button onclick="changeQty('${it.id}', -1)">−</button>
-        <input type="number" value="${it.qty}" readonly>
-        <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+      <div class="qty-box-wrapper">
+        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
+        <div class="qty-box">
+          <button onclick="changeQty('${it.id}', -1)">−</button>
+          <input type="number" value="${it.qty}" readonly>
+          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+        </div>
       </div>
     </div>
   `;

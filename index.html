@@ -15,7 +15,7 @@
   *{box-sizing:border-box;}
   html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
-    margin:0 auto; padding:0 0 110px 0; background:var(--paper); color:var(--ink);
+    margin:0 auto; padding:150px 0 110px 0; background:var(--paper); color:var(--ink);
     font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
     width:100%; max-width:480px; min-height:100vh; position:relative;
     box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
@@ -27,6 +27,7 @@
     border-radius:0 0 24px 24px; 
     position:relative; 
     box-shadow: 0 4px 15px rgba(21,58,32,0.2);
+    margin-top: -130px;
   }
   header h1{
     margin:0 0 4px; font-size:23px; font-weight:700; 
@@ -100,14 +101,17 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* ABSOLUTELY FIXED STICKY TOP CONTAINER */
+  /* 100% HARD-FIXED LAYER TOP CONTAINER (Never moves on scroll) */
   .sticky-top-container{
-    position: -webkit-sticky;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    z-index: 9999;
     background: var(--paper);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
     border-bottom: 1.5px solid var(--line);
   }
 
@@ -282,6 +286,18 @@
 </head>
 <body translate="no">
 
+<!-- HARD-FIXED TOP CONTAINER: Search bar & Categories locked at the very top -->
+<div class="sticky-top-container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
+</div>
+
 <header>
   <button class="share-btn" id="shareBtn" title="Share">🔗</button>
   <h1>🟢 ایس جے فوڈز آن لائن</h1>
@@ -314,18 +330,6 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- ABSOLUTELY FIXED STICKY TOP CONTAINER -->
-<div class="sticky-top-container">
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-  </div>
-  <div class="cat-section">
-    <div class="cat-marquee-wrap">
-      <div class="cat-marquee-track" id="chips"></div>
-    </div>
-  </div>
-</div>
-
 <main id="list"></main>
 
 <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
@@ -343,7 +347,7 @@
       📌 <b>اہم ہدایات و ضوابط:</b><br>
       • ہر چیز 100% معیاری اور تول میں پوری دی جائے گی۔<br>
       • سپورٹ اوقات: صبح 10 سے رات 8 بجے تک۔<br>
-      • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد آئٹم تبدیل کیا جائے گا۔<br>
+      • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
       • محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف آپ کے پاس ہونا چاہیے۔
     </div>
     
@@ -560,7 +564,7 @@ function selectCategory(catName){
   currentSelectedCategory = catName;
   renderChips();
   renderMainView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Prevent page from auto-scrolling to top abruptly
 }
 
 function resetToHome(){
@@ -801,7 +805,7 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
   msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
 
-  // 1. Save directly to localStorage immediately so admin panel catches it instantly on any device sync or local view
+  // Save directly to localStorage for instant admin panel detection
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let newOrderObj = {
     id: "wa_" + Date.now(),
@@ -818,7 +822,7 @@ document.getElementById("waBtn").onclick = () => {
   localOrders.unshift(newOrderObj);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
-  // 2. Attempt background Google Sheet sync safely without blocking WhatsApp navigation
+  // Background Google Sheet sync
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({

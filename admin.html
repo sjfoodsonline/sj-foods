@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -454,8 +454,8 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowFormatted = new Date().toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true});
-  let formattedSummary = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
+  let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
+  let formattedSummary = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${address}<br>📋 Details: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode,
@@ -491,17 +491,17 @@ async function parseAndAddWhatsAppOrder(){
 }
 
 function getTimeElapsed(timestamp) {
-  if (!timestamp) return "ابھی";
+  if (!timestamp) return "Recent";
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return "آج";
+  if (isNaN(past)) return "Today";
   let now = new Date().getTime();
   let diffMin = Math.floor((now - past) / (1000 * 60));
-  if (diffMin < 1) return "ابھی آرڈر آیا ہے";
-  if (diffMin < 60) return `${diffMin} منٹ پہلے`;
+  if (diffMin < 1) return "Just now";
+  if (diffMin < 60) return `${diffMin} mins ago`;
   let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return `${diffHour} گھنٹے پہلے`;
+  if (diffHour < 24) return `${diffHour} hours ago`;
   let diffDays = Math.floor(diffHour / 24);
-  return `${diffDays} دن پہلے`;
+  return `${diffDays} days ago`;
 }
 
 async function fetchOrdersFromSheet(){
@@ -510,12 +510,13 @@ async function fetchOrdersFromSheet(){
     const data = await res.json();
     let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
       let rawTime = row.timestamp || "";
-      let formattedDate = rawTime ? new Date(rawTime).toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true}) : "آج";
+      // Proper English & Pakistan Time formatting
+      let formattedDate = rawTime ? new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTime)) : "Today";
       let timeAgo = getTimeElapsed(rawTime);
       return {
         id: "sh_" + index,
         code: row.code,
-        name: row.name || "نامعلوم",
+        name: row.name || "Unknown",
         phone: row.phone || "03000000000",
         address: row.address || "Mingora Swat",
         itemsSummary: row.items,
@@ -590,25 +591,25 @@ function renderOrdersDOM(){
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
-          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo} | ${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ'}</span>
+          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo} | ${isCompleted ? '✅ Completed' : '⏳ Pending'}</span>
         </div>
         <div class="chat-body">
           <div style="font-size:13.5px; line-height:1.7;">
-            📞 فون: ${o.phone}<br>
-            📍 پتہ: ${o.address}<br>
-            🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            📅 تاریخ و وقت: <b>${o.date}</b> (${o.timeAgo})<br>
-            🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-            💰 کل رقم: <b>Rs. ${o.total}</b><br>
-            وضعیت: <b>${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ (Pending)'}</b>
+            📞 Phone: ${o.phone}<br>
+            📍 Address: ${o.address}<br>
+            🔐 OTP Code: <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
+            📅 Date & Time: <b>${o.date}</b> (${o.timeAgo})<br>
+            🛒 Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+            💰 Total Amount: <b>Rs. ${o.total}</b><br>
+            Status: <b>${isCompleted ? '✅ Completed' : '⏳ Pending'}</b>
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode}, '${o.date}')">🖨️ پرنٹ</button>
+            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode}, '${o.date}')">🖨️ Print</button>
             ${!isCompleted ? `
-              <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
-            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
+              <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 First Msg</button>
+              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ Close & Thank Msg</button>
+            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
           </div>
         </div>
       </div>
@@ -621,11 +622,11 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
+  showToast("✅ First WhatsApp message opened!");
 }
 
 async function closeAndThankOrder(id, phone, name, code){
-  if(!confirm("کیا آپ اس آرڈر کو کلوز کر کے کسٹمر کو شکریہ کا میسج بھیجنا چاہتے ہیں؟")) return;
+  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
   if(cacheMatch) cacheMatch.status = 'completed';
@@ -644,7 +645,7 @@ async function closeAndThankOrder(id, phone, name, code){
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
-  showToast("✅ آرڈر کلوز ہو گیا اور گوگل شیٹ میں اپ ڈیٹ ہو گیا!");
+  showToast("✅ Order closed and updated in sheet!");
   setTimeout(() => { renderOrders(); }, 1000);
 }
 
@@ -657,19 +658,19 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
       <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
       <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
       <hr style="border:dashed 1px #000;">
-      <p><b>آرڈر کوڈ:</b> ${code}</p>
-      <p><b>تاریخ و وقت:</b> ${orderTime || new Date().toLocaleString()}</p>
-      <p><b>نام:</b> ${name}</p>
-      <p><b>فون:</b> ${phone}</p>
-      <p><b>پتہ:</b> ${address}</p>
-      <p><b>ڈیلیوری کوڈ (OTP):</b> <span style="font-size:18px;"><b>${otp}</b></span></p>
+      <p><b>Order Code:</b> ${code}</p>
+      <p><b>Date & Time:</b> ${orderTime || new Date().toLocaleString()}</p>
+      <p><b>Name:</b> ${name}</p>
+      <p><b>Phone:</b> ${phone}</p>
+      <p><b>Address:</b> ${address}</p>
+      <p><b>OTP Code:</b> <span style="font-size:18px;"><b>${otp}</b></span></p>
       <hr style="border:dashed 1px #000;">
-      <p><b>آرڈر کی تفصیل:</b></p>
+      <p><b>Order Details:</b></p>
       <div>${items}</div>
       <hr style="border:dashed 1px #000;">
-      <h3 style="text-align:center;">کل رقم: Rs. ${total}</h3>
+      <h3 style="text-align:center;">Total: Rs. ${total}</h3>
       <br>
-      <div style="text-align:center; font-size:11px;">ڈلیوری کے وقت OTP کوڈ لازمی بتائیں۔</div>
+      <div style="text-align:center; font-size:11px;">Please provide OTP code upon delivery.</div>
     </body>
     </html>
   `);

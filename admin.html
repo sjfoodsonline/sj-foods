@@ -41,14 +41,20 @@
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;}
+  /* Inbox Accordion Chat Item */
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
-  .chat-item.completed{background:#F1F8E9; border-color:#81C784;}
+  .chat-item.completed{background:#F1F8E9; border-color:#81C784; animation: none !important;}
+  
   @keyframes superBlinking{ 
     0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
     50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
     100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
   }
+
+  .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
+  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px;}
+  .chat-item.open .chat-body{display:block;}
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
@@ -92,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -106,7 +112,7 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ دوسرے موبائلز کے آرڈرز خود بخود سنک ہو رہے ہیں۔</p>
+      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ پٹی پر کلک کرنے سے آرڈر کھلے گا۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
@@ -448,7 +454,9 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let formattedSummary = `👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
+  let nowTime = new Date().toLocaleTimeString();
+  let nowDate = new Date().toLocaleDateString();
+  let formattedSummary = `📅 تاریخ: ${nowDate} | وقت: ${nowTime}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode,
@@ -483,7 +491,7 @@ async function parseAndAddWhatsAppOrder(){
     itemsSummary: formattedSummary,
     total: 0,
     otpCode: newOrd.otp,
-    date: new Date().toLocaleTimeString(),
+    date: nowTime,
     status: "pending"
   });
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
@@ -522,30 +530,54 @@ async function fetchOrdersFromSheet(){
         combined.unshift(so);
       }
     });
+    
+    // Sort so pending orders stay on top, completed/closed orders stay at bottom
+    combined.sort((a, b) => {
+      if (a.status === 'completed' && b.status !== 'completed') return 1;
+      if (a.status !== 'completed' && b.status === 'completed') return -1;
+      return 0;
+    });
+
     return combined;
   }catch(e){
+    localOrders.sort((a, b) => {
+      if (a.status === 'completed' && b.status !== 'completed') return 1;
+      if (a.status !== 'completed' && b.status === 'completed') return -1;
+      return 0;
+    });
     return localOrders;
   }
 }
 
 let cachedOrdersCount = 0;
 let lastReminderTime = Date.now();
+let activeAccordionId = null;
+
+function toggleAccordion(id){
+  if(activeAccordionId === id){
+    activeAccordionId = null;
+  } else {
+    activeAccordionId = id;
+  }
+  renderOrdersDOM();
+}
+
+let latestOrdersCache = [];
 
 async function renderOrders(){
-  const area = document.getElementById("ordersArea");
-  const orders = await fetchOrdersFromSheet();
+  latestOrdersCache = await fetchOrdersFromSheet();
   
-  if(orders.length === 0){
-    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
+  if(latestOrdersCache.length === 0){
+    document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
     return;
   }
 
-  if(orders.length > cachedOrdersCount && cachedOrdersCount !== 0){
+  if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
     playBeepTech();
   }
-  cachedOrdersCount = orders.length;
+  cachedOrdersCount = latestOrdersCache.length;
 
-  let hasPending = orders.some(o => o.status !== 'completed');
+  let hasPending = latestOrdersCache.some(o => o.status !== 'completed');
   let currentTime = Date.now();
   if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
     playBeepTech();
@@ -553,32 +585,49 @@ async function renderOrders(){
     showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
   }
 
-  area.innerHTML = orders.map((o) => `
-    <div class="chat-item ${o.status==='completed'?'completed':'pending'}">
-      <div style="font-weight:800; font-size:15px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
-      <div style="font-size:13.5px; line-height:1.7;">
-        📞 فون: ${o.phone}<br>
-        📍 پتہ: ${o.address}<br>
-        🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-        🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-        💰 کل رقم: <b>Rs. ${o.total}</b><br>
-        وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
+  renderOrdersDOM();
+}
+
+function renderOrdersDOM(){
+  const area = document.getElementById("ordersArea");
+  const orders = latestOrdersCache;
+
+  area.innerHTML = orders.map((o) => {
+    let isOpen = (activeAccordionId === o.id);
+    let isCompleted = (o.status === 'completed');
+
+    return `
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+        <div class="chat-header" onclick="toggleAccordion('${o.id}')">
+          <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
+          <span style="font-size:11px; color:var(--muted);">${o.date || ''} 🕒 ${isCompleted ? '✅ کلوزڈ' : '⏳ پینڈنگ'}</span>
+        </div>
+        <div class="chat-body">
+          <div style="font-size:13.5px; line-height:1.7;">
+            📞 فون: ${o.phone}<br>
+            📍 پتہ: ${o.address}<br>
+            🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
+            📅 وقت و تاریخ: <b>${o.date || 'ابھی'}</b><br>
+            🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+            💰 کل رقم: <b>Rs. ${o.total}</b><br>
+          </div>
+          
+          <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode}, '${o.date}')">🖨️ پرنٹ</button>
+            ${!isCompleted ? `
+              <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
+            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
+            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+          </div>
+        </div>
       </div>
-      
-      <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
-        ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
-        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
-        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
-      </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
 
 function sendFirstWhatsAppMessage(phone, name, code, otp){
-  const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
+  const msg = `السلام علیکم محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -588,7 +637,6 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
 function closeAndThankOrder(id, phone, name, code){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کر کے کسٹمر کو شکریہ کا میسج بھیجنا چاہتے ہیں؟")) return;
   
-  // 1. Mark as completed
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let ord = localOrders.find(o => o.id === id);
   if(ord){
@@ -599,8 +647,7 @@ function closeAndThankOrder(id, phone, name, code){
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
 
-  // 2. Open WhatsApp Thank You message
-  const msg = `محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
+  const msg = `محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -618,7 +665,7 @@ function deleteOrder(id){
   renderOrders();
 }
 
-function printReceipt(code, name, phone, address, items, total, otp){
+function printReceipt(code, name, phone, address, items, total, otp, orderTime){
   const w = window.open('', '_blank');
   w.document.write(`
     <html dir="rtl">
@@ -628,6 +675,7 @@ function printReceipt(code, name, phone, address, items, total, otp){
       <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
       <hr style="border:dashed 1px #000;">
       <p><b>آرڈر کوڈ:</b> ${code}</p>
+      <p><b>تاریخ و وقت:</b> ${orderTime || new Date().toLocaleString()}</p>
       <p><b>نام:</b> ${name}</p>
       <p><b>فون:</b> ${phone}</p>
       <p><b>پتہ:</b> ${address}</p>

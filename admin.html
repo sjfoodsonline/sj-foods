@@ -142,6 +142,7 @@
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
+const BUSINESS_WHATSAPP = "923155166034"; // تیسرا واٹس ایپ بزنس نمبر
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);
@@ -591,6 +592,7 @@ async function closeAndThankOrder(id, code, phone){
     cleanPhone = "92" + cleanPhone.slice(1);
   }
   
+  // کسٹمر کے نمبر پر شکریہ کا میسج کھولنے کے لیے (یہ آپ کے تیسرے بزنس واٹس ایپ سے جائے گا)
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ Order closed and customer WhatsApp opened!");

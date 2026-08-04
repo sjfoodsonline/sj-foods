@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -400,7 +400,7 @@ function addUnit(itemIdx){
 
 function removeUnit(itemIdx, unitIdx){
   const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][itemIdx].units.splice(itemIdx, 1);
+  globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
   renderAdminEditor();
   markUnsaved();
 }
@@ -607,7 +607,7 @@ function renderOrdersDOM(){
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.date}')">🖨️ Print</button>
             ${!isCompleted ? `
-              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ Close & Thank Msg</button>
+              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.code}')">✅ Close & Thank Msg</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
           </div>
         </div>
@@ -616,10 +616,11 @@ function renderOrdersDOM(){
   }).join("");
 }
 
-async function closeAndThankOrder(id, phone, name, code){
+async function closeAndThankOrder(id, code){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
+  let phone = cacheMatch ? cacheMatch.phone : "03000000000";
   if(cacheMatch) cacheMatch.status = 'completed';
 
   try {

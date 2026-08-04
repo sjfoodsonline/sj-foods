@@ -184,9 +184,7 @@
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
 
   .item .info{min-width:0; flex:1;}
-  .item .name{ font-size: 16.5px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: Arial, sans-serif; }
-  .item .name .roman-part { font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; }
-  .item .name .urdu-part { font-size: 13px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px; }
+  .item .name{ font-size: 17px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: "Jameel Noori Nastaleeq", serif; }
 
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px; font-weight: bold; font-family: Arial, sans-serif;}
   .item .meta b{color:var(--price); font-weight:bold; font-size:14.5px;}
@@ -350,7 +348,7 @@
 
     <div class="cart-sops">
       📌 <b>اہم ہدایات و ضوابط:</b><br>
-      • ہر چیز 100% معیاری اور تول میں پوری دی جاتی ہے۔<br>
+      • ہر چیز 100% معیاری اور تول میں پوری دی جائے گی۔<br>
       • سپورٹ اوقات: صبح 10 سے رات 8 بجے تک۔<br>
       • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
       • محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف آپ کے پاس ہونا چاہیے۔
@@ -368,14 +366,14 @@
 
     <div class="checkout-box">
       <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px; font-family:'Jameel Noori Nastaleeq',serif;">📦 ڈلیوری کی تفصیلات دیں</div>
-      <input id="custName" type="text" placeholder="آپ کا نام (Your Name)">
-      <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر (Phone Number)">
-      <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address / علاقہ)">
-      <input id="payTxId" type="text" placeholder="ایزی پیسہ / بینک ٹرانزیکشن آئی ڈی / رسید نمبر (TID)" style="display:none;">
+      <input id="custName" type="text" placeholder="Name (نام)">
+      <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
+      <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
+      <input id="payTxId" type="text" placeholder="EasyPaisa / Bank Transaction ID (TID)" style="display:none;">
 
       <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
-        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈلیوری</label>
-        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ / بینک</label>
+        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
+        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 EasyPaisa / Bank</label>
       </div>
     </div>
 
@@ -484,12 +482,6 @@ function formatUnitLabel(label){
   if(l.includes("پیکٹ") || l.includes("packet")) return "Pkt";
   if(l.includes("درجن") || l.includes("dozen")) return "Dzn";
   return label;
-}
-
-function formatItemName(it){
-  const roman = it.name_roman || it.name;
-  const urdu = it.name ? ` (${it.name})` : '';
-  return `<span class="roman-part" dir="ltr">${roman}</span><span class="urdu-part">${urdu}</span>`;
 }
 
 async function loadData(){
@@ -603,7 +595,6 @@ function selectCategory(catName){
   document.getElementById('stickyNavContainer').classList.add('fixed-nav');
   renderChips();
   renderMainView();
-  // Fixed: Removed auto-scroll to top so user stays at exact position
 }
 
 function resetToHome(){
@@ -713,7 +704,7 @@ function createItemRow(it){
         ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
       </div>
       <div class="info">
-        <div class="name">${formatItemName(it)}</div>
+        <div class="name">${it.name}</div>
         <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
       </div>
     </div>
@@ -760,7 +751,7 @@ function renderBill(){
     const total = it.qty * u.rate;
     subtotal += total;
     return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px;">
-      📦 <b style="color:var(--dark);">[${it.cat}]</b> ${it.name_roman || it.name} (${it.name}) × ${it.qty} ${u.label} = <b>${fmt(total)}</b>
+      • [${it.cat}] ${it.name} — ${it.qty} ${u.label} = <b>${fmt(total)}</b>
     </div>`;
   }).join("");
 
@@ -828,45 +819,44 @@ document.getElementById("waBtn").onclick = () => {
   const addr = document.getElementById("custAddr").value.trim();
   let txId = payTxId.value.trim();
   
-  let payMethod = "کیش آن ڈلیوری (COD)";
+  let payMethod = "Cash on Delivery (COD)";
   if(payEasy.checked){
     if(!txId){
-      alert("⚠️ براہ کرم ایزی پیسہ یا بینک ٹرانسفر کا ٹرانزیکشن نمبر / رسید آئی ڈی (TID) لازمی درج کریں!");
+      alert("⚠️ Please enter EasyPaisa / Bank Transaction ID (TID)!");
       payTxId.focus();
       return;
     }
-    payMethod = `ایزی پیسہ / بینک ٹرانسفر (TID: ${txId})`;
+    payMethod = `EasyPaisa / Bank Transfer (TID: ${txId})`;
   }
 
-  if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
+  if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   const otpCode = Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
   let summaryHtml = "";
   
-  let msg = `🟢 *SJ Foods Online — نیا آرڈر* [${orderCode}]\n\n`;
-  msg += `السلام علیکم! میں درج ذیل اشیاء منگوانا چاہتا ہوں:\n\n`;
-  msg += `👤 میرا نام: ${name}\n`;
-  msg += `📞 میرا فون: ${phone}\n`;
-  msg += `📍 مکمل پتہ: ${addr}\n`;
-  msg += `💳 ادائیگی کا طریقہ: ${payMethod}\n\n`;
-  msg += `📋 *آرڈر کی تفصیلات:*\n`;
+  let msg = `SJ Foods Online — New Order [${orderCode}]\n\n`;
+  msg += `Name: ${name}\n`;
+  msg += `Phone: ${phone}\n`;
+  msg += `Address: ${addr}\n`;
+  msg += `Payment Method: ${payMethod}\n\n`;
+  msg += `Order Details:\n`;
   
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
     const t = it.qty * u.rate;
     subtotal += t;
-    msg += `• [${it.cat}] ${it.name_roman || it.name} (${it.name}) — ${it.qty} ${u.label} = ${fmt(t)}\n`;
-    summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
+    msg += `• [${it.cat}] ${it.name} — ${it.qty} ${u.label} = ${fmt(t)}\n`;
+    summaryHtml += `• [${it.cat}] ${it.name} — ${it.qty} ${u.label} = ${fmt(t)}<br>`;
   });
   
   if(payEasy.checked) {
-    summaryHtml += `<br><b>💳 ادائیگی تصدیق نمبر (TID):</b> ${txId}`;
+    summaryHtml += `<br><b>Transaction ID:</b> ${txId}`;
   }
   
-  msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
-  msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
+  msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
+  msg += `Please dispatch my order as soon as possible. Thank you!`;
 
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let newOrderObj = {
@@ -894,7 +884,7 @@ document.getElementById("waBtn").onclick = () => {
   } catch(e){}
 
   window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ آرڈر واٹس ایپ پر روانہ اور پینل میں محفوظ ہو گیا!");
+  showToast("✅ Order sent to WhatsApp and saved!");
 };
 
 function renderFeatured(){
@@ -915,14 +905,14 @@ function renderFeatured(){
       let second = feat[(currentIndex + 1) % feat.length];
       
       box.innerHTML = `
-        <div class="deal-card fade-out" onclick="scrollToMainItem('${first.id}')">
+        <div class="deal-card fade-out" onclick="jumpToItem('${first.cat}', '${first.id}')">
           ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
-          <div class="d-name">${first.name_roman || first.name} (${first.name})</div>
+          <div class="d-name">${first.name}</div>
           <div class="d-rate">${fmt(first.units[0].rate)}</div>
         </div>
-        <div class="deal-card fade-out" onclick="scrollToMainItem('${second.id}')">
+        <div class="deal-card fade-out" onclick="jumpToItem('${second.cat}', '${second.id}')">
           ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
-          <div class="d-name">${second.name_roman || second.name} (${second.name})</div>
+          <div class="d-name">${second.name}</div>
           <div class="d-rate">${fmt(second.units[0].rate)}</div>
         </div>
       `;
@@ -939,6 +929,13 @@ function renderFeatured(){
   if(feat.length > 2){
     setInterval(updateFeaturedGrid, 4000);
   }
+}
+
+function jumpToItem(catName, itemId){
+  selectCategory(catName);
+  setTimeout(() => {
+    scrollToMainItem(itemId);
+  }, 100);
 }
 
 function scrollToMainItem(id){

@@ -526,7 +526,8 @@ function renderMainView(filter=""){
     if(items.length > 0){
       let titleDiv = document.createElement("div");
       titleDiv.className = "cat-title";
-      titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ واپس تمام کیٹگریز</button>`;
+      // Explicit Back to Categories Button
+      titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back to Categories</button>`;
       main.appendChild(titleDiv);
       items.forEach(it => main.appendChild(createItemRow(it)));
 
@@ -577,7 +578,6 @@ function createItemRow(it){
   row.className = "item" + (it.qty>0 ? " active":"");
   row.id = "row-"+it.id;
   
-  // Roman Name First & Larger, Urdu Name in Brackets Smaller
   let primaryName = it.name_roman ? it.name_roman : it.name;
   let secondaryName = it.name_roman ? `(${it.name})` : '';
 
@@ -684,7 +684,7 @@ function showToast(text){
   const t = document.getElementById("toast");
   t.textContent = text;
   t.className = "toast show";
-  setTimeout(()=> t.classList.remove("show"), 2200);
+  setTimeout(()=> t.className = "toast", 2200);
 }
 
 document.getElementById("shareBtn").onclick = async () => {
@@ -700,23 +700,29 @@ document.getElementById("waBtn").onclick = () => {
   const addr = document.getElementById("custAddr").value.trim();
   let txId = payTxId.value.trim();
   
-  let payMethod = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
+  let payMethodWA = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
+  let payMethodClean = "Cash on Delivery (COD)";
+  
   if(payEasy.checked){
     if(!txId){ alert("⚠️ Please enter EasyPaisa / Bank Transaction ID (TID)!"); payTxId.focus(); return; }
-    payMethod = `EasyPaisa / Bank Transfer (Online Payment) — TID: ${txId}`;
+    payMethodWA = `EasyPaisa / Bank Transfer (Online Payment) — TID: ${txId}`;
+    payMethodClean = `EasyPaisa / Bank Transfer (TID: ${txId})`;
   }
   if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
-  let summaryHtml = "";
   
+  // WhatsApp Message with Emojis
   let msg = `SJ Foods Online — New Order [${orderCode}]\n\n`;
   msg += `Name: ${name}\n`;
   msg += `Phone: ${phone}\n`;
   msg += `Address: ${addr}\n`;
-  msg += `Payment Method: ${payMethod}\n\n`;
+  msg += `Payment Method: ${payMethodWA}\n\n`;
   msg += `Order Details:\n`;
+  
+  // Clean Receipt Details WITHOUT Emojis & Double Dates
+  let receiptItems = "";
   
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
@@ -724,25 +730,21 @@ document.getElementById("waBtn").onclick = () => {
     subtotal += t;
     let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
     msg += `• [${it.cat}] ${displayName} — ${it.qty} ${u.label} = ${fmt(t)}\n`;
-    summaryHtml += `• [${it.cat}] ${displayName} — ${it.qty} ${u.label} = ${fmt(t)}<br>`;
+    receiptItems += `• [${it.cat}] ${displayName} — ${it.qty} ${u.label} = ${fmt(t)}<br>`;
   });
   
-  if(payEasy.checked) summaryHtml += `<br><b>Payment Method:</b> EasyPaisa / Bank Transfer (Online)<br><b>Transaction ID (TID):</b> ${txId}`;
-  else summaryHtml += `<br><b>Payment Method:</b> Cash on Delivery (COD)`;
-  
+  receiptItems += `<br><b>Payment Method:</b> ${payMethodClean}`;
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 
-  let nowOptions = { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-  let nowFormatted = new Intl.DateTimeFormat('en-GB', nowOptions).format(new Date());
-
-  let formattedSummaryWithTime = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${addr}<br>📋 Details: <br>` + summaryHtml;
+  // Clean Single Data String for Google Sheet & Print Receipt (No duplicate dates, No emojis)
+  let formattedCleanReceipt = `Payment Method: ${payMethodClean}<br>Items Summary:<br>` + receiptItems;
 
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
-      items: formattedSummaryWithTime, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+      items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
       timestamp: new Date().toISOString(), status: "pending"
     }));
   } catch(e){}

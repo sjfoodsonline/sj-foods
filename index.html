@@ -281,7 +281,7 @@
 <body translate="no">
 
 <header>
-  <!-- Share Arrow Icon -->
+  <!-- Arrow / Share Icon -->
   <button class="share-btn" id="shareBtn" title="Share">➦</button>
   <h1>🟢 ایس جے فوڈز آن لائن</h1>
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
@@ -752,7 +752,6 @@ function renderBill(){
   if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
-// Touch & Click to minimize/expand cart smoothly
 const billbarEl = document.getElementById("billbar");
 const summaryEl = document.getElementById("summary");
 
@@ -868,14 +867,13 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 
-  // Perfect Pakistan Date & Time
   let nowOptions = { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
   let nowFormatted = new Intl.DateTimeFormat('en-GB', nowOptions).format(new Date());
 
   let formattedSummaryWithTime = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${addr}<br>📋 Details: <br>` + summaryHtml;
 
   try {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQm8rRjAn7FULiVGDFWOH-41cJ2Wtl6VamL81UNTlmKfpVey-KTBZP1zBWmQ2xr0h3/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
       items: formattedSummaryWithTime, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),

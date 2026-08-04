@@ -52,7 +52,7 @@
   }
 
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
-  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px;}
+  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
   .chat-item.open .chat-body{display:block;}
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
@@ -60,7 +60,6 @@
   .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px; cursor:pointer;}
   .item-edit-thumb img{width:100%; height:100%; object-fit:cover;}
   .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
-  .unit-row input[type=text], .unit-row input[type=number]{margin-bottom:0;}
 
   .floating-save-bar {
     position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
@@ -97,7 +96,7 @@
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ کر لے گا۔</p>
+      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے محفوظ कर لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
@@ -109,7 +108,7 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ ڈیٹا براہ راست گوگل شیٹ سے آرہا ہے۔</p>
+      <p>نیا آرڈر ہمیشہ سب سے اوپر آئے گا۔ وقت لائیو چلتا رہے گا۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
@@ -142,7 +141,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// Updated with your new Google Sheet Script URL
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
 
 window.addEventListener('popstate', (event) => {
@@ -153,11 +151,9 @@ function switchTab(tabName, pushState = true){
   if(pushState && history.state?.tab !== tabName){
     history.pushState({tab: tabName}, "", "#" + tabName);
   }
-
   document.getElementById('tabOrdersBtn').className = 'tab';
   document.getElementById('tabAddBtn').className = 'tab';
   document.getElementById('tabProductsBtn').className = 'tab';
-  
   document.getElementById('secOrders').style.display = 'none';
   document.getElementById('secAddWA').style.display = 'none';
   document.getElementById('secProducts').style.display = 'none';
@@ -210,19 +206,16 @@ let loadedCategoriesList = [];
 async function initAdminCategories(){
   const selectEl = document.getElementById("catSelect");
   let savedData = JSON.parse(localStorage.getItem("sj_admin_all_categories"));
-  
   if(savedData){
     globalCategoriesData = savedData;
     loadedCategoriesList = Object.keys(savedData);
     populateCategoryDropdown();
     return;
   }
-
   try{
     const idxRes = await fetch("categories_index.json", {cache:"no-store"});
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
-    
     globalCategoriesData = {};
     index.forEach((entry, i) => {
       let catName = entry.category;
@@ -235,7 +228,6 @@ async function initAdminCategories(){
         units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
       }));
     });
-
     loadedCategoriesList = Object.keys(globalCategoriesData);
     localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
     populateCategoryDropdown();
@@ -256,12 +248,10 @@ function renderAdminEditor(){
   const cat = document.getElementById("catSelect").value;
   const items = globalCategoriesData[cat] || [];
   const container = document.getElementById("adminItemsEditor");
-
   if(items.length === 0){
     container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`;
     return;
   }
-
   container.innerHTML = items.map((it, idx) => `
     <div class="control-box">
       <div class="item-edit-row">
@@ -269,8 +259,8 @@ function renderAdminEditor(){
           ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}
         </div>
         <div style="flex:1;">
-          <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام (مثلاً آلو)" oninput="markUnsaved()">
-          <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name (e.g. Aloo)" oninput="markUnsaved()">
+          <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام" oninput="markUnsaved()">
+          <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name" oninput="markUnsaved()">
         </div>
       </div>
       <div style="display:flex; gap:6px; margin-bottom:8px;">
@@ -278,14 +268,12 @@ function renderAdminEditor(){
         <button class="btn-danger" style="flex:1; padding:6px;" onclick="deleteAdminItem(${idx})">🗑️ آئٹم ڈیلیٹ کریں</button>
       </div>
       <input type="file" id="file_${idx}" style="display:none;" accept="image/*" onchange="handleImageUpload(event, ${idx})">
-
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت</span>
         <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;">
           <input type="checkbox" ${it.autoCalc ? 'checked' : ''} onchange="toggleAutoCalc(${idx}, this.checked)"> خودکار حساب
         </label>
       </div>
-
       <div id="units_area_${idx}">
         ${it.units.map((u, uIdx) => `
           <div class="unit-row">
@@ -295,7 +283,6 @@ function renderAdminEditor(){
           </div>
         `).join("")}
       </div>
-
       <button class="btn-secondary" style="width:100%; margin-top:6px; background:var(--leaf); color:var(--dark);" onclick="addUnit(${idx})">＋ سائز/قیمت شامل کریں</button>
     </div>
   `).join("");
@@ -305,11 +292,7 @@ function markUnsaved(){
   document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں";
   document.getElementById("saveStatus").style.color = "var(--price)";
 }
-
-function triggerImgUpload(idx){
-  document.getElementById("file_" + idx).click();
-}
-
+function triggerImgUpload(idx){ document.getElementById("file_" + idx).click(); }
 function handleImageUpload(event, idx){
   const file = event.target.files[0];
   if(file){
@@ -324,24 +307,17 @@ function handleImageUpload(event, idx){
     reader.readAsDataURL(file);
   }
 }
-
 function addNewItemToCurrentCategory(){
   const cat = document.getElementById("catSelect").value;
   if(!cat) return;
   if(!globalCategoriesData[cat]) globalCategoriesData[cat] = [];
   globalCategoriesData[cat].unshift({
-    name: "نیا آئٹم",
-    name_roman: "New Item",
-    image: "",
-    icon: "🛒",
-    autoCalc: true,
-    units: [{label: "KG", rate: 0}]
+    name: "نیا آئٹم", name_roman: "New Item", image: "", icon: "🛒", autoCalc: true, units: [{label: "KG", rate: 0}]
   });
   renderAdminEditor();
   markUnsaved();
   showToast("✅ نیا آئٹم شامل کر دیا گیا ہے");
 }
-
 function deleteAdminItem(idx){
   if(!confirm("کیا آپ اس آئٹم کو حذف کرنا چاہتے ہیں؟")) return;
   const cat = document.getElementById("catSelect").value;
@@ -350,34 +326,26 @@ function deleteAdminItem(idx){
   markUnsaved();
   showToast("✅ آئٹم ہٹا دیا گیا");
 }
-
 function toggleAutoCalc(idx, val){
   const cat = document.getElementById("catSelect").value;
   globalCategoriesData[cat][idx].autoCalc = val;
   markUnsaved();
 }
-
 function onRateInput(idx, uIdx){
   markUnsaved();
   const cat = document.getElementById("catSelect").value;
   let item = globalCategoriesData[cat][idx];
-  
   let val = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
   item.units[uIdx].rate = val;
-
   if(item.autoCalc && uIdx === 0){
     let baseRate = val;
     item.units.forEach((u, i) => {
       if(i > 0){
         let lbl = u.label.toLowerCase();
         let calculated = baseRate;
-        if(lbl.includes("آدھا") || lbl.includes("half")){
-          calculated = Math.round(baseRate / 2);
-        } else if(lbl.includes("پاؤ") || lbl.includes("pao")){
-          calculated = Math.round(baseRate / 4);
-        } else if(lbl.includes("ڈڑی") || lbl.includes("5") || lbl.includes("dari")){
-          calculated = baseRate * 5;
-        }
+        if(lbl.includes("آدھا") || lbl.includes("half")) calculated = Math.round(baseRate / 2);
+        else if(lbl.includes("پاؤ") || lbl.includes("pao")) calculated = Math.round(baseRate / 4);
+        else if(lbl.includes("ڈڑی") || lbl.includes("5") || lbl.includes("dari")) calculated = baseRate * 5;
         u.rate = calculated;
         const inputEl = document.getElementById(`rate_${idx}_${i}`);
         if(inputEl) inputEl.value = calculated;
@@ -385,25 +353,21 @@ function onRateInput(idx, uIdx){
     });
   }
 }
-
 function addUnit(itemIdx){
   const cat = document.getElementById("catSelect").value;
   globalCategoriesData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
   renderAdminEditor();
   markUnsaved();
 }
-
 function removeUnit(itemIdx, unitIdx){
   const cat = document.getElementById("catSelect").value;
   globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
   renderAdminEditor();
   markUnsaved();
 }
-
 function saveAllItemChanges(){
   const cat = document.getElementById("catSelect").value;
   const items = globalCategoriesData[cat];
-  
   items.forEach((it, idx) => {
     it.name = document.getElementById(`name_${idx}`).value;
     it.name_roman = document.getElementById(`roman_${idx}`).value;
@@ -412,7 +376,6 @@ function saveAllItemChanges(){
       u.label = document.getElementById(`label_${idx}_${uIdx}`).value;
     });
   });
-
   localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
   document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
   document.getElementById("saveStatus").style.color = "var(--mid)";
@@ -430,7 +393,6 @@ async function parseAndAddWhatsAppOrder(){
     showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
     return;
   }
-
   let lines = rawText.split('\n');
   lines.forEach(line => {
     let l = line.toLowerCase();
@@ -450,31 +412,23 @@ async function parseAndAddWhatsAppOrder(){
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
-  let formattedSummary = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${address}<br>📋 Details: <br>` + rawText.replace(/\n/g, "<br>");
+  let formattedSummary = `Date & Time: ${nowFormatted}<br>Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
-    code: orderCode,
-    name: name,
-    phone: phone,
-    address: address,
-    items: formattedSummary,
-    total: 0,
-    otp: orderCode.replace("SJ-", ""),
-    timestamp: new Date().toISOString(),
-    status: "pending"
+    code: orderCode, name: name, phone: phone, address: address,
+    items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""),
+    timestamp: new Date().toISOString(), status: "pending"
   };
 
   if(SHEET_URL){
     try{
       await fetch(SHEET_URL, {
-        method: "POST",
-        mode: "no-cors",
+        method: "POST", mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newOrd)
       });
     }catch(e){}
   }
-
   showToast("✅ آرڈر گوگل شیٹ پر بھیج دیا گیا ہے!");
   playBeepTech();
   document.getElementById("waRawText").value = "";
@@ -492,11 +446,11 @@ function getTimeElapsed(timestamp) {
   let now = new Date().getTime();
   let diffMin = Math.floor((now - past) / (1000 * 60));
   if (diffMin < 1) return "Just now";
-  if (diffMin < 60) return `${diffMin} mins ago`;
+  if (diffMin < 60) return `${diffMin}m ago`;
   let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return `${diffHour} hours ago`;
+  if (diffHour < 24) return `${diffHour}h ago`;
   let diffDays = Math.floor(diffHour / 24);
-  return `${diffDays} days ago`;
+  return `${diffDays}d ago`;
 }
 
 async function fetchOrdersFromSheet(){
@@ -518,15 +472,17 @@ async function fetchOrdersFromSheet(){
         total: row.total || 0,
         otpCode: unifiedOtp,
         date: formattedDate,
+        rawTimestamp: rawTime ? new Date(rawTime).getTime() : 0,
         timeAgo: timeAgo,
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
 
+    // NEWEST FIRST ORDERING (Reverse chronological)
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
-      return 0;
+      return b.rawTimestamp - a.rawTimestamp;
     });
 
     return sheetOrders;
@@ -540,11 +496,8 @@ let lastReminderTime = Date.now();
 let activeAccordionId = null;
 
 function toggleAccordion(id){
-  if(activeAccordionId === id){
-    activeAccordionId = null;
-  } else {
-    activeAccordionId = id;
-  }
+  if(activeAccordionId === id) activeAccordionId = null;
+  else activeAccordionId = id;
   renderOrdersDOM();
 }
 
@@ -552,12 +505,10 @@ let latestOrdersCache = [];
 
 async function renderOrders(){
   latestOrdersCache = await fetchOrdersFromSheet();
-  
   if(latestOrdersCache.length === 0){
     document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
     return;
   }
-
   if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
     playBeepTech();
   }
@@ -570,7 +521,6 @@ async function renderOrders(){
     lastReminderTime = currentTime;
     showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
   }
-
   renderOrdersDOM();
 }
 
@@ -585,24 +535,26 @@ function renderOrdersDOM(){
     return `
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
-          <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
-          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo ? o.timeAgo + ' | ' : ''} ${isCompleted ? '✅ Completed' : '⏳ Pending'}</span>
+          <span style="font-size:14px; direction:auto;">📌 ${o.code} — ${o.name}</span>
+          <span style="font-size:10.5px; direction:ltr; color:${isCompleted ? 'var(--mid)' : 'var(--price)'}; background:rgba(255,255,255,0.7); padding:2px 6px; border-radius:6px; font-weight:700;">
+            ${o.timeAgo} | ${isCompleted ? 'Completed' : 'Pending'}
+          </span>
         </div>
-        <div class="chat-body">
+        <div class="chat-body" dir="auto">
           <div style="font-size:13.5px; line-height:1.7;">
-            📞 Phone: ${o.phone}<br>
-            📍 Address: ${o.address}<br>
-            🔐 OTP Code: <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            📅 Date & Time: <b>${o.date}</b><br>
-            🛒 Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-            💰 Total Amount: <b>Rs. ${o.total}</b><br>
-            Status: <b>${isCompleted ? '✅ Completed' : '⏳ Pending'}</b>
+            Phone: <span dir="ltr">${o.phone}</span><br>
+            Address: ${o.address}<br>
+            OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
+            Date & Time: <b>${o.date}</b><br>
+            Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto;" dir="auto">${o.itemsSummary}</div>
+            Total Amount: <b>Rs. ${o.total}</b><br>
+            Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.date}')">🖨️ Print</button>
             ${!isCompleted ? `
-              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}')">✅ Close & Thank Msg</button>
+              <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
           </div>
         </div>
@@ -611,11 +563,11 @@ function renderOrdersDOM(){
   }).join("");
 }
 
-async function closeAndThankOrder(id, code){
+async function closeAndThankOrder(id, code, phone){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
-  let phone = cacheMatch ? cacheMatch.phone : "03000000000";
+  let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "03000000000");
   if(cacheMatch) cacheMatch.status = 'completed';
 
   try {
@@ -628,11 +580,12 @@ async function closeAndThankOrder(id, code){
   } catch(e){}
 
   const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
-  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
-  showToast("✅ Order closed and updated in sheet!");
+  showToast("✅ Order closed and WhatsApp opened!");
   setTimeout(() => { renderOrders(); }, 1000);
 }
 
@@ -641,19 +594,19 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
   w.document.write(`
     <html dir="rtl">
     <head><title>Receipt ${code}</title></head>
-    <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto;">
+    <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto; text-align:right;">
       <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
       <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
       <hr style="border:dashed 1px #000;">
       <p><b>Order Code:</b> ${code}</p>
       <p><b>Date & Time:</b> ${orderTime || new Date().toLocaleString()}</p>
       <p><b>Name:</b> ${name}</p>
-      <p><b>Phone:</b> ${phone}</p>
+      <p><b>Phone:</b> <span dir="ltr">${phone}</span></p>
       <p><b>Address:</b> ${address}</p>
-      <p><b>OTP Code:</b> <span style="font-size:18px;"><b>${otp}</b></span></p>
+      <p><b>OTP Code:</b> <span style="font-size:18px;" dir="ltr"><b>${otp}</b></span></p>
       <hr style="border:dashed 1px #000;">
       <p><b>Order Details:</b></p>
-      <div>${items}</div>
+      <div dir="auto">${items}</div>
       <hr style="border:dashed 1px #000;">
       <h3 style="text-align:center;">Total: Rs. ${total}</h3>
       <br>

@@ -41,7 +41,6 @@
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  /* Inbox Accordion Chat Item */
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
   .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important; animation: none !important;}
@@ -95,7 +94,6 @@
     <div class="tab" id="tabProductsBtn" onclick="switchTab('products', true)">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
-  <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
       <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
@@ -108,7 +106,6 @@
     </div>
   </div>
 
-  <!-- لائیو ان باکس سیکشن -->
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
@@ -121,7 +118,6 @@
     <div id="ordersArea"><div class="loading">⏳ گوگل شیٹ سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
-  <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن -->
   <div id="secProducts" style="display:none;">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -133,13 +129,11 @@
       <button class="btn-secondary" style="width:100%; background:var(--mid); color:#fff; margin-top:8px;" onclick="addNewItemToCurrentCategory()">＋ اس کیٹیگری میں نیا آئٹم شامل کریں</button>
     </div>
 
-    <!-- آئٹمز کی ایڈیٹنگ لسٹ -->
     <div id="adminItemsEditor"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
   </div>
 
 </div>
 
-<!-- Floating Save Bar -->
 <div class="floating-save-bar" id="floatingSaveBar" style="display:none;">
   <span id="saveStatus" style="font-size:12px; font-weight:700; color:var(--price);">⚠️ تبدیلیاں محفوظ نہیں ہیں</span>
   <button class="btn-primary" style="background:var(--dark); width:auto; padding:8px 20px;" onclick="saveAllItemChanges()">💾 سیو کریں</button>
@@ -148,7 +142,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQm8rRjAn7FULiVGDFWOH-41cJ2Wtl6VamL81UNTlmKfpVey-KTBZP1zBWmQ2xr0h3/exec";
+// Updated with your new Google Sheet Script URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);

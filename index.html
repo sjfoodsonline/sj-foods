@@ -100,7 +100,7 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER (Only becomes sticky when inside category view, normal position on home) */
+  /* STICKY TOP CONTAINER */
   .sticky-top-container{
     position: relative;
     z-index: 50;
@@ -310,12 +310,11 @@
 <div class="features-scroll-wrap">
   <div class="features-scroll" id="featuresTrack">
     <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
-    <div class="feature-card"><span class="ic">💰</span><span class="tx">Best Rates</span></div>
-    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fast Delivery</span></div>
-    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payment</span></div>
-    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
-    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa</span></div>
-    <div class="feature-card"><span class="ic">🕙</span><span class="tx">10AM-8PM Support</span></div>
+    <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
+    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
+    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
+    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
+    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
   </div>
 </div>
 
@@ -324,7 +323,7 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- STICKY TOP CONTAINER: Normal on home, fixed only when inside a category -->
+<!-- STICKY TOP CONTAINER -->
 <div class="sticky-top-container" id="stickyNavContainer">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -351,7 +350,7 @@
 
     <div class="cart-sops">
       📌 <b>اہم ہدایات و ضوابط:</b><br>
-      • ہر چیز 100% معیاری اور تول میں پوری دی جائے گی۔<br>
+      • ہر چیز 100% معیاری اور تول میں پوری دی جاتی ہے۔<br>
       • سپورٹ اوقات: صبح 10 سے رات 8 بجے تک۔<br>
       • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
       • محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف آپ کے پاس ہونا چاہیے۔
@@ -364,7 +363,7 @@
         <span class="pay-number" id="payNumber">0315-5166034</span>
         <button id="copyNumBtn">📋 کاپی</button>
       </div>
-      <div class="pay-hint">✅ اگر آپ کوئیک اور فاسٹ رسپانس چاہتے ہیں، تو اس نمبر پر ایزی پیسہ یا بینک ٹرانسفر کریں۔ آپ بے فکر رہیں، آپ کا سامان فوری طور پر روانہ کر دیا جائے گا۔</div>
+      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد نیچے ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
     </div>
 
     <div class="checkout-box">
@@ -372,6 +371,7 @@
       <input id="custName" type="text" placeholder="آپ کا نام (Your Name)">
       <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر (Phone Number)">
       <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address / علاقہ)">
+      <input id="payTxId" type="text" placeholder="ایزی پیسہ / بینک ٹرانزیکشن آئی ڈی / رسید نمبر (TID)" style="display:none;">
 
       <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈلیوری</label>
@@ -440,7 +440,6 @@ window.addEventListener('popstate', (event) => {
   }
 });
 
-// Enable drag-to-scroll / touch swipe for categories
 const slider = document.getElementById('catSliderWrap');
 let isDown = false, startX, scrollLeft;
 slider.addEventListener('mousedown', (e) => {
@@ -604,7 +603,7 @@ function selectCategory(catName){
   document.getElementById('stickyNavContainer').classList.add('fixed-nav');
   renderChips();
   renderMainView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Fixed: Removed auto-scroll to top so user stays at exact position
 }
 
 function resetToHome(){
@@ -700,7 +699,7 @@ function renderMainView(filter=""){
     main.appendChild(grid);
   }
 
-  document.getElementById("noResult").style.display = (anyShown && !filter) ? "none" : "none";
+  document.getElementById("noResult").style.display = "none";
 }
 
 function createItemRow(it){
@@ -790,10 +789,17 @@ const payCod = document.getElementById("payCod");
 const payEasy = document.getElementById("payEasy");
 const lblCod = document.getElementById("lblCod");
 const lblEasy = document.getElementById("lblEasy");
+const payTxId = document.getElementById("payTxId");
 
 function updatePayMethodUI(){
   lblCod.classList.toggle("checked", payCod.checked);
   lblEasy.classList.toggle("checked", payEasy.checked);
+  if(payEasy.checked){
+    payTxId.style.display = "block";
+  } else {
+    payTxId.style.display = "none";
+    payTxId.value = "";
+  }
 }
 payCod.addEventListener("change", updatePayMethodUI);
 payEasy.addEventListener("change", updatePayMethodUI);
@@ -820,7 +826,17 @@ document.getElementById("waBtn").onclick = () => {
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  const payMethod = payEasy.checked ? "ایزی پیسہ / بینک ٹرانسفر (EasyPaisa/Bank)" : (payCod.checked ? "کیش آن ڈلیوری (COD)" : "نامعلوم");
+  let txId = payTxId.value.trim();
+  
+  let payMethod = "کیش آن ڈلیوری (COD)";
+  if(payEasy.checked){
+    if(!txId){
+      alert("⚠️ براہ کرم ایزی پیسہ یا بینک ٹرانسفر کا ٹرانزیکشن نمبر / رسید آئی ڈی (TID) لازمی درج کریں!");
+      payTxId.focus();
+      return;
+    }
+    payMethod = `ایزی پیسہ / بینک ٹرانسفر (TID: ${txId})`;
+  }
 
   if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
 
@@ -845,10 +861,13 @@ document.getElementById("waBtn").onclick = () => {
     summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
   
+  if(payEasy.checked) {
+    summaryHtml += `<br><b>💳 ادائیگی تصدیق نمبر (TID):</b> ${txId}`;
+  }
+  
   msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
   msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
 
-  // Save to localStorage immediately so admin panel receives it 100%
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let newOrderObj = {
     id: "wa_" + Date.now(),
@@ -865,7 +884,6 @@ document.getElementById("waBtn").onclick = () => {
   localOrders.unshift(newOrderObj);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
-  // Background Google Sheet sync
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({

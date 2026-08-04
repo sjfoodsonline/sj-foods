@@ -454,8 +454,9 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let otpCode = Math.floor(1000 + Math.random() * 9000);
   let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
-  let formattedSummary = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${address}<br>📋 Details: <br>` + rawText.replace(/\n/g, "<br>");
+  let formattedSummary = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${address}<br>🔐 OTP Code: ${otpCode}<br>📋 Details: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode,
@@ -464,7 +465,7 @@ async function parseAndAddWhatsAppOrder(){
     address: address,
     items: formattedSummary,
     total: 0,
-    otp: Math.floor(1000 + Math.random() * 9000),
+    otp: otpCode,
     timestamp: new Date().toISOString(),
     status: "pending"
   };
@@ -491,9 +492,9 @@ async function parseAndAddWhatsAppOrder(){
 }
 
 function getTimeElapsed(timestamp) {
-  if (!timestamp) return "Recent";
+  if (!timestamp) return "";
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return "Today";
+  if (isNaN(past)) return "";
   let now = new Date().getTime();
   let diffMin = Math.floor((now - past) / (1000 * 60));
   if (diffMin < 1) return "Just now";
@@ -510,8 +511,7 @@ async function fetchOrdersFromSheet(){
     const data = await res.json();
     let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
       let rawTime = row.timestamp || "";
-      // Proper English & Pakistan Time formatting
-      let formattedDate = rawTime ? new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTime)) : "Today";
+      let formattedDate = rawTime ? new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTime)) : "";
       let timeAgo = getTimeElapsed(rawTime);
       return {
         id: "sh_" + index,
@@ -528,6 +528,7 @@ async function fetchOrdersFromSheet(){
       };
     });
 
+    // PENDING orders first, COMPLETED orders at the bottom
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -591,14 +592,14 @@ function renderOrdersDOM(){
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
-          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo} | ${isCompleted ? '✅ Completed' : '⏳ Pending'}</span>
+          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo ? o.timeAgo + ' | ' : ''} ${isCompleted ? '✅ Completed' : '⏳ Pending'}</span>
         </div>
         <div class="chat-body">
           <div style="font-size:13.5px; line-height:1.7;">
             📞 Phone: ${o.phone}<br>
             📍 Address: ${o.address}<br>
             🔐 OTP Code: <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            📅 Date & Time: <b>${o.date}</b> (${o.timeAgo})<br>
+            📅 Date & Time: <b>${o.date}</b><br>
             🛒 Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
             💰 Total Amount: <b>Rs. ${o.total}</b><br>
             Status: <b>${isCompleted ? '✅ Completed' : '⏳ Pending'}</b>
@@ -618,7 +619,7 @@ function renderOrdersDOM(){
 }
 
 function sendFirstWhatsAppMessage(phone, name, code, otp){
-  const msg = `السلام علیکم محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
+  const msg = `SJ Foods Mingora par aap ka order *[${code}]* mosool ho gaya hai.\n\n🔐 Aap ka delivery confirmatory OTP code: *${otp}* hai.\n\nJab hamara delivery man aap ke paas saman le kar pohnche ga, to barah-e-karam yeh OTP code bata kar saman وصول karein aur sign karein. Shukriya! 🌿`;
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -640,7 +641,7 @@ async function closeAndThankOrder(id, phone, name, code){
     });
   } catch(e){}
 
-  const msg = `محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
+  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -670,7 +671,7 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
       <hr style="border:dashed 1px #000;">
       <h3 style="text-align:center;">Total: Rs. ${total}</h3>
       <br>
-      <div style="text-align:center; font-size:11px;">Please provide OTP code upon delivery.</div>
+      <div style="text-align:center; font-size:11px; line-height:1.5;">سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا۔</div>
     </body>
     </html>
   `);

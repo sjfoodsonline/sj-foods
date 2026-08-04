@@ -176,6 +176,12 @@
 
   .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
   
+  /* Extra Info Panels (About, Careers, Feedback) */
+  .info-section { background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 16px; margin: 16px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.04); font-family: "Jameel Noori Nastaleeq", serif; }
+  .info-section h3 { color: var(--dark); margin: 0 0 8px; font-size: 16px; border-bottom: 2px solid var(--leaf); padding-bottom: 4px; }
+  .info-section p { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin: 0 0 10px; }
+  .feedback-box input, .feedback-box textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 9px; font-size: 13px; margin-bottom: 8px; background: #fff; font-family: "Jameel Noori Nastaleeq", serif; }
+
   footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
   .social-btn{ display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif; }
@@ -237,6 +243,27 @@
 </div>
 
 <main id="list"></main>
+
+<!-- Extra Sections for About Us, Careers & Public Feedback -->
+<div style="padding: 0 16px;" id="extraSections">
+  <div class="info-section">
+    <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
+    <p>SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائنادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔ ہمارا مقصد بہترین معیار اور دیانت داری کے ساتھ آپ کی خدمت کرنا ہے۔</p>
+  </div>
+
+  <div class="info-section">
+    <h3>💼 کیریئرز اور جابز (Careers)</h3>
+    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
+  </div>
+
+  <div class="info-section feedback-box">
+    <h3>💬 عام پبلک کا فیڈ بیک (Customer Feedback)</h3>
+    <p>ہماری سروس یا معیار کے بارے میں اپنی قیمتی رائے یہاں درج کریں:</p>
+    <input type="text" id="fbName" placeholder="آپ کا نام">
+    <textarea id="fbText" rows="3" placeholder="اپنا پیغام یا رائے یہاں لکھیں..."></textarea>
+    <button class="wa-btn" style="padding:8px; font-size:14px; margin-top:4px;" onclick="sendFeedbackWhatsApp()">💬 واٹس ایپ پر فیڈ بیک بھیجیں</button>
+  </div>
+</div>
 
 <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
@@ -506,9 +533,11 @@ function renderMainView(filter=""){
   const main = document.getElementById("list");
   main.innerHTML = "";
   const homeWrapper = document.getElementById("homePageWrapper");
+  const extraSec = document.getElementById("extraSections");
 
   if(filter){
     homeWrapper.style.display = "none";
+    extraSec.style.display = "none";
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
     let container = document.createElement("div");
     container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
@@ -521,12 +550,12 @@ function renderMainView(filter=""){
   } 
   else if(currentSelectedCategory){
     homeWrapper.style.display = "none";
+    extraSec.style.display = "none";
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
     let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
     if(items.length > 0){
       let titleDiv = document.createElement("div");
       titleDiv.className = "cat-title";
-      // Explicit Back to Categories Button
       titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back to Categories</button>`;
       main.appendChild(titleDiv);
       items.forEach(it => main.appendChild(createItemRow(it)));
@@ -546,6 +575,7 @@ function renderMainView(filter=""){
   } 
   else {
     homeWrapper.style.display = "block";
+    extraSec.style.display = "block";
     let grid = document.createElement("div");
     grid.className = "home-cats-grid";
     
@@ -687,6 +717,14 @@ function showToast(text){
   setTimeout(()=> t.className = "toast", 2200);
 }
 
+function sendFeedbackWhatsApp(){
+  let name = document.getElementById("fbName").value.trim() || "گمنام صارف";
+  let text = document.getElementById("fbText").value.trim();
+  if(!text){ alert("براہ کرم اپنا فیڈ بیک یا رائے درج کریں!"); return; }
+  let fbMsg = `SJ Foods Online — Customer Feedback\n\nName: ${name}\nFeedback: ${text}`;
+  window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(fbMsg)}`, "_blank");
+}
+
 document.getElementById("shareBtn").onclick = async () => {
   if(navigator.share){ await navigator.share({title: "SJ Foods Online", url: window.location.href}).catch(()=>{}); }
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
@@ -713,7 +751,6 @@ document.getElementById("waBtn").onclick = () => {
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
   
-  // WhatsApp Message with Emojis
   let msg = `SJ Foods Online — New Order [${orderCode}]\n\n`;
   msg += `Name: ${name}\n`;
   msg += `Phone: ${phone}\n`;
@@ -721,7 +758,6 @@ document.getElementById("waBtn").onclick = () => {
   msg += `Payment Method: ${payMethodWA}\n\n`;
   msg += `Order Details:\n`;
   
-  // Clean Receipt Details WITHOUT Emojis & Double Dates
   let receiptItems = "";
   
   chosen.forEach(it => {
@@ -737,7 +773,6 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 
-  // Clean Single Data String for Google Sheet & Print Receipt (No duplicate dates, No emojis)
   let formattedCleanReceipt = `Payment Method: ${payMethodClean}<br>Items Summary:<br>` + receiptItems;
 
   try {

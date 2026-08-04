@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -112,13 +112,13 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ پٹی پر کلک کرنے سے آرڈر کھلے گا۔</p>
+      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ ڈیٹا براہ راست گوگل شیٹ سے آرہا ہے (کیشے سے بے فکر رہیں)۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
     </div>
     
-    <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ گوگل شیٹ سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
   <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن -->
@@ -480,37 +480,21 @@ async function parseAndAddWhatsAppOrder(){
     }catch(e){}
   }
 
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders.unshift({
-    id: "wa_" + Date.now(),
-    code: orderCode,
-    name: name,
-    phone: phone,
-    address: address,
-    itemsSummary: formattedSummary,
-    total: 0,
-    otpCode: newOrd.otp,
-    date: nowFormatted,
-    status: "pending"
-  });
-  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-
+  showToast("✅ آرڈر گوگل شیٹ پر بھیج دیا گیا ہے!");
+  playBeepTech();
   document.getElementById("waRawText").value = "";
   document.getElementById("waCustName").value = "";
   document.getElementById("waCustPhone").value = "";
   document.getElementById("waCustAddr").value = "";
-  showToast("✅ آرڈر کارٹ کی طرح درج ہو گیا!");
-  playBeepTech();
   switchTab('orders', true);
   renderOrders();
 }
 
 async function fetchOrdersFromSheet(){
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
     const data = await res.json();
-    let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => {
+    let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
       let formattedDate = "آج";
       if(row.timestamp){
         let d = new Date(row.timestamp);
@@ -531,33 +515,16 @@ async function fetchOrdersFromSheet(){
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
-    
-    let combined = [...localOrders];
-    sheetOrders.forEach(so => {
-      let existingIndex = combined.findIndex(c => c.code === so.code);
-      if(existingIndex !== -1){
-        if(so.status === 'completed'){
-          combined[existingIndex].status = 'completed';
-        }
-      } else {
-        combined.unshift(so);
-      }
-    });
 
-    combined.sort((a, b) => {
+    sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
       return 0;
     });
 
-    return combined;
+    return sheetOrders;
   }catch(e){
-    localOrders.sort((a, b) => {
-      if (a.status === 'completed' && b.status !== 'completed') return 1;
-      if (a.status !== 'completed' && b.status === 'completed') return -1;
-      return 0;
-    });
-    return localOrders;
+    return [];
   }
 }
 
@@ -580,7 +547,7 @@ async function renderOrders(){
   latestOrdersCache = await fetchOrdersFromSheet();
   
   if(latestOrdersCache.length === 0){
-    document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
+    document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
     return;
   }
 
@@ -631,7 +598,6 @@ function renderOrdersDOM(){
               <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
-            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ مکمل ڈیلیٹ</button>
           </div>
         </div>
       </div>
@@ -647,26 +613,19 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
   showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
 }
 
-function closeAndThankOrder(id, phone, name, code){
+async function closeAndThankOrder(id, phone, name, code){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کر کے کسٹمر کو شکریہ کا میسج بھیجنا چاہتے ہیں؟")) return;
   
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  let ord = localOrders.find(o => o.id === id);
-  if(ord){
-    ord.status = 'completed';
-    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  } else {
-    localOrders.push({id: id, status: 'completed'});
-    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  }
-
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
   if(cacheMatch) cacheMatch.status = 'completed';
 
   try {
-    navigator.sendBeacon(SHEET_URL, JSON.stringify({
-      code: code, status: "completed", timestamp: new Date().toISOString()
-    }));
+    await fetch(SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code, status: "completed", timestamp: new Date().toISOString() })
+    });
   } catch(e){}
 
   const msg = `محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
@@ -674,21 +633,8 @@ function closeAndThankOrder(id, phone, name, code){
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
-  showToast("✅ آرڈر کلوز ہو گیا اور شکریہ کا میسج کھل گیا!");
-  renderOrdersDOM();
-}
-
-function deleteOrder(id){
-  if(!confirm("⚠️ کیا آپ واقعی اس آرڈر کو ہمیشہ کے لیے ڈیلیٹ کرنا چاہتے ہیں؟")) return;
-  
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders = localOrders.filter(o => o.id !== id && o.code !== id);
-  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-
-  latestOrdersCache = latestOrdersCache.filter(o => o.id !== id && o.code !== id);
-
-  showToast("🗑️ آرڈر کامیابی سے مکمل ڈیلیٹ کر دیا گیا");
-  renderOrdersDOM();
+  showToast("✅ آرڈر کلوز ہو گیا اور گوگل شیٹ میں اپ ڈیٹ ہو گیا!");
+  renderOrders();
 }
 
 function printReceipt(code, name, phone, address, items, total, otp, orderTime){

@@ -1,654 +1,967 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="ur" dir="rtl" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — مکمل ایڈمن اور ریٹس کنٹرول پینل</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>SJ Foods Online — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+    --gold:#C9A227; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86;
+    --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF; --brown:#5D4037;
   }
   *{box-sizing:border-box;}
-  html{ background:#EDEAE0; height:100%; overflow-x:hidden; }
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
     margin:0 auto; padding:0 0 110px 0; background:var(--paper); color:var(--ink);
-    font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; text-align:right;
+    font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
     width:100%; max-width:480px; min-height:100vh; position:relative;
-    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden;
-  }
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
-  header h1{margin:0; font-size:18px; font-family:"Jameel Noori Nastaleeq",serif;}
-  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
-
-  .wrap{padding:14px;}
-  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
-  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  textarea, input[type=text], select{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
-  }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
-  button{font-family:inherit; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
-  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
-  
-  .tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
-  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-
-  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;}
-  .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
-  .chat-item.completed{background:#F1F8E9; border-color:#81C784;}
-  @keyframes superBlinking{ 
-    0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
-    50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
-    100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
   }
 
-  .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
-  .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px; cursor:pointer;}
-  .item-edit-thumb img{width:100%; height:100%; object-fit:cover;}
-  .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
-  .unit-row input[type=text], .unit-row input[type=number]{margin-bottom:0;}
+  header{ 
+    background:linear-gradient(160deg,var(--dark),var(--mid)); 
+    color:#fff; padding:20px 16px; 
+    border-radius:0 0 24px 24px; 
+    position:relative; 
+    box-shadow: 0 4px 15px rgba(21,58,32,0.2);
+  }
+  header h1{
+    margin:0 0 4px; font-size:23px; font-weight:700; 
+    font-family: "Jameel Noori Nastaleeq", serif, Arial; 
+    letter-spacing: 0.5px;
+  }
+  header p{
+    margin:0; font-size:13px; opacity:.95; 
+    font-family: "Jameel Noori Nastaleeq", serif;
+  }
 
-  .floating-save-bar {
-    position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
-    background: rgba(255, 253, 248, 0.95); backdrop-filter: blur(8px);
-    border-top: 1.5px solid var(--line); padding: 12px 16px; z-index: 100;
+  .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+  .install-banner {
+    background: linear-gradient(135deg, var(--accent), #E65100);
+    color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
     display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 -6px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
+  }
+  .install-banner span { font-size: 14px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
+  .install-banner button { background: #fff; color: var(--accent); border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+  .cover-banner{
+    width:100%; max-width: 448px; height: 180px; margin: 12px auto 8px; 
+    overflow:hidden; border-radius:16px; display:none; background: var(--leaf);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1.5px solid var(--line);
+  }
+  .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .cover-slide{ min-width:100%; width:100%; height: 100%; }
+  .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
+  .features-scroll-wrap:hover .features-scroll{ animation-play-state: paused; }
+  @keyframes smoothMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
   }
 
-  .toast{
-    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
-    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;
+  .feature-card{
+    flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:8px 16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    display:flex; align-items:center; gap:6px;
   }
-  .toast.show{opacity:1; top:26px;}
-  .toast.err{background:#B71C1C;}
-  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+  .feature-card .ic{font-size:16px;}
+  .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
+
+  .featured-section{
+    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
+    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
+    box-shadow:0 10px 30px rgba(93,64,55,0.15);
+  }
+
+  .shout-title {
+    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
+    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
+  }
+  
+  .deal-grid { display: flex; gap: 12px; justify-content: center; }
+  .deal-card{
+    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0);
+  }
+  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
+
+  .deal-card img, .deal-card .deal-icon-box{
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
+    display: flex; align-items:center; justify-content:center; font-size: 38px;
+  }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
+  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
+
+  /* STICKY TOP CONTAINER */
+  .sticky-top-container{
+    position: relative;
+    z-index: 50;
+    background: var(--paper);
+  }
+  .sticky-top-container.fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    border-bottom: 1.5px solid var(--line);
+  }
+
+  .search-wrap{padding:10px 16px 6px; background:var(--paper);}
+  #search{
+    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
+    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
+  }
+
+  .cat-section{padding:4px 0 10px; background:var(--paper);}
+  .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:4px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; cursor: grab; }
+  .cat-marquee-wrap::-webkit-scrollbar { display: none; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
+  .cat-marquee-wrap.auto-animate .cat-marquee-track { animation: cat-move 35s linear infinite; }
+  .cat-marquee-wrap.auto-animate:hover .cat-marquee-track{ animation-play-state: paused; }
+  @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+
+  .cat-chip{
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
+    border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold;
+    white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
+    user-select: none;
+  }
+  .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
+
+  .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 16px; }
+  .home-cat-card{
+    background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 12px; text-align: center;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+  }
+  .home-cat-card:hover{ transform: translateY(-4px); border-color: var(--mid); box-shadow: 0 8px 25px rgba(46,125,50,0.15); }
+  
+  .home-cat-img-wrap{
+    width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; background: var(--leaf); overflow: hidden;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative;
+  }
+  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; opacity: 1; }
+  .home-cat-img-wrap img.fade-out { opacity: 0; }
+
+  .home-cat-name { font-size: 14px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
+  .home-cat-urdu { font-size: 12.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
+
+  .back-cat-btn{
+    background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
+    padding: 8px 16px; font-size: 13.5px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
+  }
+
+  main{padding:6px 16px 100px;}
+  .cat-title{
+    font-size:18px; font-weight:bold; color:var(--dark); margin:10px 2px 14px; padding-right:10px; border-right:4px solid var(--dark);
+    font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:space-between;
+  }
+  
+  .item{
+    display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
+    padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
+  }
+  .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
+  
+  .item-row-top{display:flex; align-items:center; gap:12px;}
+
+  .item-thumb{
+    flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06); position:relative;
+  }
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+
+  .item .info{min-width:0; flex:1;}
+  .item .name{ font-size: 16.5px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: Arial, sans-serif; }
+  .item .name .roman-part { font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; }
+  .item .name .urdu-part { font-size: 13px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px; }
+
+  .item .meta{font-size:13px; color:var(--muted); margin-top:4px; font-weight: bold; font-family: Arial, sans-serif;}
+  .item .meta b{color:var(--price); font-weight:bold; font-size:14.5px;}
+
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
+  .unit-select{
+    flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold;
+    background:#fff; color:var(--dark); font-family: Arial, sans-serif;
+  }
+  
+  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  
+  .status-label {
+    font-size: 10px; font-weight: bold; font-family: Arial, sans-serif;
+    padding: 1px 6px; border-radius: 4px; letter-spacing: 0.3px;
+  }
+  .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+  .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
+
+  .qty-box{display:flex; align-items:center; gap:6px;}
+  .qty-box button{
+    width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif;
+  }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box input{
+    width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; font-family: Arial, sans-serif;
+  }
+
+  .sops-box{
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: right; font-family: "Jameel Noori Nastaleeq", serif;
+  }
+  .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14.5px; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
+
+  .cart-sops {
+    background: #F9F8F3; border: 1px dashed var(--mid); border-radius: 10px; padding: 10px; margin: 10px 0;
+    font-size: 12px; color: var(--dark); line-height: 1.6; font-family: "Jameel Noori Nastaleeq", serif !important;
+  }
+
+  #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary {
+    font-family: "Jameel Noori Nastaleeq", serif !important;
+  }
+  .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
+
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
+    border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
+    width:100%; max-width:480px; margin:0 auto; max-height:85vh;
+  }
+  #billbar.collapsed .cart-details{display:none;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
+  .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
+  .cart-details{overflow-y:auto; max-height:65vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
+  
+  .pay-card{
+    background:linear-gradient(135deg,#1B5E20,#2E7D32);
+    border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff;
+  }
+  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif;}
+  .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
+  .pay-number-row{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
+    border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px;
+  }
+  .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
+  #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
+  .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right; font-family: "Jameel Noori Nastaleeq", serif;}
+
+  .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
+  .checkout-box input{
+    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif;
+  }
+  
+  .pay-method{display:flex; gap:8px; margin-bottom:8px;}
+  .pay-method label{
+    flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold;
+    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); font-family: "Jameel Noori Nastaleeq", serif;
+  }
+  .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
+  .pay-method input{width:15px; height:15px;}
+
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; font-family: "Jameel Noori Nastaleeq", serif;}
+  
+  footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
+  .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
+  .social-btn{
+    display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff;
+    padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif;
+  }
+  .social-btn.fb{background:#1877F2;}
+  .social-btn.tk{background:#000000;}
+  .social-btn.yt{background:#FF0000;}
+  .social-btn.ig{background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
+
+  .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:130; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.hidden{display:none;}
+  .lightbox img{max-width:100%; max-height:80vh; border-radius:14px;}
+  .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:38px; height:38px; font-size:18px; cursor:pointer;}
+
+  .toast{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
+  .toast.show{opacity:1;}
 </style>
 </head>
-<body>
+<body translate="no">
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>پروڈکٹس، ریٹس اور لائیو کسٹمر آرڈرز کا انتظام</p>
+  <button class="share-btn" id="shareBtn" title="Share">🔗</button>
+  <h1>🟢 ایس جے فوڈز آن لائن</h1>
+  <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
-<div class="wrap">
-
-  <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', true)">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="switchTab('products', true)">📦 پروڈکٹس اور ریٹس</div>
-  </div>
-
-  <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
-  <div id="secAddWA" style="display:none;">
-    <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
-      <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
-      <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
-      <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
-      <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا پورا واٹس ایپ میسج پیسٹ کریں..."></textarea>
-      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ آرڈر درج کریں اور ان باکس میں بھیجیں</button>
-    </div>
-  </div>
-
-  <!-- لائیو ان باکس سیکشن -->
-  <div id="secOrders">
-    <div class="card">
-      <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ دوسرے موبائلز کے آرڈرز خود بخود سنک ہو رہے ہیں۔</p>
-      <div style="display:flex; gap:8px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
-      </div>
-    </div>
-    
-    <div id="ordersArea"><div class="loading">⏳ ان باکس لوڈ ہو رہا ہے...</div></div>
-  </div>
-
-  <!-- پروڈکٹس اور ریٹس کنٹرول سیکشن -->
-  <div id="secProducts" style="display:none;">
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-weight:700; color:var(--dark);">🔒 کیٹگری کنٹرول</span>
-        <select id="catSelect" onchange="renderAdminEditor()" style="width:65%; margin-bottom:0;">
-          <option value="">⏳ کیٹگریز لوڈ ہو رہی ہیں...</option>
-        </select>
-      </div>
-      <button class="btn-secondary" style="width:100%; background:var(--mid); color:#fff; margin-top:8px;" onclick="addNewItemToCurrentCategory()">＋ اس کیٹیگری میں نیا آئٹم شامل کریں</button>
-    </div>
-
-    <!-- آئٹمز کی ایڈیٹنگ لسٹ -->
-    <div id="adminItemsEditor"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
-  </div>
-
+<div class="install-banner" id="installBanner" style="display:none;">
+  <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
+  <button id="installAppBtn">انسٹال کریں</button>
 </div>
 
-<!-- Floating Save Bar -->
-<div class="floating-save-bar" id="floatingSaveBar" style="display:none;">
-  <span id="saveStatus" style="font-size:12px; font-weight:700; color:var(--price);">⚠️ تبدیلیاں محفوظ نہیں ہیں</span>
-  <button class="btn-primary" style="background:var(--dark); width:auto; padding:8px 20px;" onclick="saveAllItemChanges()">💾 سیو کریں</button>
+<div class="cover-banner" id="coverBanner">
+  <div class="cover-slider-track" id="coverSliderTrack"></div>
+</div>
+
+<div class="features-scroll-wrap">
+  <div class="features-scroll" id="featuresTrack">
+    <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+    <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
+    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
+    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
+    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
+    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
+  </div>
+</div>
+
+<div class="featured-section hidden" id="featuredSection">
+  <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
+  <div class="deal-grid" id="dealBox"></div>
+</div>
+
+<!-- STICKY TOP CONTAINER -->
+<div class="sticky-top-container" id="stickyNavContainer">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap auto-animate" id="catSliderWrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
+</div>
+
+<main id="list"></main>
+
+<div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
+<div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+
+<div id="billbar" class="collapsed" style="display:none;">
+  <div class="bill-summary" id="summary">
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز)</div>
+    <div class="total" id="summaryTotal">Rs. 0</div>
+  </div>
+  <div class="cart-details">
+    <div id="billLines" style="margin-bottom:10px;"></div>
+
+    <div class="cart-sops">
+      📌 <b>اہم ہدایات و ضوابط:</b><br>
+      • ہر چیز 100% معیاری اور تول میں پوری دی جاتی ہے۔<br>
+      • سپورٹ اوقات: صبح 10 سے رات 8 بجے تک۔<br>
+      • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
+      • محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف آپ کے پاس ہونا چاہیے۔
+    </div>
+    
+    <div class="pay-card" id="payCard">
+      <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
+      <div class="pay-amount" id="payAmount">Rs. 0</div>
+      <div class="pay-number-row">
+        <span class="pay-number" id="payNumber">0315-5166034</span>
+        <button id="copyNumBtn">📋 کاپی</button>
+      </div>
+      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد نیچے ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
+    </div>
+
+    <div class="checkout-box">
+      <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px; font-family:'Jameel Noori Nastaleeq',serif;">📦 ڈلیوری کی تفصیلات دیں</div>
+      <input id="custName" type="text" placeholder="آپ کا نام (Your Name)">
+      <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر (Phone Number)">
+      <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address / علاقہ)">
+      <input id="payTxId" type="text" placeholder="ایزی پیسہ / بینک ٹرانزیکشن آئی ڈی / رسید نمبر (TID)" style="display:none;">
+
+      <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
+        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod"> 💵 کیش آن ڈلیوری</label>
+        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 ایزی پیسہ / بینک</label>
+      </div>
+    </div>
+
+    <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
+  </div>
+</div>
+
+<footer>
+  SJ Foods Online — Fresh Quality, Fast Delivery 🌿<br>
+  📞 <span id="footerContact">0315-5166034</span>   📧 <span id="footerEmail">sjfoodsonline@outlook.com</span><br>
+  📍 Al Basit Plaza, Haji Baba Road, Mingora Swat<br>
+  🕙 Hours: 10:00 AM - 8:00 PM
+  
+  <div class="social-links" id="socialLinksBox">
+    <a href="https://facebook.com" target="_blank" class="social-btn fb" id="linkFb">📘 فیس بک</a>
+    <a href="https://tiktok.com" target="_blank" class="social-btn tk" id="linkTk">🎵 ٹک ٹاک</a>
+    <a href="https://youtube.com" target="_blank" class="social-btn yt" id="linkYt">▶️ یوٹیوب</a>
+    <a href="https://instagram.com" target="_blank" class="social-btn ig" id="linkIg">📸 انسٹاگرام</a>
+  </div>
+</footer>
+
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">✕</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+let CATEGORIES_DATA = {};
+let CATEGORIES_META = [];
+let ITEMS = [];
+let SHOP_WHATSAPP = "923155166034";
+let SHOP_PAY_NUMBER = "0315-5166034";
+let currentSelectedCategory = null;
+let coverImagesList = [];
+let deferredPrompt = null;
 
-window.addEventListener('popstate', (event) => {
-  switchTab('orders', false);
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
 });
 
-function switchTab(tabName, pushState = true){
-  if(pushState && history.state?.tab !== tabName){
-    history.pushState({tab: tabName}, "", "#" + tabName);
-  }
-
-  document.getElementById('tabOrdersBtn').className = 'tab';
-  document.getElementById('tabAddBtn').className = 'tab';
-  document.getElementById('tabProductsBtn').className = 'tab';
-  
-  document.getElementById('secOrders').style.display = 'none';
-  document.getElementById('secAddWA').style.display = 'none';
-  document.getElementById('secProducts').style.display = 'none';
-  document.getElementById('floatingSaveBar').style.display = 'none';
-
-  if(tabName === 'orders'){
-    document.getElementById('tabOrdersBtn').className = 'tab active';
-    document.getElementById('secOrders').style.display = 'block';
-  } else if(tabName === 'addwa'){
-    document.getElementById('tabAddBtn').className = 'tab active';
-    document.getElementById('secAddWA').style.display = 'block';
-  } else {
-    document.getElementById('tabProductsBtn').className = 'tab active';
-    document.getElementById('secProducts').style.display = 'block';
-    document.getElementById('floatingSaveBar').style.display = 'flex';
-    initAdminCategories();
-  }
-}
-
-function showToast(msg, isErr){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show" + (isErr ? " err" : "");
-  setTimeout(()=> t.className = "toast", 2600);
-}
-
-function playBeepTech(){
-  try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    let time = ctx.currentTime;
-    for(let i = 0; i < 2; i++){
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(800 + (i*200), time);
-      gain.gain.setValueAtTime(0.5, time);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(time);
-      osc.stop(time + 0.2);
-      time += 0.25;
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      document.getElementById('installBanner').style.display = 'none';
     }
-  }catch(e){}
+    deferredPrompt = null;
+  }
+});
+
+window.addEventListener('popstate', (event) => {
+  if(currentSelectedCategory !== null){
+    currentSelectedCategory = null;
+    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
+    renderChips();
+    renderMainView();
+  }
+});
+
+const slider = document.getElementById('catSliderWrap');
+let isDown = false, startX, scrollLeft;
+slider.addEventListener('mousedown', (e) => {
+  isDown = true;
+  slider.classList.remove('auto-animate');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('mouseup', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+});
+slider.addEventListener('touchstart', (e) => {
+  isDown = true;
+  slider.classList.remove('auto-animate');
+  startX = e.touches[0].pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('touchend', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('touchmove', (e) => {
+  if(!isDown) return;
+  const x = e.touches[0].pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+}, {passive: true});
+
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function formatUnitLabel(label){
+  if(!label) return "";
+  let l = label.toLowerCase();
+  if(l.includes("کلو") || l.includes("kg")) return "KG";
+  if(l.includes("پاؤ") || l.includes("pao")) return "Pao";
+  if(l.includes("دڑی") || l.includes("dari")) return "Dri";
+  if(l.includes("گرام") || l.includes("g")) return "g";
+  if(l.includes("لیٹر") || l.includes("litre") || l.includes("liter")) return "Ltr";
+  if(l.includes("پیکٹ") || l.includes("packet")) return "Pkt";
+  if(l.includes("درجن") || l.includes("dozen")) return "Dzn";
+  return label;
 }
 
-let globalCategoriesData = {};
-let loadedCategoriesList = [];
+function formatItemName(it){
+  const roman = it.name_roman || it.name;
+  const urdu = it.name ? ` (${it.name})` : '';
+  return `<span class="roman-part" dir="ltr">${roman}</span><span class="urdu-part">${urdu}</span>`;
+}
 
-async function initAdminCategories(){
-  const selectEl = document.getElementById("catSelect");
-  let savedData = JSON.parse(localStorage.getItem("sj_admin_all_categories"));
-  
-  if(savedData){
-    globalCategoriesData = savedData;
-    loadedCategoriesList = Object.keys(savedData);
-    populateCategoryDropdown();
-    return;
-  }
-
+async function loadData(){
   try{
     const idxRes = await fetch("categories_index.json", {cache:"no-store"});
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
     
-    globalCategoriesData = {};
+    CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
+    ITEMS = [];
+    CATEGORIES_DATA = {};
+
     index.forEach((entry, i) => {
       let catName = entry.category;
-      globalCategoriesData[catName] = catResults[i].map(it => ({
-        name: it.name || "",
-        name_roman: it.name_roman || "",
-        image: it.image || "",
-        icon: entry.icon || "🛒",
-        autoCalc: true,
-        units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
-      }));
+      let itemsList = catResults[i];
+      CATEGORIES_DATA[catName] = itemsList;
+
+      if(entry.image) coverImagesList.push(entry.image);
+      itemsList.forEach((it, ii) => {
+        if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
+        let cleanUnits = (it.units && it.units.length)
+          ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
+          : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
+
+        ITEMS.push({
+          id: i+"-"+ii, cat: catName, icon: entry.icon,
+          name: it.name, name_roman: it.name_roman || "",
+          units: cleanUnits, unitIndex: 0,
+          available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
+        });
+      });
     });
 
-    loadedCategoriesList = Object.keys(globalCategoriesData);
-    localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
-    populateCategoryDropdown();
+    setupCoverSlider();
+    renderChips();
+    renderMainView();
+    renderFeatured();
+    loadSavedCustomerDetails();
+    document.getElementById("loadingMsg").style.display = "none";
+    document.getElementById("billbar").style.display = "flex";
   }catch(e){
-    selectEl.innerHTML = `<option value="">⚠️ کیٹگریز لوڈ نہیں ہو سکیں</option>`;
+    document.getElementById("loadingMsg").textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی";
   }
 }
 
-function populateCategoryDropdown(){
-  const selectEl = document.getElementById("catSelect");
-  selectEl.innerHTML = loadedCategoriesList.map((cat, idx) => `
-    <option value="${cat}" ${idx===0?'selected':''}>${globalCategoriesData[cat][0]?.icon || '📂'} ${cat}</option>
-  `).join("");
-  renderAdminEditor();
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    if(s.whatsapp) SHOP_WHATSAPP = s.whatsapp;
+    if(s.pay_number){
+      SHOP_PAY_NUMBER = s.pay_number;
+      document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
+    }
+    if(s.cover_image && !coverImagesList.includes(s.cover_image)){
+      coverImagesList.unshift(s.cover_image);
+      setupCoverSlider();
+    }
+    if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
+    if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
+    if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
+    if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
+  }catch(e){}
 }
 
-function renderAdminEditor(){
-  const cat = document.getElementById("catSelect").value;
-  const items = globalCategoriesData[cat] || [];
-  const container = document.getElementById("adminItemsEditor");
+function setupCoverSlider(){
+  const track = document.getElementById("coverSliderTrack");
+  const banner = document.getElementById("coverBanner");
+  if(coverImagesList.length === 0) return;
 
-  if(items.length === 0){
-    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`;
-    return;
+  banner.style.display = "block";
+  track.innerHTML = coverImagesList.map(img => `<div class="cover-slide"><img src="${img}" alt="Cover Slide"></div>`).join("");
+
+  let currentSlide = 0;
+  if(coverImagesList.length > 1){
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % coverImagesList.length;
+      track.style.transform = `translateX(${currentSlide * 100}%)`;
+    }, 4000);
   }
+}
 
-  container.innerHTML = items.map((it, idx) => `
-    <div class="control-box">
-      <div class="item-edit-row">
-        <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})" title="تصویر تبدیل کریں">
-          ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}
+function loadSavedCustomerDetails(){
+  const savedName = localStorage.getItem("sj_cust_name") || "";
+  const savedPhone = localStorage.getItem("sj_cust_phone") || "";
+  const savedAddr = localStorage.getItem("sj_cust_addr") || "";
+
+  if(savedName) document.getElementById("custName").value = savedName;
+  if(savedPhone) document.getElementById("custPhone").value = savedPhone;
+  if(savedAddr) document.getElementById("custAddr").value = savedAddr;
+
+  document.getElementById("custName").oninput = (e) => localStorage.setItem("sj_cust_name", e.target.value);
+  document.getElementById("custPhone").oninput = (e) => localStorage.setItem("sj_cust_phone", e.target.value);
+  document.getElementById("custAddr").oninput = (e) => localStorage.setItem("sj_cust_addr", e.target.value);
+}
+
+function renderChips(){
+  const chips = CATEGORIES_META.map(c => 
+    `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
+  ).join("");
+  document.getElementById("chips").innerHTML = `
+    <div style="display:flex; gap:10px;">${chips}</div>
+    <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>`;
+}
+
+function selectCategory(catName){
+  if(currentSelectedCategory === null && catName !== null){
+    history.pushState({cat: catName}, "", "#" + catName);
+  }
+  currentSelectedCategory = catName;
+  document.getElementById('stickyNavContainer').classList.add('fixed-nav');
+  renderChips();
+  renderMainView();
+  // Fixed: Removed auto-scroll to top so user stays at exact position
+}
+
+function resetToHome(){
+  if(currentSelectedCategory !== null){
+    history.back();
+  } else {
+    currentSelectedCategory = null;
+    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
+    renderChips();
+    renderMainView();
+  }
+}
+
+function renderMainView(filter=""){
+  const main = document.getElementById("list");
+  main.innerHTML = "";
+  let anyShown = false;
+
+  if(filter){
+    anyShown = true;
+    let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    let container = document.createElement("div");
+    container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+    if(filteredItems.length > 0){
+      filteredItems.forEach(it => container.appendChild(createItemRow(it)));
+    } else {
+      container.innerHTML += `<div style="text-align:center; padding:20px; color:var(--muted);">کوئی آئٹم نہیں ملا</div>`;
+    }
+    main.appendChild(container);
+  } 
+  else if(currentSelectedCategory){
+    let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
+    let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
+    if(items.length > 0){
+      anyShown = true;
+      let titleDiv = document.createElement("div");
+      titleDiv.className = "cat-title";
+      titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ واپس تمام کیٹگریز</button>`;
+      main.appendChild(titleDiv);
+      items.forEach(it => main.appendChild(createItemRow(it)));
+
+      let sopsDiv = document.createElement("div");
+      sopsDiv.className = "sops-box";
+      sopsDiv.innerHTML = `
+        <h4>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h4>
+        • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
+        • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
+        • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
+        • ڈلیوری سواری اور چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی طے ہوگی۔<br>
+        • سامان وصول کرتے وقت محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف سامان لینے والے کے پاس ہونا چاہیے۔
+      `;
+      main.appendChild(sopsDiv);
+    }
+  } 
+  else {
+    anyShown = true;
+    let grid = document.createElement("div");
+    grid.className = "home-cats-grid";
+    
+    CATEGORIES_META.forEach(cat => {
+      let card = document.createElement("div");
+      card.className = "home-cat-card";
+      card.onclick = () => selectCategory(cat.name);
+      
+      let catItems = CATEGORIES_DATA[cat.name] || [];
+      let imagesList = catItems.filter(it => it.image).map(it => it.image);
+      let defaultImg = cat.image || (imagesList.length > 0 ? imagesList[0] : "");
+
+      card.innerHTML = `
+        <div class="home-cat-img-wrap" id="cat_img_wrap_${cat.name}">
+          ${defaultImg ? `<img src="${defaultImg}" alt="${cat.name}" id="cat_img_${cat.name}">` : `<div style="font-size:38px;">${cat.icon}</div>`}
         </div>
-        <div style="flex:1;">
-          <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام (مثلاً آلو)" oninput="markUnsaved()">
-          <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name (e.g. Aloo)" oninput="markUnsaved()">
-        </div>
-      </div>
-      <div style="display:flex; gap:6px; margin-bottom:8px;">
-        <button class="btn-secondary" style="background:#FDECEA; color:var(--price); flex:1; padding:6px;" onclick="triggerImgUpload(${idx})">🖼️ تصویر بدلیں</button>
-        <button class="btn-danger" style="flex:1; padding:6px;" onclick="deleteAdminItem(${idx})">🗑️ آئٹم ڈیلیٹ کریں</button>
-      </div>
-      <input type="file" id="file_${idx}" style="display:none;" accept="image/*" onchange="handleImageUpload(event, ${idx})">
+        <div class="home-cat-name">${cat.name_roman || cat.name}</div>
+        <div class="home-cat-urdu">${cat.name}</div>
+      `;
+      grid.appendChild(card);
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت</span>
-        <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;">
-          <input type="checkbox" ${it.autoCalc ? 'checked' : ''} onchange="toggleAutoCalc(${idx}, this.checked)"> خودکار حساب
-        </label>
-      </div>
-
-      <div id="units_area_${idx}">
-        ${it.units.map((u, uIdx) => `
-          <div class="unit-row">
-            <input type="number" value="${u.rate}" id="rate_${idx}_${uIdx}" style="flex:1;" oninput="onRateInput(${idx}, ${uIdx})">
-            <input type="text" value="${u.label}" id="label_${idx}_${uIdx}" style="flex:1.5;" oninput="markUnsaved()">
-            <button class="btn-danger" style="padding:8px 10px;" onclick="removeUnit(${idx}, ${uIdx})">✕</button>
-          </div>
-        `).join("")}
-      </div>
-
-      <button class="btn-secondary" style="width:100%; margin-top:6px; background:var(--leaf); color:var(--dark);" onclick="addUnit(${idx})">＋ سائز/قیمت شامل کریں</button>
-    </div>
-  `).join("");
-}
-
-function markUnsaved(){
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں";
-  document.getElementById("saveStatus").style.color = "var(--price)";
-}
-
-function triggerImgUpload(idx){
-  document.getElementById("file_" + idx).click();
-}
-
-function handleImageUpload(event, idx){
-  const file = event.target.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      const cat = document.getElementById("catSelect").value;
-      globalCategoriesData[cat][idx].image = e.target.result;
-      renderAdminEditor();
-      markUnsaved();
-      showToast("✅ تصویر اپ لوڈ ہو گئی!");
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function addNewItemToCurrentCategory(){
-  const cat = document.getElementById("catSelect").value;
-  if(!cat) return;
-  if(!globalCategoriesData[cat]) globalCategoriesData[cat] = [];
-  globalCategoriesData[cat].unshift({
-    name: "نیا آئٹم",
-    name_roman: "New Item",
-    image: "",
-    icon: "🛒",
-    autoCalc: true,
-    units: [{label: "KG", rate: 0}]
-  });
-  renderAdminEditor();
-  markUnsaved();
-  showToast("✅ نیا آئٹم شامل کر دیا گیا ہے");
-}
-
-function deleteAdminItem(idx){
-  if(!confirm("کیا آپ اس آئٹم کو حذف کرنا چاہتے ہیں؟")) return;
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat].splice(idx, 1);
-  renderAdminEditor();
-  markUnsaved();
-  showToast("✅ آئٹم ہٹا دیا گیا");
-}
-
-function toggleAutoCalc(idx, val){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][idx].autoCalc = val;
-  markUnsaved();
-}
-
-function onRateInput(idx, uIdx){
-  markUnsaved();
-  const cat = document.getElementById("catSelect").value;
-  let item = globalCategoriesData[cat][idx];
-  
-  let val = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-  item.units[uIdx].rate = val;
-
-  if(item.autoCalc && uIdx === 0){
-    let baseRate = val;
-    item.units.forEach((u, i) => {
-      if(i > 0){
-        let lbl = u.label.toLowerCase();
-        let calculated = baseRate;
-        if(lbl.includes("آدھا") || lbl.includes("half")){
-          calculated = Math.round(baseRate / 2);
-        } else if(lbl.includes("پاؤ") || lbl.includes("pao")){
-          calculated = Math.round(baseRate / 4);
-        } else if(lbl.includes("ڈڑی") || lbl.includes("5") || lbl.includes("dari")){
-          calculated = baseRate * 5;
-        }
-        u.rate = calculated;
-        const inputEl = document.getElementById(`rate_${idx}_${i}`);
-        if(inputEl) inputEl.value = calculated;
+      if(imagesList.length > 1){
+        let imgIdx = 0;
+        setInterval(() => {
+          imgIdx = (imgIdx + 1) % imagesList.length;
+          let imgEl = document.getElementById(`cat_img_${cat.name}`);
+          if(imgEl){
+            imgEl.classList.add("fade-out");
+            setTimeout(() => {
+              imgEl.src = imagesList[imgIdx];
+              imgEl.classList.remove("fade-out");
+            }, 400);
+          }
+        }, 3500);
       }
     });
+    main.appendChild(grid);
+  }
+
+  document.getElementById("noResult").style.display = "none";
+}
+
+function createItemRow(it){
+  const u = it.units[it.unitIndex];
+  const row = document.createElement("div");
+  row.className = "item" + (it.qty>0 ? " active":"");
+  row.id = "row-"+it.id;
+  row.innerHTML = `
+    <div class="item-row-top">
+      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
+        ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
+      </div>
+      <div class="info">
+        <div class="name">${formatItemName(it)}</div>
+        <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
+      </div>
+    </div>
+    <div class="item-row-bottom">
+      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      <div class="qty-box-wrapper">
+        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
+        <div class="qty-box">
+          <button onclick="changeQty('${it.id}', -1)">−</button>
+          <input type="number" value="${it.qty}" readonly>
+          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+        </div>
+      </div>
+    </div>
+  `;
+  return row;
+}
+
+function changeUnit(id, idx){
+  const it = ITEMS.find(x => x.id === id);
+  if(it){
+    it.unitIndex = parseInt(idx);
+    renderMainView(document.getElementById("search").value);
+    renderBill();
   }
 }
 
-function addUnit(itemIdx){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
-  renderAdminEditor();
-  markUnsaved();
+function changeQty(id, delta){
+  const it = findItem(id);
+  if(!it || !it.available) return;
+  it.qty = Math.max(0, it.qty + delta);
+  renderMainView(document.getElementById("search").value);
+  renderBill();
 }
 
-function removeUnit(itemIdx, unitIdx){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
-  renderAdminEditor();
-  markUnsaved();
-}
+function findItem(id){ return ITEMS.find(i=>i.id===id); }
 
-function saveAllItemChanges(){
-  const cat = document.getElementById("catSelect").value;
-  const items = globalCategoriesData[cat];
+function renderBill(){
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  let subtotal = 0;
   
-  items.forEach((it, idx) => {
-    it.name = document.getElementById(`name_${idx}`).value;
-    it.name_roman = document.getElementById(`roman_${idx}`).value;
-    it.units.forEach((u, uIdx) => {
-      u.rate = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-      u.label = document.getElementById(`label_${idx}_${uIdx}`).value;
-    });
-  });
+  document.getElementById("billLines").innerHTML = chosen.map(it => {
+    const u = it.units[it.unitIndex];
+    const total = it.qty * u.rate;
+    subtotal += total;
+    return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px;">
+      📦 <b style="color:var(--dark);">[${it.cat}]</b> ${it.name_roman || it.name} (${it.name}) × ${it.qty} ${u.label} = <b>${fmt(total)}</b>
+    </div>`;
+  }).join("");
 
-  localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
-  document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
-  document.getElementById("saveStatus").style.color = "var(--mid)";
-  showToast("✅ تمام تبدیلیاں اور ریٹس محفوظ ہو گئے!");
-  playBeepTech();
+  document.getElementById("itemCount").textContent = chosen.length;
+  document.getElementById("summaryTotal").textContent = fmt(subtotal);
+  document.getElementById("payAmount").textContent = fmt(subtotal);
+  if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
-async function parseAndAddWhatsAppOrder(){
-  const rawText = document.getElementById("waRawText").value.trim();
-  let name = document.getElementById("waCustName").value.trim() || "واٹس ایپ کسٹمر";
-  let phone = document.getElementById("waCustPhone").value.trim() || "03000000000";
-  let address = document.getElementById("waCustAddr").value.trim() || "Mingora Swat";
+document.getElementById("summary").onclick = () => {
+  document.getElementById("billbar").classList.toggle("collapsed");
+};
 
-  if(!rawText){
-    showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
-    return;
+document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
+
+document.getElementById("copyNumBtn").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
+    showToast("✅ نمبر کاپی ہوگیا");
+  }catch(e){
+    showToast("نمبر: " + SHOP_PAY_NUMBER);
+  }
+};
+
+const payCod = document.getElementById("payCod");
+const payEasy = document.getElementById("payEasy");
+const lblCod = document.getElementById("lblCod");
+const lblEasy = document.getElementById("lblEasy");
+const payTxId = document.getElementById("payTxId");
+
+function updatePayMethodUI(){
+  lblCod.classList.toggle("checked", payCod.checked);
+  lblEasy.classList.toggle("checked", payEasy.checked);
+  if(payEasy.checked){
+    payTxId.style.display = "block";
+  } else {
+    payTxId.style.display = "none";
+    payTxId.value = "";
+  }
+}
+payCod.addEventListener("change", updatePayMethodUI);
+payEasy.addEventListener("change", updatePayMethodUI);
+
+function showToast(text){
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2200);
+}
+
+document.getElementById("shareBtn").onclick = async () => {
+  if(navigator.share){
+    await navigator.share({title: "SJ Foods Online", url: window.location.href}).catch(()=>{});
+  } else {
+    await navigator.clipboard.writeText(window.location.href);
+    showToast("✅ Link Copied!");
+  }
+};
+
+document.getElementById("waBtn").onclick = () => {
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  if(chosen.length === 0){ alert("Cart is empty"); return; }
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  let txId = payTxId.value.trim();
+  
+  let payMethod = "کیش آن ڈلیوری (COD)";
+  if(payEasy.checked){
+    if(!txId){
+      alert("⚠️ براہ کرم ایزی پیسہ یا بینک ٹرانسفر کا ٹرانزیکشن نمبر / رسید آئی ڈی (TID) لازمی درج کریں!");
+      payTxId.focus();
+      return;
+    }
+    payMethod = `ایزی پیسہ / بینک ٹرانسفر (TID: ${txId})`;
   }
 
-  let lines = rawText.split('\n');
-  lines.forEach(line => {
-    let l = line.toLowerCase();
-    if(l.includes("نام") || l.includes("name")) {
-      let parts = line.split(/[:\-]/);
-      if(parts[1]) name = parts[1].trim();
-    }
-    if(l.includes("فون") || l.includes("phone") || l.includes("03")) {
-      let match = line.match(/03[0-9]{9}/);
-      if(match) phone = match[0];
-    }
-    if(l.includes("پتہ") || l.includes("address")) {
-      let parts = line.split(/[:\-]/);
-      if(parts[1]) address = parts[1].trim();
-    }
+  if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
+
+  const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  const otpCode = Math.floor(1000 + Math.random() * 9000);
+  let subtotal = 0;
+  let summaryHtml = "";
+  
+  let msg = `🟢 *SJ Foods Online — نیا آرڈر* [${orderCode}]\n\n`;
+  msg += `السلام علیکم! میں درج ذیل اشیاء منگوانا چاہتا ہوں:\n\n`;
+  msg += `👤 میرا نام: ${name}\n`;
+  msg += `📞 میرا فون: ${phone}\n`;
+  msg += `📍 مکمل پتہ: ${addr}\n`;
+  msg += `💳 ادائیگی کا طریقہ: ${payMethod}\n\n`;
+  msg += `📋 *آرڈر کی تفصیلات:*\n`;
+  
+  chosen.forEach(it => {
+    const u = it.units[it.unitIndex];
+    const t = it.qty * u.rate;
+    subtotal += t;
+    msg += `• [${it.cat}] ${it.name_roman || it.name} (${it.name}) — ${it.qty} ${u.label} = ${fmt(t)}\n`;
+    summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
-
-  let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let formattedSummary = `👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
-
-  let newOrd = {
-    code: orderCode,
-    name: name,
-    phone: phone,
-    address: address,
-    items: formattedSummary,
-    total: 0,
-    otp: Math.floor(1000 + Math.random() * 9000),
-    timestamp: new Date().toISOString(),
-    status: "pending"
-  };
-
-  if(SHEET_URL){
-    try{
-      await fetch(SHEET_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newOrd)
-      });
-    }catch(e){}
+  
+  if(payEasy.checked) {
+    summaryHtml += `<br><b>💳 ادائیگی تصدیق نمبر (TID):</b> ${txId}`;
   }
+  
+  msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
+  msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
 
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders.unshift({
+  let newOrderObj = {
     id: "wa_" + Date.now(),
     code: orderCode,
     name: name,
     phone: phone,
-    address: address,
-    itemsSummary: formattedSummary,
-    total: 0,
-    otpCode: newOrd.otp,
+    address: addr,
+    itemsSummary: summaryHtml,
+    total: Math.round(subtotal),
+    otpCode: otpCode,
     date: new Date().toLocaleTimeString(),
     status: "pending"
-  });
+  };
+  localOrders.unshift(newOrderObj);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
-  document.getElementById("waRawText").value = "";
-  document.getElementById("waCustName").value = "";
-  document.getElementById("waCustPhone").value = "";
-  document.getElementById("waCustAddr").value = "";
-  showToast("✅ آرڈر کارٹ کی طرح درج ہو گیا!");
-  playBeepTech();
-  switchTab('orders', true);
-  renderOrders();
-}
-
-async function fetchOrdersFromSheet(){
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  try{
-    const res = await fetch(SHEET_URL, {cache: "no-store"});
-    const data = await res.json();
-    let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
-      id: "sh_" + index,
-      code: row.code,
-      name: row.name || "نامعلوم",
-      phone: row.phone || "03000000000",
-      address: row.address || "Mingora Swat",
-      itemsSummary: row.items,
-      total: row.total || 0,
-      otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
-      date: new Date(row.timestamp).toLocaleTimeString(),
-      status: row.status || 'pending'
+  try {
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+    navigator.sendBeacon(SHEET_URL, JSON.stringify({
+      code: orderCode, name: name, phone: phone, address: addr,
+      items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
+      timestamp: new Date().toISOString(), status: "pending"
     }));
-    
-    let combined = [...localOrders];
-    sheetOrders.forEach(so => {
-      if(!combined.some(c => c.code === so.code)){
-        combined.unshift(so);
-      }
-    });
-    return combined;
-  }catch(e){
-    return localOrders;
-  }
-}
+  } catch(e){}
 
-let cachedOrdersCount = 0;
-let lastReminderTime = Date.now();
+  window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ آرڈر واٹس ایپ پر روانہ اور پینل میں محفوظ ہو گیا!");
+};
 
-async function renderOrders(){
-  const area = document.getElementById("ordersArea");
-  const orders = await fetchOrdersFromSheet();
-  
-  if(orders.length === 0){
-    area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی نیا آرڈر موجود نہیں</div>`;
-    return;
-  }
+function renderFeatured(){
+  const feat = ITEMS.filter(i => i.featured && i.available);
+  const box = document.getElementById("dealBox");
+  const sec = document.getElementById("featuredSection");
+  if(feat.length === 0) return;
+  sec.classList.remove("hidden");
 
-  if(orders.length > cachedOrdersCount && cachedOrdersCount !== 0){
-    playBeepTech();
-  }
-  cachedOrdersCount = orders.length;
+  let currentIndex = 0;
+  const updateFeaturedGrid = () => {
+    if(feat.length === 0) return;
+    const cards = box.querySelectorAll('.deal-card');
+    cards.forEach(c => c.classList.add('fade-out'));
 
-  let hasPending = orders.some(o => o.status !== 'completed');
-  let currentTime = Date.now();
-  if(hasPending && (currentTime - lastReminderTime > 10 * 60 * 1000)){
-    playBeepTech();
-    lastReminderTime = currentTime;
-    showToast("⏰ یاد دہانی: پینڈنگ آرڈرز موجود ہیں!");
-  }
-
-  area.innerHTML = orders.map((o) => `
-    <div class="chat-item ${o.status==='completed'?'completed':'pending'}">
-      <div style="font-weight:800; font-size:15px; margin-bottom:6px;">📌 ${o.code} — ${o.name} <span style="font-size:11px; color:var(--muted); float:left;">${o.date || ''}</span></div>
-      <div style="font-size:13.5px; line-height:1.7;">
-        📞 فون: ${o.phone}<br>
-        📍 پتہ: ${o.address}<br>
-        🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-        🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
-        💰 کل رقم: <b>Rs. ${o.total}</b><br>
-        وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
-      </div>
+    setTimeout(() => {
+      let first = feat[currentIndex % feat.length];
+      let second = feat[(currentIndex + 1) % feat.length];
       
-      <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
-        ${o.status !== 'completed' ? `
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendThankYouWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}')">💚 شکریہ میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
-        ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
-        <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
-      </div>
-    </div>
-  `).join("");
-}
+      box.innerHTML = `
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${first.id}')">
+          ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
+          <div class="d-name">${first.name_roman || first.name} (${first.name})</div>
+          <div class="d-rate">${fmt(first.units[0].rate)}</div>
+        </div>
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${second.id}')">
+          ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
+          <div class="d-name">${second.name_roman || second.name} (${second.name})</div>
+          <div class="d-rate">${fmt(second.units[0].rate)}</div>
+        </div>
+      `;
 
-function sendFirstWhatsAppMessage(phone, name, code, otp){
-  const msg = `السلام علیکم محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora پر آپ کا آرڈر *[${code}]* موصول ہو گیا ہے۔\n\n🔐 آپ کا ڈیلیوری تصدیقی کوڈ: *${otp}* ہے۔\n\nجب ہمارا ڈیلیوری مین آپ کے پاس سامان لے کر پہنچے گا، تو براہ کرم یہ کوڈ اسے بتائیں تاکہ آپ کا آرڈر کنفرم ہو سکے۔ شکریہ! 🌿`;
-  let cleanPhone = phone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
-}
+      setTimeout(() => {
+        box.querySelectorAll('.deal-card').forEach(c => c.classList.remove('fade-out'));
+      }, 50);
 
-function sendThankYouWhatsAppMessage(phone, name, code){
-  const msg = `محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
-  let cleanPhone = phone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("💚 شکریہ / کلوزنگ میسج واٹس ایپ پر کھل گیا!");
-}
+      currentIndex += 2;
+    }, 400);
+  };
 
-function completeOrder(id){
-  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  let ord = localOrders.find(o => o.id === id);
-  if(ord){
-    ord.status = 'completed';
-    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  } else {
-    localOrders.push({id: id, status: 'completed'});
-    localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  updateFeaturedGrid();
+  if(feat.length > 2){
+    setInterval(updateFeaturedGrid, 4000);
   }
-  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
-  renderOrders();
 }
 
-function deleteOrder(id){
-  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders = localOrders.filter(o => o.id !== id);
-  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
-  renderOrders();
+function scrollToMainItem(id){
+  const el = document.getElementById("row-"+id);
+  if(el){
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.style.transition = "background 0.4s";
+    el.style.backgroundColor = "#FFF3CD";
+    setTimeout(()=> { el.style.backgroundColor = ""; }, 1500);
+  }
 }
 
-function printReceipt(code, name, phone, address, items, total, otp){
-  const w = window.open('', '_blank');
-  w.document.write(`
-    <html dir="rtl">
-    <head><title>Receipt ${code}</title></head>
-    <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto;">
-      <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
-      <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
-      <hr style="border:dashed 1px #000;">
-      <p><b>آرڈر کوڈ:</b> ${code}</p>
-      <p><b>نام:</b> ${name}</p>
-      <p><b>فون:</b> ${phone}</p>
-      <p><b>پتہ:</b> ${address}</p>
-      <p><b>ڈیلیوری کوڈ (OTP):</b> <span style="font-size:18px;"><b>${otp}</b></span></p>
-      <hr style="border:dashed 1px #000;">
-      <p><b>آرڈر کی تفصیل:</b></p>
-      <div>${items}</div>
-      <hr style="border:dashed 1px #000;">
-      <h3 style="text-align:center;">کل رقم: Rs. ${total}</h3>
-      <br>
-      <div style="text-align:center; font-size:11px;">ڈلیوری کے وقت OTP کوڈ لازمی بتائیں۔</div>
-    </body>
-    </html>
-  `);
-  w.document.close();
-  w.focus();
-  setTimeout(()=> { w.print(); w.close(); }, 500);
+function openLightbox(src, name){
+  if(!src) return;
+  document.getElementById("lightboxImg").src = src;
+  document.getElementById("lightbox").classList.remove("hidden");
 }
+document.getElementById("closeLightbox").onclick = () => {
+  document.getElementById("lightbox").classList.add("hidden");
+};
 
-renderOrders();
-setInterval(renderOrders, 4000);
+loadData();
+loadSettings();
 </script>
 </body>
 </html>

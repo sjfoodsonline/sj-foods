@@ -25,7 +25,6 @@
 
   .wrap{padding:14px;}
   
-  /* Analytics Dashboard */
   .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
   .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
   .dash-num{font-size:16px; font-weight:800; color:var(--dark); margin-top:2px;}
@@ -84,7 +83,6 @@
   .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
 
-  /* Rider View Mode Style */
   body.rider-mode .dash-grid, body.rider-mode .tabs, body.rider-mode header p, body.rider-mode .card-analytics {display:none !important;}
   body.rider-mode .chat-body {display:block !important;}
 </style>
@@ -98,7 +96,6 @@
 
 <div class="wrap">
 
-  <!-- Analytics Dashboard -->
   <div class="dash-grid card-analytics">
     <div class="dash-card">
       <div class="dash-lbl">📦 کل آرڈرز</div>
@@ -117,7 +114,7 @@
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو ان باکس</div>
     <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', true)">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="switchTab('products', true)">📦 پروڈکٹس اور ریٹس</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🔒 پروڈکٹس و ریٹس</div>
   </div>
 
   <div id="secAddWA" style="display:none;">
@@ -170,8 +167,25 @@
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
+const ADMIN_PASSWORD = "3799"; // اپڈیٹ شدہ پاسورڈ 3799
 
-// ویب پش نوٹیفکیشن آن کرنے کی اجازت مانگنا
+let isAdminAuthenticated = false;
+
+function checkAdminPasswordAndSwitch(tabName){
+  if(isAdminAuthenticated){
+    switchTab(tabName, true);
+    return;
+  }
+  let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
+  if(pass === ADMIN_PASSWORD){
+    isAdminAuthenticated = true;
+    showToast("🟢 پاسورڈ درست ہے!");
+    switchTab(tabName, true);
+  } else {
+    showToast("❌ غلط پاسورڈ!", true);
+  }
+}
+
 function requestNotificationPermission() {
   if ('Notification' in window) {
     Notification.requestPermission().then(permission => {
@@ -187,11 +201,10 @@ function requestNotificationPermission() {
   }
 }
 
-// 15 منٹ سے زیادہ پرانے پینڈنگ آرڈر کے لیے پاپ اپ نوٹیفکیشن بھیجنا
 function sendPushNotification(orderCode, timeAgoStr) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification("⚠️ آرڈر میں تاخیر (SJ Foods)", {
-      body: `آرڈر ${orderCode} کو آئے ہوئے ${timeAgoStr} ہو چکے ہیں! براہ کرم فوری عمل کریں۔`,
+      body: `آرڈر ${orderCode} کو آئے ہوئے ${timeAgoStr} ہو چکے ہیں!`,
       requireInteraction: true
     });
   }
@@ -561,7 +574,6 @@ async function fetchOrdersFromSheet(){
 }
 
 let cachedOrdersCount = 0;
-let lastReminderTime = Date.now();
 let activeAccordionId = null;
 
 function toggleAccordion(id){
@@ -575,7 +587,6 @@ let latestOrdersCache = [];
 async function renderOrders(){
   latestOrdersCache = await fetchOrdersFromSheet();
   
-  // Update Analytics Dashboard
   let totalSales = 0;
   let pendingCount = 0;
   latestOrdersCache.forEach(o => {
@@ -595,7 +606,6 @@ async function renderOrders(){
   }
   cachedOrdersCount = latestOrdersCache.length;
 
-  // Check 15-minute pending orders for Notification
   latestOrdersCache.forEach(o => {
     if(o.status !== 'completed' && o.diffMin >= 15) {
       sendPushNotification(o.code, o.timeAgo);

@@ -148,7 +148,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzmKJ1qOTHy1EwtxmePLJBsLZYFUGYNrsJSnDp_wmPQ8ErckPbsMwmt-sPIUKwDuvON/exec";
 
 window.addEventListener('popstate', (event) => {
   switchTab('orders', false);
@@ -528,13 +528,18 @@ async function fetchOrdersFromSheet(){
         total: row.total || 0,
         otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
         date: formattedDate,
-        status: row.status || 'pending'
+        status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
     
     let combined = [...localOrders];
     sheetOrders.forEach(so => {
-      if(!combined.some(c => c.code === so.code)){
+      let existingIndex = combined.findIndex(c => c.code === so.code);
+      if(existingIndex !== -1){
+        if(so.status === 'completed'){
+          combined[existingIndex].status = 'completed';
+        }
+      } else {
         combined.unshift(so);
       }
     });
@@ -655,24 +660,31 @@ function closeAndThankOrder(id, phone, name, code){
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
 
+  let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
+  if(cacheMatch) cacheMatch.status = 'completed';
+
+  try {
+    navigator.sendBeacon(SHEET_URL, JSON.stringify({
+      code: code, status: "completed", timestamp: new Date().toISOString()
+    }));
+  } catch(e){}
+
   const msg = `محترم صاحب/محترمہ! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ آرڈر کلوز ہو گیا اور شکریہ کا میسج کھل گیا!");
-  renderOrders();
+  renderOrdersDOM();
 }
 
 function deleteOrder(id){
   if(!confirm("⚠️ کیا آپ واقعی اس آرڈر کو ہمیشہ کے لیے ڈیلیٹ کرنا چاہتے ہیں؟")) return;
   
-  // Remove from local storage
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders = localOrders.filter(o => o.id !== id && o.code !== id);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
-  // Also filter from current cache view
   latestOrdersCache = latestOrdersCache.filter(o => o.id !== id && o.code !== id);
 
   showToast("🗑️ آرڈر کامیابی سے مکمل ڈیلیٹ کر دیا گیا");

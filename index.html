@@ -846,27 +846,14 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 
-  let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  let newOrderObj = {
-    id: "wa_" + Date.now(),
-    code: orderCode,
-    name: name,
-    phone: phone,
-    address: addr,
-    itemsSummary: summaryHtml,
-    total: Math.round(subtotal),
-    otpCode: otpCode,
-    date: new Date().toLocaleTimeString(),
-    status: "pending"
-  };
-  localOrders.unshift(newOrderObj);
-  localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
+  let nowFormatted = new Date().toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true});
+  let formattedSummaryWithTime = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${addr}<br>📋 تفصیل: <br>` + summaryHtml;
 
   try {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzmKJ1qOTHy1EwtxmePLJBsLZYFUGYNrsJSnDp_wmPQ8ErckPbsMwmt-sPIUKwDuvON/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQm8rRjAn7FULiVGDFWOH-41cJ2Wtl6VamL81UNTlmKfpVey-KTBZP1zBWmQ2xr0h3/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
-      items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
+      items: formattedSummaryWithTime, total: Math.round(subtotal), otp: otpCode,
       timestamp: new Date().toISOString(), status: "pending"
     }));
   } catch(e){}

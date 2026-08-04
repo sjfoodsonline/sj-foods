@@ -569,8 +569,7 @@ async function renderOrders(){
         <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
         ${o.status !== 'completed' ? `
           <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendThankYouWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}')">💚 شکریہ میسج</button>
-          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
+          <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
         ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
         <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
       </div>
@@ -586,16 +585,10 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
   showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
 }
 
-function sendThankYouWhatsAppMessage(phone, name, code){
-  const msg = `محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
-  let cleanPhone = phone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("💚 شکریہ / کلوزنگ میسج واٹس ایپ پر کھل گیا!");
-}
-
-function completeOrder(id){
-  if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
+function closeAndThankOrder(id, phone, name, code){
+  if(!confirm("کیا آپ اس آرڈر کو کلوز کر کے کسٹمر کو شکریہ کا میسج بھیجنا چاہتے ہیں؟")) return;
+  
+  // 1. Mark as completed
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   let ord = localOrders.find(o => o.id === id);
   if(ord){
@@ -605,7 +598,14 @@ function completeOrder(id){
     localOrders.push({id: id, status: 'completed'});
     localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
   }
-  showToast("✅ آرڈر کامیابی سے کلوز ہو گیا!");
+
+  // 2. Open WhatsApp Thank You message
+  const msg = `محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+
+  showToast("✅ آرڈر کلوز ہو گیا اور شکریہ کا میسج کھل گیا!");
   renderOrders();
 }
 

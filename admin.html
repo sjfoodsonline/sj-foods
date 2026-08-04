@@ -44,7 +44,7 @@
   /* Inbox Accordion Chat Item */
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   .chat-item.pending{animation: superBlinking 0.8s infinite ease-in-out;}
-  .chat-item.completed{background:#F1F8E9; border-color:#81C784; animation: none !important;}
+  .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important; animation: none !important;}
   
   @keyframes superBlinking{ 
     0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -454,9 +454,8 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowTime = new Date().toLocaleTimeString();
-  let nowDate = new Date().toLocaleDateString();
-  let formattedSummary = `📅 تاریخ: ${nowDate} | وقت: ${nowTime}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
+  let nowFormatted = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+  let formattedSummary = `📅 تاریخ: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode,
@@ -491,7 +490,7 @@ async function parseAndAddWhatsAppOrder(){
     itemsSummary: formattedSummary,
     total: 0,
     otpCode: newOrd.otp,
-    date: nowTime,
+    date: nowFormatted,
     status: "pending"
   });
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
@@ -511,18 +510,27 @@ async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
     const data = await res.json();
-    let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
-      id: "sh_" + index,
-      code: row.code,
-      name: row.name || "نامعلوم",
-      phone: row.phone || "03000000000",
-      address: row.address || "Mingora Swat",
-      itemsSummary: row.items,
-      total: row.total || 0,
-      otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
-      date: new Date(row.timestamp).toLocaleTimeString(),
-      status: row.status || 'pending'
-    }));
+    let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => {
+      let formattedDate = "آج";
+      if(row.timestamp){
+        let d = new Date(row.timestamp);
+        if(!isNaN(d.getTime())){
+          formattedDate = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+        }
+      }
+      return {
+        id: "sh_" + index,
+        code: row.code,
+        name: row.name || "نامعلوم",
+        phone: row.phone || "03000000000",
+        address: row.address || "Mingora Swat",
+        itemsSummary: row.items,
+        total: row.total || 0,
+        otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
+        date: formattedDate,
+        status: row.status || 'pending'
+      };
+    });
     
     let combined = [...localOrders];
     sheetOrders.forEach(so => {
@@ -530,8 +538,7 @@ async function fetchOrdersFromSheet(){
         combined.unshift(so);
       }
     });
-    
-    // Sort so pending orders stay on top, completed/closed orders stay at bottom
+
     combined.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -600,16 +607,17 @@ function renderOrdersDOM(){
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
-          <span style="font-size:11px; color:var(--muted);">${o.date || ''} 🕒 ${isCompleted ? '✅ کلوزڈ' : '⏳ پینڈنگ'}</span>
+          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.date || 'آج'} | ${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ (Pending)'}</span>
         </div>
         <div class="chat-body">
           <div style="font-size:13.5px; line-height:1.7;">
             📞 فون: ${o.phone}<br>
             📍 پتہ: ${o.address}<br>
             🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            📅 وقت و تاریخ: <b>${o.date || 'ابھی'}</b><br>
+            📅 تاریخ و وقت: <b>${o.date || 'آج'}</b><br>
             🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
             💰 کل رقم: <b>Rs. ${o.total}</b><br>
+            وضعیت: <b>${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ (Pending)'}</b>
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
@@ -618,7 +626,7 @@ function renderOrdersDOM(){
               <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.phone}', '${o.name}', '${o.code}')">✅ کلوز اور شکریہ میسج</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
-            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
+            <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ مکمل ڈیلیٹ</button>
           </div>
         </div>
       </div>
@@ -657,12 +665,18 @@ function closeAndThankOrder(id, phone, name, code){
 }
 
 function deleteOrder(id){
-  if(!confirm("کیا آپ اس ریکارڈ کو پینل سے ہٹانا چاہتے ہیں؟")) return;
+  if(!confirm("⚠️ کیا آپ واقعی اس آرڈر کو ہمیشہ کے لیے ڈیلیٹ کرنا چاہتے ہیں؟")) return;
+  
+  // Remove from local storage
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders = localOrders.filter(o => o.id !== id);
+  localOrders = localOrders.filter(o => o.id !== id && o.code !== id);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
-  showToast("✅ آرڈر پینل سے ہٹا دیا گیا");
-  renderOrders();
+
+  // Also filter from current cache view
+  latestOrdersCache = latestOrdersCache.filter(o => o.id !== id && o.code !== id);
+
+  showToast("🗑️ آرڈر کامیابی سے مکمل ڈیلیٹ کر دیا گیا");
+  renderOrdersDOM();
 }
 
 function printReceipt(code, name, phone, address, items, total, otp, orderTime){

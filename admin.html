@@ -446,13 +446,13 @@ function getTimeElapsed(timestamp) {
   if (isNaN(past)) return "";
   let now = new Date().getTime();
   let diffSec = Math.floor((now - past) / 1000);
-  if (diffSec < 60) return "Just now";
+  if (diffSec < 120) return "Just now"; // صرف 2 منٹ تک Just now رہے گا
   let diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 60) return `${diffMin} منٹ پہلے`;
   let diffHour = Math.floor(diffMin / 60);
-  if (diffHour < 24) return `${diffHour}h ago`;
+  if (diffHour < 24) return `${diffHour} گھنٹے پہلے`;
   let diffDays = Math.floor(diffHour / 24);
-  return `${diffDays}d ago`;
+  return `${diffDays} دن پہلے`;
 }
 
 async function fetchOrdersFromSheet(){
@@ -480,7 +480,7 @@ async function fetchOrdersFromSheet(){
       };
     });
 
-    // نئے آنے والے آرڈرز بالکل سب سے اوپر (سب سے بڑا ٹائم اسٹیمپ یا تازہ ترین اوپر)
+    // نئے آنے والے آرڈرز بالکل سب سے اوپر (تازہ ترین ٹائم اسٹیمپ والے پہلے)
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
@@ -594,7 +594,7 @@ async function closeAndThankOrder(id, code, phone){
     cleanPhone = "92" + cleanPhone.slice(1);
   }
   
-  // تیسرے بزنس واٹس ایپ نمبر (0315-5166034) کے ذریعے کسٹمر کو میسج کھولنے کے لیے
+  // تیسرے بزنس واٹس ایپ نمبر (0315-5166034) کے ذریعے کسٹمر کو شکریہ کا میسج بھیجنے کے لیے
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ Order closed and customer WhatsApp opened!");

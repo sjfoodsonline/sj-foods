@@ -454,7 +454,7 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowFormatted = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+  let nowFormatted = new Date().toLocaleString();
   let formattedSummary = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
@@ -486,8 +486,8 @@ async function parseAndAddWhatsAppOrder(){
   document.getElementById("waCustName").value = "";
   document.getElementById("waCustPhone").value = "";
   document.getElementById("waCustAddr").value = "";
+  setTimeout(() => { renderOrders(); }, 1500);
   switchTab('orders', true);
-  renderOrders();
 }
 
 function getTimeElapsed(timestamp) {
@@ -645,7 +645,7 @@ async function closeAndThankOrder(id, phone, name, code){
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ آرڈر کلوز ہو گیا اور گوگل شیٹ میں اپ ڈیٹ ہو گیا!");
-  renderOrders();
+  setTimeout(() => { renderOrders(); }, 1000);
 }
 
 function printReceipt(code, name, phone, address, items, total, otp, orderTime){

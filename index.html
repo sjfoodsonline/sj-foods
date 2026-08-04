@@ -21,29 +21,35 @@
     box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
   }
 
-  header{ background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:18px 16px; border-radius:0 0 22px 22px; position:relative; }
-  header h1{margin:0 0 4px; font-size:22px; font-weight:700; font-family: Arial, sans-serif;}
-  header p{margin:0; font-size:12.5px; opacity:.92; font-family: Arial, sans-serif;}
-
-  .share-btn{ position:absolute; left:16px; top:18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-
-  .cover-banner{width:100%; overflow:hidden; margin-bottom:8px; border-radius:0 0 16px 16px; display:none;}
-  .cover-banner img{width:100%; height:auto; display:block; max-height:200px; object-fit:cover;}
-
-  /* Sticky Top Container for Search Bar and Category Marquee together */
-  .sticky-top-container{
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--paper);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  /* Green Top Header with fixed rounded corners */
+  header{ 
+    background:linear-gradient(160deg,var(--dark),var(--mid)); 
+    color:#fff; padding:20px 16px; 
+    border-radius:0 0 24px 24px; 
+    position:relative; 
+    box-shadow: 0 4px 15px rgba(21,58,32,0.2);
+  }
+  header h1{
+    margin:0 0 4px; font-size:23px; font-weight:700; 
+    font-family: "Jameel Noori Nastaleeq", serif, Arial; 
+    letter-spacing: 0.5px;
+  }
+  header p{
+    margin:0; font-size:13px; opacity:.95; 
+    font-family: "Jameel Noori Nastaleeq", serif;
   }
 
-  .search-wrap{padding:12px 16px 6px; background:var(--paper);}
-  #search{
-    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
-    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
+  .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+  /* Cover Banner Slider with fixed uniform frame */
+  .cover-banner{
+    width:100%; max-width: 448px; height: 180px; margin: 12px auto 8px; 
+    overflow:hidden; border-radius:16px; display:none; background: var(--leaf);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1.5px solid var(--line);
   }
+  .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .cover-slide{ min-width:100%; width:100%; height: 100%; }
+  .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
 
   .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
@@ -61,7 +67,48 @@
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
-  /* Sticky Category Bar with Marquee Animation */
+  .featured-section{
+    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
+    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
+    box-shadow:0 10px 30px rgba(93,64,55,0.15);
+  }
+
+  .shout-title {
+    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
+    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
+  }
+  
+  .deal-grid { display: flex; gap: 12px; justify-content: center; }
+  .deal-card{
+    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0);
+  }
+  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
+
+  .deal-card img, .deal-card .deal-icon-box{
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
+    display: flex; align-items:center; justify-content:center; font-size: 38px;
+  }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
+  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
+
+  /* STICKY TOP CONTAINER (Placed precisely below Top Deals, stays fixed on scroll) */
+  .sticky-top-container{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-bottom: 1.5px solid var(--line);
+  }
+
+  .search-wrap{padding:10px 16px 6px; background:var(--paper);}
+  #search{
+    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
+    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
+  }
+
   .cat-section{padding:4px 0 10px; background:var(--paper);}
   .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
@@ -90,38 +137,12 @@
   .home-cat-img-wrap img.fade-out { opacity: 0; }
 
   .home-cat-name { font-size: 14px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
-  .home-cat-urdu { font-size: 11.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
+  .home-cat-urdu { font-size: 12.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
 
   .back-cat-btn{
     background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
     padding: 8px 16px; font-size: 13.5px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
   }
-
-  .featured-section{
-    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
-    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
-    box-shadow:0 10px 30px rgba(93,64,55,0.15);
-  }
-
-  .shout-title {
-    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
-    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
-  }
-  
-  .deal-grid { display: flex; gap: 12px; justify-content: center; }
-  .deal-card{
-    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0);
-  }
-  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
-
-  .deal-card img, .deal-card .deal-icon-box{
-    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
-    display: flex; align-items:center; justify-content:center; font-size: 38px;
-  }
-  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
-  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
   main{padding:6px 16px 100px;}
   .cat-title{
@@ -144,26 +165,10 @@
   }
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
 
-  .avail-badge{
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
-    background: var(--mid);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(46,125,50,0.3);
-    z-index: 5;
-  }
-  .avail-badge.no{ background:#B71C1C; }
-
   .item .info{min-width:0; flex:1;}
   .item .name{ font-size: 16.5px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: Arial, sans-serif; }
   .item .name .roman-part { font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; }
-  .item .name .urdu-part { font-size: 12px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px; }
+  .item .name .urdu-part { font-size: 13px; font-family: "Jameel Noori Nastaleeq", serif; color: var(--muted); margin-right: 5px; }
 
   .item .meta{font-size:13px; color:var(--muted); margin-top:4px; font-weight: bold; font-family: Arial, sans-serif;}
   .item .meta b{color:var(--price); font-weight:bold; font-size:14.5px;}
@@ -177,12 +182,8 @@
   .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
   
   .status-label {
-    font-size: 10px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    padding: 1px 6px;
-    border-radius: 4px;
-    letter-spacing: 0.3px;
+    font-size: 10px; font-weight: bold; font-family: Arial, sans-serif;
+    padding: 1px 6px; border-radius: 4px; letter-spacing: 0.3px;
   }
   .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
   .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
@@ -197,19 +198,19 @@
   }
 
   .sops-box{
-    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12px; color: var(--muted); line-height: 1.6; text-align: right; font-family: Arial, sans-serif;
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: right; font-family: "Jameel Noori Nastaleeq", serif;
   }
-  .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif; }
+  .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14.5px; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
 
   .cart-sops {
     background: #F9F8F3; border: 1px dashed var(--mid); border-radius: 10px; padding: 10px; margin: 10px 0;
-    font-size: 11px; color: var(--dark); line-height: 1.5; font-family: "Jameel Noori Nastaleeq", serif !important;
+    font-size: 12px; color: var(--dark); line-height: 1.6; font-family: "Jameel Noori Nastaleeq", serif !important;
   }
 
   #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary {
     font-family: "Jameel Noori Nastaleeq", serif !important;
   }
-  .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15px; }
+  .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
 
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
@@ -225,7 +226,7 @@
     background:linear-gradient(135deg,#1B5E20,#2E7D32);
     border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff;
   }
-  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95;}
+  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif;}
   .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
   .pay-number-row{
     display:flex; align-items:center; justify-content:center; gap:8px;
@@ -234,24 +235,24 @@
   }
   .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
   #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
-  .pay-hint{color:#FFF3CD; font-size:12px; margin-top:8px; line-height:1.6; text-align:right;}
+  .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right; font-family: "Jameel Noori Nastaleeq", serif;}
 
   .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
   .checkout-box input{
-    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold;
+    width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif;
   }
   
   .pay-method{display:flex; gap:8px; margin-bottom:8px;}
   .pay-method label{
     flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold;
-    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark);
+    background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); font-family: "Jameel Noori Nastaleeq", serif;
   }
   .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
   .pay-method input{width:15px; height:15px;}
 
-  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; font-family: "Jameel Noori Nastaleeq", serif;}
   
-  footer{text-align:center; font-size:11px; color:var(--muted); padding:18px 16px 20px; font-family: Arial, sans-serif; font-weight: bold;}
+  footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
   .social-btn{
     display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff;
@@ -267,7 +268,7 @@
   .lightbox img{max-width:100%; max-height:80vh; border-radius:14px;}
   .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:38px; height:38px; font-size:18px; cursor:pointer;}
 
-  .toast{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150; font-family: Arial, sans-serif; font-weight: bold; }
+  .toast{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
   .toast.show{opacity:1;}
 </style>
 </head>
@@ -279,20 +280,9 @@
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
+<!-- Cover Banner Slider (Multiple images in uniform frame) -->
 <div class="cover-banner" id="coverBanner">
-  <img id="coverImg" src="" alt="SJ Foods Cover">
-</div>
-
-<!-- Sticky Top Container holding Search and Marquee Category Bar together -->
-<div class="sticky-top-container">
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-  </div>
-  <div class="cat-section">
-    <div class="cat-marquee-wrap">
-      <div class="cat-marquee-track" id="chips"></div>
-    </div>
-  </div>
+  <div class="cover-slider-track" id="coverSliderTrack"></div>
 </div>
 
 <div class="features-scroll-wrap">
@@ -312,14 +302,26 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
+<!-- STICKY TOP CONTAINER: Search bar + Animated Categories placed right below Top Deals -->
+<div class="sticky-top-container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
+</div>
+
 <main id="list"></main>
 
-<div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:Arial;">کوئی آئٹم نہیں ملا</div>
-<div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:Arial;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+<div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
+<div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-summary" id="summary">
-    <div>🛒 Cart (<span id="itemCount">0</span> items)</div>
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز)</div>
     <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
   <div class="cart-details">
@@ -344,7 +346,7 @@
     </div>
 
     <div class="checkout-box">
-      <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px;">📦 ڈلیوری کی تفصیلات دیں</div>
+      <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px; font-family:'Jameel Noori Nastaleeq',serif;">📦 ڈلیوری کی تفصیلات دیں</div>
       <input id="custName" type="text" placeholder="آپ کا نام (Your Name)">
       <input id="custPhone" type="tel" placeholder="واٹس ایپ / رابطہ نمبر (Phone Number)">
       <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address / علاقہ)">
@@ -387,6 +389,7 @@ let ITEMS = [];
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
 let currentSelectedCategory = null;
+let coverImagesList = [];
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
@@ -424,7 +427,9 @@ async function loadData(){
       let itemsList = catResults[i];
       CATEGORIES_DATA[catName] = itemsList;
 
+      if(entry.image) coverImagesList.push(entry.image);
       itemsList.forEach((it, ii) => {
+        if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
         let cleanUnits = (it.units && it.units.length)
           ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
           : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
@@ -438,6 +443,7 @@ async function loadData(){
       });
     });
 
+    setupCoverSlider();
     renderChips();
     renderMainView();
     renderFeatured();
@@ -457,15 +463,32 @@ async function loadSettings(){
       SHOP_PAY_NUMBER = s.pay_number;
       document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
     }
-    if(s.cover_image){
-      document.getElementById("coverImg").src = s.cover_image;
-      document.getElementById("coverBanner").style.display = "block";
+    if(s.cover_image && !coverImagesList.includes(s.cover_image)){
+      coverImagesList.unshift(s.cover_image);
+      setupCoverSlider();
     }
     if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
     if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
     if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
     if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
   }catch(e){}
+}
+
+function setupCoverSlider(){
+  const track = document.getElementById("coverSliderTrack");
+  const banner = document.getElementById("coverBanner");
+  if(coverImagesList.length === 0) return;
+
+  banner.style.display = "block";
+  track.innerHTML = coverImagesList.map(img => `<div class="cover-slide"><img src="${img}" alt="Cover Slide"></div>`).join("");
+
+  let currentSlide = 0;
+  if(coverImagesList.length > 1){
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % coverImagesList.length;
+      track.style.transform = `translateX(${currentSlide * 100}%)`;
+    }, 4000);
+  }
 }
 
 function renderChips(){

@@ -2,7 +2,7 @@
 <html lang="ur" dir="rtl" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
 <title>SJ Foods Online — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
@@ -30,6 +30,12 @@
   .cover-banner{width:100%; overflow:hidden; margin-bottom:8px; border-radius:0 0 16px 16px; display:none;}
   .cover-banner img{width:100%; height:auto; display:block; max-height:200px; object-fit:cover;}
 
+  .search-wrap{padding:14px 16px 4px; position:sticky; top:0; background:var(--paper); z-index:20;}
+  #search{
+    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
+    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
+  }
+
   .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
   .features-scroll-wrap:hover .features-scroll{ animation-play-state: paused; }
@@ -46,56 +52,16 @@
   .feature-card .ic{font-size:16px;}
   .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
 
-  .featured-section{
-    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
-    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
-    box-shadow:0 10px 30px rgba(93,64,55,0.15);
-  }
-
-  .shout-title {
-    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
-    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
-  }
-  
-  .deal-grid { display: flex; gap: 12px; justify-content: center; min-height: 185px; }
-  .deal-card{
-    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: opacity 0.3s ease; opacity: 1; height: 100%;
-  }
-  .deal-card.fade-out { opacity: 0; }
-
-  .deal-card img, .deal-card .deal-icon-box{
-    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
-    display: flex; align-items:center; justify-content:center; font-size: 38px;
-  }
-  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
-  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
-
-  .sticky-top-container{
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: var(--paper);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  }
-
-  .search-wrap{padding:10px 16px; background:var(--paper);}
-  #search{
-    width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line);
-    background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold;
-  }
-
-  .cat-section{padding:6px 0 8px; background:var(--paper);}
-  .cat-marquee-wrap{ overflow-x:auto; position:relative; padding:4px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .cat-marquee-wrap::-webkit-scrollbar { display: none; }
-  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
+  .cat-section{padding:8px 0; position:sticky; top:58px; background:var(--paper); z-index:19; box-shadow:0 4px 10px rgba(0,0,0,0.03);}
+  .cat-marquee-wrap{ overflow:hidden; position:relative; padding:4px 0; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; animation: cat-move 35s linear infinite; direction:rtl; }
+  .cat-marquee-wrap:hover .cat-marquee-track{ animation-play-state: paused; }
+  @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
     border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold;
     white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
-    user-select: none;
   }
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
@@ -113,15 +79,41 @@
   .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease-in-out; opacity: 1; }
   .home-cat-img-wrap img.fade-out { opacity: 0; }
 
-  .home-cat-name { font-size: 15px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
-  .home-cat-urdu { font-size: 12.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
+  .home-cat-name { font-size: 14px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
+  .home-cat-urdu { font-size: 11.5px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
 
   .back-cat-btn{
     background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
     padding: 8px 16px; font-size: 13.5px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
   }
 
-  main{padding:10px 16px 100px;}
+  .featured-section{
+    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
+    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden;
+    box-shadow:0 10px 30px rgba(93,64,55,0.15);
+  }
+
+  .shout-title {
+    font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase;
+    text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif;
+  }
+  
+  .deal-grid { display: flex; gap: 12px; justify-content: center; }
+  .deal-card{
+    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0);
+  }
+  .deal-card.fade-out { opacity: 0; transform: translateY(-10px) scale(0.97); }
+
+  .deal-card img, .deal-card .deal-icon-box{
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
+    display: flex; align-items:center; justify-content:center; font-size: 38px;
+  }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
+  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
+
+  main{padding:6px 16px 100px;}
   .cat-title{
     font-size:18px; font-weight:bold; color:var(--dark); margin:10px 2px 14px; padding-right:10px; border-right:4px solid var(--dark);
     font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:space-between;
@@ -129,7 +121,7 @@
   
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
-    padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right; cursor: pointer;
+    padding:14px; margin-bottom:10px; transition:transform 0.2s, box-shadow 0.2s; text-align:right;
   }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
   
@@ -201,14 +193,9 @@
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
     border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
     width:100%; max-width:480px; margin:0 auto; max-height:85vh;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   #billbar.collapsed .cart-details{display:none;}
-  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer; position:relative;}
-  .bill-summary::before {
-    content: ""; display: block; width: 40px; height: 5px; background: #ccc; border-radius: 3px;
-    position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-  }
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
   .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
   .cart-details{overflow-y:auto; max-height:65vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
   
@@ -274,6 +261,10 @@
   <img id="coverImg" src="" alt="SJ Foods Cover">
 </div>
 
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+</div>
+
 <div class="features-scroll-wrap">
   <div class="features-scroll" id="featuresTrack">
     <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
@@ -291,15 +282,8 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<div class="sticky-top-container">
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-  </div>
-  <div class="cat-section">
-    <div class="cat-marquee-wrap" id="catScrollContainer">
-      <div class="cat-marquee-track" id="chipsTrack"></div>
-    </div>
-  </div>
+<div class="cat-section">
+  <div class="cat-marquee-wrap" id="chips"></div>
 </div>
 
 <main id="list"></main>
@@ -462,47 +446,23 @@ function renderChips(){
   const chips = CATEGORIES_META.map(c => 
     `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
-  
-  const track = document.getElementById("chipsTrack");
-  track.innerHTML = chips;
-  
-  const slider = document.getElementById('catScrollContainer');
-  let isDown = false, startX, scrollLeft;
-
-  slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-  slider.addEventListener('mouseleave', () => { isDown = false; });
-  slider.addEventListener('mouseup', () => { isDown = false; });
-  slider.addEventListener('mousemove', (e) => {
-    if(!isDown) return;
-    e.preventDefault();
-    slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft - startX) * 2);
-  });
-
-  slider.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-  slider.addEventListener('touchend', () => { isDown = false; });
-  slider.addEventListener('touchmove', (e) => {
-    if(!isDown) return;
-    slider.scrollLeft = scrollLeft - ((e.touches[0].pageX - slider.offsetLeft - startX) * 2);
-  }, {passive: true});
+  document.getElementById("chips").innerHTML = `
+    <div class="cat-marquee-track" style="${currentSelectedCategory ? 'animation:none; justify-content:center; flex-wrap:wrap;' : ''}">
+      <div style="display:flex; gap:10px;">${chips}</div>
+      <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>
+    </div>`;
 }
 
 function selectCategory(catName){
   currentSelectedCategory = catName;
-  document.getElementById("search").value = "";
   renderChips();
   renderMainView();
 }
 
 function resetToHome(){
   currentSelectedCategory = null;
-  document.getElementById("search").value = "";
   renderChips();
   renderMainView();
-}
-
-function jumpToCategory(catName){
-  document.getElementById("search").value = "";
-  selectCategory(catName);
 }
 
 function renderMainView(filter=""){
@@ -515,12 +475,8 @@ function renderMainView(filter=""){
     if(filteredItems.length > 0){
       anyShown = true;
       let container = document.createElement("div");
-      container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج (کلک کرنے پر کیٹگری میں جائیں)</div>`;
-      filteredItems.forEach(it => {
-        let row = createItemRow(it);
-        row.onclick = () => jumpToCategory(it.cat);
-        container.appendChild(row);
-      });
+      container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+      filteredItems.forEach(it => container.appendChild(createItemRow(it)));
       main.appendChild(container);
     }
   } 
@@ -599,7 +555,7 @@ function createItemRow(it){
   row.id = "row-"+it.id;
   row.innerHTML = `
     <div class="item-row-top">
-      <div class="item-thumb" onclick="event.stopPropagation(); openLightbox('${it.image||''}', '${it.name}')">
+      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${it.name}')">
         ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
         <div class="avail-badge ${it.available ? 'yes' : 'no'}">
           ${it.available ? `<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5 11-11" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` : `<svg width="12" height="12" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
@@ -610,7 +566,7 @@ function createItemRow(it){
         <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
       </div>
     </div>
-    <div class="item-row-bottom" onclick="event.stopPropagation()">
+    <div class="item-row-bottom">
       ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
       <div class="qty-box">
         <button onclick="changeQty('${it.id}', -1)">−</button>
@@ -660,22 +616,9 @@ function renderBill(){
   if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
-const billbarEl = document.getElementById("billbar");
 document.getElementById("summary").onclick = () => {
-  billbarEl.classList.toggle("collapsed");
+  document.getElementById("billbar").classList.toggle("collapsed");
 };
-
-let touchStartY = 0;
-billbarEl.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, {passive: true});
-
-billbarEl.addEventListener('touchmove', (e) => {
-  let touchEndY = e.touches[0].clientY;
-  if(touchEndY - touchStartY > 50 && !billbarEl.classList.contains('collapsed')){
-    billbarEl.classList.add('collapsed');
-  }
-}, {passive: true});
 
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
@@ -722,11 +665,7 @@ document.getElementById("waBtn").onclick = () => {
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  
-  let payMethodText = "کیش آن ڈلیوری (COD - سامان پر ادائیگی)";
-  if(payEasy.checked){
-    payMethodText = "ایزی پیسہ / بینک ٹرانسفر (رقم ایڈوانس وصول ہو چکی ہے ✅)";
-  }
+  const payMethod = payEasy.checked ? "ایزی پیسہ / بینک ٹرانسفر (EasyPaisa/Bank)" : (payCod.checked ? "کیش آن ڈلیوری (COD)" : "نامعلوم");
 
   if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات (نام، فون اور پتہ) پُر کریں"); return; }
 
@@ -736,12 +675,12 @@ document.getElementById("waBtn").onclick = () => {
   let summaryHtml = "";
   
   let msg = `🟢 *SJ Foods Online — آرڈر ریسیوڈ & کنفرمیشن* [${orderCode}]\n\n`;
-  msg += `محترم *${name}* صاحب! آپ کا آرڈر ہمیں کامیابی سے موصول ہو گیا ہے۔ آپ کے اعتماد کا شکریہ! 🌿\n\n`;
+  msg += `محترم *${name}* صاحب! آپ کا آرڈر ہمیں کامیابی سے موصول ہو گیا ہے۔ ہم ہر چیز سو فیصد معیار اور تول کے ساتھ تیار کرنے کے لیے پرعزم ہیں۔ آپ کے اعتماد کا شکریہ! 🌿\n\n`;
   msg += `👤 نام: ${name}\n`;
   msg += `📞 فون: ${phone}\n`;
   msg += `📍 پتہ: ${addr}\n`;
-  msg += `💳 ادائیگی: ${payMethodText}\n`;
-  msg += `🔐 سیکیورٹی OTP کوڈ: *${otpCode}* \n*(نوٹ: یہ کوڈ صرف آپ کے پاس رہے گا؛ سامان وصول کرتے وقت صرف ڈلیوری والے کو بتائیں)*\n\n`;
+  msg += `💳 ادائیگی: ${payMethod}\n`;
+  msg += `🔐 سیکیورٹی OTP کوڈ: *${otpCode}* \n*(نوٹ: یہ ذاتی کوڈ صرف آپ کے پاس محفوظ ہونا چاہیے؛ سامان وصول کرتے وقت صرف اس ڈلیوری بوائے/سواری والے کو بتائیں جو آپ کا سامان لے کر آیا ہے)*\n\n`;
   msg += `📋 *آرڈر کی تفصیلات:*\n`;
   
   chosen.forEach(it => {
@@ -752,10 +691,11 @@ document.getElementById("waBtn").onclick = () => {
     summaryHtml += `[${it.cat}] ${it.name_roman || it.name} (${it.qty} ${u.label}) — ${fmt(t)}<br>`;
   });
   
-  msg += `\n💰 *کل رقم:* ${fmt(subtotal)}\n\n`;
-  msg += `🚚 *ڈلیوری ہدایات:*\n`;
-  msg += `• اشیاء کی بہترین قیمت برقرار رکھنے کے لیے، ڈلیوری چارجز سواری (بائیک/رکشہ) والے کو موقع پر الگ سے ادا کیے جائیں گے۔\n\n`;
-  msg += `معیاری اور بروقت سروس ہماری ترجیح ہے!`;
+  msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
+  msg += `🚚 *ڈلیوری اور پیمنٹ کی ہدایات:*\n`;
+  msg += `• ڈلیوری سواری (بائیک یا رکشہ) اور چارجز کے حوالے سے آپ سے واٹس ایپ پر باہمی رضامندی طے کی جائے گی۔\n`;
+  msg += `• یاد رکھیں: سامان کی ڈلیوری فیس یا رقم صرف اسی بندے (ڈلیوری بوائے) کو ادا کی جائے گی جو آپ تک آرڈر پہنچا رہا ہے۔\n\n`;
+  msg += `ہماری کوشش ہے کہ آپ کو بہترین اور معیاری سروس ملے! کسی بھی مسئلے کی صورت میں جانچ پڑتال کے بعد فوری حل کیا جائے گا۔`;
 
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({
@@ -768,8 +708,7 @@ document.getElementById("waBtn").onclick = () => {
     total: Math.round(subtotal),
     otpCode: otpCode,
     date: new Date().toLocaleTimeString(),
-    status: "pending",
-    payMethod: payMethodText
+    status: "pending"
   });
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
@@ -782,7 +721,7 @@ document.getElementById("waBtn").onclick = () => {
       body: JSON.stringify({
         code: orderCode, name: name, phone: phone, address: addr,
         items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
-        timestamp: new Date().toISOString(), status: "pending", payMethod: payMethodText
+        timestamp: new Date().toISOString(), status: "pending"
       })
     });
   } catch(e){}
@@ -809,12 +748,12 @@ function renderFeatured(){
       let second = feat[(currentIndex + 1) % feat.length];
       
       box.innerHTML = `
-        <div class="deal-card fade-out" onclick="jumpToCategory('${first.cat}')">
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${first.id}')">
           ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
           <div class="d-name">${first.name_roman || first.name} (${first.name})</div>
           <div class="d-rate">${fmt(first.units[0].rate)}</div>
         </div>
-        <div class="deal-card fade-out" onclick="jumpToCategory('${second.cat}')">
+        <div class="deal-card fade-out" onclick="scrollToMainItem('${second.id}')">
           ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
           <div class="d-name">${second.name_roman || second.name} (${second.name})</div>
           <div class="d-rate">${fmt(second.units[0].rate)}</div>
@@ -826,12 +765,22 @@ function renderFeatured(){
       }, 50);
 
       currentIndex += 2;
-    }, 300);
+    }, 400);
   };
 
   updateFeaturedGrid();
   if(feat.length > 2){
     setInterval(updateFeaturedGrid, 4000);
+  }
+}
+
+function scrollToMainItem(id){
+  const el = document.getElementById("row-"+id);
+  if(el){
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.style.transition = "background 0.4s";
+    el.style.backgroundColor = "#FFF3CD";
+    setTimeout(()=> { el.style.backgroundColor = ""; }, 1500);
   }
 }
 

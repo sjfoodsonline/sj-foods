@@ -40,6 +40,16 @@
 
   .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
+  /* Install App Banner Button */
+  .install-banner {
+    background: linear-gradient(135deg, var(--accent), #E65100);
+    color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
+  }
+  .install-banner span { font-size: 14px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
+  .install-banner button { background: #fff; color: var(--accent); border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
   .cover-banner{
     width:100%; max-width: 448px; height: 180px; margin: 12px auto 8px; 
     overflow:hidden; border-radius:16px; display:none; background: var(--leaf);
@@ -91,11 +101,12 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER (Search bar + Marquee categories fixed securely below Top Deals) */
+  /* ABSOLUTELY FIXED STICKY TOP CONTAINER (Stays locked on scroll everywhere) */
   .sticky-top-container{
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 1000;
     background: var(--paper);
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border-bottom: 1.5px solid var(--line);
@@ -278,6 +289,12 @@
   <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
 </header>
 
+<!-- Install App Button Bar -->
+<div class="install-banner" id="installBanner" style="display:none;">
+  <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
+  <button id="installAppBtn">انسٹال کریں</button>
+</div>
+
 <div class="cover-banner" id="coverBanner">
   <div class="cover-slider-track" id="coverSliderTrack"></div>
 </div>
@@ -299,7 +316,7 @@
   <div class="deal-grid" id="dealBox"></div>
 </div>
 
-<!-- STICKY TOP CONTAINER: Search bar + Animated Categories placed right below Top Deals and fixed securely -->
+<!-- ABSOLUTELY FIXED STICKY TOP CONTAINER (Search bar + Marquee categories fixed securely below Top Deals) -->
 <div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -387,6 +404,24 @@ let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
 let currentSelectedCategory = null;
 let coverImagesList = [];
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      document.getElementById('installBanner').style.display = 'none';
+    }
+    deferredPrompt = null;
+  }
+});
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
@@ -444,6 +479,7 @@ async function loadData(){
     renderChips();
     renderMainView();
     renderFeatured();
+    loadSavedCustomerDetails();
     document.getElementById("loadingMsg").style.display = "none";
     document.getElementById("billbar").style.display = "flex";
   }catch(e){
@@ -486,6 +522,20 @@ function setupCoverSlider(){
       track.style.transform = `translateX(${currentSlide * 100}%)`;
     }, 4000);
   }
+}
+
+function loadSavedCustomerDetails(){
+  const savedName = localStorage.getItem("sj_cust_name") || "";
+  const savedPhone = localStorage.getItem("sj_cust_phone") || "";
+  const savedAddr = localStorage.getItem("sj_cust_addr") || "";
+
+  if(savedName) document.getElementById("custName").value = savedName;
+  if(savedPhone) document.getElementById("custPhone").value = savedPhone;
+  if(savedAddr) document.getElementById("custAddr").value = savedAddr;
+
+  document.getElementById("custName").oninput = (e) => localStorage.setItem("sj_cust_name", e.target.value);
+  document.getElementById("custPhone").oninput = (e) => localStorage.setItem("sj_cust_phone", e.target.value);
+  document.getElementById("custAddr").oninput = (e) => localStorage.setItem("sj_cust_addr", e.target.value);
 }
 
 function renderChips(){

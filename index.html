@@ -15,7 +15,7 @@
   *{box-sizing:border-box;}
   html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
-    margin:0 auto; padding:0 0 110px 0; background:var(--paper); color:var(--ink);
+    margin:0 auto; padding:0 0 130px 0; background:var(--paper); color:var(--ink);
     font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
     width:100%; max-width:480px; min-height:100vh; position:relative;
     box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
@@ -100,11 +100,11 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER (Always fixed on top for smooth navigation) */
+  /* STICKY TOP CONTAINER */
   .sticky-top-container{
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 90;
     background: var(--paper);
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border-bottom: 1.5px solid var(--line);
@@ -217,15 +217,16 @@
   }
   .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
 
+  /* CART BILLBAR (High z-index to stay above search and categories) */
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
-    border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15); padding:14px 18px; z-index:100; display:flex; flex-direction:column;
-    width:100%; max-width:480px; margin:0 auto; max-height:85vh;
+    border-radius:22px 22px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.2); padding:14px 18px; z-index:99999; display:flex; flex-direction:column;
+    width:100%; max-width:480px; margin:0 auto; max-height:85vh; touch-action: pan-y;
   }
   #billbar.collapsed .cart-details{display:none;}
-  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select: none;}
   .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
-  .cart-details{overflow-y:auto; max-height:65vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
+  .cart-details{overflow-y:auto; max-height:60vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
   
   .pay-card{
     background:linear-gradient(135deg,#1B5E20,#2E7D32);
@@ -313,7 +314,7 @@
   </div>
 </div>
 
-<!-- STICKY TOP CONTAINER (Always fixed on top) -->
+<!-- STICKY TOP CONTAINER -->
 <div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
@@ -330,9 +331,10 @@
 <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 
+<!-- CART BILLBAR -->
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-summary" id="summary">
-    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز)</div>
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز) <span style="font-size:11px; color:var(--muted); margin-right:6px;">(👆 انگلی سے کھولیں/بند کریں)</span></div>
     <div class="total" id="summaryTotal">Rs. 0</div>
   </div>
   <div class="cart-details">
@@ -749,8 +751,26 @@ function renderBill(){
   if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
-document.getElementById("summary").onclick = () => {
-  document.getElementById("billbar").classList.toggle("collapsed");
+// Touch & Click to minimize/expand cart smoothly
+const billbarEl = document.getElementById("billbar");
+const summaryEl = document.getElementById("summary");
+
+let touchStartY = 0;
+billbarEl.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, {passive: true});
+
+billbarEl.addEventListener('touchend', (e) => {
+  let touchEndY = e.changedTouches[0].clientY;
+  if(touchEndY - touchStartY > 50) {
+    billbarEl.classList.add("collapsed");
+  } else if(touchStartY - touchEndY > 50) {
+    billbarEl.classList.remove("collapsed");
+  }
+});
+
+summaryEl.onclick = () => {
+  billbarEl.classList.toggle("collapsed");
 };
 
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
@@ -846,8 +866,11 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 
-  let nowFormatted = new Date().toLocaleString("en-GB", {timeZone: "Asia/Karachi", hour12: true});
-  let formattedSummaryWithTime = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${addr}<br>📋 تفصیل: <br>` + summaryHtml;
+  // Perfect Pakistan Date & Time in English format
+  let nowOptions = { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+  let nowFormatted = new Intl.DateTimeFormat('en-GB', nowOptions).format(new Date());
+
+  let formattedSummaryWithTime = `📅 Date & Time: ${nowFormatted}<br>👤 Name: ${name}<br>📞 Phone: ${phone}<br>📍 Address: ${addr}<br>📋 Details: <br>` + summaryHtml;
 
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQm8rRjAn7FULiVGDFWOH-41cJ2Wtl6VamL81UNTlmKfpVey-KTBZP1zBWmQ2xr0h3/exec";

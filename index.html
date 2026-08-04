@@ -421,7 +421,6 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
   }
 });
 
-// Smart Back Button History Management to prevent accidental app close
 window.addEventListener('popstate', (event) => {
   if(currentSelectedCategory !== null){
     currentSelectedCategory = null;
@@ -802,8 +801,9 @@ document.getElementById("waBtn").onclick = () => {
   msg += `\n💰 *کل سامان کی رقم:* ${fmt(subtotal)}\n\n`;
   msg += `برائے مہربانی میرا آرڈر جلد از جلد روانہ کر دیں۔ شکریہ! 🌿`;
 
+  // 1. Save directly to localStorage immediately so admin panel catches it instantly on any device sync or local view
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
-  localOrders.unshift({
+  let newOrderObj = {
     id: "wa_" + Date.now(),
     code: orderCode,
     name: name,
@@ -814,25 +814,22 @@ document.getElementById("waBtn").onclick = () => {
     otpCode: otpCode,
     date: new Date().toLocaleTimeString(),
     status: "pending"
-  });
+  };
+  localOrders.unshift(newOrderObj);
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
+  // 2. Attempt background Google Sheet sync safely without blocking WhatsApp navigation
   try {
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
-    fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: orderCode, name: name, phone: phone, address: addr,
-        items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
-        timestamp: new Date().toISOString(), status: "pending"
-      })
-    });
+    navigator.sendBeacon(SHEET_URL, JSON.stringify({
+      code: orderCode, name: name, phone: phone, address: addr,
+      items: summaryHtml.replace(/<br>/g, " | "), total: Math.round(subtotal), otp: otpCode,
+      timestamp: new Date().toISOString(), status: "pending"
+    }));
   } catch(e){}
 
   window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ آرڈر واٹس ایپ پر روانہ کر دیا گیا!");
+  showToast("✅ آرڈر واٹس ایپ پر روانہ اور پینل میں محفوظ ہو گیا!");
 };
 
 function renderFeatured(){

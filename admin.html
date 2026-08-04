@@ -98,7 +98,7 @@
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
+      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
       <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
       <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
       <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
@@ -112,7 +112,7 @@
   <div id="secOrders">
     <div class="card">
       <h3>🔔 کسٹمرز کے ان باکس آرڈرز</h3>
-      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ ڈیٹا براہ راست گوگل شیٹ سے آرہا ہے (کیشے سے بے فکر رہیں)۔</p>
+      <p>نیا آرڈر سرخ رنگ میں بلنک کرے گا۔ ڈیٹا براہ راست گوگل شیٹ سے آرہا ہے۔</p>
       <div style="display:flex; gap:8px; margin-top:8px;">
         <button class="btn-secondary" style="flex:1; background:#D32F2F; color:#fff;" onclick="playBeepTech(); showToast('✅ گھنٹی ایکٹیو ہے');">🔊 گھنٹی ٹیسٹ کریں</button>
       </div>
@@ -455,7 +455,7 @@ async function parseAndAddWhatsAppOrder(){
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let nowFormatted = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-  let formattedSummary = `📅 تاریخ: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
+  let formattedSummary = `📅 تاریخ و وقت: ${nowFormatted}<br>👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode,
@@ -490,18 +490,28 @@ async function parseAndAddWhatsAppOrder(){
   renderOrders();
 }
 
+function getTimeElapsed(timestamp) {
+  if (!timestamp) return "ابھی";
+  let past = new Date(timestamp).getTime();
+  if (isNaN(past)) return "آج";
+  let now = new Date().getTime();
+  let diffMin = Math.floor((now - past) / (1000 * 60));
+  if (diffMin < 1) return "ابھی آرڈر آیا ہے";
+  if (diffMin < 60) return `${diffMin} منٹ پہلے`;
+  let diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `${diffHour} گھنٹے پہلے`;
+  let diffDays = Math.floor(diffHour / 24);
+  return `${diffDays} دن پہلے`;
+}
+
 async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
     const data = await res.json();
     let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
-      let formattedDate = "آج";
-      if(row.timestamp){
-        let d = new Date(row.timestamp);
-        if(!isNaN(d.getTime())){
-          formattedDate = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-        }
-      }
+      let rawTime = row.timestamp || "";
+      let formattedDate = rawTime ? new Date(rawTime).toLocaleString() : "آج";
+      let timeAgo = getTimeElapsed(rawTime);
       return {
         id: "sh_" + index,
         code: row.code,
@@ -512,6 +522,7 @@ async function fetchOrdersFromSheet(){
         total: row.total || 0,
         otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
         date: formattedDate,
+        timeAgo: timeAgo,
         status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
       };
     });
@@ -579,14 +590,14 @@ function renderOrdersDOM(){
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span>📌 ${o.code} — ${o.name} (${o.phone})</span>
-          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.date || 'آج'} | ${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ (Pending)'}</span>
+          <span style="font-size:11px; color:${isCompleted ? 'var(--mid)' : 'var(--price)'};">${o.timeAgo} | ${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ'}</span>
         </div>
         <div class="chat-body">
           <div style="font-size:13.5px; line-height:1.7;">
             📞 فون: ${o.phone}<br>
             📍 پتہ: ${o.address}<br>
             🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-            📅 تاریخ و وقت: <b>${o.date || 'آج'}</b><br>
+            📅 تاریخ و وقت: <b>${o.date}</b> (${o.timeAgo})<br>
             🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
             💰 کل رقم: <b>Rs. ${o.total}</b><br>
             وضعیت: <b>${isCompleted ? '✅ مکمل (Completed)' : '⏳ پینڈنگ (Pending)'}</b>

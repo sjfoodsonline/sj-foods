@@ -100,21 +100,13 @@
   .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.2; font-family: Arial, sans-serif; }
   .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
 
-  /* STICKY TOP CONTAINER */
+  /* STICKY TOP CONTAINER (Always fixed on top for smooth navigation) */
   .sticky-top-container{
-    position: relative;
-    z-index: 50;
-    background: var(--paper);
-  }
-  .sticky-top-container.fixed-nav {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 480px;
     z-index: 9999;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    background: var(--paper);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border-bottom: 1.5px solid var(--line);
   }
 
@@ -128,9 +120,6 @@
   .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:4px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; cursor: grab; }
   .cat-marquee-wrap::-webkit-scrollbar { display: none; }
   .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
-  .cat-marquee-wrap.auto-animate .cat-marquee-track { animation: cat-move 35s linear infinite; }
-  .cat-marquee-wrap.auto-animate:hover .cat-marquee-track{ animation-play-state: paused; }
-  @keyframes cat-move { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
@@ -301,33 +290,36 @@
   <button id="installAppBtn">انسٹال کریں</button>
 </div>
 
-<div class="cover-banner" id="coverBanner">
-  <div class="cover-slider-track" id="coverSliderTrack"></div>
-</div>
+<!-- Home Page Only Elements: Cover Banner, Features, Top Deals -->
+<div id="homePageWrapper">
+  <div class="cover-banner" id="coverBanner">
+    <div class="cover-slider-track" id="coverSliderTrack"></div>
+  </div>
 
-<div class="features-scroll-wrap">
-  <div class="features-scroll" id="featuresTrack">
-    <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
-    <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
-    <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
-    <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
-    <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
-    <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
+  <div class="features-scroll-wrap">
+    <div class="features-scroll" id="featuresTrack">
+      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+      <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
+      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
+      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
+      <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
+      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
+    </div>
+  </div>
+
+  <div class="featured-section hidden" id="featuredSection">
+    <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
+    <div class="deal-grid" id="dealBox"></div>
   </div>
 </div>
 
-<div class="featured-section hidden" id="featuredSection">
-  <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
-  <div class="deal-grid" id="dealBox"></div>
-</div>
-
-<!-- STICKY TOP CONTAINER -->
-<div class="sticky-top-container" id="stickyNavContainer">
+<!-- STICKY TOP CONTAINER (Always fixed on top) -->
+<div class="sticky-top-container">
   <div class="search-wrap">
     <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
   </div>
   <div class="cat-section">
-    <div class="cat-marquee-wrap auto-animate" id="catSliderWrap">
+    <div class="cat-marquee-wrap" id="catSliderWrap">
       <div class="cat-marquee-track" id="chips"></div>
     </div>
   </div>
@@ -430,24 +422,20 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
 });
 
 window.addEventListener('popstate', (event) => {
-  if(currentSelectedCategory !== null){
-    currentSelectedCategory = null;
-    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
-    renderChips();
-    renderMainView();
-  }
+  currentSelectedCategory = null;
+  renderChips();
+  renderMainView();
 });
 
 const slider = document.getElementById('catSliderWrap');
 let isDown = false, startX, scrollLeft;
 slider.addEventListener('mousedown', (e) => {
   isDown = true;
-  slider.classList.remove('auto-animate');
   startX = e.pageX - slider.offsetLeft;
   scrollLeft = slider.scrollLeft;
 });
-slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.add('auto-animate'); });
-slider.addEventListener('mouseup', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('mouseleave', () => { isDown = false; });
+slider.addEventListener('mouseup', () => { isDown = false; });
 slider.addEventListener('mousemove', (e) => {
   if(!isDown) return;
   e.preventDefault();
@@ -457,11 +445,10 @@ slider.addEventListener('mousemove', (e) => {
 });
 slider.addEventListener('touchstart', (e) => {
   isDown = true;
-  slider.classList.remove('auto-animate');
   startX = e.touches[0].pageX - slider.offsetLeft;
   scrollLeft = slider.scrollLeft;
 });
-slider.addEventListener('touchend', () => { isDown = false; slider.classList.add('auto-animate'); });
+slider.addEventListener('touchend', () => { isDown = false; });
 slider.addEventListener('touchmove', (e) => {
   if(!isDown) return;
   const x = e.touches[0].pageX - slider.offsetLeft;
@@ -582,9 +569,7 @@ function renderChips(){
   const chips = CATEGORIES_META.map(c => 
     `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
   ).join("");
-  document.getElementById("chips").innerHTML = `
-    <div style="display:flex; gap:10px;">${chips}</div>
-    <div style="display:flex; gap:10px;" aria-hidden="true">${chips}</div>`;
+  document.getElementById("chips").innerHTML = `<div style="display:flex; gap:10px;">${chips}</div>`;
 }
 
 function selectCategory(catName){
@@ -592,9 +577,9 @@ function selectCategory(catName){
     history.pushState({cat: catName}, "", "#" + catName);
   }
   currentSelectedCategory = catName;
-  document.getElementById('stickyNavContainer').classList.add('fixed-nav');
   renderChips();
   renderMainView();
+  window.scrollTo({top: 0, behavior: 'auto'});
 }
 
 function resetToHome(){
@@ -602,7 +587,6 @@ function resetToHome(){
     history.back();
   } else {
     currentSelectedCategory = null;
-    document.getElementById('stickyNavContainer').classList.remove('fixed-nav');
     renderChips();
     renderMainView();
   }
@@ -612,8 +596,10 @@ function renderMainView(filter=""){
   const main = document.getElementById("list");
   main.innerHTML = "";
   let anyShown = false;
+  const homeWrapper = document.getElementById("homePageWrapper");
 
   if(filter){
+    homeWrapper.style.display = "none";
     anyShown = true;
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
     let container = document.createElement("div");
@@ -626,6 +612,7 @@ function renderMainView(filter=""){
     main.appendChild(container);
   } 
   else if(currentSelectedCategory){
+    homeWrapper.style.display = "none";
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
     let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
     if(items.length > 0){
@@ -650,6 +637,7 @@ function renderMainView(filter=""){
     }
   } 
   else {
+    homeWrapper.style.display = "block";
     anyShown = true;
     let grid = document.createElement("div");
     grid.className = "home-cats-grid";

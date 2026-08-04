@@ -62,22 +62,31 @@
   .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
   .chat-item.open .chat-body{display:block;}
 
-  /* Stopwatch Counter Box */
-  .stopwatch-badge{
+  .time-badge{
     font-family: monospace, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
-    padding: 3px 8px;
+    padding: 3px 6px;
     border-radius: 6px;
+    direction: ltr;
     display: flex;
     align-items: center;
     gap: 4px;
-    direction: ltr;
   }
-  .stopwatch-badge.fresh { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
-  .stopwatch-badge.warning { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
-  .stopwatch-badge.danger { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
-  .stopwatch-badge.done { background: #E8F5E9; color: #1B5E20; }
+  .time-badge.fresh { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .time-badge.warning { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+  .time-badge.danger { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+  .time-badge.done { background: #E8F5E9; color: #1B5E20; }
+
+  .challenge-tag {
+    background: #D32F2F;
+    color: #FFF;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
@@ -219,10 +228,10 @@ function requestNotificationPermission() {
   }
 }
 
-function sendPushNotification(orderCode, elapsedStr) {
+function sendPushNotification(orderCode, timeStr) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification("⚠️ آرڈر میں تاخیر (SJ Foods)", {
-      body: `آرڈر ${orderCode} کو آئے ہوئے ${elapsedStr} ہو چکے ہیں!`,
+      body: `آرڈر ${orderCode} (${timeStr}) پر تاحال پینڈنگ ہے!`,
       requireInteraction: true
     });
   }
@@ -270,22 +279,22 @@ function showToast(msg, isErr){
   setTimeout(()=> t.className = "toast", 2600);
 }
 
-function playBeepTech(){
+function playLoudBeep(){
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     let time = ctx.currentTime;
-    for(let i = 0; i < 2; i++){
+    for(let i = 0; i < 3; i++){
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(800 + (i*200), time);
-      gain.gain.setValueAtTime(0.5, time);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
+      osc.type = "square";
+      osc.frequency.setValueAtTime(900 + (i*150), time);
+      gain.gain.setValueAtTime(1.0, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(time);
-      osc.stop(time + 0.2);
-      time += 0.25;
+      osc.stop(time + 0.3);
+      time += 0.35;
     }
   }catch(e){}
 }
@@ -470,7 +479,7 @@ function saveAllItemChanges(){
   document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
   document.getElementById("saveStatus").style.color = "var(--mid)";
   showToast("✅ تمام تبدیلیاں اور ریٹس محفوظ ہو گئے!");
-  playBeepTech();
+  playLoudBeep();
 }
 
 async function parseAndAddWhatsAppOrder(){
@@ -521,7 +530,7 @@ async function parseAndAddWhatsAppOrder(){
     }catch(e){}
   }
   showToast("✅ آرڈر گوگل شیٹ پر بھیج دیا گیا ہے!");
-  playBeepTech();
+  playLoudBeep();
   document.getElementById("waRawText").value = "";
   document.getElementById("waCustName").value = "";
   document.getElementById("waCustPhone").value = "";
@@ -530,11 +539,11 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// ⏱️ ریسنگ اسٹاپ واچ کاؤنٹر (روپ منٹ و سیکنڈز)
-function getStopwatchElapsed(timestamp) {
-  if (!timestamp) return { text: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
+// ⏱️ لائیو لائیو کاؤنٹر چیلنج (جب تک آرڈر کلوز نہ ہو)
+function getLiveChallengeCounter(timestamp) {
+  if (!timestamp) return { liveText: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return { text: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
+  if (isNaN(past)) return { liveText: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
   
   let now = new Date().getTime();
   let totalSec = Math.floor((now - past) / 1000);
@@ -546,50 +555,53 @@ function getStopwatchElapsed(timestamp) {
   mins = mins % 60;
 
   let pad = (n) => n < 10 ? '0' + n : n;
-  let timeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
+  let exactTimeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
 
-  let formattedText = "";
-  if(hrs > 0) {
-    formattedText = `⏱️ ${pad(hrs)}h ${pad(mins)}m ${pad(secs)}s`;
-  } else {
-    formattedText = `⏱️ ${pad(mins)}m ${pad(secs)}s`;
-  }
+  let formattedLive = hrs > 0 ? `⏱️ ${pad(hrs)}h ${pad(mins)}m ${pad(secs)}s` : `⏱️ ${pad(mins)}m ${pad(secs)}s`;
 
   let statusClass = "fresh";
-  if (totalSec >= 900) { // 15 min+
+  if (totalSec >= 900) { // 15 منٹ+
     statusClass = "danger";
-  } else if (totalSec >= 300) { // 5 min+
+  } else if (totalSec >= 300) { // 5 منٹ+
     statusClass = "warning";
   }
 
-  return { text: formattedText, exactTimeStr: timeStr, totalSec: totalSec, class: statusClass };
+  return { liveText: formattedLive, exactTimeStr: exactTimeStr, totalSec: totalSec, class: statusClass };
 }
 
 async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
     const data = await res.json();
-    let sheetOrders = data.filter(row => row.code && row.code.toString().includes("SJ-")).map((row, index) => {
-      let rawTime = row.timestamp || "";
-      let parsedTime = Date.parse(rawTime);
-      let rawTimestamp = isNaN(parsedTime) ? Date.now() : parsedTime;
-      
-      let formattedDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTimestamp));
-      let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
-      
-      return {
-        id: "sh_" + index,
-        code: row.code,
-        name: row.name || "Unknown",
-        phone: row.phone || "03000000000",
-        address: row.address || "Mingora Swat",
-        itemsSummary: row.items,
-        total: parseFloat(row.total) || 0,
-        otpCode: unifiedOtp,
-        date: formattedDate,
-        rawTimestamp: rawTimestamp,
-        status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
-      };
+    
+    let seenCodes = new Set();
+    let sheetOrders = [];
+
+    data.forEach((row, index) => {
+      if(row.code && row.code.toString().includes("SJ-") && !seenCodes.has(row.code)){
+        seenCodes.add(row.code);
+        
+        let rawTime = row.timestamp || "";
+        let parsedTime = Date.parse(rawTime);
+        let rawTimestamp = isNaN(parsedTime) ? Date.now() : parsedTime;
+        
+        let formattedDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTimestamp));
+        let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
+        
+        sheetOrders.push({
+          id: "sh_" + index,
+          code: row.code,
+          name: row.name || "Unknown",
+          phone: row.phone || "03000000000",
+          address: row.address || "Mingora Swat",
+          itemsSummary: row.items,
+          total: parseFloat(row.total) || 0,
+          otpCode: unifiedOtp,
+          date: formattedDate,
+          rawTimestamp: rawTimestamp,
+          status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
+        });
+      }
     });
 
     sheetOrders.sort((a, b) => {
@@ -633,7 +645,7 @@ async function renderOrders(){
     return;
   }
   if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
-    playBeepTech();
+    playLoudBeep();
   }
   cachedOrdersCount = latestOrdersCache.length;
 
@@ -654,22 +666,25 @@ function renderOrdersDOM(){
   area.innerHTML = orders.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
-    let sw = getStopwatchElapsed(o.rawTimestamp);
+    let chal = getLiveChallengeCounter(o.rawTimestamp);
 
-    if(!isCompleted && sw.totalSec >= 900) {
-      sendPushNotification(o.code, sw.text);
+    if(!isCompleted && chal.totalSec >= 900) {
+      sendPushNotification(o.code, chal.liveText);
     }
 
-    let isOverdue = (!isCompleted && sw.totalSec >= 900);
+    let isOverdue = (!isCompleted && chal.totalSec >= 900);
 
     return `
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOverdue ? 'overdue' : ''} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
-          <span style="font-size:14px; direction:auto;">📌 ${o.code} — ${o.name}</span>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span style="font-size:11px; font-weight:700; color:var(--muted);">${sw.exactTimeStr}</span>
-            <span class="stopwatch-badge ${isCompleted ? 'done' : sw.class}">
-              ${isCompleted ? '✅ Completed' : sw.text}
+          <span style="font-size:13.5px; direction:auto;">
+            📌 ${o.code} — ${o.name}
+            ${!isCompleted ? `<span class="challenge-tag">🔥 چیلنج</span>` : ''}
+          </span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:10.5px; font-weight:700; color:var(--muted);">${chal.exactTimeStr}</span>
+            <span class="time-badge ${isCompleted ? 'done' : chal.class}">
+              ${isCompleted ? '✅ Completed' : chal.liveText}
             </span>
           </div>
         </div>
@@ -765,7 +780,7 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
 
 renderOrders();
 setInterval(renderOrders, 4000);
-// ہر 1 سیکنڈ بعد سیکنڈز کے لائیو کاؤنٹر کو اپڈیٹ کرنا (استاپ واچ)
+// ہر ایک سیکنڈ بعد لائیو چیلنج ٹائمر اور سیکنڈز اپڈیٹ ہوں گے
 setInterval(renderOrdersDOM, 1000);
 </script>
 </body>

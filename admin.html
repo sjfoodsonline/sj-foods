@@ -57,7 +57,6 @@
   .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
   .unit-row input[type=text], .unit-row input[type=number]{margin-bottom:0;}
 
-  /* Floating Save Bar */
   .floating-save-bar {
     position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
     background: rgba(255, 253, 248, 0.95); backdrop-filter: blur(8px);
@@ -85,17 +84,20 @@
 <div class="wrap">
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="switchTab('products')">📦 پروڈکٹس اور ریٹس</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو ان باکس</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', true)">➕ واٹس ایپ آرڈر</div>
+    <div class="tab" id="tabProductsBtn" onclick="switchTab('products', true)">📦 پروڈکٹس اور ریٹس</div>
   </div>
 
   <!-- واٹس ایپ آرڈر درج کرنے کا سیکشن -->
   <div id="secAddWA" style="display:none;">
     <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکت آرڈر شامل کریں</h3>
-      <p>واٹس ایپ میسج یہاں پیسٹ کریں؛ یہ ان باکس میں بطور نئی چیٹ اور گوگل شیٹ میں محفوظ ہو جائے گا۔</p>
-      <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا میسج پیسٹ کریں..."></textarea>
+      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
+      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے کارٹ کی طرح محفوظ کر لے گا۔</p>
+      <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
+      <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
+      <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
+      <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا پورا واٹس ایپ میسج پیسٹ کریں..."></textarea>
       <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ آرڈر درج کریں اور ان باکس میں بھیجیں</button>
     </div>
   </div>
@@ -131,7 +133,7 @@
 
 </div>
 
-<!-- Floating Save Bar always visible in products tab -->
+<!-- Floating Save Bar -->
 <div class="floating-save-bar" id="floatingSaveBar" style="display:none;">
   <span id="saveStatus" style="font-size:12px; font-weight:700; color:var(--price);">⚠️ تبدیلیاں محفوظ نہیں ہیں</span>
   <button class="btn-primary" style="background:var(--dark); width:auto; padding:8px 20px;" onclick="saveAllItemChanges()">💾 سیو کریں</button>
@@ -142,7 +144,15 @@
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzKSCq_94xthvKY6isryQpgwsq_BGPRQ2InQ8is2Ge3kxP02ocK0Go7jboBicShuM2M/exec";
 
-function switchTab(tabName){
+window.addEventListener('popstate', (event) => {
+  switchTab('orders', false);
+});
+
+function switchTab(tabName, pushState = true){
+  if(pushState && history.state?.tab !== tabName){
+    history.pushState({tab: tabName}, "", "#" + tabName);
+  }
+
   document.getElementById('tabOrdersBtn').className = 'tab';
   document.getElementById('tabAddBtn').className = 'tab';
   document.getElementById('tabProductsBtn').className = 'tab';
@@ -411,18 +421,41 @@ function saveAllItemChanges(){
 
 async function parseAndAddWhatsAppOrder(){
   const rawText = document.getElementById("waRawText").value.trim();
+  let name = document.getElementById("waCustName").value.trim() || "واٹس ایپ کسٹمر";
+  let phone = document.getElementById("waCustPhone").value.trim() || "03000000000";
+  let address = document.getElementById("waCustAddr").value.trim() || "Mingora Swat";
+
   if(!rawText){
     showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
     return;
   }
 
+  let lines = rawText.split('\n');
+  lines.forEach(line => {
+    let l = line.toLowerCase();
+    if(l.includes("نام") || l.includes("name")) {
+      let parts = line.split(/[:\-]/);
+      if(parts[1]) name = parts[1].trim();
+    }
+    if(l.includes("فون") || l.includes("phone") || l.includes("03")) {
+      let match = line.match(/03[0-9]{9}/);
+      if(match) phone = match[0];
+    }
+    if(l.includes("پتہ") || l.includes("address")) {
+      let parts = line.split(/[:\-]/);
+      if(parts[1]) address = parts[1].trim();
+    }
+  });
+
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let formattedSummary = `👤 نام: ${name}<br>📞 فون: ${phone}<br>📍 پتہ: ${address}<br>📋 تفصیل: <br>` + rawText.replace(/\n/g, "<br>");
+
   let newOrd = {
     code: orderCode,
-    name: "واٹس ایپ کسٹمر",
-    phone: "03000000000",
-    address: "Mingora Swat",
-    items: rawText.replace(/\n/g, " | "),
+    name: name,
+    phone: phone,
+    address: address,
+    items: formattedSummary,
     total: 0,
     otp: Math.floor(1000 + Math.random() * 9000),
     timestamp: new Date().toISOString(),
@@ -443,12 +476,12 @@ async function parseAndAddWhatsAppOrder(){
   let localOrders = JSON.parse(localStorage.getItem("sj_local_orders") || "[]");
   localOrders.unshift({
     id: "wa_" + Date.now(),
-    code: newOrd.code,
-    name: newOrd.name,
-    phone: newOrd.phone,
-    address: newOrd.address,
-    itemsSummary: rawText.replace(/\n/g, "<br>"),
-    total: newOrd.total,
+    code: orderCode,
+    name: name,
+    phone: phone,
+    address: address,
+    itemsSummary: formattedSummary,
+    total: 0,
     otpCode: newOrd.otp,
     date: new Date().toLocaleTimeString(),
     status: "pending"
@@ -456,9 +489,12 @@ async function parseAndAddWhatsAppOrder(){
   localStorage.setItem("sj_local_orders", JSON.stringify(localOrders));
 
   document.getElementById("waRawText").value = "";
-  showToast("✅ آرڈر درج اور ان باکس میں آ گیا!");
+  document.getElementById("waCustName").value = "";
+  document.getElementById("waCustPhone").value = "";
+  document.getElementById("waCustAddr").value = "";
+  showToast("✅ آرڈر کارٹ کی طرح درج ہو گیا!");
   playBeepTech();
-  switchTab('orders');
+  switchTab('orders', true);
   renderOrders();
 }
 
@@ -470,11 +506,11 @@ async function fetchOrdersFromSheet(){
     let sheetOrders = data.filter(row => row.code && row.code.includes("SJ-")).map((row, index) => ({
       id: "sh_" + index,
       code: row.code,
-      name: row.name,
-      phone: row.phone,
-      address: row.address,
+      name: row.name || "نامعلوم",
+      phone: row.phone || "03000000000",
+      address: row.address || "Mingora Swat",
       itemsSummary: row.items,
-      total: row.total,
+      total: row.total || 0,
       otpCode: row.otp || Math.floor(1000 + Math.random() * 9000),
       date: new Date(row.timestamp).toLocaleTimeString(),
       status: row.status || 'pending'
@@ -524,7 +560,7 @@ async function renderOrders(){
         📞 فون: ${o.phone}<br>
         📍 پتہ: ${o.address}<br>
         🔐 ڈلیوری کوڈ (OTP): <b style="color:var(--price); font-size:15px;">${o.otpCode}</b><br>
-        🛒 اشیاء: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
+        🛒 اشیاء اور تفصیلات: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;">${o.itemsSummary}</div>
         💰 کل رقم: <b>Rs. ${o.total}</b><br>
         وضعیت: <b>${o.status === 'completed' ? '✅ مکمل / کلوزڈ' : '⏳ نیا آرڈر (پینڈنگ)'}</b>
       </div>
@@ -533,6 +569,7 @@ async function renderOrders(){
         <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, ${o.otpCode})">🖨️ پرنٹ</button>
         ${o.status !== 'completed' ? `
           <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendFirstWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}', ${o.otpCode})">📲 پہلا میسج</button>
+          <button class="btn-secondary" style="flex:1; background:#25D366; color:#fff;" onclick="sendThankYouWhatsAppMessage('${o.phone}', '${o.name}', '${o.code}')">💚 شکریہ میسج</button>
           <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrder('${o.id}')">✅ کلوز کریں</button>
         ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 یہ آرڈر محفوظ اور کلوز ہو چکا ہے</div>`}
         <button class="btn-danger" style="flex:0 0 auto;" onclick="deleteOrder('${o.id}')">🗑️ حذف</button>
@@ -547,6 +584,14 @@ function sendFirstWhatsAppMessage(phone, name, code, otp){
   if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ پہلا تصدیقی میسج واٹس ایپ پر کھل گیا!");
+}
+
+function sendThankYouWhatsAppMessage(phone, name, code){
+  const msg = `محترم *${name}* صاحب! 🙏\n\nSJ Foods Mingora سے خریداری کرنے کا بہت بہت شکریہ! 🌿 آپ کا آرڈر *[${code}]* کامیابی کے ساتھ مکمل کر دیا گیا ہے۔\n\nامید ہے آپ کو ہماری سروس پسند آئی ہوگی۔ مستقبل میں بھی آپ کی خدمت کا موقع ضرور دیں! جزاک اللہ خیر! ✨`;
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("💚 شکریہ / کلوزنگ میسج واٹس ایپ پر کھل گیا!");
 }
 
 function completeOrder(id){

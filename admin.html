@@ -532,57 +532,45 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا پاک صاف طریقہ
+// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا پاک صاف طریقہ (فکسڈ)
 function parseExactRecordedTime(rawTimestamp) {
   if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
   let str = String(rawTimestamp).trim();
-  
-  // اگر ISO فارمیٹ ہو (جیسے 2026-08-05T05:08:00) تو اسے صاف ڈسپلے سٹرنگ میں بدلو
-  if (str.includes("T") || str.includes("-")) {
-    let parsed = Date.parse(str);
-    if (!isNaN(parsed)) {
-      return new Intl.DateTimeFormat('en-GB', { 
-        timeZone: 'Asia/Karachi', 
-        weekday: 'short', 
-        day: 'numeric', 
-        month: 'short', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: true 
-      }).format(new Date(parsed));
-    }
+  if (str.startsWith("'")) {
+    str = str.substring(1);
   }
-  
-  // ورنہ شیٹ میں جو ٹیکسٹ پہلے سے لکھا ہوا ہے وہی بالکل ساکت دکھاو
   return str;
 }
 
 async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
-    const data = await res.json();
+    const result = await res.json();
+    const data = result.orders || result;
     
     let seenCodes = new Set();
     let sheetOrders = [];
 
     data.forEach((row, index) => {
-      if(row.code && row.code.toString().includes("SJ-") && !seenCodes.has(row.code)){
-        seenCodes.add(row.code);
+      let codeVal = row.code || row[0];
+      if(codeVal && codeVal.toString().includes("SJ-") && !seenCodes.has(codeVal)){
+        seenCodes.add(codeVal);
         
-        let exactOrderTimeStr = parseExactRecordedTime(row.timestamp);
-        let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
+        let rawTime = row.timestamp || row[6];
+        let exactOrderTimeStr = parseExactRecordedTime(rawTime);
+        let unifiedOtp = codeVal ? codeVal.toString().replace("SJ-", "") : "0000";
         
         sheetOrders.push({
           id: "sh_" + index,
-          code: row.code,
-          name: row.name || "Unknown",
-          phone: row.phone || "03000000000",
-          address: row.address || "Mingora Swat",
-          itemsSummary: row.items,
-          total: parseFloat(row.total) || 0,
+          code: codeVal,
+          name: row.name || row[1] || "Unknown",
+          phone: row.phone || row[2] || "03000000000",
+          address: row.address || row[3] || "Mingora Swat",
+          itemsSummary: row.items || row[4] || "",
+          total: parseFloat(row.total || row[5]) || 0,
           otpCode: unifiedOtp,
           displayTime: exactOrderTimeStr,
-          status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
+          status: (row.status || row[7]) ? (row.status || row[7]).toString().toLowerCase().trim() : 'pending'
         });
       }
     });

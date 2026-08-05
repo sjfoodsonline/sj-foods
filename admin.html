@@ -193,7 +193,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// 📌 اپڈیٹ شدہ نیا گوگل ایپس اسکرپٹ URL
 const SHEET_URL = "https://script.google.com/macros/s/AKfycby5Ls_tAiDVos0DGPtnyk_us6m24EfC9vKgNl1Q1EN_JElABCpkcLJKkTHKYqm64t-f/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
@@ -445,16 +444,48 @@ function requestLocation(phone){
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
+let dragSrcIndex = null;
+
+function handleDragStart(e, index) {
+  dragSrcIndex = index;
+  e.target.classList.add('dragging');
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) e.preventDefault();
+  return false;
+}
+
+function handleDrop(e, targetIndex) {
+  if (e.stopPropagation) e.stopPropagation();
+  if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
+    const movedItem = latestOrdersCache.splice(dragSrcIndex, 1)[0];
+    latestOrdersCache.splice(targetIndex, 0, movedItem);
+    renderOrdersDOM();
+  }
+  return false;
+}
+
+function handleDragEnd(e) {
+  e.target.classList.remove('dragging');
+}
+
 function renderOrdersDOM(){
   const area = document.getElementById("ordersArea");
-  area.innerHTML = latestOrdersCache.map((o) => {
+  area.innerHTML = latestOrdersCache.map((o, index) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
 
     return `
-      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" 
+           id="card-${o.id}" 
+           draggable="true" 
+           ondragstart="handleDragStart(event, ${index})" 
+           ondragover="handleDragOver(event)" 
+           ondrop="handleDrop(event, ${index})" 
+           ondragend="handleDragEnd(event)">
         <div class="chat-header">
-          <span class="drag-handle">⣿</span>
+          <span class="drag-handle" title="ترتیب بدلنے کے لیے اوپر نیچے کریں">⣿</span>
           <span style="font-size:13.5px; flex:1;" onclick="toggleAccordion('${o.id}')">
             📌 ${o.code} — ${o.name} ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
           </span>

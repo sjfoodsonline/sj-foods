@@ -590,6 +590,27 @@ function parseExactRecordedTime(rawTimestamp) {
   return str;
 }
 
+// 📌 کسٹمر کو تصدیقی پیغام بھیجنے کا نیا فنکشن
+function sendConfirmationMsg(phone, code) {
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if (cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
+
+  const msg = 
+`السلام علیکم!
+
+آپ کا آرڈر *[${code}]* SJ Foods Online کو موصول ہو گیا ہے۔
+
+کیا ہماری ٹیم آپ کے سامان پر کام شروع کر دے؟ براہ کرم *OK* لکھ کر تصدیق کریں۔
+
+💳 پیمنٹ کے طریقے:
+• کیش آن ڈیلیوری (COD)
+• ایزی پیسہ — کسی بھی بینک یا ایزی پیسہ اکاؤنٹ سے آسانی سے بھیجا جا سکتا ہے
+
+آپ کے جواب کا انتظار رہے گا۔ شکریہ — SJ Foods Online`;
+
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
 async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
@@ -729,6 +750,9 @@ function renderOrdersDOM(){
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            ${!isCompleted ? `
+              <button class="btn-secondary" style="flex:1; background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیقی میسج</button>
+            ` : ''}
             <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
             ${!isCompleted ? `

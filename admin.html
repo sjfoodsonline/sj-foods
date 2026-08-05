@@ -49,7 +49,6 @@
 
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   
-  /* 🔴 Red Blinking Animation for Pending Orders */
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -590,7 +589,6 @@ function parseExactRecordedTime(rawTimestamp) {
   return str;
 }
 
-// 📌 کسٹمر کو تصدیقی پیغام بھیجنے کا نیا فنکشن
 function sendConfirmationMsg(phone, code) {
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if (cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
@@ -787,7 +785,7 @@ async function closeAndThankOrder(id, code, phone){
     });
   } catch(e){}
 
-  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap کو hamari service pasand aayi hogi. Shukriya! ✨`;
+  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
   
   let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) {

@@ -185,6 +185,7 @@
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
+// 📌 صرف ڈپلیکیٹ ایس جے فوڈز بزنس نمبر
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
@@ -494,7 +495,7 @@ async function parseAndAddWhatsAppOrder(){
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   
-  let nowFormatted = new Intl.DateTimeFormat('en-GB', { 
+  let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
     timeZone: 'Asia/Karachi', 
     weekday: 'short', 
     day: 'numeric', 

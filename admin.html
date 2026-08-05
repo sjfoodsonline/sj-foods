@@ -86,6 +86,7 @@
     padding: 2px 6px;
     border-radius: 4px;
     margin-left: 4px;
+    letter-spacing: 0.5px;
   }
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
@@ -539,25 +540,26 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// ⏱️ لائیو لائیو کاؤنٹر چیلنج (جب تک آرڈر کلوز نہ ہو)
-function getLiveChallengeCounter(timestamp) {
-  if (!timestamp) return { liveText: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
+// 📌 فکسڈ اور محفوظ وقت (جو قیامت تک حرکت نہیں کرے گا، صرف وصول ہونے کا وقت بتائے گا)
+fnGetStaticTimeInfo = function(timestamp) {
+  if (!timestamp) return { text: "N/A", totalSec: 0, class: "fresh" };
   let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return { liveText: "⏱️ 00m 00s", exactTimeStr: "", totalSec: 0, class: "fresh" };
+  if (isNaN(past)) return { text: "N/A", totalSec: 0, class: "fresh" };
   
   let now = new Date().getTime();
   let totalSec = Math.floor((now - past) / 1000);
   if(totalSec < 0) totalSec = 0;
 
-  let mins = Math.floor(totalSec / 60);
-  let secs = totalSec % 60;
-  let hrs = Math.floor(mins / 60);
-  mins = mins % 60;
-
-  let pad = (n) => n < 10 ? '0' + n : n;
-  let exactTimeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(past));
-
-  let formattedLive = hrs > 0 ? `⏱️ ${pad(hrs)}h ${pad(mins)}m ${pad(secs)}s` : `⏱️ ${pad(mins)}m ${pad(secs)}s`;
+  // صرف وہی فکس وقت دکھائے گا جب میسج موصول ہوا تھا (مثلاً: Wed, 5 Aug 2026, 04:35 am)
+  let exactDateStr = new Intl.DateTimeFormat('en-GB', { 
+    timeZone: 'Asia/Karachi', 
+    weekday: 'short', 
+    day: 'numeric', 
+    month: 'short', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true 
+  }).format(new Date(past));
 
   let statusClass = "fresh";
   if (totalSec >= 900) { // 15 منٹ+
@@ -566,7 +568,7 @@ function getLiveChallengeCounter(timestamp) {
     statusClass = "warning";
   }
 
-  return { liveText: formattedLive, exactTimeStr: exactTimeStr, totalSec: totalSec, class: statusClass };
+  return { text: exactDateStr, totalSec: totalSec, class: statusClass };
 }
 
 async function fetchOrdersFromSheet(){
@@ -666,25 +668,24 @@ function renderOrdersDOM(){
   area.innerHTML = orders.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
-    let chal = getLiveChallengeCounter(o.rawTimestamp);
+    let st = fnGetStaticTimeInfo(o.rawTimestamp);
 
-    if(!isCompleted && chal.totalSec >= 900) {
-      sendPushNotification(o.code, chal.liveText);
+    if(!isCompleted && st.totalSec >= 900) {
+      sendPushNotification(o.code, st.text);
     }
 
-    let isOverdue = (!isCompleted && chal.totalSec >= 900);
+    let isOverdue = (!isCompleted && st.totalSec >= 900);
 
     return `
       <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOverdue ? 'overdue' : ''} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span style="font-size:13.5px; direction:auto;">
             📌 ${o.code} — ${o.name}
-            ${!isCompleted ? `<span class="challenge-tag">🔥 چیلنج</span>` : ''}
+            ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
           </span>
           <div style="display:flex; align-items:center; gap:4px;">
-            <span style="font-size:10.5px; font-weight:700; color:var(--muted);">${chal.exactTimeStr}</span>
-            <span class="time-badge ${isCompleted ? 'done' : chal.class}">
-              ${isCompleted ? '✅ Completed' : chal.liveText}
+            <span class="time-badge ${isCompleted ? 'done' : st.class}">
+              ${isCompleted ? '✅ Completed' : '🕒 ' + st.text}
             </span>
           </div>
         </div>
@@ -780,8 +781,6 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
 
 renderOrders();
 setInterval(renderOrders, 4000);
-// ہر ایک سیکنڈ بعد لائیو چیلنج ٹائمر اور سیکنڈز اپڈیٹ ہوں گے
-setInterval(renderOrdersDOM, 1000);
 </script>
 </body>
 </html>

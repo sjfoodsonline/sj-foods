@@ -49,7 +49,6 @@
 
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   
-  /* 🔴 Red Blinking Animation for Pending Orders */
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -108,10 +107,10 @@
   .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
 
   .avail-box {
-    background: var(--leaf); padding: 6px 10px; border-radius: 8px; margin-bottom: 8px;
+    background: var(--leaf); padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
     display: flex; align-items: center; justify-content: space-between; border: 1px solid #A5D6A7;
   }
-  .avail-box label { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .avail-box label { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 0; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
   .floating-save-bar {
     position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
@@ -373,7 +372,7 @@ function renderAdminEditor(){
           <span>🟢 Available (دستیاب ہے)</span>
         </label>
         <span style="font-size:11px; color:${it.available !== false ? 'var(--mid)' : 'var(--price)'}; font-weight:bold;">
-          ${it.available !== false ? '✅ شاپ پر شو ہو رہا ہے' : '❌ نا دستیاب (ویب سائٹ پر لاک ہے)'}
+          ${it.available !== false ? '✅ شاپ پر شو ہو رہا ہے' : '❌ نا دستیاب (ویب سائٹ پر بلاک ہے)'}
         </span>
       </div>
 
@@ -415,7 +414,6 @@ function toggleAvailability(idx, val){
   const cat = document.getElementById("catSelect").value;
   globalCategoriesData[cat][idx].available = val;
   markUnsaved();
-  renderAdminEditor();
 }
 
 function markUnsaved(){

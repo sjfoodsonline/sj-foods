@@ -38,7 +38,7 @@
     ],
     "available": true,
     "image": "products/spices-1-1785162522466.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Garam Masala No. 1"
   },
   {
@@ -80,7 +80,7 @@
     ],
     "available": true,
     "image": "products/spices-3-1785162605971.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Handi Masala"
   },
   {
@@ -101,7 +101,7 @@
     ],
     "available": true,
     "image": "products/spices-4-1785162652380.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Dhania Sabut"
   },
   {

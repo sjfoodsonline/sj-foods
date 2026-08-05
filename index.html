@@ -32,7 +32,6 @@
   .header-btns{display:flex; gap:8px; align-items:center;}
   .menu-btn, .share-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   
-  /* Slide Drawer Styles */
   .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 99999; display: none; }
   .drawer-overlay.active { display: block; }
   .drawer {
@@ -52,7 +51,6 @@
   }
   .drawer-menu a:hover { background: var(--leaf); }
 
-  /* Modal Popup Styles */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.active { display: flex; }
   .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -229,7 +227,6 @@
   </div>
 </header>
 
-<!-- Sidebar Panel Drawer -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
@@ -245,7 +242,6 @@
   </ul>
 </div>
 
-<!-- Modal Dialogs for Menu Items -->
 <div class="modal-overlay" id="modalAbout">
   <div class="modal-box">
     <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
@@ -386,6 +382,20 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    databaseURL: "https://sj-foods-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  window.dbRef = { ref, set, push, db };
+</script>
+
 <script>
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
@@ -393,9 +403,6 @@ let ITEMS = [];
 
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
-
-// 📌 آپ کا نیا اور ایکٹیو گوگل ایپس سکرپٹ URL
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzTDns65unUDyPLOCBpS5tylqtyCACwsQwBFTGwMzmtExVoh4aQPdEAtXilqq2KKqLh/exec";
 
 let currentSelectedCategory = null;
 let coverImagesList = [];
@@ -465,21 +472,13 @@ slider.addEventListener('touchmove', (e) => {
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-// 📌 اردو یونٹ میپنگ فنکشن
 function urduUnit(label) {
   const map = {
-    "KG": "کلو",
-    "Kg": "کلو",
-    "kg": "کلو",
-    "G": "گرام",
-    "g": "گرام",
-    "Ltr": "لیٹر",
-    "Litre": "لیٹر",
-    "L": "لیٹر",
-    "Pkt": "پیکٹ",
-    "Packet": "پیکٹ",
-    "Pcs": "عدد",
-    "Piece": "عدد",
+    "KG": "کلو", "Kg": "کلو", "kg": "کلو",
+    "G": "گرام", "g": "گرام",
+    "Ltr": "لیٹر", "Litre": "لیٹر", "L": "لیٹر",
+    "Pkt": "پیکٹ", "Packet": "پیکٹ",
+    "Pcs": "عدد", "Piece": "عدد",
     "Dozen": "درجن"
   };
   return map[label] || label;
@@ -805,7 +804,6 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
-// 📌 آرڈر بھیجنے کا فائنل فنکشن (کیٹگری وائز گروپنگ کے ساتھ)
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
@@ -875,16 +873,20 @@ document.getElementById("waBtn").onclick = () => {
     hour12: true 
   }).format(new Date());
 
+  // Save directly to Firebase Realtime Database
   try {
-    navigator.sendBeacon(SHEET_URL, JSON.stringify({
-      code: orderCode, name: name, phone: phone, address: addr,
-      items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
-      timestamp: nowFormatted, status: "pending"
-    }));
+    if(window.dbRef) {
+      const orderRef = window.dbRef.ref(window.dbRef.db, 'orders/' + orderCode);
+      window.dbRef.set(orderRef, {
+        code: orderCode, name: name, phone: phone, address: addr,
+        items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+        timestamp: nowFormatted, status: "pending"
+      });
+    }
   } catch(e){}
 
   window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ Order sent to WhatsApp and saved!");
+  showToast("✅ Order saved to Firebase and sent to WhatsApp!");
 };
 
 function renderFeatured(){

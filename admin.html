@@ -60,10 +60,10 @@
   }
   
   .chat-item.completed {
-    background: #F1F8E9 !important;
-    border-color: #81C784 !important;
+    background: #E8F5E9 !important;
+    border: 2px solid #2E7D32 !important;
     animation: none !important;
-    opacity: 0.85;
+    box-shadow: 0 2px 8px rgba(46,125,50,0.15) !important;
   }
 
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
@@ -82,7 +82,7 @@
     gap: 4px;
     background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
   }
-  .time-badge.done { background: #E8F5E9; color: #1B5E20; }
+  .time-badge.done { background: #2E7D32; color: #FFFFFF; border-color: #1B5E20; }
 
   @keyframes blinkChallenge {
     0% { background: #D32F2F; }
@@ -717,7 +717,7 @@ function renderOrdersDOM(){
             Order Time: <b>${o.displayTime}</b><br>
             Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto; text-align:right;" dir="auto">${o.itemsSummary}</div>
             Total Amount: <b>Rs. ${o.total}</b><br>
-            Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
+            Status: <b style="color:${isCompleted ? '#1B5E20' : '#B71C1C'}">${isCompleted ? 'Completed' : 'Pending'}</b>
           </div>
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
@@ -725,7 +725,7 @@ function renderOrdersDOM(){
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
-            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
+            ` : `<div style="width:100%; text-align:center; font-size:13px; color:#1B5E20; font-weight:bold; margin-top:4px; background:#C8E6C9; padding:6px; border-radius:8px;">✅ Status: Completed</div>`}
           </div>
         </div>
       </div>
@@ -744,8 +744,11 @@ async function closeAndThankOrder(id, code, phone){
     if(!targetPhone) return;
   }
 
+  // 1. لوکل کیشے میں اسٹیٹس فوراً Completed کرنا
   if(cacheMatch) cacheMatch.status = 'completed';
+  renderOrdersDOM(); // اسکرین پر فوراً گرین اسٹیٹس دکھانا اور ریڈ اینیمیشن بند کرنا
 
+  // 2. گوگل شیٹ پر اپڈیٹ بھیجنا
   try {
     await fetch(SHEET_URL, {
       method: "POST",

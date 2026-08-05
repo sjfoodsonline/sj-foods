@@ -47,7 +47,8 @@
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
-  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s; position:relative;}
+  .chat-item.dragging{opacity: 0.5; border: 2px dashed var(--mid);}
   
   /* 🔴 Red Blinking Animation for Pending Orders */
   @keyframes blinkRedBorder {
@@ -70,6 +71,14 @@
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
   .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
   .chat-item.open .chat-body{display:block;}
+
+  .drag-handle {
+    cursor: grab;
+    font-size: 18px;
+    color: var(--muted);
+    padding: 0 6px;
+    user-select: none;
+  }
 
   .time-badge{
     font-family: monospace, sans-serif;
@@ -592,7 +601,6 @@ function parseExactRecordedTime(rawTimestamp) {
 
 async function fetchOrdersFromSheet(){
   try{
-    // 📌 لائیو ڈیٹا کھینچنے کے لیے nocache کی سیٹنگ
     const liveUrl = SHEET_URL + "?nocache=" + new Date().getTime();
     const res = await fetch(liveUrl, {cache: "no-store"});
     const result = await res.json();
@@ -691,22 +699,55 @@ function requestLocation(phone){
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
+let dragSrcIndex = null;
+
+function handleDragStart(e, index) {
+  dragSrcIndex = index;
+  e.target.classList.add('dragging');
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) e.preventDefault();
+  return false;
+}
+
+function handleDrop(e, targetIndex) {
+  if (e.stopPropagation) e.stopPropagation();
+  if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
+    const movedItem = latestOrdersCache.splice(dragSrcIndex, 1)[0];
+    latestOrdersCache.splice(targetIndex, 0, movedItem);
+    renderOrdersDOM();
+  }
+  return false;
+}
+
+function handleDragEnd(e) {
+  e.target.classList.remove('dragging');
+}
+
 function renderOrdersDOM(){
   const area = document.getElementById("ordersArea");
   const orders = latestOrdersCache;
 
-  area.innerHTML = orders.map((o) => {
+  area.innerHTML = orders.map((o, index) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
 
     return `
-      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
-        <div class="chat-header" onclick="toggleAccordion('${o.id}')">
-          <span style="font-size:13.5px; direction:auto;">
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" 
+           id="card-${o.id}" 
+           draggable="true" 
+           ondragstart="handleDragStart(event, ${index})" 
+           ondragover="handleDragOver(event)" 
+           ondrop="handleDrop(event, ${index})" 
+           ondragend="handleDragEnd(event)">
+        <div class="chat-header">
+          <span class="drag-handle" title="ترتیب بدلنے کے لیے اوپر نیچے کریں">⣿</span>
+          <span style="font-size:13.5px; direction:auto; flex:1;" onclick="toggleAccordion('${o.id}')">
             📌 ${o.code} — ${o.name}
             ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
           </span>
-          <div style="display:flex; align-items:center; gap:4px;">
+          <div style="display:flex; align-items:center; gap:4px;" onclick="toggleAccordion('${o.id}')">
             <span class="time-badge ${isCompleted ? 'done' : ''}">
               ${isCompleted ? '✅ Completed' : '🕒 ' + o.displayTime}
             </span>
@@ -729,7 +770,7 @@ function renderOrdersDOM(){
             <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
-            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
+            ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Completed & Secured</div>`}
           </div>
         </div>
       </div>
@@ -759,7 +800,7 @@ async function closeAndThankOrder(id, code, phone){
     });
   } catch(e){}
 
-  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar دیا گیا ہے.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
+  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
   
   let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) {

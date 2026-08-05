@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods Online — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
+<title>SJ Foods Online — تازہ سبزیاں، پھل، اشیائے خوردونوش آن لائن آرڈر</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -237,7 +237,7 @@
 <header>
   <div class="header-title-box">
     <h1>🟢 ایس جے فوڈز آن لائن</h1>
-    <p>🥦 تازہ سبزیاں، پھل و کریانہ 🌿 — معیاری ہوم ڈلیوری 🚚</p>
+    <p>🥦 تازہ سبزیاں، پھل و اشیائے خوردونوش 🌿 — معیاری ہوم ڈلیوری 🚚</p>
   </div>
   <div class="header-btns">
     <button class="share-btn" id="shareBtn" title="Share">➦</button>
@@ -254,10 +254,10 @@
   </div>
   <ul class="drawer-menu">
     <li><button onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</button></li>
-    <li><button onclick="openModal('modalAbout')">👨‍💼 بانی کا پیغام (About Us)</button></li>
     <li><button onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</button></li>
     <li><button onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</button></li>
     <li><button onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</button></li>
+    <li><button onclick="openModal('modalAbout')">👨‍💼 بانی کا پیغام (About Us)</button></li>
   </ul>
 </div>
 
@@ -273,8 +273,11 @@
     </div>
     <h3>🎙️ بانی کا پیغام</h3>
     <p id="ownerDisplayMsg">
-      میں سلیمان جان، ایس جے فوڈز آن لائن کا مالک اور بانی ہوں۔ میں ایک میڈیا ایکسپرٹ ہوں، اور اب یہ ایک ایکسٹرا کوشش کی ہے ایس جے فوڈز کے نام سے۔ خواہش ہے کہ میڈیا سے اب آہستہ آہستہ کنارہ کشی کر لوں اور اپنا خود کا کوئی کاروبار شروع کروں، تو آپ سب جو مجھے دیکھ رہے ہیں میری حوصلہ افزائی کریں۔<br><br>
-      میں نے میڈیا میں 20 سال اپنے لوگوں کی خدمت کی اور کبھی زندگی میں کسی سے ایک روپیہ کی بے ایمانی یا وعدہ خلافی نہیں کی، اس لیے آپ لوگ بے فکر رہیے، ہم آپ کو بہترین سروس دینے کے لیے حاضر ہیں۔ شروع میں مشکلات اور مسائل ہو سکتے ہیں جس کے لیے آپ سب کو میرے اور میری ٹیم کے ساتھ تعاون کرنا ہوگا۔ ان شاء اللہ ہم ایس جے فوڈز کو آپ کی مدد سے سوات کا نمبر 1 گروسری اسٹور بنائیں گے، لیکن یہ کام صرف آپ کے تعاون سے ہی ممکن ہوگا!
+      <b>السلام علیکم ورحمۃ اللہ وبرکاتہ!</b><br><br>
+      میڈیا کی دنیا میں 20 سال تک عوام کی خدمت کرنے کے بعد، <b>ایس جے فوڈز آن لائن (SJ Foods Online)</b> کے نام سے سوات کے عوام کی سہولت کے لیے ایک نئی اور معیاری کوشش کا آغاز کیا جا رہا ہے۔<br><br>
+      ہم جانتے ہیں کہ روزمرہ کی زندگی میں انسان اکثر <b>شدید مصروفیت، ملازمت، بیماری، یا گھر سے دور ہونے</b> کی وجہ سے خود بازار جا کر خریداری نہیں کر پاتا۔ اسی طرح بزرگوں اور گھر کی خواتین کے لیے بازار کے چکر لگانا یا وزنی سامان اٹھانا کافی مشکل ہوتا ہے۔<br><br>
+      <b>ایس جے فوڈز آن لائن</b> کا مقصد انہی مسائل کو ختم کرنا ہے۔ اب آپ چاہے کام پر ہوں، گھر پر ہوں یا شہر سے باہر — بس ایک کلک یا واٹس ایپ میسج کے ذریعے اپنے گھر کے لیے تازہ ترین سبزیاں، پھل اور روزمرہ کی <b>اشیائے خوردونوش</b> منگوا سکتے ہیں۔<br><br>
+      ہم ہر آرڈر کو مکمل <b>دیانت داری، صفائی اور تول میں پورا</b> کر کے آپ کی دہلیز تک پہنچانے کے پابند ہیں۔ آپ کا اعتماد ہی ہماری اصل طاقت ہے!
     </p>
     <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
   </div>
@@ -426,7 +429,6 @@ let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
 
-// 📌 لوکل اسٹوریج سے بانی کی معلومات اور ایڈمن پیجز کا ڈیٹا لوڈ کرنا
 function loadOwnerSettings(){
   let savedOwner = JSON.parse(localStorage.getItem("sj_owner_data"));
   if(savedOwner){

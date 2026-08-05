@@ -50,7 +50,6 @@
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s; position:relative;}
   .chat-item.dragging{opacity: 0.5; border: 2px dashed var(--mid);}
   
-  /* 🔴 Red Blinking Animation for Pending Orders */
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -73,24 +72,11 @@
   .chat-item.open .chat-body{display:block;}
 
   .drag-handle {
-    cursor: grab;
-    font-size: 18px;
-    color: var(--muted);
-    padding: 0 6px;
-    user-select: none;
+    cursor: grab; font-size: 18px; color: var(--muted); padding: 0 6px; user-select: none;
   }
 
   .time-badge{
-    font-family: monospace, sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 3px 6px;
-    border-radius: 6px;
-    direction: ltr;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
+    font-family: monospace, sans-serif; font-size: 11px; font-weight: 800; padding: 3px 6px; border-radius: 6px; direction: ltr; display: flex; align-items: center; gap: 4px; background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
   }
   .time-badge.done { background: #E8F5E9; color: #1B5E20; }
 
@@ -100,14 +86,7 @@
     100% { background: #D32F2F; }
   }
   .challenge-tag {
-    color: #FFF;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 4px;
-    letter-spacing: 0.5px;
-    animation: blinkChallenge 0.8s infinite;
+    color: #FFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 4px; letter-spacing: 0.5px; animation: blinkChallenge 0.8s infinite;
   }
 
   .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
@@ -117,22 +96,16 @@
   .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
 
   .avail-box {
-    background: var(--leaf); padding: 6px 10px; border-radius: 8px; margin-bottom: 8px;
-    display: flex; align-items: center; justify-content: space-between; border: 1px solid #A5D6A7;
+    background: var(--leaf); padding: 6px 10px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #A5D6A7;
   }
   .avail-box label { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
   .floating-save-bar {
-    position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
-    background: rgba(255, 253, 248, 0.95); backdrop-filter: blur(8px);
-    border-top: 1.5px solid var(--line); padding: 12px 16px; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 -6px 20px rgba(0,0,0,0.1);
+    position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: rgba(255, 253, 248, 0.95); backdrop-filter: blur(8px); border-top: 1.5px solid var(--line); padding: 12px 16px; z-index: 100; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -6px 20px rgba(0,0,0,0.1);
   }
 
   .toast{
-    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
-    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;
+    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;
   }
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
@@ -167,8 +140,8 @@
   </div>
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', false)">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', false)">➕ واٹس ایپ آرڈر</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو ان باکس</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa')">➕ واٹس ایپ آرڈر</div>
     <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🔒 پروڈکٹس و ریٹس</div>
   </div>
 
@@ -220,25 +193,22 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
+// 📌 اپڈیٹ شدہ نیا گوگل ایپس اسکرپٹ URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycby5Ls_tAiDVos0DGPtnyk_us6m24EfC9vKgNl1Q1EN_JElABCpkcLJKkTHKYqm64t-f/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
 let isAdminAuthenticated = false;
+let completedLocalSet = new Set();
 
 function checkAdminPasswordAndSwitch(tabName){
-  if(isAdminAuthenticated){
-    switchTab(tabName, false);
-    return;
-  }
+  if(isAdminAuthenticated){ switchTab(tabName); return; }
   let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
   if(pass === ADMIN_PASSWORD){
     isAdminAuthenticated = true;
     showToast("🟢 پاسورڈ درست ہے!");
-    switchTab(tabName, false);
-  } else {
-    showToast("❌ غلط پاسورڈ!", true);
-  }
+    switchTab(tabName);
+  } else { showToast("❌ غلط پاسورڈ!", true); }
 }
 
 function requestNotificationPermission() {
@@ -247,12 +217,8 @@ function requestNotificationPermission() {
       if (permission === 'granted') {
         showToast("🟢 نوٹیفکیشن ایکٹیو ہو گئے ہیں!");
         new Notification("SJ Foods Admin", { body: "پینڈنگ آرڈر کے نوٹیفکیشن اب اسکرین پر آئیں گے۔", icon: "favicon.ico" });
-      } else {
-        showToast("⚠️ نوٹیفکیشن بلاک کر دیے گئے ہیں", true);
-      }
+      } else { showToast("⚠️ نوٹیفکیشن بلاک کر دیے گئے ہیں", true); }
     });
-  } else {
-    showToast("⚠️ آپ کا براؤزر نوٹیفکیشن کو سپورٹ نہیں کرتا", true);
   }
 }
 
@@ -261,7 +227,7 @@ function toggleRiderView(){
   showToast(document.body.classList.contains("rider-mode") ? "🏍️ رائڈر موڈ آن" : "⚙️ نارمل ایڈمن موڈ");
 }
 
-function switchTab(tabName, pushState = false){
+function switchTab(tabName){
   document.getElementById('tabOrdersBtn').className = 'tab';
   document.getElementById('tabAddBtn').className = 'tab';
   document.getElementById('tabProductsBtn').className = 'tab';
@@ -303,10 +269,8 @@ function playLoudBeep(){
         osc.frequency.setValueAtTime(1000 + (i * 200), time);
         gain.gain.setValueAtTime(3.0, time);
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.25);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(time);
-        osc.stop(time + 0.25);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(time); osc.stop(time + 0.25);
         time += 0.28;
       }
       time += 0.2;
@@ -318,7 +282,6 @@ let globalCategoriesData = {};
 let loadedCategoriesList = [];
 
 async function initAdminCategories(){
-  const selectEl = document.getElementById("catSelect");
   let savedData = JSON.parse(localStorage.getItem("sj_admin_all_categories"));
   if(savedData){
     globalCategoriesData = savedData;
@@ -334,28 +297,18 @@ async function initAdminCategories(){
     index.forEach((entry, i) => {
       let catName = entry.category;
       globalCategoriesData[catName] = catResults[i].map(it => ({
-        name: it.name || "",
-        name_roman: it.name_roman || "",
-        image: it.image || "",
-        icon: entry.icon || "🛒",
-        available: it.available !== false,
-        autoCalc: true,
-        units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
+        name: it.name || "", name_roman: it.name_roman || "", image: it.image || "", icon: entry.icon || "🛒", available: it.available !== false, autoCalc: true, units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
       }));
     });
     loadedCategoriesList = Object.keys(globalCategoriesData);
     localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
     populateCategoryDropdown();
-  }catch(e){
-    selectEl.innerHTML = `<option value="">⚠️ کیٹگریز لوڈ نہیں ہو سکیں</option>`;
-  }
+  }catch(e){}
 }
 
 function populateCategoryDropdown(){
   const selectEl = document.getElementById("catSelect");
-  selectEl.innerHTML = loadedCategoriesList.map((cat, idx) => `
-    <option value="${cat}" ${idx===0?'selected':''}>${globalCategoriesData[cat][0]?.icon || '📂'} ${cat}</option>
-  `).join("");
+  selectEl.innerHTML = loadedCategoriesList.map((cat, idx) => `<option value="${cat}" ${idx===0?'selected':''}>${globalCategoriesData[cat][0]?.icon || '📂'} ${cat}</option>`).join("");
   renderAdminEditor();
 }
 
@@ -363,52 +316,26 @@ function renderAdminEditor(){
   const cat = document.getElementById("catSelect").value;
   const items = globalCategoriesData[cat] || [];
   const container = document.getElementById("adminItemsEditor");
-  if(items.length === 0){
-    container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`;
-    return;
-  }
+  if(items.length === 0){ container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`; return; }
   container.innerHTML = items.map((it, idx) => `
     <div class="control-box">
       <div class="avail-box">
-        <label>
-          <input type="checkbox" id="avail_${idx}" ${it.available !== false ? 'checked' : ''} onchange="toggleAvailability(${idx}, this.checked)">
-          <span>🟢 Available (دستیاب ہے)</span>
-        </label>
-        <span style="font-size:11px; color:${it.available !== false ? 'var(--mid)' : 'var(--price)'}; font-weight:bold;">
-          ${it.available !== false ? '✅ شاپ پر شو ہو رہا ہے' : '❌ نا دستیاب (ویب سائٹ پر لاک ہے)'}
-        </span>
+        <label><input type="checkbox" id="avail_${idx}" ${it.available !== false ? 'checked' : ''} onchange="toggleAvailability(${idx}, this.checked)"><span>🟢 Available (دستیاب ہے)</span></label>
+        <span style="font-size:11px; color:${it.available !== false ? 'var(--mid)' : 'var(--price)'}; font-weight:bold;">${it.available !== false ? '✅ شاپ پر شو ہو رہا ہے' : '❌ نا دستیاب (ویب سائٹ پر لاک ہے)'}</span>
       </div>
-
       <div class="item-edit-row">
-        <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})" title="تصویر تبدیل کریں">
-          ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}
-        </div>
+        <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})">${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}</div>
         <div style="flex:1;">
           <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام" oninput="markUnsaved()">
           <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name" oninput="markUnsaved()">
         </div>
       </div>
       <div style="display:flex; gap:6px; margin-bottom:8px;">
-        <button class="btn-secondary" style="background:#FDECEA; color:var(--price); flex:1; padding:6px;" onclick="triggerImgUpload(${idx})">🖼️ تصویر بدلیں</button>
-        <button class="btn-danger" style="flex:1; padding:6px;" onclick="deleteAdminItem(${idx})">🗑️ آئٹم ڈیلیٹ کریں</button>
+        <button class="btn-secondary" style="background:#FDECEA; color:var(--price); flex:1;" onclick="triggerImgUpload(${idx})">🖼️ تصویر بدلیں</button>
+        <button class="btn-danger" style="flex:1;" onclick="deleteAdminItem(${idx})">🗑️ آئٹم ڈیلیٹ کریں</button>
       </div>
       <input type="file" id="file_${idx}" style="display:none;" accept="image/*" onchange="handleImageUpload(event, ${idx})">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت</span>
-        <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;">
-          <input type="checkbox" ${it.autoCalc ? 'checked' : ''} onchange="toggleAutoCalc(${idx}, this.checked)"> خودکار حساب
-        </label>
-      </div>
-      <div id="units_area_${idx}">
-        ${it.units.map((u, uIdx) => `
-          <div class="unit-row">
-            <input type="number" value="${u.rate}" id="rate_${idx}_${uIdx}" style="flex:1;" oninput="onRateInput(${idx}, ${uIdx})">
-            <input type="text" value="${u.label}" id="label_${idx}_${uIdx}" style="flex:1.5;" oninput="markUnsaved()">
-            <button class="btn-danger" style="padding:8px 10px;" onclick="removeUnit(${idx}, ${uIdx})">✕</button>
-          </div>
-        `).join("")}
-      </div>
-      <button class="btn-secondary" style="width:100%; margin-top:6px; background:var(--leaf); color:var(--dark);" onclick="addUnit(${idx})">＋ سائز/قیمت شامل کریں</button>
+      <div id="units_area_${idx}">${it.units.map((u, uIdx) => `<div class="unit-row"><input type="number" value="${u.rate}" id="rate_${idx}_${uIdx}" style="flex:1;"><input type="text" value="${u.label}" id="label_${idx}_${uIdx}" style="flex:1.5;"></div>`).join("")}</div>
     </div>
   `).join("");
 }
@@ -416,14 +343,10 @@ function renderAdminEditor(){
 function toggleAvailability(idx, val){
   const cat = document.getElementById("catSelect").value;
   globalCategoriesData[cat][idx].available = val;
-  markUnsaved();
-  renderAdminEditor();
+  markUnsaved(); renderAdminEditor();
 }
 
-function markUnsaved(){
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں";
-  document.getElementById("saveStatus").style.color = "var(--price)";
-}
+function markUnsaved(){ document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں"; }
 function triggerImgUpload(idx){ document.getElementById("file_" + idx).click(); }
 function handleImageUpload(event, idx){
   const file = event.target.files[0];
@@ -432,88 +355,9 @@ function handleImageUpload(event, idx){
     reader.onload = function(e){
       const cat = document.getElementById("catSelect").value;
       globalCategoriesData[cat][idx].image = e.target.result;
-      renderAdminEditor();
-      markUnsaved();
-      showToast("✅ تصویر اپ لوڈ ہو گئی!");
-    };
-    reader.readAsDataURL(file);
+      renderAdminEditor(); markUnsaved();
+    }; reader.readAsDataURL(file);
   }
-}
-function addNewItemToCurrentCategory(){
-  const cat = document.getElementById("catSelect").value;
-  if(!cat) return;
-  if(!globalCategoriesData[cat]) globalCategoriesData[cat] = [];
-  globalCategoriesData[cat].unshift({
-    name: "نیا آئٹم", name_roman: "New Item", image: "", icon: "🛒", available: true, autoCalc: true, units: [{label: "KG", rate: 0}]
-  });
-  renderAdminEditor();
-  markUnsaved();
-  showToast("✅ نیا آئٹم شامل کر دیا گیا ہے");
-}
-function deleteAdminItem(idx){
-  if(!confirm("کیا آپ اس آئٹم کو حذف کرنا چاہتے ہیں؟")) return;
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat].splice(idx, 1);
-  renderAdminEditor();
-  markUnsaved();
-  showToast("✅ آئٹم ہٹا دیا گیا");
-}
-function toggleAutoCalc(idx, val){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][idx].autoCalc = val;
-  markUnsaved();
-}
-function onRateInput(idx, uIdx){
-  markUnsaved();
-  const cat = document.getElementById("catSelect").value;
-  let item = globalCategoriesData[cat][idx];
-  let val = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-  item.units[uIdx].rate = val;
-  if(item.autoCalc && uIdx === 0){
-    let baseRate = val;
-    item.units.forEach((u, i) => {
-      if(i > 0){
-        let lbl = u.label.toLowerCase();
-        let calculated = baseRate;
-        if(lbl.includes("آدھا") || lbl.includes("half")) calculated = Math.round(baseRate / 2);
-        else if(lbl.includes("پاؤ") || lbl.includes("pao")) calculated = Math.round(baseRate / 4);
-        else if(lbl.includes("دڑی") || lbl.includes("5") || lbl.includes("dari")) calculated = baseRate * 5;
-        u.rate = calculated;
-        const inputEl = document.getElementById(`rate_${idx}_${i}`);
-        if(inputEl) inputEl.value = calculated;
-      }
-    });
-  }
-}
-function addUnit(itemIdx){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
-  renderAdminEditor();
-  markUnsaved();
-}
-function removeUnit(itemIdx, unitIdx){
-  const cat = document.getElementById("catSelect").value;
-  globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
-  renderAdminEditor();
-  markUnsaved();
-}
-function saveAllItemChanges(){
-  const cat = document.getElementById("catSelect").value;
-  const items = globalCategoriesData[cat];
-  items.forEach((it, idx) => {
-    it.name = document.getElementById(`name_${idx}`).value;
-    it.name_roman = document.getElementById(`roman_${idx}`).value;
-    it.available = document.getElementById(`avail_${idx}`).checked;
-    it.units.forEach((u, uIdx) => {
-      u.rate = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-      u.label = document.getElementById(`label_${idx}_${uIdx}`).value;
-    });
-  });
-  localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
-  document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
-  document.getElementById("saveStatus").style.color = "var(--mid)";
-  showToast("✅ تمام تبدیلیاں اور ریٹس محفوظ ہو گئے!");
-  playLoudBeep();
 }
 
 async function parseAndAddWhatsAppOrder(){
@@ -521,75 +365,16 @@ async function parseAndAddWhatsAppOrder(){
   let name = document.getElementById("waCustName").value.trim() || "واٹس ایپ کسٹمر";
   let phone = document.getElementById("waCustPhone").value.trim() || "03000000000";
   let address = document.getElementById("waCustAddr").value.trim() || "Mingora Swat";
-
-  if(!rawText){
-    showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
-    return;
-  }
-  let lines = rawText.split('\n');
-  lines.forEach(line => {
-    let l = line.toLowerCase();
-    if(l.includes("نام") || l.includes("name")) {
-      let parts = line.split(/[:\-]/);
-      if(parts[1]) name = parts[1].trim();
-    }
-    if(l.includes("فون") || l.includes("phone") || l.includes("03")) {
-      let match = line.match(/03[0-9]{9}/);
-      if(match) phone = match[0];
-    }
-    if(l.includes("پتہ") || l.includes("address")) {
-      let parts = line.split(/[:\-]/);
-      if(parts[1]) address = parts[1].trim();
-    }
-  });
-
+  if(!rawText) return;
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  
-  let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
-    timeZone: 'Asia/Karachi', 
-    weekday: 'short', 
-    day: 'numeric', 
-    month: 'short', 
-    year: 'numeric',
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: true 
-  }).format(new Date());
-
+  let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
   let formattedSummary = `Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
-
-  let newOrd = {
-    code: orderCode, name: name, phone: phone, address: address,
-    items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""),
-    timestamp: nowFormatted, status: "pending"
-  };
-
-  if(SHEET_URL){
-    try{
-      await fetch(SHEET_URL, {
-        method: "POST", mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newOrd)
-      });
-    }catch(e){}
-  }
+  let newOrd = { code: orderCode, name: name, phone: phone, address: address, items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""), timestamp: nowFormatted, status: "pending" };
+  if(SHEET_URL){ try{ await fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newOrd) }); }catch(e){} }
   showToast("✅ آرڈر گوگل شیٹ پر بھیج دیا گیا ہے!");
   playLoudBeep();
-  document.getElementById("waRawText").value = "";
-  document.getElementById("waCustName").value = "";
-  document.getElementById("waCustPhone").value = "";
-  document.getElementById("waCustAddr").value = "";
   setTimeout(() => { renderOrders(); }, 1500);
-  switchTab('orders', false);
-}
-
-function parseExactRecordedTime(rawTimestamp) {
-  if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
-  let str = String(rawTimestamp).trim();
-  if (str.startsWith("'")) {
-    str = str.substring(1);
-  }
-  return str;
+  switchTab('orders');
 }
 
 async function fetchOrdersFromSheet(){
@@ -607,41 +392,23 @@ async function fetchOrdersFromSheet(){
       let codeVal = row.code || row[0];
       if(codeVal && codeVal.toString().includes("SJ-") && !seenCodes.has(codeVal)){
         seenCodes.add(codeVal);
-        
         let rawTime = row.timestamp || row[6] || "N/A";
-        let exactOrderTimeStr = parseExactRecordedTime(rawTime);
         let unifiedOtp = codeVal ? codeVal.toString().replace("SJ-", "") : "0000";
         let st = (row.status || row[7]) ? (row.status || row[7]).toString().toLowerCase().trim() : 'pending';
 
-        let itemObj = {
-          id: "sh_" + index,
-          code: codeVal,
-          name: row.name || row[1] || "Unknown",
-          phone: row.phone || row[2] || "03000000000",
-          address: row.address || row[3] || "Mingora Swat",
-          itemsSummary: row.items || row[4] || "",
-          total: parseFloat(row.total || row[5]) || 0,
-          otpCode: unifiedOtp,
-          displayTime: exactOrderTimeStr,
-          status: st,
-          rawIndex: index
-        };
+        if(completedLocalSet.has(codeVal)){ st = 'completed'; }
 
-        if(st === 'completed') {
-          completedOrders.push(itemObj);
-        } else {
-          pendingOrders.push(itemObj);
-        }
+        let itemObj = { id: "sh_" + index, code: codeVal, name: row.name || row[1] || "Unknown", phone: row.phone || row[2] || "03000000000", address: row.address || row[3] || "Mingora Swat", itemsSummary: row.items || row[4] || "", total: parseFloat(row.total || row[5]) || 0, otpCode: unifiedOtp, displayTime: rawTime, status: st };
+
+        if(st === 'completed') { completedOrders.push(itemObj); } 
+        else { pendingOrders.push(itemObj); }
       }
     });
 
     pendingOrders.reverse();
     completedOrders.reverse();
-
     return [...pendingOrders, ...completedOrders];
-  }catch(e){
-    return [];
-  }
+  }catch(e){ return []; }
 }
 
 let cachedOrdersCount = 0;
@@ -657,9 +424,7 @@ let latestOrdersCache = [];
 
 async function renderOrders(){
   latestOrdersCache = await fetchOrdersFromSheet();
-  
-  let totalSales = 0;
-  let pendingCount = 0;
+  let totalSales = 0, pendingCount = 0;
   latestOrdersCache.forEach(o => {
     if(o.status === 'completed') totalSales += o.total;
     else pendingCount++;
@@ -668,99 +433,46 @@ async function renderOrders(){
   document.getElementById("statPendingOrders").textContent = pendingCount;
   document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
 
-  if(latestOrdersCache.length === 0){
-    document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
-    return;
-  }
-  
-  if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
-    playLoudBeep();
-    showToast("🔔 نیا آرڈر موصول ہوا ہے!");
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification("SJ Foods", { body: "🚨 نیا آرڈر موصول ہوا ہے! فوری چیک کریں۔", icon: "favicon.ico" });
-    }
-  }
+  if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){ playLoudBeep(); showToast("🔔 نیا آرڈر موصول ہوا ہے!"); }
   cachedOrdersCount = latestOrdersCache.length;
-
   renderOrdersDOM();
 }
 
 function requestLocation(phone){
   let cleanPhone = phone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-  let msg = "Mohtaram Customer! Meharbani karke apne ghar ya dukan ki Live Location WhatsApp par share kar dein taake delivery boy asani se pohnch sake. Shukriya!";
+  if(cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
+  let msg = "Mohtaram Customer! Meharbani karke apne ghar ya dukan ki Live Location WhatsApp par share kar dein. Shukriya!";
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-}
-
-let dragSrcIndex = null;
-
-function handleDragStart(e, index) {
-  dragSrcIndex = index;
-  e.target.classList.add('dragging');
-}
-
-function handleDragOver(e) {
-  if (e.preventDefault) e.preventDefault();
-  return false;
-}
-
-function handleDrop(e, targetIndex) {
-  if (e.stopPropagation) e.stopPropagation();
-  if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
-    const movedItem = latestOrdersCache.splice(dragSrcIndex, 1)[0];
-    latestOrdersCache.splice(targetIndex, 0, movedItem);
-    renderOrdersDOM();
-  }
-  return false;
-}
-
-function handleDragEnd(e) {
-  e.target.classList.remove('dragging');
 }
 
 function renderOrdersDOM(){
   const area = document.getElementById("ordersArea");
-  const orders = latestOrdersCache;
-
-  area.innerHTML = orders.map((o, index) => {
+  area.innerHTML = latestOrdersCache.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
 
     return `
-      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" 
-           id="card-${o.id}" 
-           draggable="true" 
-           ondragstart="handleDragStart(event, ${index})" 
-           ondragover="handleDragOver(event)" 
-           ondrop="handleDrop(event, ${index})" 
-           ondragend="handleDragEnd(event)">
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header">
-          <span class="drag-handle" title="ترتیب بدلنے کے لیے اوپر نیچے کریں">⣿</span>
-          <span style="font-size:13.5px; direction:auto; flex:1;" onclick="toggleAccordion('${o.id}')">
-            📌 ${o.code} — ${o.name}
-            ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
+          <span class="drag-handle">⣿</span>
+          <span style="font-size:13.5px; flex:1;" onclick="toggleAccordion('${o.id}')">
+            📌 ${o.code} — ${o.name} ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
           </span>
-          <div style="display:flex; align-items:center; gap:4px;" onclick="toggleAccordion('${o.id}')">
-            <span class="time-badge ${isCompleted ? 'done' : ''}">
-              ${isCompleted ? '✅ Completed' : '🕒 ' + o.displayTime}
-            </span>
+          <div onclick="toggleAccordion('${o.id}')">
+            <span class="time-badge ${isCompleted ? 'done' : ''}">${isCompleted ? '✅ Completed' : '🕒 ' + o.displayTime}</span>
           </div>
         </div>
         <div class="chat-body" dir="auto">
           <div style="font-size:13.5px; line-height:1.7;">
-            Phone: <span dir="ltr">${o.phone}</span> 
-            <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Call Direct</a><br>
+            Phone: <span dir="ltr">${o.phone}</span> <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Call Direct</a><br>
             Address: ${o.address}<br>
             OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
-            Order Time: <b>${o.displayTime}</b><br>
-            Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto; text-align:right;" dir="auto">${o.itemsSummary}</div>
+            Order Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;" dir="auto">${o.itemsSummary}</div>
             Total Amount: <b>Rs. ${o.total}</b><br>
             Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
           </div>
-          
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
-            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Completed & Secured</div>`}
@@ -774,18 +486,16 @@ function renderOrdersDOM(){
 async function closeAndThankOrder(id, code, phone){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
+  // 📌 1. لوکل اپڈیٹ: فوراً Completed کریں اور بلنکنگ بند کریں
+  completedLocalSet.add(code);
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
-  let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "");
-  
-  if(!targetPhone || targetPhone.length < 10) {
-    targetPhone = prompt("⚠️ اس آرڈر کے لیے کسٹمر کا درست واٹس ایپ نمبر درج کریں:", "92");
-    if(!targetPhone) return;
-  }
-
   if(cacheMatch) cacheMatch.status = 'completed';
+  
+  renderOrdersDOM();
 
+  // 📌 2. گوگل شیٹ پر اسٹیٹس اپڈیٹ کی ریکویسٹ بھیجیں
   try {
-    await fetch(SHEET_URL, {
+    fetch(SHEET_URL, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
@@ -793,54 +503,16 @@ async function closeAndThankOrder(id, code, phone){
     });
   } catch(e){}
 
+  // 📌 3. کسٹمر کو واٹس ایپ پر شکریہ میسج بھیجیں
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  if(cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
   const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
   
-  let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
-  if(cleanPhone.startsWith("0")) {
-    cleanPhone = "92" + cleanPhone.slice(1);
-  }
-  
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-
-  showToast("✅ Order closed and customer WhatsApp opened!");
-  setTimeout(() => { renderOrders(); }, 1000);
+  showToast("✅ Order Closed Successfully!");
 }
 
-function printReceipt(code, name, phone, address, items, total, otp, orderTime){
-  const w = window.open('', '_blank');
-  w.document.write(`
-    <html dir="rtl">
-    <head><title>Receipt ${code}</title></head>
-    <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto; text-align:right;">
-      <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
-      <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
-      <hr style="border:dashed 1px #000;">
-      <p><b>Order Code:</b> ${code}</p>
-      <p><b>Order Time:</b> ${orderTime || 'N/A'}</p>
-      <p><b>Name:</b> ${name}</p>
-      <p><b>Phone:</b> <span dir="ltr">${phone}</span></p>
-      <p><b>Address:</b> ${address}</p>
-      <p><b>OTP Code:</b> <span style="font-size:18px;" dir="ltr"><b>${otp}</b></span></p>
-      <hr style="border:dashed 1px #000;">
-      <p><b>Order Details:</b></p>
-      <div dir="auto">${items}</div>
-      <hr style="border:dashed 1px #000;">
-      <h3 style="text-align:center;">Total: Rs. ${total}</h3>
-      <br>
-      <div style="text-align:center; font-size:11px; line-height:1.5;">سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا۔</div>
-    </body>
-    </html>
-  `);
-  w.document.close();
-  w.focus();
-  setTimeout(()=> { w.print(); w.close(); }, 500);
-}
-
-// 📌 پیج لوڈ ہوتے ہی #products جیسے پرانے ہیش کو صاف کرنا تاکہ کلک بلاک نہ ہو
-if(window.location.hash){
-  history.replaceState(null, "", window.location.pathname);
-}
-
+if(window.location.hash){ history.replaceState(null, "", window.location.pathname); }
 renderOrders();
 setInterval(renderOrders, 4000);
 </script>

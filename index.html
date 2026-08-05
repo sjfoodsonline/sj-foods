@@ -86,7 +86,7 @@
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-  /* 📌 فچرز ٹیکسٹ پٹی کو ٹچ/سوائپ فرینڈلی بنانا */
+  /* 📌 بغیر جھٹکے کے سہموار اور مکھن کی طرح چلنے والی ٹچ پٹی */
   .features-scroll-wrap{ 
     overflow-x: auto; 
     position: relative; 
@@ -343,14 +343,17 @@
     <div class="cover-slider-track" id="coverSliderTrack"></div>
   </div>
 
+  <!-- 📌 اضافی اور ملتے جلتے زبردست الفاظ کے ساتھ لمبی پٹی -->
   <div class="features-scroll-wrap" id="featuresWrap">
     <div class="features-scroll" id="featuresTrack">
-      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
-      <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
-      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
-      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
-      <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
-      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
+      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Organic</span></div>
+      <div class="feature-card"><span class="ic">💎</span><span class="tx">100% Quality Guaranteed</span></div>
+      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fastest Doorstep Delivery</span></div>
+      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure & Easy Payments</span></div>
+      <div class="feature-card"><span class="ic">💬</span><span class="tx">Instant WhatsApp Ordering</span></div>
+      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank Transfer</span></div>
+      <div class="feature-card"><span class="ic">🛒</span><span class="tx">Best Market Rates</span></div>
+      <div class="feature-card"><span class="ic">🌟</span><span class="tx">Honest Weight & Care</span></div>
     </div>
   </div>
 
@@ -1007,24 +1010,36 @@ function closeLightboxOverlay(event){
 }
 document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
 
-// 📌 فچرز ٹیکسٹ پٹی کا آٹو لوپ اور ٹچ کنٹرول اسکرپٹ
+// 📌 100% ہموار اور بغیر کسی جھٹکے کے مسلسل چلنے والا آٹو لوپ اسکرپٹ
 const featWrap = document.getElementById('featuresWrap');
-let featAutoScroll = true;
+const featTrack = document.getElementById('featuresTrack');
 
-setInterval(() => {
-  if (featWrap && featAutoScroll) {
-    if (Math.abs(featWrap.scrollLeft) >= (featWrap.scrollWidth - featWrap.clientWidth)) {
+if(featTrack) {
+  // ڈپلیکیٹ عناصر شامل کرنا تاکہ ختم ہونے پر جھٹکا نہ آئے
+  featTrack.innerHTML += featTrack.innerHTML;
+}
+
+let featAutoScroll = true;
+let isUserInteracting = false;
+
+function autoScrollLoop() {
+  if (featWrap && featAutoScroll && !isUserInteracting) {
+    featWrap.scrollLeft -= 0.8;
+    
+    // اگر ہم آدھی لسٹ مکمل کر لیں تو خاموشی سے واپس پہلے حصے پر شفٹ کر دیں
+    if (Math.abs(featWrap.scrollLeft) >= featTrack.scrollWidth / 2) {
       featWrap.scrollLeft = 0;
-    } else {
-      featWrap.scrollLeft -= 1;
     }
   }
-}, 30);
+  requestAnimationFrame(autoScrollLoop);
+}
+
+requestAnimationFrame(autoScrollLoop);
 
 if(featWrap) {
-  featWrap.addEventListener('touchstart', () => { featAutoScroll = false; }, {passive: true});
+  featWrap.addEventListener('touchstart', () => { isUserInteracting = true; }, {passive: true});
   featWrap.addEventListener('touchend', () => { 
-    setTimeout(() => { featAutoScroll = true; }, 2500);
+    setTimeout(() => { isUserInteracting = false; }, 2000);
   });
 }
 

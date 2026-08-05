@@ -22,7 +22,7 @@
     ],
     "available": true,
     "image": "products/poultry-1-1785581561521.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Murgi (Farmi, Chhoti Saaf Shuda)"
   },
   {
@@ -87,7 +87,7 @@
     ],
     "available": true,
     "image": "products/poultry-6-1785580260811.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "Wings (Farmi Murgi)"
   },
   {
@@ -117,7 +117,7 @@
     ],
     "available": true,
     "image": "products/poultry-8-1785580352762.jpg",
-    "featured": false,
+    "featured": true,
     "name_roman": "🐾 Panje (Farmi Murgi)"
   }
 ]

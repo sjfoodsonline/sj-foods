@@ -334,8 +334,11 @@
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
+
+// 📌 ایس جے فوڈز کا آفیشل اور واحد واٹس ایپ نمبر (تمام اِن کمنگ اور اؤٹ گوئنگ کے لیے)
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
+
 let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
@@ -458,11 +461,11 @@ async function loadSettings(){
   try{
     const res = await fetch("settings.json", {cache:"no-store"});
     const s = await res.json();
-    if(s.whatsapp) SHOP_WHATSAPP = s.whatsapp;
-    if(s.pay_number){
-      SHOP_PAY_NUMBER = s.pay_number;
-      document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
-    }
+    // 📌 پچھلے پرانے نمبر کو اوور رائڈ کر کے پکا 0315-5166034 رکھنا
+    SHOP_WHATSAPP = "923155166034";
+    SHOP_PAY_NUMBER = "0315-5166034";
+    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
+
     if(s.cover_image && !coverImagesList.includes(s.cover_image)){
       coverImagesList.unshift(s.cover_image);
       setupCoverSlider();
@@ -471,7 +474,10 @@ async function loadSettings(){
     if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
     if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
     if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
-  }catch(e){}
+  }catch(e){
+    SHOP_WHATSAPP = "923155166034";
+    SHOP_PAY_NUMBER = "0315-5166034";
+  }
 }
 
 function setupCoverSlider(){
@@ -688,9 +694,9 @@ document.getElementById("search").oninput = (e) => renderMainView(e.target.value
 
 document.getElementById("copyNumBtn").onclick = async ()=>{
   try{
-    await navigator.clipboard.writeText(SHOP_PAY_NUMBER.replace(/-/g,""));
+    await navigator.clipboard.writeText("03155166034");
     showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){ showToast("نمبر: " + SHOP_PAY_NUMBER); }
+  }catch(e){ showToast("نمبر: 0315-5166034"); }
 };
 
 const payCod = document.getElementById("payCod");
@@ -720,7 +726,7 @@ function sendFeedbackWhatsApp(){
   let text = document.getElementById("fbText").value.trim();
   if(!text){ alert("براہ کرم اپنا فیڈ بیک یا رائے درج کریں!"); return; }
   let fbMsg = `SJ Foods Online — Customer Feedback\n\nName: ${name}\nFeedback: ${text}`;
-  window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(fbMsg)}`, "_blank");
+  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(fbMsg)}`, "_blank");
 }
 
 document.getElementById("shareBtn").onclick = async () => {
@@ -773,7 +779,6 @@ document.getElementById("waBtn").onclick = () => {
 
   let formattedCleanReceipt = `Payment Method: ${payMethodClean}<br>Items Summary:<br>` + receiptItems;
 
-  // 📌 بالکل ساکت پاکستان ٹائم بنانے کی لاجک
   let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
     timeZone: 'Asia/Karachi', 
     weekday: 'short', 
@@ -794,7 +799,8 @@ document.getElementById("waBtn").onclick = () => {
     }));
   } catch(e){}
 
-  window.open(`https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+  // 📌 آرڈر بھیجنے کے لیے صرف 0315-5166034 (923155166034) کا واٹس ایپ کھلے گا
+  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ Order sent to WhatsApp and saved!");
 };
 

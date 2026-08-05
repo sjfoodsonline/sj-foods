@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — ایڈمن کنترل سینٹر</title>
+<title>SJ Foods — ایڈمن کنٹرول سینٹر</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -35,7 +35,7 @@
   
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   
-  /* Blinking Red Border jab tak confirm na ho */
+  /* Blinking Red Border جب تک سامان ڈلیور نہ ہو */
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -46,7 +46,7 @@
     background: #FFFDE7;
   }
   
-  /* Calm Green jab confirm/complete ho jaye */
+  /* Calm Green جب ڈلیوری مکمل ہو جائے */
   .chat-item.completed {
     background: #F1F8E9 !important;
     border-color: #81C784 !important;
@@ -69,7 +69,7 @@
     color: #FFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 4px; background: #D32F2F;
   }
 
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700; border:none; cursor:pointer;}
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700; border:none; cursor:pointer;}
   
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
@@ -77,6 +77,13 @@
   }
   .toast.show{opacity:1; top:26px;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+
+  /* Thermal Print Specific Style */
+  @media print {
+    body * { visibility: hidden; }
+    #printableReceipt, #printableReceipt * { visibility: visible; }
+    #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; font-family: Arial, sans-serif; padding: 10px; color: #000; }
+  }
 </style>
 </head>
 <body>
@@ -112,6 +119,9 @@
   
   <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
 </div>
+
+<!-- Hidden container for thermal printing -->
+<div id="printableReceipt" style="display:none;"></div>
 
 <div class="toast" id="toast"></div>
 
@@ -183,6 +193,33 @@
 براہ کرم اس میسج کا جواب دے کر یا 'OK' لکھ کر کنفرم کر دیں۔ شکریہ! ✨`;
 
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+
+  // Thermal Printer Function
+  window.printThermalReceipt = function(code) {
+    let o = latestOrdersCache.find(x => x.code === code);
+    if(!o) return;
+    let printDiv = document.getElementById('printableReceipt');
+    printDiv.style.display = 'block';
+    printDiv.innerHTML = `
+      <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:5px;">SJ FOODS ONLINE</div>
+      <div style="text-align:center; font-size:12px; margin-bottom:10px;">Al Basit Plaza, Haji Baba Road, Mingora Swat</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:13px;"><b>Order ID:</b> ${o.code}</div>
+      <div style="font-size:13px;"><b>OTP Code:</b> ${o.otpCode}</div>
+      <div style="font-size:13px;"><b>Time:</b> ${o.displayTime}</div>
+      <div style="font-size:13px;"><b>Name:</b> ${o.name}</div>
+      <div style="font-size:13px;"><b>Phone:</b> ${o.phone}</div>
+      <div style="font-size:13px;"><b>Address:</b> ${o.address}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:13px;"><b>Items:</b><br>${o.itemsSummary}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:15px; font-weight:bold; text-align:center;">Total: Rs. ${o.total}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="text-align:center; font-size:12px; margin-top:10px;">شکریہ! دوبارہ تشریف لائیں۔</div>
+    `;
+    window.print();
+    setTimeout(() => { printDiv.style.display = 'none'; }, 1000);
   }
 
   let activeAccordionId = null;
@@ -269,11 +306,11 @@
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:13.5px; direction:auto;">
               📌 ${o.code} — ${o.name}
-              ${!isCompleted ? `<span class="challenge-tag">تصدیق باقی</span>` : ''}
+              ${!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : ''}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
               <span class="time-badge ${isCompleted ? 'done' : ''}">
-                ${isCompleted ? '✅ پرسکون گرین (مکمل)' : '⏳ بلنکنگ ریڈ'}
+                ${isCompleted ? '✅ گرین (مکمل)' : '⏳ بلنکنگ ریڈ'}
               </span>
             </div>
           </div>
@@ -287,14 +324,17 @@
               Order Time: <b>${o.displayTime}</b><br>
               Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;" dir="auto">${o.itemsSummary}</div>
               Total Amount: <b>Rs. ${o.total}</b><br>
-              Status: <b>${isCompleted ? 'Completed' : 'Pending Confirmation'}</b>
+              Status: <b>${isCompleted ? 'Completed' : 'Pending Delivery'}</b>
             </div>
             
-            <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <div style="margin-top:12px; display:flex; gap:5px; flex-wrap:wrap;">
               ${!isCompleted ? `
-                <button class="btn-secondary" style="flex:1; background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیق کا میسج بھیجیں</button>
-                <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.code}', '${o.phone}')">✅ کنفرم & کلوز کریں</button>
-              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 آرڈر مکمل اور محفوظ ہو چکا ہے</div>`}
+                <button class="btn-secondary" style="background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیق</button>
+              ` : ''}
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}')">🖨️ پرنٹ</button>
+              ${!isCompleted ? `
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل ہو گئی</button>
+              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 آرڈر ڈلیور اور مکمل ہو چکا ہے</div>`}
             </div>
           </div>
         </div>
@@ -302,20 +342,20 @@
     }).join("");
   }
 
-  window.closeAndThankOrder = async function(code, phone){
-    if(!confirm("کیا آپ اس آرڈر کو کنفرم کر کے مکمل کرنا چاہتے ہیں؟")) return;
+  window.completeOrderAndThank = async function(code, phone){
+    if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل کرنا چاہتے ہیں؟")) return;
     
     try {
       await update(ref(db, 'orders/' + code), { status: "completed" });
     } catch(e){}
 
-    const msg = `السلام علیکم! محترم صارف، آپ کے آرڈر [${code}] کی تصدیق ہو گئی ہے اور ہم نے اس پر کام شروع کر دیا ہے۔ SJ Foods Online کا شکریہ! 🌿`;
+    const msg = `السلام علیکم! محترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Foods Online کا شکریہ! 🌿`;
     
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
     
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-    showToast("✅ آرڈر سبز (Completed) ہو گیا ہے!");
+    showToast("✅ آرڈر مکمل (Green) ہو گیا ہے!");
   }
 </script>
 </body>

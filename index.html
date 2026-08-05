@@ -60,7 +60,6 @@
   .modal-box p { font-size: 14.5px; color: var(--ink); line-height: 1.8; text-align: justify; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
 
-  /* 🖼️ بانی کارڈ اور فریم کی درستگی */
   .owner-card {
     text-align: center; background: var(--leaf); border: 1.5px solid #A5D6A7; border-radius: 16px; padding: 16px 12px; margin-bottom: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
@@ -87,9 +86,26 @@
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-  .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-  .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
-  @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+  /* 📌 فچرز ٹیکسٹ پٹی کو ٹچ/سوائپ فرینڈلی بنانا */
+  .features-scroll-wrap{ 
+    overflow-x: auto; 
+    position: relative; 
+    padding: 10px 0; 
+    background: #F9F8F3; 
+    border-top: 1px solid var(--line); 
+    border-bottom: 1px solid var(--line); 
+    scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch; 
+    cursor: grab;
+  }
+  .features-scroll-wrap::-webkit-scrollbar { display: none; }
+
+  .features-scroll{ 
+    display: flex; 
+    width: max-content; 
+    gap: 12px; 
+    padding: 0 16px;
+  }
 
   .feature-card{
     flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -327,7 +343,7 @@
     <div class="cover-slider-track" id="coverSliderTrack"></div>
   </div>
 
-  <div class="features-scroll-wrap">
+  <div class="features-scroll-wrap" id="featuresWrap">
     <div class="features-scroll" id="featuresTrack">
       <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
       <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
@@ -565,7 +581,6 @@ async function loadData(){
         let isAvail = true;
         let itemImg = it.image || "";
 
-        // 📌 ایڈمن پینل سے دودھ اور ہر پروڈکٹ کا لائیو ڈیٹا
         if (adminCatSaved[catName] && adminCatSaved[catName][ii]) {
           isAvail = adminCatSaved[catName][ii].available !== false;
           if (adminCatSaved[catName][ii].image) {
@@ -991,6 +1006,27 @@ function closeLightboxOverlay(event){
   }
 }
 document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
+
+// 📌 فچرز ٹیکسٹ پٹی کا آٹو لوپ اور ٹچ کنٹرول اسکرپٹ
+const featWrap = document.getElementById('featuresWrap');
+let featAutoScroll = true;
+
+setInterval(() => {
+  if (featWrap && featAutoScroll) {
+    if (Math.abs(featWrap.scrollLeft) >= (featWrap.scrollWidth - featWrap.clientWidth)) {
+      featWrap.scrollLeft = 0;
+    } else {
+      featWrap.scrollLeft -= 1;
+    }
+  }
+}, 30);
+
+if(featWrap) {
+  featWrap.addEventListener('touchstart', () => { featAutoScroll = false; }, {passive: true});
+  featWrap.addEventListener('touchend', () => { 
+    setTimeout(() => { featAutoScroll = true; }, 2500);
+  });
+}
 
 loadData();
 loadSettings();

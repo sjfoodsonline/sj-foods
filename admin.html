@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — مکمل ایڈمن و آرڈر کنٹرول سینٹر (Firebase)</title>
+<title>SJ Foods — ایڈمن کنترل سینٹر</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
@@ -32,23 +32,10 @@
 
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Jameel Noori Nastaleeq",serif;}
-  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
-  textarea, input[type=text], select{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
-  }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
-  button{font-family:inherit; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
-  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
   
-  .tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
-  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   
+  /* Blinking Red Border jab tak confirm na ho */
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -59,11 +46,12 @@
     background: #FFFDE7;
   }
   
+  /* Calm Green jab confirm/complete ho jaye */
   .chat-item.completed {
     background: #F1F8E9 !important;
     border-color: #81C784 !important;
     animation: none !important;
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
@@ -71,77 +59,35 @@
   .chat-item.open .chat-body{display:block;}
 
   .time-badge{
-    font-family: monospace, sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 3px 6px;
-    border-radius: 6px;
-    direction: ltr;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    font-family: monospace, sans-serif; font-size: 11px; font-weight: 800;
+    padding: 3px 6px; border-radius: 6px; direction: ltr; display: flex; align-items: center; gap: 4px;
     background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
   }
   .time-badge.done { background: #E8F5E9; color: #1B5E20; }
 
-  @keyframes blinkChallenge {
-    0% { background: #D32F2F; }
-    50% { background: #FF1744; }
-    100% { background: #D32F2F; }
-  }
   .challenge-tag {
-    color: #FFF;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 4px;
-    letter-spacing: 0.5px;
-    animation: blinkChallenge 0.8s infinite;
+    color: #FFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 4px; background: #D32F2F;
   }
 
-  .control-box{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .item-edit-row{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
-  .item-edit-thumb{width:64px; height:64px; border-radius:12px; background:var(--leaf); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex:0 0 64px; cursor:pointer;}
-  .item-edit-thumb img{width:100%; height:100%; object-fit:cover;}
-  .unit-row{display:flex; gap:6px; align-items:center; margin-bottom:6px;}
-
-  .avail-box {
-    background: var(--leaf); padding: 6px 10px; border-radius: 8px; margin-bottom: 8px;
-    display: flex; align-items: center; justify-content: space-between; border: 1px solid #A5D6A7;
-  }
-  .avail-box label { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-
-  .floating-save-bar {
-    position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
-    background: rgba(255, 253, 248, 0.95); backdrop-filter: blur(8px);
-    border-top: 1.5px solid var(--line); padding: 12px 16px; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 -6px 20px rgba(0,0,0,0.1);
-  }
-
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700; border:none; cursor:pointer;}
+  
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
     padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;
   }
   .toast.show{opacity:1; top:26px;}
-  .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
-
-  body.rider-mode .dash-grid, body.rider-mode .tabs, body.rider-mode header p, body.rider-mode .card-analytics {display:none !important;}
-  body.rider-mode .chat-body {display:block !important;}
 </style>
 </head>
 <body>
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن پینل</h1>
-  <p>پروڈکٹس، ریٹس اور لائیو کسٹمر آرڈرز (Firebase Connected)</p>
+  <p>لائیو آرڈرز کنٹرول سینٹر (Firebase Connected)</p>
 </header>
 
 <div class="wrap">
-
-  <div class="dash-grid card-analytics">
+  <div class="dash-grid">
     <div class="dash-card">
       <div class="dash-lbl">📦 کل آرڈرز</div>
       <div class="dash-num" id="statTotalOrders">0</div>
@@ -156,55 +102,15 @@
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو آرڈرز</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', true)">➕ واٹس ایپ آرڈر</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🔒 پروڈکٹس و ریٹس</div>
-  </div>
-
-  <div id="secAddWA" style="display:none;">
-    <div class="card" style="border: 2px dashed var(--mid); background: #F4FBF7;">
-      <h3>📥 واٹس ایپ ڈائریکٹ آرڈر شامل کریں</h3>
-      <p>واٹس ایپ کا پورا میسج یہاں پیسٹ کریں؛ یہ خودکار طور پر نام، فون، پتہ اور اشیاء الگ کر کے فائر بیس میں محفوظ کر لے گا۔</p>
-      <input type="text" id="waCustName" placeholder="کسٹمر کا نام (اگر میسج میں نہ ہو)">
-      <input type="text" id="waCustPhone" placeholder="فون نمبر (اگر میسج میں نہ ہو)">
-      <input type="text" id="waCustAddr" placeholder="مکمل پتہ (اگر میسج میں نہ ہو)">
-      <textarea id="waRawText" rows="4" placeholder="یہاں کسٹمر کا پورا واٹس ایپ میسج پیسٹ کریں..."></textarea>
-      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="parseAndAddWhatsAppOrder()">➕ آرڈر درج کریں اور ان باکس میں بھیجیں</button>
+  <div class="card">
+    <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+    <div style="display:flex; gap:6px; margin-top:8px;">
+      <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
+      <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 ٹیسٹ بیل</button>
     </div>
   </div>
-
-  <div id="secOrders">
-    <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-      <div style="display:flex; gap:6px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
-        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="toggleRiderView()">🏍️ رائڈر موڈ</button>
-      </div>
-    </div>
-    
-    <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
-  </div>
-
-  <div id="secProducts" style="display:none;">
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-weight:700; color:var(--dark);">🔒 کیٹگری کنٹرول</span>
-        <select id="catSelect" onchange="renderAdminEditor()" style="width:65%; margin-bottom:0;">
-          <option value="">⏳ کیٹگریز لوڈ ہو رہی ہیں...</option>
-        </select>
-      </div>
-      <button class="btn-secondary" style="width:100%; background:var(--mid); color:#fff; margin-top:8px;" onclick="addNewItemToCurrentCategory()">＋ اس کیٹیگری میں نیا آئٹم شامل کریں</button>
-    </div>
-
-    <div id="adminItemsEditor"><div class="loading">⏳ اشیاء لوڈ ہو رہی ہیں...</div></div>
-  </div>
-
-</div>
-
-<div class="floating-save-bar" id="floatingSaveBar" style="display:none;">
-  <span id="saveStatus" style="font-size:12px; font-weight:700; color:var(--price);">⚠️ تبدیلیاں محفوظ نہیں ہیں</span>
-  <button class="btn-primary" style="background:var(--dark); width:auto; padding:8px 20px;" onclick="saveAllItemChanges()">💾 سیو کریں</button>
+  
+  <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -212,7 +118,7 @@
 <!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update, remove, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   const firebaseConfig = {
     databaseURL: "https://sj-foods-default-rtdb.firebaseio.com"
@@ -221,81 +127,12 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  const ADMIN_PASSWORD = "3799"; 
-  let isAdminAuthenticated = false;
-
-  window.checkAdminPasswordAndSwitch = function(tabName){
-    if(isAdminAuthenticated){
-      switchTab(tabName, true);
-      return;
-    }
-    let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
-    if(pass === ADMIN_PASSWORD){
-      isAdminAuthenticated = true;
-      showToast("🟢 پاسورڈ درست ہے!");
-      switchTab(tabName, true);
-    } else {
-      showToast("❌ غلط پاسورڈ!", true);
-    }
-  }
-
-  window.requestNotificationPermission = function() {
-    if ('Notification' in window) {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          showToast("🟢 نوٹیفکیشن ایکٹیو ہو گئے ہیں!");
-          new Notification("SJ Foods Admin", { body: "پینڈنگ آرڈر کے نوٹیفکیشن اب اسکرین پر آئیں گے۔", icon: "favicon.ico" });
-        } else {
-          showToast("⚠️ نوٹیفکیشن بلاک کر دیے گئے ہیں", true);
-        }
-      });
-    } else {
-      showToast("⚠️ آپ کا براؤزر نوٹیفکیشن کو سپورٹ نہیں کرتا", true);
-    }
-  }
-
-  window.toggleRiderView = function(){
-    document.body.classList.toggle("rider-mode");
-    showToast(document.body.classList.contains("rider-mode") ? "🏍️ رائڈر موڈ آن" : "⚙️ نارمل ایڈمن موڈ");
-  }
-
-  window.addEventListener('popstate', (event) => {
-    switchTab('orders', false);
-  });
-
-  window.switchTab = function(tabName, pushState = true){
-    if(pushState && history.state?.tab !== tabName){
-      history.pushState({tab: tabName}, "", "#" + tabName);
-    }
-    document.getElementById('tabOrdersBtn').className = 'tab';
-    document.getElementById('tabAddBtn').className = 'tab';
-    document.getElementById('tabProductsBtn').className = 'tab';
-    document.getElementById('secOrders').style.display = 'none';
-    document.getElementById('secAddWA').style.display = 'none';
-    document.getElementById('secProducts').style.display = 'none';
-    document.getElementById('floatingSaveBar').style.display = 'none';
-
-    if(tabName === 'orders'){
-      document.getElementById('tabOrdersBtn').className = 'tab active';
-      document.getElementById('secOrders').style.display = 'block';
-    } else if(tabName === 'addwa'){
-      document.getElementById('tabAddBtn').className = 'tab active';
-      document.getElementById('secAddWA').style.display = 'block';
-    } else {
-      document.getElementById('tabProductsBtn').className = 'tab active';
-      document.getElementById('secProducts').style.display = 'block';
-      document.getElementById('floatingSaveBar').style.display = 'flex';
-      initAdminCategories();
-    }
-  }
-
   function showToast(msg, isErr){
     const t = document.getElementById("toast");
     t.textContent = msg;
     t.className = "toast show" + (isErr ? " err" : "");
     setTimeout(()=> t.className = "toast", 2600);
   }
-  window.showToast = showToast;
 
   function playLoudBeep(){
     try{
@@ -319,327 +156,44 @@
       }
     }catch(e){}
   }
+  window.playTestSound = playLoudBeep;
 
-  let globalCategoriesData = {};
-  let loadedCategoriesList = [];
-
-  async function initAdminCategories(){
-    const selectEl = document.getElementById("catSelect");
-    let savedData = JSON.parse(localStorage.getItem("sj_admin_all_categories"));
-    if(savedData){
-      globalCategoriesData = savedData;
-      loadedCategoriesList = Object.keys(savedData);
-      populateCategoryDropdown();
-      return;
-    }
-    try{
-      const idxRes = await fetch("categories_index.json", {cache:"no-store"});
-      const index = await idxRes.json();
-      const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
-      globalCategoriesData = {};
-      index.forEach((entry, i) => {
-        let catName = entry.category;
-        globalCategoriesData[catName] = catResults[i].map(it => ({
-          name: it.name || "",
-          name_roman: it.name_roman || "",
-          image: it.image || "",
-          icon: entry.icon || "🛒",
-          available: it.available !== false,
-          autoCalc: true,
-          units: (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}]
-        }));
-      });
-      loadedCategoriesList = Object.keys(globalCategoriesData);
-      localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
-      populateCategoryDropdown();
-    }catch(e){
-      selectEl.innerHTML = `<option value="">⚠️ کیٹگریز لوڈ نہیں ہو سکیں</option>`;
-    }
-  }
-
-  function populateCategoryDropdown(){
-    const selectEl = document.getElementById("catSelect");
-    selectEl.innerHTML = loadedCategoriesList.map((cat, idx) => `
-      <option value="${cat}" ${idx===0?'selected':''}>${globalCategoriesData[cat][0]?.icon || '📂'} ${cat}</option>
-    `).join("");
-    renderAdminEditor();
-  }
-
-  window.renderAdminEditor = function(){
-    const cat = document.getElementById("catSelect").value;
-    const items = globalCategoriesData[cat] || [];
-    const container = document.getElementById("adminItemsEditor");
-    if(items.length === 0){
-      container.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">اس کیٹیگری میں کوئی آئٹم موجود نہیں</div>`;
-      return;
-    }
-    container.innerHTML = items.map((it, idx) => `
-      <div class="control-box">
-        <div class="avail-box">
-          <label>
-            <input type="checkbox" id="avail_${idx}" ${it.available !== false ? 'checked' : ''} onchange="toggleAvailability(${idx}, this.checked)">
-            <span>🟢 Available (دستیاب ہے)</span>
-          </label>
-          <span style="font-size:11px; color:${it.available !== false ? 'var(--mid)' : 'var(--price)'}; font-weight:bold;">
-            ${it.available !== false ? '✅ شاپ پر شو ہو رہا ہے' : '❌ نا دستیاب (ویب سائٹ پر لاک ہے)'}
-          </span>
-        </div>
-
-        <div class="item-edit-row">
-          <div class="item-edit-thumb" onclick="triggerImgUpload(${idx})" title="تصویر تبدیل کریں">
-            ${it.image ? `<img src="${it.image}">` : `<span style="font-size:24px;">${it.icon}</span>`}
-          </div>
-          <div style="flex:1;">
-            <input type="text" value="${it.name}" id="name_${idx}" placeholder="اردو نام" oninput="markUnsaved()">
-            <input type="text" value="${it.name_roman}" id="roman_${idx}" placeholder="English Name" oninput="markUnsaved()">
-          </div>
-        </div>
-        <div style="display:flex; gap:6px; margin-bottom:8px;">
-          <button class="btn-secondary" style="background:#FDECEA; color:var(--price); flex:1; padding:6px;" onclick="triggerImgUpload(${idx})">🖼️ تصویر بدلیں</button>
-          <button class="btn-danger" style="flex:1; padding:6px;" onclick="deleteAdminItem(${idx})">🗑️ آئٹم ڈیلیٹ کریں</button>
-        </div>
-        <input type="file" id="file_${idx}" style="display:none;" accept="image/*" onchange="handleImageUpload(event, ${idx})">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <span style="font-size:12px; font-weight:700; color:var(--dark);">⚖️ سائز / قیمت</span>
-          <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;">
-            <input type="checkbox" ${it.autoCalc ? 'checked' : ''} onchange="toggleAutoCalc(${idx}, this.checked)"> خودکار حساب
-          </label>
-        </div>
-        <div id="units_area_${idx}">
-          ${it.units.map((u, uIdx) => `
-            <div class="unit-row">
-              <input type="number" value="${u.rate}" id="rate_${idx}_${uIdx}" style="flex:1;" oninput="onRateInput(${idx}, ${uIdx})">
-              <input type="text" value="${u.label}" id="label_${idx}_${uIdx}" style="flex:1.5;" oninput="markUnsaved()">
-              <button class="btn-danger" style="padding:8px 10px;" onclick="removeUnit(${idx}, ${uIdx})">✕</button>
-            </div>
-          `).join("")}
-        </div>
-        <button class="btn-secondary" style="width:100%; margin-top:6px; background:var(--leaf); color:var(--dark);" onclick="addUnit(${idx})">＋ سائز/قیمت شامل کریں</button>
-      </div>
-    `).join("");
-  }
-
-  window.toggleAvailability = function(idx, val){
-    const cat = document.getElementById("catSelect").value;
-    globalCategoriesData[cat][idx].available = val;
-    markUnsaved();
-    renderAdminEditor();
-  }
-
-  window.markUnsaved = function(){
-    document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں";
-    document.getElementById("saveStatus").style.color = "var(--price)";
-  }
-
-  window.triggerImgUpload = function(idx){ document.getElementById("file_" + idx).click(); }
-
-  window.handleImageUpload = function(event, idx){
-    const file = event.target.files[0];
-    if(file){
-      const reader = new FileReader();
-      reader.onload = function(e){
-        const cat = document.getElementById("catSelect").value;
-        globalCategoriesData[cat][idx].image = e.target.result;
-        renderAdminEditor();
-        markUnsaved();
-        showToast("✅ تصویر اپ لوڈ ہو گئی!");
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  window.addNewItemToCurrentCategory = function(){
-    const cat = document.getElementById("catSelect").value;
-    if(!cat) return;
-    if(!globalCategoriesData[cat]) globalCategoriesData[cat] = [];
-    globalCategoriesData[cat].unshift({
-      name: "نیا آئٹم", name_roman: "New Item", image: "", icon: "🛒", available: true, autoCalc: true, units: [{label: "KG", rate: 0}]
-    });
-    renderAdminEditor();
-    markUnsaved();
-    showToast("✅ نیا آئٹم شامل کر دیا گیا ہے");
-  }
-
-  window.deleteAdminItem = function(idx){
-    if(!confirm("کیا آپ اس آئٹم کو حذف کرنا چاہتے ہیں؟")) return;
-    const cat = document.getElementById("catSelect").value;
-    globalCategoriesData[cat].splice(idx, 1);
-    renderAdminEditor();
-    markUnsaved();
-    showToast("✅ آئٹم ہٹا دیا گیا");
-  }
-
-  window.toggleAutoCalc = function(idx, val){
-    const cat = document.getElementById("catSelect").value;
-    globalCategoriesData[cat][idx].autoCalc = val;
-    markUnsaved();
-  }
-
-  window.onRateInput = function(idx, uIdx){
-    markUnsaved();
-    const cat = document.getElementById("catSelect").value;
-    let item = globalCategoriesData[cat][idx];
-    let val = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-    item.units[uIdx].rate = val;
-    if(item.autoCalc && uIdx === 0){
-      let baseRate = val;
-      item.units.forEach((u, i) => {
-        if(i > 0){
-          let lbl = u.label.toLowerCase();
-          let calculated = baseRate;
-          if(lbl.includes("آدھا") || lbl.includes("half")) calculated = Math.round(baseRate / 2);
-          else if(lbl.includes("پاؤ") || lbl.includes("pao")) calculated = Math.round(baseRate / 4);
-          else if(lbl.includes("دڑی") || lbl.includes("5") || lbl.includes("dari")) calculated = baseRate * 5;
-          u.rate = calculated;
-          const inputEl = document.getElementById(`rate_${idx}_${i}`);
-          if(inputEl) inputEl.value = calculated;
+  window.requestNotificationPermission = function() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          showToast("🟢 نوٹیفکیشن ایکٹیو ہو گئے ہیں!");
+        } else {
+          showToast("⚠️ نوٹیفکیشن بلاک ہیں", true);
         }
       });
     }
   }
 
-  window.addUnit = function(itemIdx){
-    const cat = document.getElementById("catSelect").value;
-    globalCategoriesData[cat][itemIdx].units.push({label: "نیا یونٹ", rate: 0});
-    renderAdminEditor();
-    markUnsaved();
-  }
-
-  window.removeUnit = function(itemIdx, unitIdx){
-    const cat = document.getElementById("catSelect").value;
-    globalCategoriesData[cat][itemIdx].units.splice(unitIdx, 1);
-    renderAdminEditor();
-    markUnsaved();
-  }
-
-  window.saveAllItemChanges = function(){
-    const cat = document.getElementById("catSelect").value;
-    const items = globalCategoriesData[cat];
-    items.forEach((it, idx) => {
-      it.name = document.getElementById(`name_${idx}`).value;
-      it.name_roman = document.getElementById(`roman_${idx}`).value;
-      it.available = document.getElementById(`avail_${idx}`).checked;
-      it.units.forEach((u, uIdx) => {
-        u.rate = parseFloat(document.getElementById(`rate_${idx}_${uIdx}`).value) || 0;
-        u.label = document.getElementById(`label_${idx}_${uIdx}`).value;
-      });
-    });
-    localStorage.setItem("sj_admin_all_categories", JSON.stringify(globalCategoriesData));
-    document.getElementById("saveStatus").textContent = "🟢 محفوظ ہے";
-    document.getElementById("saveStatus").style.color = "var(--mid)";
-    showToast("✅ تمام تبدیلیاں اور ریٹس محفوظ ہو گئے!");
-    playLoudBeep();
-  }
-
-  // --- WhatsApp Direct Order Parser to Firebase ---
-  window.parseAndAddWhatsAppOrder = async function(){
-    const rawText = document.getElementById("waRawText").value.trim();
-    let name = document.getElementById("waCustName").value.trim() || "واٹس ایپ کسٹمر";
-    let phone = document.getElementById("waCustPhone").value.trim() || "03000000000";
-    let address = document.getElementById("waCustAddr").value.trim() || "Mingora Swat";
-
-    if(!rawText){
-      showToast("⚠️ براہ کرم پہلے واٹس ایپ کا میسج یہاں پیسٹ کریں!", true);
-      return;
-    }
-    let lines = rawText.split('\n');
-    lines.forEach(line => {
-      let l = line.toLowerCase();
-      if(l.includes("نام") || l.includes("name")) {
-        let parts = line.split(/[:\-]/);
-        if(parts[1]) name = parts[1].trim();
-      }
-      if(l.includes("فون") || l.includes("phone") || l.includes("03")) {
-        let match = line.match(/03[0-9]{9}/);
-        if(match) phone = match[0];
-      }
-      if(l.includes("پتہ") || l.includes("address")) {
-        let parts = line.split(/[:\-]/);
-        if(parts[1]) address = parts[1].trim();
-      }
-    });
-
-    let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-    
-    let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
-      timeZone: 'Asia/Karachi', 
-      weekday: 'short', 
-      day: 'numeric', 
-      month: 'short', 
-      year: 'numeric',
-      hour: '2-digit', 
-      minute: '2-digit', 
-      hour12: true 
-    }).format(new Date());
-
-    let formattedSummary = `Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
-
-    let newOrd = {
-      code: orderCode, name: name, phone: phone, address: address,
-      items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""),
-      timestamp: nowFormatted, status: "pending"
-    };
-
-    try{
-      await set(ref(db, 'orders/' + orderCode), newOrd);
-      showToast("✅ آرڈر فائر بیس پر محفوظ کر دیا گیا ہے!");
-      playLoudBeep();
-      document.getElementById("waRawText").value = "";
-      document.getElementById("waCustName").value = "";
-      document.getElementById("waCustPhone").value = "";
-      document.getElementById("waCustAddr").value = "";
-      setTimeout(() => { switchTab('orders', true); }, 1000);
-    }catch(e){
-      showToast("❌ آرڈر محفوظ کرنے میں خرابی پیش آئی", true);
-    }
-  }
-
-  function parseExactRecordedTime(rawTimestamp) {
-    if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
-    let str = String(rawTimestamp).trim();
-    if (str.startsWith("'")) {
-      str = str.substring(1);
-    }
-    return str;
-  }
-
+  // Friendly Confirmation Message button
   window.sendConfirmationMsg = function(phone, code) {
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if (cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
 
     const msg = 
-`السلام علیکم!
+`السلام علیکم! ایس جے فوڈز آن لائن میں خوش آمدید 🌿۔
 
-آپ کا آرڈر *[${code}]* SJ Foods Online کو موصول ہو گیا ہے۔
+آپ نے جو سامان سلیکٹ کیا ہے، کیا آپ اپنے اس آرڈر [${code}] کی تصدیق کرنا چاہتے ہیں تاکہ ہم فوراً آپ کے سامان کی ڈلیوری کی تیاری شروع کر دیں؟
 
-کیا ہماری ٹیم آپ کے سامان پر کام شروع کر دے؟ براہ کرم *OK* لکھ کر تصدیق کریں۔
-
-💳 پیمنٹ کے طریقے:
-• کیش آن ڈیلیوری (COD)
-• ایزی پیسہ — کسی بھی بینک یا ایزی پیسہ اکاؤنٹ سے آسانی سے بھیجا جا سکتا ہے
-
-آپ کے جواب کا انتظار رہے گا۔ شکریہ — SJ Foods Online`;
+براہ کرم اس میسج کا جواب دے کر یا 'OK' لکھ کر کنفرم کر دیں۔ شکریہ! ✨`;
 
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
-  window.requestLocation = function(phone){
-    let cleanPhone = phone.replace(/[^0-9]/g, "");
-    if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-    let msg = "Mohtaram Customer! Meharbani karke apne ghar ya dukan ki Live Location WhatsApp par share kar dein taake delivery boy asani se pohnch sake. Shukriya!";
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-  }
-
-  // --- Listen Live Orders from Firebase ---
-  let cachedOrdersCount = 0;
   let activeAccordionId = null;
-  let latestOrdersCache = [];
-
   window.toggleAccordion = function(id){
     if(activeAccordionId === id) activeAccordionId = null;
     else activeAccordionId = id;
     renderOrdersDOM();
   }
+
+  let latestOrdersCache = [];
+  let cachedOrdersCount = 0;
 
   const ordersRef = ref(db, 'orders');
   onValue(ordersRef, (snapshot) => {
@@ -652,11 +206,7 @@
     dataList.forEach((row, index) => {
       let codeVal = row.code;
       if(codeVal){
-        let rawTime = row.timestamp || "N/A";
-        let exactOrderTimeStr = parseExactRecordedTime(rawTime);
-        let unifiedOtp = row.otp || String(codeVal).replace("SJ-", "");
         let st = String(row.status || 'pending').toLowerCase().trim();
-
         let itemObj = {
           id: "fb_" + index,
           code: codeVal,
@@ -665,17 +215,13 @@
           address: row.address || "Mingora Swat",
           itemsSummary: row.items || "",
           total: parseFloat(row.total || 0) || 0,
-          otpCode: unifiedOtp,
-          displayTime: exactOrderTimeStr,
-          status: st,
-          rawIndex: index
+          otpCode: row.otp || String(codeVal).replace("SJ-", ""),
+          displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
+          status: st
         };
 
-        if(st === 'completed') {
-          completedOrders.push(itemObj);
-        } else {
-          pendingOrders.push(itemObj);
-        }
+        if(st === 'completed') completedOrders.push(itemObj);
+        else pendingOrders.push(itemObj);
       }
     });
 
@@ -694,18 +240,9 @@
     document.getElementById("statPendingOrders").textContent = pendingCount;
     document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
 
-    if(latestOrdersCache.length === 0){
-      document.getElementById("ordersArea").innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
-      cachedOrdersCount = 0;
-      return;
-    }
-    
     if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
       playLoudBeep();
       showToast("🔔 نیا آرڈر موصول ہوا ہے!");
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification("SJ Foods", { body: "🚨 نیا آرڈر موصول ہوا ہے! فوری چیک کریں۔", icon: "favicon.ico" });
-      }
     }
     cachedOrdersCount = latestOrdersCache.length;
 
@@ -724,47 +261,40 @@
     area.innerHTML = orders.map((o) => {
       let isOpen = (activeAccordionId === o.id);
       let isCompleted = (o.status === 'completed');
-
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
-      if(cleanPhoneForWA.startsWith('0')) {
-        cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
-      }
+      if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
       return `
         <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:13.5px; direction:auto;">
               📌 ${o.code} — ${o.name}
-              ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
+              ${!isCompleted ? `<span class="challenge-tag">تصدیق باقی</span>` : ''}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
               <span class="time-badge ${isCompleted ? 'done' : ''}">
-                ${isCompleted ? '✅ Completed' : '🕒 ' + o.displayTime}
+                ${isCompleted ? '✅ پرسکون گرین (مکمل)' : '⏳ بلنکنگ ریڈ'}
               </span>
             </div>
           </div>
           <div class="chat-body" dir="auto">
             <div style="font-size:13.5px; line-height:1.7;">
               Phone: <span dir="ltr">${o.phone}</span> 
-              <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Direct Call</a>
-              <a href="https://wa.me/${cleanPhoneForWA}" target="_blank" style="text-decoration:none; margin-right:6px; font-weight:bold; color:#25D366;">💬 WhatsApp Direct</a><br>
+              <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Call</a>
+              <a href="https://wa.me/${cleanPhoneForWA}" target="_blank" style="text-decoration:none; margin-right:6px; font-weight:bold; color:#25D366;">💬 WhatsApp</a><br>
               Address: ${o.address}<br>
               OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
               Order Time: <b>${o.displayTime}</b><br>
-              Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto; text-align:right;" dir="auto">${o.itemsSummary}</div>
+              Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px;" dir="auto">${o.itemsSummary}</div>
               Total Amount: <b>Rs. ${o.total}</b><br>
-              Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
+              Status: <b>${isCompleted ? 'Completed' : 'Pending Confirmation'}</b>
             </div>
             
             <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
               ${!isCompleted ? `
-                <button class="btn-secondary" style="flex:1; background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیقی میسج</button>
-              ` : ''}
-              <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
-              <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
-              ${!isCompleted ? `
-                <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
-              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
+                <button class="btn-secondary" style="flex:1; background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیق کا میسج بھیجیں</button>
+                <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.code}', '${o.phone}')">✅ کنفرم & کلوز کریں</button>
+              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 آرڈر مکمل اور محفوظ ہو چکا ہے</div>`}
             </div>
           </div>
         </div>
@@ -772,61 +302,20 @@
     }).join("");
   }
 
-  window.closeAndThankOrder = async function(id, code, phone){
-    if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
+  window.closeAndThankOrder = async function(code, phone){
+    if(!confirm("کیا آپ اس آرڈر کو کنفرم کر کے مکمل کرنا چاہتے ہیں؟")) return;
     
-    let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
-    let targetPhone = phone || (cacheMatch ? cacheMatch.phone : "");
-    
-    if(!targetPhone || targetPhone.length < 10) {
-      targetPhone = prompt("⚠️ اس آرڈر کے لیے کسٹمر کا درست واٹس ایپ نمبر درج کریں:", "92");
-      if(!targetPhone) return;
-    }
-
     try {
       await update(ref(db, 'orders/' + code), { status: "completed" });
     } catch(e){}
 
-    const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
+    const msg = `السلام علیکم! محترم صارف، آپ کے آرڈر [${code}] کی تصدیق ہو گئی ہے اور ہم نے اس پر کام شروع کر دیا ہے۔ SJ Foods Online کا شکریہ! 🌿`;
     
-    let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
-    if(cleanPhone.startsWith("0")) {
-      cleanPhone = "92" + cleanPhone.slice(1);
-    }
+    let cleanPhone = phone.replace(/[^0-9]/g, "");
+    if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
     
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-
-    showToast("✅ Order closed and customer WhatsApp opened!");
-  }
-
-  window.printReceipt = function(code, name, phone, address, items, total, otp, orderTime){
-    const w = window.open('', '_blank');
-    w.document.write(`
-      <html dir="rtl">
-      <head><title>Receipt ${code}</title></head>
-      <body style="font-family:monospace; padding:15px; width:300px; margin:0 auto; text-align:right;">
-        <h2 style="text-align:center; margin:0;">SJ Foods Mingora</h2>
-        <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
-        <hr style="border:dashed 1px #000;">
-        <p><b>Order Code:</b> ${code}</p>
-        <p><b>Order Time:</b> ${orderTime || 'N/A'}</p>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Phone:</b> <span dir="ltr">${phone}</span></p>
-        <p><b>Address:</b> ${address}</p>
-        <p><b>OTP Code:</b> <span style="font-size:18px;" dir="ltr"><b>${otp}</b></span></p>
-        <hr style="border:dashed 1px #000;">
-        <p><b>Order Details:</b></p>
-        <div dir="auto">${items}</div>
-        <hr style="border:dashed 1px #000;">
-        <h3 style="text-align:center;">Total: Rs. ${total}</h3>
-        <br>
-        <div style="text-align:center; font-size:11px; line-height:1.5;">سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا۔</div>
-      </body>
-      </html>
-    `);
-    w.document.close();
-    w.focus();
-    setTimeout(()=> { w.print(); w.close(); }, 500);
+    showToast("✅ آرڈر سبز (Completed) ہو گیا ہے!");
   }
 </script>
 </body>

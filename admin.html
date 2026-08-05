@@ -167,8 +167,8 @@
   </div>
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', true)">📥 لائیو ان باکس</div>
-    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', true)">➕ واٹس ایپ آرڈر</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders', false)">📥 لائیو ان باکس</div>
+    <div class="tab" id="tabAddBtn" onclick="switchTab('addwa', false)">➕ واٹس ایپ آرڈر</div>
     <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🔒 پروڈکٹس و ریٹس</div>
   </div>
 
@@ -228,14 +228,14 @@ let isAdminAuthenticated = false;
 
 function checkAdminPasswordAndSwitch(tabName){
   if(isAdminAuthenticated){
-    switchTab(tabName, true);
+    switchTab(tabName, false);
     return;
   }
   let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
   if(pass === ADMIN_PASSWORD){
     isAdminAuthenticated = true;
     showToast("🟢 پاسورڈ درست ہے!");
-    switchTab(tabName, true);
+    switchTab(tabName, false);
   } else {
     showToast("❌ غلط پاسورڈ!", true);
   }
@@ -261,14 +261,7 @@ function toggleRiderView(){
   showToast(document.body.classList.contains("rider-mode") ? "🏍️ رائڈر موڈ آن" : "⚙️ نارمل ایڈمن موڈ");
 }
 
-window.addEventListener('popstate', (event) => {
-  switchTab('orders', false);
-});
-
-function switchTab(tabName, pushState = true){
-  if(pushState && history.state?.tab !== tabName){
-    history.pushState({tab: tabName}, "", "#" + tabName);
-  }
+function switchTab(tabName, pushState = false){
   document.getElementById('tabOrdersBtn').className = 'tab';
   document.getElementById('tabAddBtn').className = 'tab';
   document.getElementById('tabProductsBtn').className = 'tab';
@@ -587,7 +580,7 @@ async function parseAndAddWhatsAppOrder(){
   document.getElementById("waCustPhone").value = "";
   document.getElementById("waCustAddr").value = "";
   setTimeout(() => { renderOrders(); }, 1500);
-  switchTab('orders', true);
+  switchTab('orders', false);
 }
 
 function parseExactRecordedTime(rawTimestamp) {
@@ -841,6 +834,11 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
   w.document.close();
   w.focus();
   setTimeout(()=> { w.print(); w.close(); }, 500);
+}
+
+// 📌 پیج لوڈ ہوتے ہی #products جیسے پرانے ہیش کو صاف کرنا تاکہ کلک بلاک نہ ہو
+if(window.location.hash){
+  history.replaceState(null, "", window.location.pathname);
 }
 
 renderOrders();

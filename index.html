@@ -165,7 +165,6 @@
   .unit-select{ flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold; background:#fff; color:var(--dark); font-family: Arial, sans-serif; }
   .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
   
-  /* 🏷️ تکلا اور خوبصورت اسٹیٹس لیبل */
   .status-label {
     font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;
   }
@@ -386,7 +385,7 @@
   </div>
 </footer>
 
-<div class="lightbox hidden" id="lightbox">
+<div class="lightbox hidden" id="lightbox" onclick="closeLightboxOverlay(event)">
   <button class="lightbox-close" id="closeLightbox">✕</button>
   <img id="lightboxImg" src="" alt="">
 </div>
@@ -394,6 +393,9 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// 📌 آپ کا نیا اور صحیح گوگل شیٹ لنک
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQMTPRSRJ8mJm-I-kYnQh5b0akZ2yb7-2j9M89SUQgm0RcSociY7tDLki6fyKezXIJ/exec";
+
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
@@ -405,7 +407,7 @@ let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
 
-// 📱 موبائل فزیکل بیک بٹن (Hardware Back Button) ہینڈلنگ
+// 📱 موبائل فزیکل بیک بٹن کنٹرول
 window.addEventListener('popstate', (event) => {
   const lightbox = document.getElementById("lightbox");
   const drawer = document.getElementById("drawer");
@@ -508,7 +510,6 @@ async function loadData(){
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
     
-    // 📌 ایڈمن سے تبدیل شدہ اویلیبلیٹی لسٹ لوڈ کرنا
     let adminCatSaved = JSON.parse(localStorage.getItem("sj_admin_all_categories")) || {};
 
     CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
@@ -527,7 +528,6 @@ async function loadData(){
           ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
           : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
 
-        // 🔗 ایڈمن پینل کے اویلیبل چیک باکس سے مطابقت
         let isAvail = true;
         if (adminCatSaved[catName] && adminCatSaved[catName][ii]) {
           isAvail = adminCatSaved[catName][ii].available !== false;
@@ -767,7 +767,6 @@ function renderBill(){
 const billbarEl = document.getElementById("billbar");
 const summaryEl = document.getElementById("summary");
 
-// 👆 کارٹ پینل انگلی سے مینمائز (Swipe Down) کرنے کا کنٹرول
 let touchStartY = 0;
 billbarEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
 billbarEl.addEventListener('touchend', (e) => {
@@ -878,7 +877,6 @@ document.getElementById("waBtn").onclick = () => {
   }).format(new Date());
 
   try {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
       items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
@@ -944,6 +942,12 @@ function openLightbox(src, name){
   history.pushState({view: 'lightbox'}, "");
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
+}
+
+function closeLightboxOverlay(event){
+  if(event.target.id === "lightbox" || event.target.id === "closeLightbox"){
+    document.getElementById("lightbox").classList.add("hidden");
+  }
 }
 document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
 

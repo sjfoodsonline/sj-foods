@@ -210,7 +210,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycby4wCQFMlpS0qK8M_6Gcu1qRTr0X0y0RCJY-jtFwdQgSy2WjwW2sZ0BA8Pvfx21fU3f/exec";
+// 📌 آپ کا نیا ایکٹیویٹ شدہ URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzTDns65unUDyPLOCBpS5tylqtyCACwsQwBFTGwMzmtExVoh4aQPdEAtXilqq2KKqLh/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
@@ -613,21 +614,27 @@ async function fetchOrdersFromSheet(){
   try{
     const res = await fetch(SHEET_URL, {cache: "no-store"});
     const result = await res.json();
-    const data = Array.isArray(result) ? result : (result.orders || []);
-    
+    let data = [];
+
+    if(Array.isArray(result)){
+      data = result;
+    } else if(result.orders && Array.isArray(result.orders)){
+      data = result.orders;
+    }
+
     let seenCodes = new Set();
     let pendingOrders = [];
     let completedOrders = [];
 
     data.forEach((row, index) => {
       let codeVal = row.code || (Array.isArray(row) ? row[0] : null);
-      if(codeVal && codeVal.toString().includes("SJ-") && !seenCodes.has(codeVal)){
+      if(codeVal && String(codeVal).includes("SJ-") && !seenCodes.has(codeVal)){
         seenCodes.add(codeVal);
         
         let rawTime = row.timestamp || (Array.isArray(row) ? row[7] : "N/A");
         let exactOrderTimeStr = parseExactRecordedTime(rawTime);
-        let unifiedOtp = codeVal ? codeVal.toString().replace("SJ-", "") : "0000";
-        let st = (row.status || (Array.isArray(row) ? row[8] : 'pending')) ? (row.status || row[8] || 'pending').toString().toLowerCase().trim() : 'pending';
+        let unifiedOtp = codeVal ? String(codeVal).replace("SJ-", "") : "0000";
+        let st = (row.status || (Array.isArray(row) ? row[8] : 'pending')) ? String(row.status || row[8] || 'pending').toLowerCase().trim() : 'pending';
 
         let itemObj = {
           id: "sh_" + index,

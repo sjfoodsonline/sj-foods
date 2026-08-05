@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods Online — تازہ سبزیاں، پھل، اشیائے خوردونوش آن لائن آرڈر</title>
+<title>SJ Foods Online — تازہ سبزیاں، پھل، کریانہ آن لائن آرڈر</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -46,29 +46,19 @@
   
   .drawer-menu { list-style: none; padding: 0; margin: 0; }
   .drawer-menu li { margin-bottom: 10px; }
-  .drawer-menu button {
+  .drawer-menu a {
     display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line);
-    border-radius: 12px; color: var(--dark); font-size: 15px; font-weight: bold; width: 100%; cursor: pointer; text-align: right; font-family: inherit;
+    border-radius: 12px; color: var(--dark); text-decoration: none; font-size: 15px; font-weight: bold; transition: background 0.2s;
   }
-  .drawer-menu button:hover { background: var(--leaf); }
+  .drawer-menu a:hover { background: var(--leaf); }
 
   /* Modal Popup Styles */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.active { display: flex; }
-  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 85vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
   .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 18px; }
-  .modal-box p { font-size: 14.5px; color: var(--ink); line-height: 1.8; text-align: justify; }
+  .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
-
-  .owner-card {
-    text-align: center; background: var(--leaf); border: 1.5px solid #A5D6A7; border-radius: 16px; padding: 16px 12px; margin-bottom: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  }
-  .owner-img-box {
-    width: 110px; height: 110px; border-radius: 50%; border: 3.5px solid var(--dark); margin: 0 auto 10px; overflow: hidden; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-shrink: 0; display: block; position: relative;
-  }
-  .owner-img-box img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-  .owner-name { font-size: 19px; font-weight: bold; color: var(--dark); margin: 4px 0 0; font-family: Arial, sans-serif; }
-  .owner-title { font-size: 13px; color: var(--accent); font-weight: bold; margin-bottom: 4px; font-family: Arial, sans-serif; }
 
   .install-banner {
     background: linear-gradient(135deg, var(--accent), #E65100); color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
@@ -86,25 +76,9 @@
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-  .features-scroll-wrap{ 
-    overflow-x: auto; 
-    position: relative; 
-    padding: 10px 0; 
-    background: #F9F8F3; 
-    border-top: 1px solid var(--line); 
-    border-bottom: 1px solid var(--line); 
-    scrollbar-width: none; 
-    -webkit-overflow-scrolling: touch; 
-    cursor: grab;
-  }
-  .features-scroll-wrap::-webkit-scrollbar { display: none; }
-
-  .features-scroll{ 
-    display: flex; 
-    width: max-content; 
-    gap: 12px; 
-    padding: 0 16px;
-  }
+  .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
+  @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
   .feature-card{
     flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -171,11 +145,9 @@
   
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
-    padding:14px; margin-bottom:10px; text-align:right; position: relative;
+    padding:14px; margin-bottom:10px; text-align:right;
   }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
-  .item.out-of-stock-item { opacity: 0.6; filter: grayscale(0.2); }
-  
   .item-row-top{display:flex; align-items:center; gap:12px;}
   .item-thumb{
     flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
@@ -189,18 +161,14 @@
 
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
   .unit-select{ flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold; background:#fff; color:var(--dark); font-family: Arial, sans-serif; }
-  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  
-  .status-label {
-    font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;
-  }
-  .status-label.available { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; }
-  .status-label.out-of-stock { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .status-label { font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; padding: 1px 6px; border-radius: 4px; }
+  .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+  .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
 
   .qty-box{display:flex; align-items:center; gap:6px;}
   .qty-box button{ width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; }
   .qty-box button.plus{background:var(--dark); color:#fff;}
-  .qty-box button:disabled{ background:#E0E0E0 !important; color:#9E9E9E !important; cursor:not-allowed; }
   .qty-box input{ width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; }
 
   #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary { font-family: "Jameel Noori Nastaleeq", serif !important; }
@@ -253,7 +221,7 @@
 <header>
   <div class="header-title-box">
     <h1>🟢 ایس جے فوڈز آن لائن</h1>
-    <p>🥦 تازہ سبزیاں، پھل و اشیائے خوردونوش 🌿 — معیاری ہوم ڈلیوری 🚚</p>
+    <p>🥦 تازہ سبزیاں، پھل و کریانہ 🌿 — معیاری ہوم ڈلیوری 🚚</p>
   </div>
   <div class="header-btns">
     <button class="share-btn" id="shareBtn" title="Share">➦</button>
@@ -269,32 +237,19 @@
     <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
   </div>
   <ul class="drawer-menu">
-    <li><button onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</button></li>
-    <li><button onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</button></li>
-    <li><button onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</button></li>
-    <li><button onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</button></li>
-    <li><button onclick="openModal('modalAbout')">👨‍💼 بانی کا پیغام (About Us)</button></li>
+    <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
+    <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (About Us)</a></li>
+    <li><a href="#" onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</a></li>
+    <li><a href="#" onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</a></li>
+    <li><a href="#" onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</a></li>
   </ul>
 </div>
 
 <!-- Modal Dialogs for Menu Items -->
 <div class="modal-overlay" id="modalAbout">
   <div class="modal-box">
-    <div class="owner-card">
-      <div class="owner-img-box">
-        <img id="ownerDisplayImg" src="https://via.placeholder.com/150?text=Suleman+Jan" alt="سلیمان جان">
-      </div>
-      <div class="owner-name" id="ownerDisplayName">سلیمان جان</div>
-      <div class="owner-title" id="ownerDisplayTitle">Founder & CEO / Chairman</div>
-    </div>
-    <h3>🎙️ بانی کا پیغام</h3>
-    <p id="ownerDisplayMsg">
-      <b>السلام علیکم ورحمۃ اللہ وبرکاتہ!</b><br><br>
-      میڈیا کی دنیا میں 20 سال تک عوام کی خدمت کرنے کے بعد، <b>ایس جے فوڈز آن لائن (SJ Foods Online)</b> کے نام سے سوات کے عوام کی سہولت کے لیے ایک نئی اور معیاری کوشش کا آغاز کیا جا رہا ہے۔<br><br>
-      ہم جانتے ہیں کہ روزمرہ کی زندگی میں انسان اکثر <b>شدید مصروفیت، ملازمت، بیماری، یا گھر سے دور ہونے</b> کی وجہ سے خود بازار جا کر خریداری نہیں کر پاتا۔ اسی طرح بزرگوں اور گھر کی خواتین کے لیے بازار کے چکر لگانا یا وزنی سامان اٹھانا کافی مشکل ہوتا ہے۔<br><br>
-      <b>ایس جے فوڈز آن لائن</b> کا مقصد انہی مسائل کو ختم کرنا ہے۔ اب آپ چاہے کام پر ہوں، گھر پر ہوں یا شہر سے باہر — بس ایک کلک یا واٹس ایپ میسج کے ذریعے اپنے گھر کے لیے تازہ ترین سبزیاں، پھل اور روزمرہ کی <b>اشیائے خوردونوش</b> منگوا سکتے ہیں۔<br><br>
-      ہم ہر آرڈر کو مکمل <b>دیانت داری، صفائی اور تول میں پورا</b> کر کے آپ کی دہلیز تک پہنچانے کے پابند ہیں۔ آپ کا اعتماد ہی ہماری اصل طاقت ہے!
-    </p>
+    <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
+    <p>SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائن ادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔ ہمارا مقصد بہترین معیار اور دیانت داری کے ساتھ آپ کی خدمت کرنا ہے۔</p>
     <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
   </div>
 </div>
@@ -302,7 +257,7 @@
 <div class="modal-overlay" id="modalCareers">
   <div class="modal-box">
     <h3>💼 کیریئرز اور جابز (Careers)</h3>
-    <p id="careersDisplayMsg">اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
+    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
     <button class="modal-close-btn" onclick="closeModal('modalCareers')">بند کریں</button>
   </div>
 </div>
@@ -321,7 +276,7 @@
 <div class="modal-overlay" id="modalSops">
   <div class="modal-box">
     <h3>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h3>
-    <p id="sopsDisplayMsg">
+    <p>
       • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
       • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
       • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
@@ -342,16 +297,14 @@
     <div class="cover-slider-track" id="coverSliderTrack"></div>
   </div>
 
-  <div class="features-scroll-wrap" id="featuresWrap">
+  <div class="features-scroll-wrap">
     <div class="features-scroll" id="featuresTrack">
-      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Organic</span></div>
-      <div class="feature-card"><span class="ic">💎</span><span class="tx">100% Quality Guaranteed</span></div>
-      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fastest Doorstep Delivery</span></div>
-      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure & Easy Payments</span></div>
-      <div class="feature-card"><span class="ic">💬</span><span class="tx">Instant WhatsApp Ordering</span></div>
-      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank Transfer</span></div>
-      <div class="feature-card"><span class="ic">🛒</span><span class="tx">Best Market Rates</span></div>
-      <div class="feature-card"><span class="ic">🌟</span><span class="tx">Honest Weight & Care</span></div>
+      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+      <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
+      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
+      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
+      <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
+      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
     </div>
   </div>
 
@@ -426,7 +379,7 @@
   </div>
 </footer>
 
-<div class="lightbox hidden" id="lightbox" onclick="closeLightboxOverlay(event)">
+<div class="lightbox hidden" id="lightbox">
   <button class="lightbox-close" id="closeLightbox">✕</button>
   <img id="lightboxImg" src="" alt="">
 </div>
@@ -434,8 +387,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQMTPRSRJ8mJm-I-kYnQh5b0akZ2yb7-2j9M89SUQgm0RcSociY7tDLki6fyKezXIJ/exec";
-
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
@@ -447,46 +398,13 @@ let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
 
-function loadOwnerSettings(){
-  let savedOwner = JSON.parse(localStorage.getItem("sj_owner_data"));
-  if(savedOwner){
-    if(savedOwner.name) document.getElementById("ownerDisplayName").textContent = savedOwner.name;
-    if(savedOwner.title) document.getElementById("ownerDisplayTitle").textContent = savedOwner.title;
-    if(savedOwner.msg) document.getElementById("ownerDisplayMsg").innerHTML = savedOwner.msg.replace(/\n/g, "<br>");
-    if(savedOwner.img && savedOwner.img.length > 20) {
-      document.getElementById("ownerDisplayImg").src = savedOwner.img;
-    }
-  }
-}
-
-window.addEventListener('popstate', (event) => {
-  const lightbox = document.getElementById("lightbox");
-  const drawer = document.getElementById("drawer");
-  const activeModal = document.querySelector(".modal-overlay.active");
-  const billbar = document.getElementById("billbar");
-
-  if (!lightbox.classList.contains("hidden")) {
-    lightbox.classList.add("hidden");
-  } else if (drawer.classList.contains("active")) {
-    toggleDrawer(false);
-  } else if (activeModal) {
-    activeModal.classList.remove("active");
-  } else if (!billbar.classList.contains("collapsed")) {
-    billbar.classList.add("collapsed");
-  } else if (currentSelectedCategory) {
-    resetToHome();
-  }
-});
-
 function toggleDrawer(show){
-  if(show) history.pushState({view: 'drawer'}, "");
   document.getElementById('drawerOverlay').classList.toggle('active', show);
   document.getElementById('drawer').classList.toggle('active', show);
 }
 
 function openModal(id){
   toggleDrawer(false);
-  history.pushState({view: id}, "");
   document.getElementById(id).classList.add('active');
 }
 
@@ -509,6 +427,16 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
     }
     deferredPrompt = null;
   }
+});
+
+window.addEventListener('popstate', (event) => {
+  if (event.state && event.state.cat) {
+    currentSelectedCategory = event.state.cat;
+  } else {
+    currentSelectedCategory = null;
+  }
+  renderChips();
+  renderMainView();
 });
 
 const slider = document.getElementById('catSliderWrap');
@@ -561,8 +489,6 @@ async function loadData(){
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
     
-    let adminCatSaved = JSON.parse(localStorage.getItem("sj_admin_all_categories")) || {};
-
     CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
     ITEMS = [];
     CATEGORIES_DATA = {};
@@ -579,23 +505,11 @@ async function loadData(){
           ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
           : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
 
-        let isAvail = true;
-        let itemImg = it.image || "";
-
-        if (adminCatSaved[catName] && adminCatSaved[catName][ii]) {
-          isAvail = adminCatSaved[catName][ii].available !== false;
-          if (adminCatSaved[catName][ii].image) {
-            itemImg = adminCatSaved[catName][ii].image;
-          }
-        } else {
-          isAvail = it.available !== false;
-        }
-
         ITEMS.push({
           id: i+"-"+ii, cat: catName, icon: entry.icon,
           name: it.name, name_roman: it.name_roman || "",
           units: cleanUnits, unitIndex: 0,
-          available: isAvail, image: itemImg, featured: it.featured === true, qty: 0
+          available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
         });
       });
     });
@@ -603,11 +517,17 @@ async function loadData(){
     coverImagesList = shuffleArray(coverImagesList);
     setupCoverSlider();
     
+    let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
+    if(initialHash && CATEGORIES_META.some(c => c.name === initialHash)){
+      currentSelectedCategory = initialHash;
+    } else {
+      currentSelectedCategory = null;
+    }
+
     renderChips();
     renderMainView();
     renderFeatured();
     loadSavedCustomerDetails();
-    loadOwnerSettings();
     document.getElementById("loadingMsg").style.display = "none";
     document.getElementById("billbar").style.display = "flex";
   }catch(e){
@@ -678,6 +598,7 @@ function selectCategory(catName){
     history.pushState({cat: catName}, "", "#" + encodeURIComponent(catName));
     currentSelectedCategory = catName;
   } else {
+    history.pushState({cat: null}, "", window.location.pathname);
     currentSelectedCategory = null;
   }
   renderChips();
@@ -749,7 +670,7 @@ function renderMainView(filter=""){
 function createItemRow(it){
   const u = it.units[it.unitIndex];
   const row = document.createElement("div");
-  row.className = "item" + (it.qty>0 ? " active":"") + (!it.available ? " out-of-stock-item" : "");
+  row.className = "item" + (it.qty>0 ? " active":"");
   row.id = "row-"+it.id;
   
   let primaryName = it.name_roman ? it.name_roman : it.name;
@@ -766,15 +687,13 @@ function createItemRow(it){
       </div>
     </div>
     <div class="item-row-bottom">
-      ${it.units.length > 1 ? `<select class="unit-select" ${!it.available?'disabled':''} onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
       <div class="qty-box-wrapper">
-        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">
-          ${it.available ? '🟢 Available' : '🔴 Out of Stock'}
-        </span>
+        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
         <div class="qty-box">
-          <button ${!it.available?'disabled':''} onclick="changeQty('${it.id}', -1)">−</button>
+          <button onclick="changeQty('${it.id}', -1)">−</button>
           <input type="number" value="${it.qty}" readonly>
-          <button class="plus" ${!it.available?'disabled':''} onclick="changeQty('${it.id}', 1)">+</button>
+          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
         </div>
       </div>
     </div>
@@ -823,13 +742,12 @@ function renderBill(){
 
 const billbarEl = document.getElementById("billbar");
 const summaryEl = document.getElementById("summary");
-
 let touchStartY = 0;
 billbarEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
 billbarEl.addEventListener('touchend', (e) => {
   let touchEndY = e.changedTouches[0].clientY;
-  if(touchEndY - touchStartY > 40) billbarEl.classList.add("collapsed");
-  else if(touchStartY - touchEndY > 40) billbarEl.classList.remove("collapsed");
+  if(touchEndY - touchStartY > 50) billbarEl.classList.add("collapsed");
+  else if(touchStartY - touchEndY > 50) billbarEl.classList.remove("collapsed");
 });
 summaryEl.onclick = () => { billbarEl.classList.toggle("collapsed"); };
 
@@ -877,7 +795,7 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
-document.getElementById("waBtn").onclick = async () => {
+document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
   const name = document.getElementById("custName").value.trim();
@@ -933,24 +851,17 @@ document.getElementById("waBtn").onclick = async () => {
     hour12: true 
   }).format(new Date());
 
-  let payload = JSON.stringify({
-    code: orderCode, name: name, phone: phone, address: addr,
-    items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
-    timestamp: nowFormatted, status: "pending"
-  });
-
-  // 📌 گوگل شیٹ کو محفوظ ڈیلیوری
   try {
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(SHEET_URL, payload);
-    } else {
-      fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: payload });
-    }
+    // 📌 اپڈیٹ شدہ نیا گوگل ایپس اسکرپٹ URL
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycby5Ls_tAiDVos0DGPtnyk_us6m24EfC9vKgNl1Q1EN_JElABCpkcLJKkTHKYqm64t-f/exec";
+    navigator.sendBeacon(SHEET_URL, JSON.stringify({
+      code: orderCode, name: name, phone: phone, address: addr,
+      items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+      timestamp: nowFormatted, status: "pending"
+    }));
   } catch(e){}
 
-  // 📌 واٹس ایپ ڈائریکٹ اوپننگ
-  let cleanWA = "923155166034";
-  window.open(`https://wa.me/${cleanWA}?text=${encodeURIComponent(msg)}`, "_blank");
+  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ Order sent to WhatsApp and saved!");
 };
 
@@ -1005,47 +916,10 @@ function scrollToMainItem(id){
 
 function openLightbox(src, name){
   if(!src) return;
-  history.pushState({view: 'lightbox'}, "");
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
 }
-
-function closeLightboxOverlay(event){
-  if(event.target.id === "lightbox" || event.target.id === "closeLightbox"){
-    document.getElementById("lightbox").classList.add("hidden");
-  }
-}
 document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
-
-// 📌 100% ہموار اور بغیر کسی جھٹکے کے مسلسل چلنے والا آٹو لوپ اسکرپٹ
-const featWrap = document.getElementById('featuresWrap');
-const featTrack = document.getElementById('featuresTrack');
-
-if(featTrack) {
-  featTrack.innerHTML += featTrack.innerHTML;
-}
-
-let featAutoScroll = true;
-let isUserInteracting = false;
-
-function autoScrollLoop() {
-  if (featWrap && featAutoScroll && !isUserInteracting) {
-    featWrap.scrollLeft -= 0.8;
-    if (Math.abs(featWrap.scrollLeft) >= featTrack.scrollWidth / 2) {
-      featWrap.scrollLeft = 0;
-    }
-  }
-  requestAnimationFrame(autoScrollLoop);
-}
-
-requestAnimationFrame(autoScrollLoop);
-
-if(featWrap) {
-  featWrap.addEventListener('touchstart', () => { isUserInteracting = true; }, {passive: true});
-  featWrap.addEventListener('touchend', () => { 
-    setTimeout(() => { isUserInteracting = false; }, 2000);
-  });
-}
 
 loadData();
 loadSettings();

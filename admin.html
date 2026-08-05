@@ -49,14 +49,7 @@
 
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
   .chat-item.pending{border-color:#FFA000; background:#FFFDE7;}
-  .chat-item.pending.overdue{animation: superBlinking 0.8s infinite ease-in-out;}
-  .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important; animation: none !important;}
-  
-  @keyframes superBlinking{ 
-    0%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
-    50%{border-color:#FFA000; background:#FFFDE7; box-shadow:0 0 0px transparent;} 
-    100%{border-color:#D32F2F; background:#FFCDD2; box-shadow:0 0 12px rgba(211,47,47,0.6);} 
-  }
+  .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important;}
 
   .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
   .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
@@ -72,10 +65,8 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
   }
-  .time-badge.fresh { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
-  .time-badge.warning { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
-  .time-badge.danger { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
   .time-badge.done { background: #E8F5E9; color: #1B5E20; }
 
   .challenge-tag {
@@ -226,15 +217,6 @@ function requestNotificationPermission() {
     });
   } else {
     showToast("⚠️ آپ کا براؤزر نوٹیفکیشن کو سپورٹ نہیں کرتا", true);
-  }
-}
-
-function sendPushNotification(orderCode, timeStr) {
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification("⚠️ آرڈر میں تاخیر (SJ Foods)", {
-      body: `آرڈر ${orderCode} (${timeStr}) پر تاحال پینڈنگ ہے!`,
-      requireInteraction: true
-    });
   }
 }
 
@@ -511,14 +493,24 @@ async function parseAndAddWhatsAppOrder(){
   });
 
   let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
-  let nowISO = new Date().toISOString();
-  let nowFormatted = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
-  let formattedSummary = `Date & Time: ${nowFormatted}<br>Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
+  
+  let nowFormatted = new Intl.DateTimeFormat('en-GB', { 
+    timeZone: 'Asia/Karachi', 
+    weekday: 'short', 
+    day: 'numeric', 
+    month: 'short', 
+    year: 'numeric',
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true 
+  }).format(new Date());
+
+  let formattedSummary = `Name: ${name}<br>Phone: ${phone}<br>Address: ${address}<br>Details: <br>` + rawText.replace(/\n/g, "<br>");
 
   let newOrd = {
     code: orderCode, name: name, phone: phone, address: address,
     items: formattedSummary, total: 0, otp: orderCode.replace("SJ-", ""),
-    timestamp: nowISO, status: "pending"
+    timestamp: nowFormatted, status: "pending"
   };
 
   if(SHEET_URL){
@@ -540,35 +532,29 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// 📌 فکسڈ اور محفوظ وقت (جو قیامت تک حرکت نہیں کرے گا، صرف وصول ہونے کا وقت بتائے گا)
-fnGetStaticTimeInfo = function(timestamp) {
-  if (!timestamp) return { text: "N/A", totalSec: 0, class: "fresh" };
-  let past = new Date(timestamp).getTime();
-  if (isNaN(past)) return { text: "N/A", totalSec: 0, class: "fresh" };
+// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا پاک صاف طریقہ
+function parseExactRecordedTime(rawTimestamp) {
+  if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
+  let str = String(rawTimestamp).trim();
   
-  let now = new Date().getTime();
-  let totalSec = Math.floor((now - past) / 1000);
-  if(totalSec < 0) totalSec = 0;
-
-  // صرف وہی فکس وقت دکھائے گا جب میسج موصول ہوا تھا (مثلاً: Wed, 5 Aug 2026, 04:35 am)
-  let exactDateStr = new Intl.DateTimeFormat('en-GB', { 
-    timeZone: 'Asia/Karachi', 
-    weekday: 'short', 
-    day: 'numeric', 
-    month: 'short', 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: true 
-  }).format(new Date(past));
-
-  let statusClass = "fresh";
-  if (totalSec >= 900) { // 15 منٹ+
-    statusClass = "danger";
-  } else if (totalSec >= 300) { // 5 منٹ+
-    statusClass = "warning";
+  // اگر ISO فارمیٹ ہو (جیسے 2026-08-05T05:08:00) تو اسے صاف ڈسپلے سٹرنگ میں بدلو
+  if (str.includes("T") || str.includes("-")) {
+    let parsed = Date.parse(str);
+    if (!isNaN(parsed)) {
+      return new Intl.DateTimeFormat('en-GB', { 
+        timeZone: 'Asia/Karachi', 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: true 
+      }).format(new Date(parsed));
+    }
   }
-
-  return { text: exactDateStr, totalSec: totalSec, class: statusClass };
+  
+  // ورنہ شیٹ میں جو ٹیکسٹ پہلے سے لکھا ہوا ہے وہی بالکل ساکت دکھاو
+  return str;
 }
 
 async function fetchOrdersFromSheet(){
@@ -583,11 +569,7 @@ async function fetchOrdersFromSheet(){
       if(row.code && row.code.toString().includes("SJ-") && !seenCodes.has(row.code)){
         seenCodes.add(row.code);
         
-        let rawTime = row.timestamp || "";
-        let parsedTime = Date.parse(rawTime);
-        let rawTimestamp = isNaN(parsedTime) ? Date.now() : parsedTime;
-        
-        let formattedDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date(rawTimestamp));
+        let exactOrderTimeStr = parseExactRecordedTime(row.timestamp);
         let unifiedOtp = row.code ? row.code.replace("SJ-", "") : "0000";
         
         sheetOrders.push({
@@ -599,8 +581,7 @@ async function fetchOrdersFromSheet(){
           itemsSummary: row.items,
           total: parseFloat(row.total) || 0,
           otpCode: unifiedOtp,
-          date: formattedDate,
-          rawTimestamp: rawTimestamp,
+          displayTime: exactOrderTimeStr,
           status: row.status ? row.status.toString().toLowerCase().trim() : 'pending'
         });
       }
@@ -609,7 +590,7 @@ async function fetchOrdersFromSheet(){
     sheetOrders.sort((a, b) => {
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
-      return b.rawTimestamp - a.rawTimestamp;
+      return 0;
     });
 
     return sheetOrders;
@@ -668,24 +649,17 @@ function renderOrdersDOM(){
   area.innerHTML = orders.map((o) => {
     let isOpen = (activeAccordionId === o.id);
     let isCompleted = (o.status === 'completed');
-    let st = fnGetStaticTimeInfo(o.rawTimestamp);
-
-    if(!isCompleted && st.totalSec >= 900) {
-      sendPushNotification(o.code, st.text);
-    }
-
-    let isOverdue = (!isCompleted && st.totalSec >= 900);
 
     return `
-      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOverdue ? 'overdue' : ''} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+      <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
         <div class="chat-header" onclick="toggleAccordion('${o.id}')">
           <span style="font-size:13.5px; direction:auto;">
             📌 ${o.code} — ${o.name}
             ${!isCompleted ? `<span class="challenge-tag">🔥 CHALLENGE</span>` : ''}
           </span>
           <div style="display:flex; align-items:center; gap:4px;">
-            <span class="time-badge ${isCompleted ? 'done' : st.class}">
-              ${isCompleted ? '✅ Completed' : '🕒 ' + st.text}
+            <span class="time-badge ${isCompleted ? 'done' : ''}">
+              ${isCompleted ? '✅ Completed' : '🕒 ' + o.displayTime}
             </span>
           </div>
         </div>
@@ -695,7 +669,7 @@ function renderOrdersDOM(){
             <a href="tel:${o.phone}" style="text-decoration:none; margin-right:6px; font-weight:bold; color:var(--mid);">📞 Call Direct</a><br>
             Address: ${o.address}<br>
             OTP Code: <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
-            Date & Time: <b>${o.date}</b><br>
+            Order Time: <b>${o.displayTime}</b><br>
             Items Details: <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; direction:auto; text-align:right;" dir="auto">${o.itemsSummary}</div>
             Total Amount: <b>Rs. ${o.total}</b><br>
             Status: <b>${isCompleted ? 'Completed' : 'Pending'}</b>
@@ -703,7 +677,7 @@ function renderOrdersDOM(){
           
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
-            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.date}')">🖨️ Print</button>
+            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Order is completed and secured</div>`}
@@ -759,7 +733,7 @@ function printReceipt(code, name, phone, address, items, total, otp, orderTime){
       <p style="text-align:center; font-size:12px; margin:2px 0;">تازہ سبزیاں و کریانہ ہوم ڈلیوری</p>
       <hr style="border:dashed 1px #000;">
       <p><b>Order Code:</b> ${code}</p>
-      <p><b>Date & Time:</b> ${orderTime || new Date().toLocaleString()}</p>
+      <p><b>Order Time:</b> ${orderTime || 'N/A'}</p>
       <p><b>Name:</b> ${name}</p>
       <p><b>Phone:</b> <span dir="ltr">${phone}</span></p>
       <p><b>Address:</b> ${address}</p>

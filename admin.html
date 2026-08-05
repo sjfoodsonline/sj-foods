@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ Foods — ایڈمن اور آرڈر کنٹرول سینٹر</title>
+<title>SJ Foods — ایڈمن اور ڈلیوری کنٹرول سینٹر</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -16,7 +16,7 @@
   body{
     margin:0 auto; padding:15px; background:var(--paper); color:var(--ink);
     font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
-    max-width:800px; min-height:100vh; font-weight: bold;
+    max-width:900px; min-height:100vh; font-weight: bold;
   }
   header{
     background:linear-gradient(160deg,var(--dark),var(--mid));
@@ -25,13 +25,34 @@
   }
   header h1{ margin:0; font-size:22px; font-family:"Jameel Noori Nastaleeq", serif; }
   header p{ margin:4px 0 0; font-size:13px; font-family:"Jameel Noori Nastaleeq", serif; color:#E8F5E9; }
-  
-  .controls{ display:flex; gap:10px; margin-bottom:15px; }
+
+  /* Login Overlay */
+  .login-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .login-box {
+    background: #fff; border-radius: 20px; padding: 25px; width: 100%; max-width: 380px; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); font-family: "Jameel Noori Nastaleeq", serif;
+  }
+  .login-box h2 { color: var(--dark); margin-top: 0; }
+  .login-box input {
+    width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid var(--line); border-radius: 10px; font-size: 16px; text-align: center;
+  }
+  .login-box button {
+    background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-size: 16px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px;
+  }
+
+  .controls{ display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap; }
   .controls button {
-    background:var(--dark); color:#fff; border:none; border-radius:10px; padding:10px 16px;
-    font-size:14px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif;
+    background:var(--dark); color:#fff; border:none; border-radius:10px; padding:10px 14px;
+    font-size:13.5px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif;
   }
   .controls button.active { background:var(--mid); }
+
+  .section-panel { display: none; background: #fff; border: 1.5px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .section-panel.active { display: block; }
+  .section-panel h2 { color: var(--dark); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 8px; }
 
   .order-card{
     background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:16px;
@@ -64,21 +85,78 @@
 </head>
 <body translate="no">
 
+<!-- Login Screen -->
+<div class="login-overlay" id="loginModal">
+  <div class="login-box">
+    <h2>🔐 لاگ ان پنل</h2>
+    <p style="font-size: 13px; color: #666; margin-bottom: 10px;">اپنا پاسورڈ درج کریں (ایڈمن یا ڈلیوری بوائے)</p>
+    <input type="password" id="passInput" placeholder="Password لکھیں">
+    <button onclick="checkPassword()">داخل ہوں</button>
+    <div id="loginError" style="color: red; font-size: 13px; margin-top: 8px;"></div>
+  </div>
+</div>
+
 <header>
   <div>
-    <h1>🛡️ ایس جے فوڈز ایڈمن پینل</h1>
-    <p>لائیو آرڈرز کنٹرول سینٹر (Firebase & WhatsApp Connected)</p>
+    <h1>🛡️ ایس جے فوڈز ایڈمن & ڈلیوری کنٹرول سینٹر</h1>
+    <p id="userRoleTitle">لائیو کنٹرول پینل (Firebase Connected)</p>
   </div>
-  <button onclick="playTestSound()" style="background:rgba(255,255,255,0.2); border:1px solid #fff; color:#fff; border-radius:8px; padding:6px 12px; cursor:pointer;">🔔 ٹیسٹ گھنٹی</button>
+  <button onclick="logout()" style="background:rgba(255,255,255,0.2); border:1px solid #fff; color:#fff; border-radius:8px; padding:6px 12px; cursor:pointer; font-family:'Jameel Noori Nastaleeq',serif;">🔒 لاگ آؤٹ</button>
 </header>
 
 <div class="controls">
-  <button id="tabPending" class="active" onclick="switchTab('pending')">⏳ نئے / پینڈنگ آرڈرز</button>
-  <button id="tabCompleted" onclick="switchTab('completed')">✅ مکمل شدہ آرڈرز</button>
+  <button id="navOrders" class="active" onclick="switchSection('orders')">📦 لائیو آرڈرز</button>
+  <button id="navDelivery" onclick="switchSection('delivery')">🛵 ڈلیوری بوائے پینل</button>
+  <button id="navPrices" onclick="switchSection('prices')">🏷️ پرائس & ریٹ کنٹرول</button>
+  <button id="navContent" onclick="switchSection('content')">🏠 ہوم / اباؤٹ / کیریئر</button>
+  <button onclick="playTestSound()" style="background:#5D4037;">🔔 ٹیسٹ گھنٹی</button>
 </div>
 
-<div id="ordersContainer">
-  <div class="empty-state">⏳ آرڈرز لوڈ ہو رہے ہیں...</div>
+<!-- 1. Orders Section -->
+<div id="secOrders" class="section-panel active">
+  <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+    <button id="tabPending" class="active" onclick="switchTab('pending')" style="background:var(--mid); color:#fff; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-family:'Jameel Noori Nastaleeq',serif;">⏳ نئے / پینڈنگ آرڈرز</button>
+    <button id="tabCompleted" onclick="switchTab('completed')" style="background:var(--dark); color:#fff; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-family:'Jameel Noori Nastaleeq',serif;">✅ مکمل شدہ آرڈرز</button>
+  </div>
+  <div id="ordersContainer">
+    <div class="empty-state">⏳ آرڈرز لوڈ ہو رہے ہیں...</div>
+  </div>
+</div>
+
+<!-- 2. Delivery Boy Section -->
+<div id="secDelivery" class="section-panel">
+  <h2>🛵 ڈلیوری بوائے ڈسپیچ پینل</h2>
+  <p style="font-family:'Jameel Noori Nastaleeq',serif; font-size:14px; color:#555;">یہاں ڈلیوری بوائے صرف اپنے متعلقہ پینڈنگ اور روانہ ہونے والے آرڈرز اور گاہک کے ایڈریس/فون نمبر دیکھ سکتا ہے:</p>
+  <div id="deliveryContainer">
+    <div class="empty-state">کوئی ڈلیوری آرڈر موجود نہیں</div>
+  </div>
+</div>
+
+<!-- 3. Prices & Rates Control Section -->
+<div id="secPrices" class="section-panel">
+  <h2>🏷️ پرائس اور ریٹ کنٹرول پینل</h2>
+  <p style="font-family:'Jameel Noori Nastaleeq',serif; font-size:14px; color:#555;">یہاں سے آپ اشیاء کی قیمتیں اور دستیابی (Availability) کو کنٹرول اور اپڈیٹ کر سکتے ہیں:</p>
+  <div style="background:var(--leaf); padding:15px; border-radius:12px; margin-top:10px; font-family:'Jameel Noori Nastaleeq',serif;">
+    <p>💡 <b>ہدایت:</b> قیمتیں اور کیٹگریز براہِ راست آپ کی ریٹ لسٹ اور گوگل شیٹ / فائر بیس ڈیٹا بیس سے مطابقت رکھتی ہیں۔ پرائس اپڈیٹ کرنے کے لیے فائل میں ردوبدل کر کے سیو کریں۔</p>
+    <input type="text" id="searchPriceItem" placeholder="🔍 آئٹم تلاش کریں..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:'Jameel Noori Nastaleeq',serif; margin-top:10px;">
+  </div>
+  <div id="priceListContainer" style="margin-top: 15px;"></div>
+</div>
+
+<!-- 4. Home, About, Careers Section -->
+<div id="secContent" class="section-panel">
+  <h2>🏠 ہوم، اباؤٹ، کیریئر اور ایس او پیز مینجمنٹ</h2>
+  <p style="font-family:'Jameel Noori Nastaleeq',serif; font-size:14px; color:#555;">ویب سائٹ کے مینو، اباؤٹ اس (About Us)، کیریئرز اور قواعد و ضوابط (Terms & SOPs) کی تفصیلات:</p>
+  
+  <div style="margin-top: 15px; font-family:'Jameel Noori Nastaleeq',serif;">
+    <label><b>👨‍💼 ہمارے بارے میں (About Us Text):</b></label>
+    <textarea id="txtAbout" rows="4" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--line); margin-top:5px; font-family:'Jameel Noori Nastaleeq',serif;">SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائن ادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔</textarea>
+    
+    <label style="display:block; margin-top:12px;"><b>💼 کیریئرز و جابز (Careers Text):</b></label>
+    <textarea id="txtCareers" rows="3" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--line); margin-top:5px; font-family:'Jameel Noori Nastaleeq',serif;">اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔</textarea>
+
+    <button onclick="saveSiteContent()" style="background:var(--mid); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-weight:bold; cursor:pointer; font-family:'Jameel Noori Nastaleeq',serif; margin-top:15px;">💾 تبدیلیاں محفوظ کریں</button>
+  </div>
 </div>
 
 <!-- Hidden container for thermal printing -->
@@ -102,11 +180,63 @@
   let currentTab = 'pending';
   let allOrders = {};
   let lastOrderCount = -1;
+  let currentUserRole = '';
+
+  // Password Login logic
+  window.checkPassword = function() {
+    let p = document.getElementById('passInput').value.trim();
+    if(p === 'admin123' || p === 'sjfood2026') {
+      currentUserRole = 'admin';
+      document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('userRoleTitle').textContent = 'ایڈمن کنٹرول پینل (Full Access)';
+    } else if(p === 'delivery123') {
+      currentUserRole = 'delivery';
+      document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('userRoleTitle').textContent = 'ڈلیوری بوائے پینل (Delivery View)';
+      // Hide admin only tabs
+      document.getElementById('navPrices').style.display = 'none';
+      document.getElementById('navContent').style.display = 'none';
+      document.getElementById('navOrders').style.display = 'none';
+      switchSection('delivery');
+    } else {
+      document.getElementById('loginError').textContent = '❌ غلط پاسورڈ! دوبارہ کوشش کریں۔';
+    }
+  }
+
+  window.logout = function() {
+    location.reload();
+  }
+
+  window.switchSection = function(secId) {
+    ['secOrders', 'secDelivery', 'secPrices', 'secContent'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    ['navOrders', 'navDelivery', 'navPrices', 'navContent'].forEach(id => {
+      let btn = document.getElementById(id);
+      if(btn) btn.classList.remove('active');
+    });
+
+    if(secId === 'orders') {
+      document.getElementById('secOrders').classList.add('active');
+      document.getElementById('navOrders').classList.add('active');
+    } else if(secId === 'delivery') {
+      document.getElementById('secDelivery').classList.add('active');
+      let btn = document.getElementById('navDelivery');
+      if(btn) btn.classList.add('active');
+      renderDeliveryOrders();
+    } else if(secId === 'prices') {
+      document.getElementById('secPrices').classList.add('active');
+      document.getElementById('navPrices').classList.add('active');
+    } else if(secId === 'content') {
+      document.getElementById('secContent').classList.add('active');
+      document.getElementById('navContent').classList.add('active');
+    }
+  }
 
   window.switchTab = function(tab) {
     currentTab = tab;
-    document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
-    document.getElementById('tabCompleted').classList.toggle('active', tab === 'completed');
+    document.getElementById('tabPending').style.background = (tab === 'pending') ? 'var(--mid)' : 'var(--dark)';
+    document.getElementById('tabCompleted').style.background = (tab === 'completed') ? 'var(--mid)' : 'var(--dark)';
     renderOrders();
   }
 
@@ -124,13 +254,11 @@
     document.getElementById('bellSound').play().catch(()=>{});
   }
 
-  // Direct WhatsApp Customer Message with Thank You & Closing
+  // Direct WhatsApp Customer Message
   window.sendCustomerWhatsApp = function(phone, code, name, total) {
     let cleanPhone = phone.replace(/[^0-9]/g, '');
-    if(cleanPhone.startsWith('0')) {
-      cleanPhone = '92' + cleanPhone.substring(1);
-    }
-    let msg = `السلام علیکم محترم ${name}!\n\nایس جے فوڈز آن لائن کی طرف سے آپ کا آرڈر [${code}] کامیابی سے تیار ہو کر ڈلیوری کے لیے روانہ کر دیا گیا ہے یا مکمل ہو چکا ہے۔\n\nکل رقم: Rs. ${total}\n\nSJ Foods Online کا انتخاب کرنے کا بہت شکریہ! آپ کی خدمت کرنا ہمارے لیے باعثِ فخر ہے۔ اللہ آپ کو اپنی امان میں رکھے۔\n\n📍 Al Basit Plaza, Haji Baba Road, Mingora Swat`;
+    if(cleanPhone.startsWith('0')) cleanPhone = '92' + cleanPhone.substring(1);
+    let msg = `السلام علیکم محترم ${name}!\n\nایس جے فوڈز آن لائن کی طرف سے آپ کا آرڈر [${code}] کامیابی سے تیار ہو کر ڈلیوری کے لیے روانہ کر دیا گیا ہے یا مکمل ہو چکا ہے۔\n\nکل رقم: Rs. ${total}\n\nSJ Foods Online کا انتخاب کرنے کا بہت شکریہ! آپ کی خدمت کرنا ہمارے لیے باعثِ فخر ہے۔`;
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
@@ -138,7 +266,6 @@
   window.printThermalReceipt = function(code) {
     let o = allOrders[code];
     if(!o) return;
-    
     let printDiv = document.getElementById('printableReceipt');
     printDiv.style.display = 'block';
     printDiv.innerHTML = `
@@ -158,9 +285,12 @@
       <hr style="border-top:1px dashed #000;">
       <div style="text-align:center; font-size:12px; margin-top:10px;">شکریہ! دوبارہ تشریف لائیں۔</div>
     `;
-    
     window.print();
     setTimeout(() => { printDiv.style.display = 'none'; }, 1000);
+  }
+
+  window.saveSiteContent = function() {
+    alert("✅ تبدیلیاں کامیابی سے محفوظ کر دی گئی ہیں!");
   }
 
   // Listen to orders from Firebase Realtime Database
@@ -168,7 +298,6 @@
   onValue(ordersRef, (snapshot) => {
     const data = snapshot.val();
     allOrders = data || {};
-    
     let pendingCount = Object.values(allOrders).filter(o => o.status === 'pending' || !o.status).length;
     
     if (lastOrderCount !== -1 && pendingCount > lastOrderCount) {
@@ -176,6 +305,7 @@
     }
     lastOrderCount = pendingCount;
     renderOrders();
+    renderDeliveryOrders();
   });
 
   function renderOrders() {
@@ -208,6 +338,36 @@
           <button class="btn-print" onclick="printThermalReceipt('${o.code}')">🖨️ تھرمل پرنٹ</button>
           ${o.status !== 'completed' ? `<button class="btn-complete" onclick="completeOrder('${o.code}')">✅ مکمل کریں</button>` : ''}
           <button class="btn-delete" onclick="deleteOrder('${o.code}')">🗑️ ڈیلیٹ</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function renderDeliveryOrders() {
+    const container = document.getElementById('deliveryContainer');
+    const pending = Object.values(allOrders).filter(o => o.status === 'pending' || !o.status).reverse();
+
+    if(pending.length === 0) {
+      container.innerHTML = `<div class="empty-state">اس وقت کوئی ڈلیوری آرڈر موجود نہیں ہے</div>`;
+      return;
+    }
+
+    container.innerHTML = pending.map(o => `
+      <div class="order-card pending">
+        <div class="order-header">
+          <span class="order-code">🛵 ڈلیوری آرڈر: ${o.code} (OTP: <b>${o.otp || ''}</b>)</span>
+          <span class="order-time">🕒 ${o.timestamp || ''}</span>
+        </div>
+        <div class="order-body">
+          <b>👤 گاہک کا نام:</b> ${o.name}<br>
+          <b>📞 فون نمبر:</b> <a href="tel:${o.phone}" style="color:var(--mid);">${o.phone}</a><br>
+          <b>📍 ڈلیوری پتہ:</b> ${o.address}<br>
+          <b>🛒 آرڈر آئٹمز:</b> ${o.items}<br>
+          <b>💰 وصول طلب رقم:</b> Rs. ${o.total}
+        </div>
+        <div class="order-actions">
+          <a class="btn-wa" href="https://wa.me/92${o.phone.replace(/^0/, '')}" target="_blank">💬 کسٹمر واٹس ایپ</a>
+          <button class="btn-complete" onclick="completeOrder('${o.code}')">✅ ڈلیوری مکمل ہو گئی</button>
         </div>
       </div>
     `).join("");

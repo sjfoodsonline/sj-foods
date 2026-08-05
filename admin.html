@@ -184,7 +184,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbwQh6ZK9eKl24Ha1u6Sc-MEhjawZsxW1-g1hFFlgJ0k8vgoho2bAnozXeW7zemFdfn6/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
@@ -532,7 +532,6 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا 100% پکا طریقہ (بلا تبدیلی)
 function parseExactRecordedTime(rawTimestamp) {
   if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
   let str = String(rawTimestamp).trim();
@@ -556,7 +555,6 @@ async function fetchOrdersFromSheet(){
       if(codeVal && codeVal.toString().includes("SJ-") && !seenCodes.has(codeVal)){
         seenCodes.add(codeVal);
         
-        // ڈائریکٹ شیٹ سے ساکت وقت پکڑیں
         let rawTime = row.timestamp || row[6] || "N/A";
         let exactOrderTimeStr = parseExactRecordedTime(rawTime);
         let unifiedOtp = codeVal ? codeVal.toString().replace("SJ-", "") : "0000";

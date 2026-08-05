@@ -145,9 +145,11 @@
   
   .item{
     display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
-    padding:14px; margin-bottom:10px; text-align:right;
+    padding:14px; margin-bottom:10px; text-align:right; position: relative;
   }
   .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
+  .item.out-of-stock-item { opacity: 0.6; filter: grayscale(0.2); }
+  
   .item-row-top{display:flex; align-items:center; gap:12px;}
   .item-thumb{
     flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
@@ -161,14 +163,19 @@
 
   .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
   .unit-select{ flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold; background:#fff; color:var(--dark); font-family: Arial, sans-serif; }
-  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-  .status-label { font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; padding: 1px 6px; border-radius: 4px; }
-  .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
-  .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
+  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  
+  /* 🏷️ تکلا اور خوبصورت اسٹیٹس لیبل */
+  .status-label {
+    font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .status-label.available { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; }
+  .status-label.out-of-stock { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
 
   .qty-box{display:flex; align-items:center; gap:6px;}
   .qty-box button{ width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; }
   .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box button:disabled{ background:#E0E0E0 !important; color:#9E9E9E !important; cursor:not-allowed; }
   .qty-box input{ width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; }
 
   #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary { font-family: "Jameel Noori Nastaleeq", serif !important; }
@@ -398,13 +405,35 @@ let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
 
+// 📱 موبائل فزیکل بیک بٹن (Hardware Back Button) ہینڈلنگ
+window.addEventListener('popstate', (event) => {
+  const lightbox = document.getElementById("lightbox");
+  const drawer = document.getElementById("drawer");
+  const activeModal = document.querySelector(".modal-overlay.active");
+  const billbar = document.getElementById("billbar");
+
+  if (!lightbox.classList.contains("hidden")) {
+    lightbox.classList.add("hidden");
+  } else if (drawer.classList.contains("active")) {
+    toggleDrawer(false);
+  } else if (activeModal) {
+    activeModal.classList.remove("active");
+  } else if (!billbar.classList.contains("collapsed")) {
+    billbar.classList.add("collapsed");
+  } else if (currentSelectedCategory) {
+    resetToHome();
+  }
+});
+
 function toggleDrawer(show){
+  if(show) history.pushState({view: 'drawer'}, "");
   document.getElementById('drawerOverlay').classList.toggle('active', show);
   document.getElementById('drawer').classList.toggle('active', show);
 }
 
 function openModal(id){
   toggleDrawer(false);
+  history.pushState({view: id}, "");
   document.getElementById(id).classList.add('active');
 }
 
@@ -427,16 +456,6 @@ document.getElementById('installAppBtn').addEventListener('click', async () => {
     }
     deferredPrompt = null;
   }
-});
-
-window.addEventListener('popstate', (event) => {
-  if (event.state && event.state.cat) {
-    currentSelectedCategory = event.state.cat;
-  } else {
-    currentSelectedCategory = null;
-  }
-  renderChips();
-  renderMainView();
 });
 
 const slider = document.getElementById('catSliderWrap');
@@ -489,6 +508,9 @@ async function loadData(){
     const index = await idxRes.json();
     const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
     
+    // 📌 ایڈمن سے تبدیل شدہ اویلیبلیٹی لسٹ لوڈ کرنا
+    let adminCatSaved = JSON.parse(localStorage.getItem("sj_admin_all_categories")) || {};
+
     CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
     ITEMS = [];
     CATEGORIES_DATA = {};
@@ -505,11 +527,19 @@ async function loadData(){
           ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
           : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
 
+        // 🔗 ایڈمن پینل کے اویلیبل چیک باکس سے مطابقت
+        let isAvail = true;
+        if (adminCatSaved[catName] && adminCatSaved[catName][ii]) {
+          isAvail = adminCatSaved[catName][ii].available !== false;
+        } else {
+          isAvail = it.available !== false;
+        }
+
         ITEMS.push({
           id: i+"-"+ii, cat: catName, icon: entry.icon,
           name: it.name, name_roman: it.name_roman || "",
           units: cleanUnits, unitIndex: 0,
-          available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
+          available: isAvail, image: it.image || "", featured: it.featured === true, qty: 0
         });
       });
     });
@@ -517,13 +547,6 @@ async function loadData(){
     coverImagesList = shuffleArray(coverImagesList);
     setupCoverSlider();
     
-    let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
-    if(initialHash && CATEGORIES_META.some(c => c.name === initialHash)){
-      currentSelectedCategory = initialHash;
-    } else {
-      currentSelectedCategory = null;
-    }
-
     renderChips();
     renderMainView();
     renderFeatured();
@@ -598,7 +621,6 @@ function selectCategory(catName){
     history.pushState({cat: catName}, "", "#" + encodeURIComponent(catName));
     currentSelectedCategory = catName;
   } else {
-    history.pushState({cat: null}, "", window.location.pathname);
     currentSelectedCategory = null;
   }
   renderChips();
@@ -670,7 +692,7 @@ function renderMainView(filter=""){
 function createItemRow(it){
   const u = it.units[it.unitIndex];
   const row = document.createElement("div");
-  row.className = "item" + (it.qty>0 ? " active":"");
+  row.className = "item" + (it.qty>0 ? " active":"") + (!it.available ? " out-of-stock-item" : "");
   row.id = "row-"+it.id;
   
   let primaryName = it.name_roman ? it.name_roman : it.name;
@@ -687,13 +709,15 @@ function createItemRow(it){
       </div>
     </div>
     <div class="item-row-bottom">
-      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      ${it.units.length > 1 ? `<select class="unit-select" ${!it.available?'disabled':''} onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
       <div class="qty-box-wrapper">
-        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
+        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">
+          ${it.available ? '🟢 Available' : '🔴 Out of Stock'}
+        </span>
         <div class="qty-box">
-          <button onclick="changeQty('${it.id}', -1)">−</button>
+          <button ${!it.available?'disabled':''} onclick="changeQty('${it.id}', -1)">−</button>
           <input type="number" value="${it.qty}" readonly>
-          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+          <button class="plus" ${!it.available?'disabled':''} onclick="changeQty('${it.id}', 1)">+</button>
         </div>
       </div>
     </div>
@@ -742,12 +766,14 @@ function renderBill(){
 
 const billbarEl = document.getElementById("billbar");
 const summaryEl = document.getElementById("summary");
+
+// 👆 کارٹ پینل انگلی سے مینمائز (Swipe Down) کرنے کا کنٹرول
 let touchStartY = 0;
 billbarEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
 billbarEl.addEventListener('touchend', (e) => {
   let touchEndY = e.changedTouches[0].clientY;
-  if(touchEndY - touchStartY > 50) billbarEl.classList.add("collapsed");
-  else if(touchStartY - touchEndY > 50) billbarEl.classList.remove("collapsed");
+  if(touchEndY - touchStartY > 40) billbarEl.classList.add("collapsed");
+  else if(touchStartY - touchEndY > 40) billbarEl.classList.remove("collapsed");
 });
 summaryEl.onclick = () => { billbarEl.classList.toggle("collapsed"); };
 
@@ -915,6 +941,7 @@ function scrollToMainItem(id){
 
 function openLightbox(src, name){
   if(!src) return;
+  history.pushState({view: 'lightbox'}, "");
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
 }

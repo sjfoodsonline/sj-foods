@@ -46,19 +46,29 @@
   
   .drawer-menu { list-style: none; padding: 0; margin: 0; }
   .drawer-menu li { margin-bottom: 10px; }
-  .drawer-menu a {
+  .drawer-menu button {
     display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line);
-    border-radius: 12px; color: var(--dark); text-decoration: none; font-size: 15px; font-weight: bold; transition: background 0.2s;
+    border-radius: 12px; color: var(--dark); font-size: 15px; font-weight: bold; width: 100%; cursor: pointer; text-align: right; font-family: inherit;
   }
-  .drawer-menu a:hover { background: var(--leaf); }
+  .drawer-menu button:hover { background: var(--leaf); }
 
   /* Modal Popup Styles */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.active { display: flex; }
-  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 85vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
   .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 18px; }
-  .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
+  .modal-box p { font-size: 14.5px; color: var(--ink); line-height: 1.8; text-align: justify; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
+
+  .owner-card {
+    text-align: center; background: var(--leaf); border: 1.5px solid #A5D6A7; border-radius: 16px; padding: 14px; margin-bottom: 12px;
+  }
+  .owner-img-box {
+    width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--dark); margin: 0 auto 10px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .owner-img-box img { width: 100%; height: 100%; object-fit: cover; }
+  .owner-name { font-size: 18px; font-weight: bold; color: var(--dark); margin: 2px 0 0; }
+  .owner-title { font-size: 12.5px; color: var(--accent); font-weight: bold; margin-bottom: 6px; }
 
   .install-banner {
     background: linear-gradient(135deg, var(--accent), #E65100); color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
@@ -243,19 +253,29 @@
     <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
   </div>
   <ul class="drawer-menu">
-    <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
-    <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (About Us)</a></li>
-    <li><a href="#" onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</a></li>
-    <li><a href="#" onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</a></li>
-    <li><a href="#" onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</a></li>
+    <li><button onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</button></li>
+    <li><button onclick="openModal('modalAbout')">👨‍💼 بانی کا پیغام (About Us)</button></li>
+    <li><button onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</button></li>
+    <li><button onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</button></li>
+    <li><button onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</button></li>
   </ul>
 </div>
 
 <!-- Modal Dialogs for Menu Items -->
 <div class="modal-overlay" id="modalAbout">
   <div class="modal-box">
-    <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
-    <p>SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائن ادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔ ہمارا مقصد بہترین معیار اور دیانت داری کے ساتھ آپ کی خدمت کرنا ہے۔</p>
+    <div class="owner-card">
+      <div class="owner-img-box">
+        <img id="ownerDisplayImg" src="https://via.placeholder.com/150?text=Suleman+Jan" alt="سلیمان جان">
+      </div>
+      <div class="owner-name" id="ownerDisplayName">سلیمان جان</div>
+      <div class="owner-title" id="ownerDisplayTitle">Founder & CEO / Chairman</div>
+    </div>
+    <h3>🎙️ بانی کا پیغام</h3>
+    <p id="ownerDisplayMsg">
+      میں سلیمان جان، ایس جے فوڈز آن لائن کا مالک اور بانی ہوں۔ میں ایک میڈیا ایکسپرٹ ہوں، اور اب یہ ایک ایکسٹرا کوشش کی ہے ایس جے فوڈز کے نام سے۔ خواہش ہے کہ میڈیا سے اب آہستہ آہستہ کنارہ کشی کر لوں اور اپنا خود کا کوئی کاروبار شروع کروں، تو آپ سب جو مجھے دیکھ رہے ہیں میری حوصلہ افزائی کریں۔<br><br>
+      میں نے میڈیا میں 20 سال اپنے لوگوں کی خدمت کی اور کبھی زندگی میں کسی سے ایک روپیہ کی بے ایمانی یا وعدہ خلافی نہیں کی، اس لیے آپ لوگ بے فکر رہیے، ہم آپ کو بہترین سروس دینے کے لیے حاضر ہیں۔ شروع میں مشکلات اور مسائل ہو سکتے ہیں جس کے لیے آپ سب کو میرے اور میری ٹیم کے ساتھ تعاون کرنا ہوگا۔ ان شاء اللہ ہم ایس جے فوڈز کو آپ کی مدد سے سوات کا نمبر 1 گروسری اسٹور بنائیں گے، لیکن یہ کام صرف آپ کے تعاون سے ہی ممکن ہوگا!
+    </p>
     <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
   </div>
 </div>
@@ -263,7 +283,7 @@
 <div class="modal-overlay" id="modalCareers">
   <div class="modal-box">
     <h3>💼 کیریئرز اور جابز (Careers)</h3>
-    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
+    <p id="careersDisplayMsg">اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
     <button class="modal-close-btn" onclick="closeModal('modalCareers')">بند کریں</button>
   </div>
 </div>
@@ -282,7 +302,7 @@
 <div class="modal-overlay" id="modalSops">
   <div class="modal-box">
     <h3>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h3>
-    <p>
+    <p id="sopsDisplayMsg">
       • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
       • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
       • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
@@ -393,7 +413,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// 📌 آپ کا نیا اور صحیح گوگل شیٹ لنک
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQMTPRSRJ8mJm-I-kYnQh5b0akZ2yb7-2j9M89SUQgm0RcSociY7tDLki6fyKezXIJ/exec";
 
 let CATEGORIES_DATA = {};
@@ -407,7 +426,17 @@ let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
 
-// 📱 موبائل فزیکل بیک بٹن کنٹرول
+// 📌 لوکل اسٹوریج سے بانی کی معلومات اور ایڈمن پیجز کا ڈیٹا لوڈ کرنا
+function loadOwnerSettings(){
+  let savedOwner = JSON.parse(localStorage.getItem("sj_owner_data"));
+  if(savedOwner){
+    if(savedOwner.name) document.getElementById("ownerDisplayName").textContent = savedOwner.name;
+    if(savedOwner.title) document.getElementById("ownerDisplayTitle").textContent = savedOwner.title;
+    if(savedOwner.msg) document.getElementById("ownerDisplayMsg").innerHTML = savedOwner.msg.replace(/\n/g, "<br>");
+    if(savedOwner.img) document.getElementById("ownerDisplayImg").src = savedOwner.img;
+  }
+}
+
 window.addEventListener('popstate', (event) => {
   const lightbox = document.getElementById("lightbox");
   const drawer = document.getElementById("drawer");
@@ -551,6 +580,7 @@ async function loadData(){
     renderMainView();
     renderFeatured();
     loadSavedCustomerDetails();
+    loadOwnerSettings();
     document.getElementById("loadingMsg").style.display = "none";
     document.getElementById("billbar").style.display = "flex";
   }catch(e){

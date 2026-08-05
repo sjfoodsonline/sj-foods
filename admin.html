@@ -45,12 +45,21 @@
   .order-time{ font-size:12px; color:var(--muted); font-family:Arial, sans-serif; }
 
   .order-body{ font-size:15px; line-height:1.8; font-family:"Jameel Noori Nastaleeq", serif; margin-bottom:12px; }
-  .order-actions{ display:flex; gap:10px; justify-content:flex-end; }
+  .order-actions{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
   
-  .btn-complete{ background:var(--mid); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; }
-  .btn-delete{ background:#D32F2F; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; }
+  .btn-complete{ background:var(--mid); color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; }
+  .btn-wa{ background:#25D366; color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; text-decoration:none; display:inline-flex; align-items:center; gap:4px; }
+  .btn-print{ background:#0288D1; color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; }
+  .btn-delete{ background:#D32F2F; color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:"Jameel Noori Nastaleeq", serif; }
 
   .empty-state{ text-align:center; padding:40px; color:var(--muted); font-family:"Jameel Noori Nastaleeq", serif; font-size:16px; }
+
+  /* Thermal Print Specific Style */
+  @media print {
+    body * { visibility: hidden; }
+    #printableReceipt, #printableReceipt * { visibility: visible; }
+    #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; font-family: Arial, sans-serif; padding: 10px; color: #000; }
+  }
 </style>
 </head>
 <body translate="no">
@@ -58,7 +67,7 @@
 <header>
   <div>
     <h1>🛡️ ایس جے فوڈز ایڈمن پینل</h1>
-    <p>لائیو آرڈرز کنٹرول سینٹر (Firebase Connected)</p>
+    <p>لائیو آرڈرز کنٹرول سینٹر (Firebase & WhatsApp Connected)</p>
   </div>
   <button onclick="playTestSound()" style="background:rgba(255,255,255,0.2); border:1px solid #fff; color:#fff; border-radius:8px; padding:6px 12px; cursor:pointer;">🔔 ٹیسٹ گھنٹی</button>
 </header>
@@ -71,6 +80,9 @@
 <div id="ordersContainer">
   <div class="empty-state">⏳ آرڈرز لوڈ ہو رہے ہیں...</div>
 </div>
+
+<!-- Hidden container for thermal printing -->
+<div id="printableReceipt" style="display:none;"></div>
 
 <!-- Audio for notification bell -->
 <audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
@@ -110,6 +122,45 @@
 
   window.playTestSound = function() {
     document.getElementById('bellSound').play().catch(()=>{});
+  }
+
+  // Direct WhatsApp Customer Message with Thank You & Closing
+  window.sendCustomerWhatsApp = function(phone, code, name, total) {
+    let cleanPhone = phone.replace(/[^0-9]/g, '');
+    if(cleanPhone.startsWith('0')) {
+      cleanPhone = '92' + cleanPhone.substring(1);
+    }
+    let msg = `السلام علیکم محترم ${name}!\n\nایس جے فوڈز آن لائن کی طرف سے آپ کا آرڈر [${code}] کامیابی سے تیار ہو کر ڈلیوری کے لیے روانہ کر دیا گیا ہے یا مکمل ہو چکا ہے۔\n\nکل رقم: Rs. ${total}\n\nSJ Foods Online کا انتخاب کرنے کا بہت شکریہ! آپ کی خدمت کرنا ہمارے لیے باعثِ فخر ہے۔ اللہ آپ کو اپنی امان میں رکھے۔\n\n📍 Al Basit Plaza, Haji Baba Road, Mingora Swat`;
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  // Thermal Printer Function
+  window.printThermalReceipt = function(code) {
+    let o = allOrders[code];
+    if(!o) return;
+    
+    let printDiv = document.getElementById('printableReceipt');
+    printDiv.style.display = 'block';
+    printDiv.innerHTML = `
+      <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:5px;">SJ FOODS ONLINE</div>
+      <div style="text-align:center; font-size:12px; margin-bottom:10px;">Al Basit Plaza, Haji Baba Road, Mingora Swat</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:13px;"><b>Order ID:</b> ${o.code}</div>
+      <div style="font-size:13px;"><b>OTP Code:</b> ${o.otp || ''}</div>
+      <div style="font-size:13px;"><b>Time:</b> ${o.timestamp || ''}</div>
+      <div style="font-size:13px;"><b>Name:</b> ${o.name}</div>
+      <div style="font-size:13px;"><b>Phone:</b> ${o.phone}</div>
+      <div style="font-size:13px;"><b>Address:</b> ${o.address}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:13px;"><b>Items:</b><br>${o.items}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="font-size:15px; font-weight:bold; text-align:center;">Total: Rs. ${o.total}</div>
+      <hr style="border-top:1px dashed #000;">
+      <div style="text-align:center; font-size:12px; margin-top:10px;">شکریہ! دوبارہ تشریف لائیں۔</div>
+    `;
+    
+    window.print();
+    setTimeout(() => { printDiv.style.display = 'none'; }, 1000);
   }
 
   // Listen to orders from Firebase Realtime Database
@@ -153,7 +204,9 @@
           <b>💰 کل رقم:</b> Rs. ${o.total}
         </div>
         <div class="order-actions">
-          ${o.status !== 'completed' ? `<button class="btn-complete" onclick="completeOrder('${o.code}')">✅ مکمل کریں (Complete)</button>` : ''}
+          <button class="btn-wa" onclick="sendCustomerWhatsApp('${o.phone}', '${o.code}', '${o.name}', '${o.total}')">💬 واٹس ایپ (تھینکس & کلوزنگ)</button>
+          <button class="btn-print" onclick="printThermalReceipt('${o.code}')">🖨️ تھرمل پرنٹ</button>
+          ${o.status !== 'completed' ? `<button class="btn-complete" onclick="completeOrder('${o.code}')">✅ مکمل کریں</button>` : ''}
           <button class="btn-delete" onclick="deleteOrder('${o.code}')">🗑️ ڈیلیٹ</button>
         </div>
       </div>

@@ -22,13 +22,44 @@
   }
   header{ 
     background:linear-gradient(160deg,var(--dark),var(--mid)); 
-    color:#fff; padding:20px 16px; border-radius:0 0 24px 24px; position:relative; 
-    box-shadow: 0 4px 15px rgba(21,58,32,0.2);
+    color:#fff; padding:18px 16px; border-radius:0 0 24px 24px; position:relative; 
+    box-shadow: 0 4px 15px rgba(21,58,32,0.2); display:flex; justify-content:space-between; align-items:center;
   }
-  header h1{ margin:0 0 4px; font-size:23px; font-weight:700; font-family: "Jameel Noori Nastaleeq", serif, Arial; letter-spacing: 0.5px; }
-  header p{ margin:0; font-size:13px; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif; }
-  .share-btn{ position:absolute; left:16px; top:20px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .header-title-box{flex:1;}
+  header h1{ margin:0 0 2px; font-size:23px; font-weight:700; font-family: "Jameel Noori Nastaleeq", serif, Arial; letter-spacing: 0.5px; color:#fff; }
+  header p{ margin:0; font-size:12px; opacity:.95; font-family: "Jameel Noori Nastaleeq", serif; color:#E8F5E9; display:flex; align-items:center; gap:4px; }
   
+  .header-btns{display:flex; gap:8px; align-items:center;}
+  .menu-btn, .share-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  
+  /* Slide Drawer Styles */
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 99999; display: none; }
+  .drawer-overlay.active { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: -100%; width: 80%; max-width: 340px; height: 100%; background: #fff; z-index: 100000;
+    transition: right 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.2); padding: 20px; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif;
+  }
+  .drawer.active { right: 0; }
+  .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--leaf); padding-bottom: 12px; margin-bottom: 16px; }
+  .drawer-header h2 { margin: 0; font-size: 18px; color: var(--dark); }
+  .drawer-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); }
+  
+  .drawer-menu { list-style: none; padding: 0; margin: 0; }
+  .drawer-menu li { margin-bottom: 10px; }
+  .drawer-menu a {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 12px; color: var(--dark); text-decoration: none; font-size: 15px; font-weight: bold; transition: background 0.2s;
+  }
+  .drawer-menu a:hover { background: var(--leaf); }
+
+  /* Modal Popup Styles */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 18px; }
+  .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
+  .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
+
   .install-banner {
     background: linear-gradient(135deg, var(--accent), #E65100); color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
     display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
@@ -140,17 +171,12 @@
   .qty-box button.plus{background:var(--dark); color:#fff;}
   .qty-box input{ width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; }
 
-  .sops-box{ background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: right; font-family: "Jameel Noori Nastaleeq", serif; }
-  .sops-box h4{ color: var(--dark); margin: 0 0 6px; font-size: 14.5px; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
-
-  .cart-sops { background: #F9F8F3; border: 1px dashed var(--mid); border-radius: 10px; padding: 10px; margin: 10px 0; font-size: 12px; color: var(--dark); line-height: 1.6; font-family: "Jameel Noori Nastaleeq", serif !important; }
-
   #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary { font-family: "Jameel Noori Nastaleeq", serif !important; }
   .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
 
   #billbar{
     position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
-    border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.25); padding:14px 18px; z-index:999999; display:flex; flex-direction:column;
+    border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.25); padding:14px 18px; z-index:99999; display:flex; flex-direction:column;
     width:100%; max-width:480px; margin:0 auto; max-height:85vh; touch-action: pan-y;
   }
   #billbar.collapsed .cart-details{display:none;}
@@ -176,11 +202,6 @@
 
   .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
   
-  .info-section { background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 16px; margin: 16px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.04); font-family: "Jameel Noori Nastaleeq", serif; }
-  .info-section h3 { color: var(--dark); margin: 0 0 8px; font-size: 16px; border-bottom: 2px solid var(--leaf); padding-bottom: 4px; }
-  .info-section p { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin: 0 0 10px; }
-  .feedback-box input, .feedback-box textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 9px; font-size: 13px; margin-bottom: 8px; background: #fff; font-family: "Jameel Noori Nastaleeq", serif; }
-
   footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
   .social-btn{ display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif; }
@@ -198,10 +219,73 @@
 <body translate="no">
 
 <header>
-  <button class="share-btn" id="shareBtn" title="Share">➦</button>
-  <h1>🟢 ایس جے فوڈز آن لائن</h1>
-  <p>تازہ سبزیاں، پھل اور کریانہ گھر بیٹھے آرڈر کریں</p>
+  <div class="header-title-box">
+    <h1>🟢 ایس جے فوڈز آن لائن</h1>
+    <p>🥦 تازہ سبزیاں، پھل و کریانہ 🌿 — معیاری ہوم ڈلیوری 🚚</p>
+  </div>
+  <div class="header-btns">
+    <button class="share-btn" id="shareBtn" title="Share">➦</button>
+    <button class="menu-btn" onclick="toggleDrawer(true)" title="Menu">☰</button>
+  </div>
 </header>
+
+<!-- Sidebar Panel Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2>📋 مینو اور معلومات</h2>
+    <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
+  </div>
+  <ul class="drawer-menu">
+    <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
+    <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (About Us)</a></li>
+    <li><a href="#" onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</a></li>
+    <li><a href="#" onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</a></li>
+    <li><a href="#" onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</a></li>
+  </ul>
+</div>
+
+<!-- Modal Dialogs for Menu Items -->
+<div class="modal-overlay" id="modalAbout">
+  <div class="modal-box">
+    <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
+    <p>SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائن ادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔ ہمارا مقصد بہترین معیار اور دیانت داری کے ساتھ آپ کی خدمت کرنا ہے۔</p>
+    <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalCareers">
+  <div class="modal-box">
+    <h3>💼 کیریئرز اور جابز (Careers)</h3>
+    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
+    <button class="modal-close-btn" onclick="closeModal('modalCareers')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalFeedback">
+  <div class="modal-box">
+    <h3>💬 عام پبلک کا فیڈ بیک (Customer Feedback)</h3>
+    <p>ہماری سروس یا معیار کے بارے میں اپنی قیمتی رائے یہاں درج کریں:</p>
+    <input type="text" id="fbName" placeholder="آپ کا نام" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
+    <textarea id="fbText" rows="3" placeholder="اپنا پیغام یا رائے یہاں لکھیں..." style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;"></textarea>
+    <button class="wa-btn" style="padding:10px; font-size:14px;" onclick="sendFeedbackWhatsApp()">💬 واٹس ایپ پر فیڈ بیک بھیجیں</button>
+    <button class="modal-close-btn" style="background:#666;" onclick="closeModal('modalFeedback')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSops">
+  <div class="modal-box">
+    <h3>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h3>
+    <p>
+      • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
+      • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
+      • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
+      • ڈلیوری سواری اور چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی طے ہوگی۔<br>
+      • سامان وصول کرتے وقت محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف سامان لینے والے کے پاس ہونا چاہیے۔
+    </p>
+    <button class="modal-close-btn" onclick="closeModal('modalSops')">بند کریں</button>
+  </div>
+</div>
 
 <div class="install-banner" id="installBanner" style="display:none;">
   <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
@@ -243,26 +327,6 @@
 
 <main id="list"></main>
 
-<div style="padding: 0 16px;" id="extraSections">
-  <div class="info-section">
-    <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
-    <p>SJ Foods Online منگورہ سوات کا ایک معتبر اور معیاری آن لائن ادارہ ہے جو آپ کو تازہ سبزیاں، پھل اور روزمرہ کا کریانہ براہ راست آپ کی دہلیز پر فراہم کرتا ہے۔ ہمارا مقصد بہترین معیار اور دیانت داری کے ساتھ آپ کی خدمت کرنا ہے۔</p>
-  </div>
-
-  <div class="info-section">
-    <h3>💼 کیریئرز اور جابز (Careers)</h3>
-    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Foods کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
-  </div>
-
-  <div class="info-section feedback-box">
-    <h3>💬 عام پبلک کا فیڈ بیک (Customer Feedback)</h3>
-    <p>ہماری سروس یا معیار کے بارے میں اپنی قیمتی رائے یہاں درج کریں:</p>
-    <input type="text" id="fbName" placeholder="آپ کا نام">
-    <textarea id="fbText" rows="3" placeholder="اپنا پیغام یا رائے یہاں لکھیں..."></textarea>
-    <button class="wa-btn" style="padding:8px; font-size:14px; margin-top:4px;" onclick="sendFeedbackWhatsApp()">💬 واٹس ایپ پر فیڈ بیک بھیجیں</button>
-  </div>
-</div>
-
 <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
 <div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 
@@ -274,14 +338,6 @@
   <div class="cart-details">
     <div id="billLines" style="margin-bottom:10px;"></div>
 
-    <div class="cart-sops">
-      📌 <b>اہم ہدایات و ضوابط:</b><br>
-      • ہر چیز 100% معیاری اور تول میں پوری دی جائے گی۔<br>
-      • سپورٹ اوقات: صبح 10 سے رات 8 بجے تک۔<br>
-      • کسی بھی غلطی یا مسئلے کی صورت میں جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
-      • محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف آپ کے پاس ہونا چاہیے۔
-    </div>
-    
     <div class="pay-card" id="payCard">
       <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
@@ -335,13 +391,26 @@ let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
 
-// 📌 ایس جے فوڈز کا آفیشل اور واحد واٹس ایپ نمبر (تمام اِن کمنگ اور اؤٹ گوئنگ کے لیے)
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
 
 let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
+
+function toggleDrawer(show){
+  document.getElementById('drawerOverlay').classList.toggle('active', show);
+  document.getElementById('drawer').classList.toggle('active', show);
+}
+
+function openModal(id){
+  toggleDrawer(false);
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
+}
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -406,6 +475,14 @@ function formatUnitLabel(label){
   return label;
 }
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 async function loadData(){
   try{
     const idxRes = await fetch("categories_index.json", {cache:"no-store"});
@@ -437,6 +514,7 @@ async function loadData(){
       });
     });
 
+    coverImagesList = shuffleArray(coverImagesList);
     setupCoverSlider();
     
     let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
@@ -461,7 +539,6 @@ async function loadSettings(){
   try{
     const res = await fetch("settings.json", {cache:"no-store"});
     const s = await res.json();
-    // 📌 پچھلے پرانے نمبر کو اوور رائڈ کر کے پکا 0315-5166034 رکھنا
     SHOP_WHATSAPP = "923155166034";
     SHOP_PAY_NUMBER = "0315-5166034";
     document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
@@ -537,11 +614,9 @@ function renderMainView(filter=""){
   const main = document.getElementById("list");
   main.innerHTML = "";
   const homeWrapper = document.getElementById("homePageWrapper");
-  const extraSec = document.getElementById("extraSections");
 
   if(filter){
     homeWrapper.style.display = "none";
-    extraSec.style.display = "none";
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
     let container = document.createElement("div");
     container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
@@ -554,7 +629,6 @@ function renderMainView(filter=""){
   } 
   else if(currentSelectedCategory){
     homeWrapper.style.display = "none";
-    extraSec.style.display = "none";
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
     let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
     if(items.length > 0){
@@ -563,23 +637,10 @@ function renderMainView(filter=""){
       titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back to Categories</button>`;
       main.appendChild(titleDiv);
       items.forEach(it => main.appendChild(createItemRow(it)));
-
-      let sopsDiv = document.createElement("div");
-      sopsDiv.className = "sops-box";
-      sopsDiv.innerHTML = `
-        <h4>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h4>
-        • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
-        • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
-        • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
-        • ڈلیوری سواری اور چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی طے ہوگی۔<br>
-        • سامان وصول کرتے وقت محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف سامان لینے والے کے پاس ہونا چاہیے۔
-      `;
-      main.appendChild(sopsDiv);
     }
   } 
   else {
     homeWrapper.style.display = "block";
-    extraSec.style.display = "block";
     let grid = document.createElement("div");
     grid.className = "home-cats-grid";
     
@@ -799,7 +860,6 @@ document.getElementById("waBtn").onclick = () => {
     }));
   } catch(e){}
 
-  // 📌 آرڈر بھیجنے کے لیے صرف 0315-5166034 (923155166034) کا واٹس ایپ کھلے گا
   window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ Order sent to WhatsApp and saved!");
 };

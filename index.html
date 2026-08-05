@@ -462,17 +462,24 @@ slider.addEventListener('touchmove', (e) => {
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-function formatUnitLabel(label){
-  if(!label) return "";
-  let l = label.toLowerCase();
-  if(l.includes("کلو") || l.includes("kg")) return "KG";
-  if(l.includes("پاؤ") || l.includes("pao")) return "Pao";
-  if(l.includes("دڑی") || l.includes("dari")) return "Dri";
-  if(l.includes("گرام") || l.includes("g")) return "g";
-  if(l.includes("لیٹر") || l.includes("litre") || l.includes("liter")) return "Ltr";
-  if(l.includes("پیکٹ") || l.includes("packet")) return "Pkt";
-  if(l.includes("درجن") || l.includes("dozen")) return "Dzn";
-  return label;
+// 📌 آپ کا فراہم کردہ اردو یونٹ میپنگ فنکشن
+function urduUnit(label) {
+  const map = {
+    "KG": "کلو",
+    "Kg": "کلو",
+    "kg": "کلو",
+    "G": "گرام",
+    "g": "گرام",
+    "Ltr": "لیٹر",
+    "Litre": "لیٹر",
+    "L": "لیٹر",
+    "Pkt": "پیکٹ",
+    "Packet": "پیکٹ",
+    "Pcs": "عدد",
+    "Piece": "عدد",
+    "Dozen": "درجن"
+  };
+  return map[label] || label;
 }
 
 function shuffleArray(array) {
@@ -502,8 +509,8 @@ async function loadData(){
       itemsList.forEach((it, ii) => {
         if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
         let cleanUnits = (it.units && it.units.length)
-          ? it.units.map(u => ({label: formatUnitLabel(u.label), rate: u.rate}))
-          : [{label: formatUnitLabel(it.unit || "KG"), rate: it.rate}];
+          ? it.units.map(u => ({label: u.label, rate: u.rate}))
+          : [{label: it.unit || "KG", rate: it.rate}];
 
         ITEMS.push({
           id: i+"-"+ii, cat: catName, icon: entry.icon,
@@ -683,11 +690,11 @@ function createItemRow(it){
       </div>
       <div class="info">
         <div class="name">${primaryName} ${secondaryName ? '<span style="font-size:13px; color:var(--muted); font-weight:normal; font-family:\'Jameel Noori Nastaleeq\',serif;">'+secondaryName+'</span>' : ''}</div>
-        <div class="meta">Per ${u.label} — <b>${fmt(u.rate)}</b></div>
+        <div class="meta">Per ${urduUnit(u.label)} — <b>${fmt(u.rate)}</b></div>
       </div>
     </div>
     <div class="item-row-bottom">
-      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${urduUnit(x.label)} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
       <div class="qty-box-wrapper">
         <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
         <div class="qty-box">
@@ -730,7 +737,7 @@ function renderBill(){
     subtotal += total;
     let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
     return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px;">
-      • [${it.cat}] ${displayName} — ${it.qty} ${u.label} = <b>${fmt(total)}</b>
+      • [${it.cat}] ${displayName} — ${it.qty} ${urduUnit(u.label)} = <b>${fmt(total)}</b>
     </div>`;
   }).join("");
 
@@ -795,6 +802,7 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
+// 📌 آپ کا فراہم کردہ مکمل منطقی آرڈر فنکشن
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
@@ -825,15 +833,29 @@ document.getElementById("waBtn").onclick = () => {
   
   let receiptItems = "";
   
+  // 📌 آپ کا مطلوبہ کیٹگری وائز گروپنگ کوڈ
+  const grouped = {};
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
     const t = it.qty * u.rate;
     subtotal += t;
-    let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
-    msg += `• [${it.cat}] ${displayName} — ${it.qty} ${u.label} = ${fmt(t)}\n`;
-    receiptItems += `• [${it.cat}] ${displayName} — ${it.qty} ${u.label} = ${fmt(t)}<br>`;
+    if (!grouped[it.cat]) grouped[it.cat] = [];
+    grouped[it.cat].push({ it, u, t });
   });
-  
+
+  Object.keys(grouped).forEach(cat => {
+    msg += `\n📂 ${cat}:\n`;
+    receiptItems += `<br><b>📂 ${cat}:</b><br>`;
+
+    grouped[cat].forEach(({ it, u, t }) => {
+      let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
+      let unitUrdu = urduUnit(u.label);
+
+      msg += `   • ${displayName} — ${it.qty} ${unitUrdu} = ${fmt(t)}\n`;
+      receiptItems += `&nbsp;&nbsp;&nbsp;• ${displayName} — ${it.qty} ${unitUrdu} = ${fmt(t)}<br>`;
+    });
+  });
+
   receiptItems += `<br><b>Payment Method:</b> ${payMethodClean}`;
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   msg += `Please dispatch my order as soon as possible. Thank you!`;
@@ -852,8 +874,7 @@ document.getElementById("waBtn").onclick = () => {
   }).format(new Date());
 
   try {
-    // 📌 اپڈیٹ شدہ نیا گوگل ایپس اسکرپٹ URL
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycby5Ls_tAiDVos0DGPtnyk_us6m24EfC9vKgNl1Q1EN_JElABCpkcLJKkTHKYqm64t-f/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
       items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),

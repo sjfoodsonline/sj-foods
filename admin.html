@@ -187,6 +187,27 @@
   </div>
 
   <div id="secProducts" style="display:none;">
+    
+    <!-- 🎙️ بانی کا پیغام اور مینو پیجز کا ایڈیٹر -->
+    <div class="card" style="border: 2px solid var(--mid); background: #F4FBF7;">
+      <h3>🎙️ بانی کا پیغام اور پروفائل انتظام</h3>
+      <p>یہاں سے آپ ویب سائٹ کے مینو میں موجود اپنے پیغام اور تصویر کو کنٹرول کر سکتے ہیں:</p>
+      
+      <label>بانی کا نام:</label>
+      <input type="text" id="editOwnerName" value="سلیمان جان">
+      
+      <label>عہدہ / ڈیزگنیشن:</label>
+      <input type="text" id="editOwnerTitle" value="Founder & CEO / Chairman">
+      
+      <label>تصویر کا لنک (Image URL):</label>
+      <input type="text" id="editOwnerImg" placeholder="تصویر کا آن لائن لنک دیں...">
+      
+      <label>بانی کا پورا پیغام (About Us Message):</label>
+      <textarea id="editOwnerMsg" rows="5" placeholder="اپنا پیغام یہاں لکھیں..."></textarea>
+      
+      <button class="btn-primary" style="background:var(--mid); margin-top:6px;" onclick="saveOwnerInfo()">💾 بانی کا پیغام محفوظ کریں</button>
+    </div>
+
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span style="font-weight:700; color:var(--dark);">🔒 کیٹگری کنٹرول</span>
@@ -210,7 +231,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// 📌 آپ کا نیا اور صحیح گوگل شیٹ لنک
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQMTPRSRJ8mJm-I-kYnQh5b0akZ2yb7-2j9M89SUQgm0RcSociY7tDLki6fyKezXIJ/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
@@ -279,6 +299,7 @@ function switchTab(tabName, pushState = true){
     document.getElementById('secProducts').style.display = 'block';
     document.getElementById('floatingSaveBar').style.display = 'flex';
     initAdminCategories();
+    loadOwnerAdminFields();
   }
 }
 
@@ -310,6 +331,28 @@ function playLoudBeep(){
       time += 0.2;
     }
   }catch(e){}
+}
+
+function loadOwnerAdminFields(){
+  let savedOwner = JSON.parse(localStorage.getItem("sj_owner_data"));
+  if(savedOwner){
+    if(savedOwner.name) document.getElementById("editOwnerName").value = savedOwner.name;
+    if(savedOwner.title) document.getElementById("editOwnerTitle").value = savedOwner.title;
+    if(savedOwner.img) document.getElementById("editOwnerImg").value = savedOwner.img;
+    if(savedOwner.msg) document.getElementById("editOwnerMsg").value = savedOwner.msg;
+  }
+}
+
+function saveOwnerInfo(){
+  let name = document.getElementById("editOwnerName").value.trim();
+  let title = document.getElementById("editOwnerTitle").value.trim();
+  let img = document.getElementById("editOwnerImg").value.trim();
+  let msg = document.getElementById("editOwnerMsg").value.trim();
+
+  let data = { name: name, title: title, img: img, msg: msg };
+  localStorage.setItem("sj_owner_data", JSON.stringify(data));
+  showToast("✅ بانی کا پیغام اور معلومات محفوظ ہو گئیں!");
+  playLoudBeep();
 }
 
 let globalCategoriesData = {};

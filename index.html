@@ -394,6 +394,9 @@ let ITEMS = [];
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
 
+// 📌 آپ کے لائیو گوگل ایپس سکرپٹ کا URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbw2h9JUcvwKsn2lqXW1uEy11me-lZVG4iwyu1wppEp0aoI1iLy_iKHlA29bSHDIV7aj/exec";
+
 let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
@@ -462,7 +465,7 @@ slider.addEventListener('touchmove', (e) => {
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-// 📌 آپ کا فراہم کردہ اردو یونٹ میپنگ فنکشن
+// 📌 اردو یونٹ میپنگ فنکشن
 function urduUnit(label) {
   const map = {
     "KG": "کلو",
@@ -802,7 +805,7 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
-// 📌 آپ کا فراہم کردہ مکمل منطقی آرڈر فنکشن
+// 📌 آرڈر بھیجنے کا فائنل فنکشن (کیٹگری وائز گروپنگ کے ساتھ)
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
@@ -833,7 +836,6 @@ document.getElementById("waBtn").onclick = () => {
   
   let receiptItems = "";
   
-  // 📌 آپ کا مطلوبہ کیٹگری وائز گروپنگ کوڈ
   const grouped = {};
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
@@ -874,7 +876,6 @@ document.getElementById("waBtn").onclick = () => {
   }).format(new Date());
 
   try {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
     navigator.sendBeacon(SHEET_URL, JSON.stringify({
       code: orderCode, name: name, phone: phone, address: addr,
       items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),

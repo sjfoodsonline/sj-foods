@@ -210,7 +210,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
+// 📌 آپ کی نئی جنریٹ شدہ گوگل ایپس سکرپٹ کا URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbw2h9JUcvwKsn2lqXW1uEy11me-lZVG4iwyu1wppEp0aoI1iLy_iKHlA29bSHDIV7aj/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
@@ -785,7 +786,7 @@ async function closeAndThankOrder(id, code, phone){
     });
   } catch(e){}
 
-  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
+  const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap کو hamari service pasand aayi hogi. Shukriya! ✨`;
   
   let cleanPhone = targetPhone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) {

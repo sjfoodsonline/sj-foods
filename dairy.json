@@ -26,32 +26,6 @@
     "name_roman": "Dahi"
   },
   {
-    "name": "پنیر",
-    "units": [
-      {
-        "label": "KG",
-        "rate": 900
-      }
-    ],
-    "available": true,
-    "image": "",
-    "featured": false,
-    "name_roman": "Paneer"
-  },
-  {
-    "name": "مکھن",
-    "units": [
-      {
-        "label": "پیکٹ",
-        "rate": 350
-      }
-    ],
-    "available": true,
-    "image": "",
-    "featured": false,
-    "name_roman": "Makhan"
-  },
-  {
     "name": "دودھ پیکٹ (چھوٹا پیک)",
     "units": [
       {

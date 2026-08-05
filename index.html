@@ -394,8 +394,8 @@ let ITEMS = [];
 let SHOP_WHATSAPP = "923155166034";
 let SHOP_PAY_NUMBER = "0315-5166034";
 
-// 📌 آپ کا لائیو گوگل ایپس سکرپٹ URL
-const SHEET_URL = "https://script.google.com/macros/s/AKfycby4wCQFMlpS0qK8M_6Gcu1qRTr0X0y0RCJY-jtFwdQgSy2WjwW2sZ0BA8Pvfx21fU3f/exec";
+// 📌 آپ کا نیا اور ایکٹیو گوگل ایپس سکرپٹ URL
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzTDns65unUDyPLOCBpS5tylqtyCACwsQwBFTGwMzmtExVoh4aQPdEAtXilqq2KKqLh/exec";
 
 let currentSelectedCategory = null;
 let coverImagesList = [];
@@ -805,7 +805,7 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
-// 📌 آرڈر بھیجنے کا فنکشن (کیٹگری وائز گروپنگ کے ساتھ)
+// 📌 آرڈر بھیجنے کا فائنل فنکشن (کیٹگری وائز گروپنگ کے ساتھ)
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }

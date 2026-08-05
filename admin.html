@@ -277,6 +277,18 @@ function playLoudBeep(){
   }catch(e){}
 }
 
+// 📌 10 منٹ کا آٹو نوٹیفکیشن الارم اگر کوئی آرڈر پینڈنگ ہو
+setInterval(() => {
+  let hasPending = latestOrdersCache.some(o => o.status !== 'completed');
+  if(hasPending){
+    playLoudBeep();
+    showToast("⏰ پینڈنگ آرڈر موجود ہے! فوری چیک کریں۔", true);
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification("SJ Foods Alert", { body: "⚠️ پینڈنگ آرڈر کو فوری پروسیس کریں!", icon: "favicon.ico" });
+    }
+  }
+}, 600000); // 10 min interval
+
 let globalCategoriesData = {};
 let loadedCategoriesList = [];
 
@@ -504,6 +516,7 @@ function renderOrdersDOM(){
           </div>
           <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn-secondary" style="flex:1; background:#E0F2F1; color:#00695C;" onclick="requestLocation('${o.phone}')">📍 Request Location</button>
+            <button class="btn-secondary" style="flex:1; background:#FFF3CD; color:#856404;" onclick="printUnifiedReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', \`${o.itemsSummary}\`, ${o.total}, '${o.otpCode}', '${o.displayTime}')">🖨️ Print Receipt</button>
             ${!isCompleted ? `
               <button class="btn-secondary" style="flex:1; background:#C8E6C9; color:#1B5E20; font-weight:700;" onclick="closeAndThankOrder('${o.id}', '${o.code}', '${o.phone}')">✅ Close & Thank Msg</button>
             ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:700; margin-top:4px;">🔒 Completed & Secured</div>`}
@@ -514,17 +527,81 @@ function renderOrdersDOM(){
   }).join("");
 }
 
+// 📌 کیٹگری وائز اور تھرمل/A4 آٹو سوئچ پرنٹ فنکشن
+function printUnifiedReceipt(code, name, phone, address, itemsRaw, total, otp, orderTime){
+  let cleanItems = itemsRaw.replace(/<br\s*\/?>/gi, "\n");
+  let itemLines = cleanItems.split("\n").filter(l => l.trim().startsWith("•"));
+
+  let categoryGrouped = {};
+  itemLines.forEach(line => {
+    let match = line.match(/•\s*\[(.*?)\]\s*(.*)/);
+    if(match){
+      let cat = match[1].trim();
+      let itemDetail = match[2].trim();
+      if(!categoryGrouped[cat]) categoryGrouped[cat] = [];
+      categoryGrouped[cat].push(itemDetail);
+    } else {
+      if(!categoryGrouped["General"]) categoryGrouped["General"] = [];
+      categoryGrouped["General"].push(line.replace("•", "").trim());
+    }
+  });
+
+  let categoryHTML = "";
+  for(let cat in categoryGrouped){
+    categoryHTML += `<div style="font-weight:bold; border-bottom:1px solid #000; margin-top:8px; padding-bottom:2px; text-align:right;">📁 ${cat}</div>`;
+    categoryGrouped[cat].forEach(it => {
+      categoryHTML += `<div style="padding-right:8px; font-size:12px;">• ${it}</div>`;
+    });
+  }
+
+  const w = window.open('', '_blank');
+  w.document.write(`
+    <html dir="rtl">
+    <head>
+      <title>Receipt ${code}</title>
+      <style>
+        @media print {
+          @page { size: auto; margin: 5mm; }
+        }
+        body { font-family: monospace, sans-serif; padding: 10px; width: 280px; margin: 0 auto; text-align: right; }
+        .head-title { text-align: center; margin: 0; font-size: 16px; font-weight: bold; }
+        .sub-title { text-align: center; font-size: 11px; margin: 2px 0 8px; }
+        hr { border: dashed 1px #000; margin: 6px 0; }
+      </style>
+    </head>
+    <body>
+      <div class="head-title">SJ Foods Mingora</div>
+      <div class="sub-title">تازہ سبزیاں، پھل و کریانہ ہوم ڈلیوری 🌿</div>
+      <hr>
+      <div><b>آرڈر کوڈ:</b> ${code}</div>
+      <div><b>وقت:</b> ${orderTime || 'N/A'}</div>
+      <div><b>کسٹمر نام:</b> ${name}</div>
+      <div><b>فون:</b> <span dir="ltr">${phone}</span></div>
+      <div><b>پتہ:</b> ${address}</div>
+      <div><b>OTP Code:</b> <b style="font-size:16px;" dir="ltr">${otp}</b></div>
+      <hr>
+      <div style="font-weight:bold;">📦 آرڈر کی تفصیلات (کیٹگری وائز):</div>
+      ${categoryHTML}
+      <hr>
+      <h3 style="text-align:center; margin:6px 0;">Total: Rs. ${total}</h3>
+      <div style="text-align:center; font-size:10px;">سامان وصول کرتے وقت OTP کوڈ بتا کر دستخط کریں۔</div>
+    </body>
+    </html>
+  `);
+  w.document.close();
+  w.focus();
+  setTimeout(()=> { w.print(); w.close(); }, 500);
+}
+
 async function closeAndThankOrder(id, code, phone){
   if(!confirm("کیا آپ اس آرڈر کو کلوز کرنا چاہتے ہیں؟")) return;
   
-  // 📌 1. لوکل اپڈیٹ: فوراً Completed کریں اور بلنکنگ بند کریں
   completedLocalSet.add(code);
   let cacheMatch = latestOrdersCache.find(o => o.id === id || o.code === code);
   if(cacheMatch) cacheMatch.status = 'completed';
   
   renderOrdersDOM();
 
-  // 📌 2. گوگل شیٹ پر اسٹیٹس اپڈیٹ کی ریکویسٹ بھیجیں
   try {
     fetch(SHEET_URL, {
       method: "POST",
@@ -534,11 +611,11 @@ async function closeAndThankOrder(id, code, phone){
     });
   } catch(e){}
 
-  // 📌 3. کسٹمر کو واٹس ایپ پر شکریہ میسج بھیجیں
   let cleanPhone = phone.replace(/[^0-9]/g, "");
   if(cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
   const msg = `Mahteram sahib/mohtarma!\n\nSJ Foods Mingora se khareedari karne ka bohat bohat shukriya! 🌿 Aap ka order *[${code}]* kamyabi ke sath mukammal kar diya gaya hai.\n\nUmeed hai aap ko hamari service pasand aayi hogi. Shukriya! ✨`;
   
+  // 📌 ڈپلیکیٹ بزنس واٹس ایپ (03155166034) کا آفیشل روٹ
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ Order Closed Successfully!");
 }

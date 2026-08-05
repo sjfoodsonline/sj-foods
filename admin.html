@@ -210,7 +210,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzGK_W0swg6g2utbsJvxxaUzHaobL0WB8onJ5OEsTSR5yljPLfMV-nmkSr_IjA6bzRa/exec";
+// 📌 آپ کا نیا اور صحیح گوگل شیٹ لنک
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxQMTPRSRJ8mJm-I-kYnQh5b0akZ2yb7-2j9M89SUQgm0RcSociY7tDLki6fyKezXIJ/exec";
 const BUSINESS_WHATSAPP = "923155166034"; 
 const ADMIN_PASSWORD = "3799"; 
 
@@ -744,11 +745,9 @@ async function closeAndThankOrder(id, code, phone){
     if(!targetPhone) return;
   }
 
-  // 1. لوکل کیشے میں اسٹیٹس فوراً Completed کرنا
   if(cacheMatch) cacheMatch.status = 'completed';
-  renderOrdersDOM(); // اسکرین پر فوراً گرین اسٹیٹس دکھانا اور ریڈ اینیمیشن بند کرنا
+  renderOrdersDOM();
 
-  // 2. گوگل شیٹ پر اپڈیٹ بھیجنا
   try {
     await fetch(SHEET_URL, {
       method: "POST",
@@ -768,7 +767,7 @@ async function closeAndThankOrder(id, code, phone){
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
 
   showToast("✅ Order closed and customer WhatsApp opened!");
-  setTimeout(() => { renderOrders(); }, 1000);
+  setTimeout(() => { renderOrders(); }, 1200);
 }
 
 function printReceipt(code, name, phone, address, items, total, otp, orderTime){

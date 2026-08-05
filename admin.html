@@ -532,7 +532,7 @@ async function parseAndAddWhatsAppOrder(){
   switchTab('orders', true);
 }
 
-// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا پاک صاف طریقہ (فکسڈ)
+// 📌 شیٹ کا اصل اور ساکت وقت ڈسپلے کرنے کا 100% پکا طریقہ (بلا تبدیلی)
 function parseExactRecordedTime(rawTimestamp) {
   if (!rawTimestamp || rawTimestamp === "undefined") return "N/A";
   let str = String(rawTimestamp).trim();
@@ -556,7 +556,8 @@ async function fetchOrdersFromSheet(){
       if(codeVal && codeVal.toString().includes("SJ-") && !seenCodes.has(codeVal)){
         seenCodes.add(codeVal);
         
-        let rawTime = row.timestamp || row[6];
+        // ڈائریکٹ شیٹ سے ساکت وقت پکڑیں
+        let rawTime = row.timestamp || row[6] || "N/A";
         let exactOrderTimeStr = parseExactRecordedTime(rawTime);
         let unifiedOtp = codeVal ? codeVal.toString().replace("SJ-", "") : "0000";
         
@@ -694,7 +695,7 @@ async function closeAndThankOrder(id, code, phone){
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, status: "completed", timestamp: new Date().toISOString() })
+      body: JSON.stringify({ code: code, status: "completed" })
     });
   } catch(e){}
 

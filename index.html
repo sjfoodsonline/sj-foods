@@ -2,242 +2,471 @@
 <html lang="ur" dir="rtl" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Online — ایڈمن و سائڈ کیٹگری کنٹرول سینٹر</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>SJ ONLINE — Fresh Vegetables, Fruits, Groceries & Daily Essentials</title>
+<link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+    --gold:#C9A227; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86;
+    --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF; --brown:#5D4037;
   }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, "Segoe UI", system-ui, sans-serif; direction:rtl; padding-bottom:110px; font-weight:bold;}
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
-  header h1{margin:0; font-size:18px; font-family:Arial, sans-serif; font-weight:bold;}
-  header p{margin:4px 0 0; font-size:11.5px; opacity:.9; font-family:Arial, sans-serif;}
-
-  .wrap{padding:14px;}
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
+  body{
+    margin:0 auto; padding:0 0 130px 0; background:var(--paper); color:var(--ink);
+    font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
+    width:100%; max-width:480px; min-height:100vh; position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
+  }
   
-  .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
-  .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
-  .dash-num{font-size:16px; font-weight:bold; color:var(--dark); margin-top:2px;}
-  .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:bold; font-family:Arial, sans-serif;}
-
-  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:Arial, sans-serif; font-weight:bold;}
-  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px; font-family:Arial, sans-serif;}
+  /* Top Header with Stylish English Banner */
+  header{ 
+    background:linear-gradient(160deg, var(--dark), var(--mid)); 
+    color:#fff; padding:18px 16px; border-radius:0 0 24px 24px; position:relative; 
+    box-shadow: 0 4px 18px rgba(21,58,32,0.3); display:flex; justify-content:space-between; align-items:center;
+  }
+  .header-title-box{ flex:1; text-align: right; }
+  header h1{ 
+    margin:0 0 2px; font-size:22px; font-weight:900; font-family: Arial, sans-serif; 
+    letter-spacing: 0.8px; color:#FFFFFF; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  header p{ 
+    margin:0; font-size:11.5px; opacity:.95; font-family: Arial, sans-serif; 
+    color:#E8F5E9; display:flex; align-items:center; gap:4px; font-weight: bold;
+  }
   
-  input[type=text], input[type=password], input[type=number], select, textarea{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:Arial, sans-serif; font-weight:bold; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
-  }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px; font-family:Arial, sans-serif; font-weight:bold;}
-  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:bold; width:100%;}
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:bold;}
-  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:bold;}
-
-  .tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:bold; font-size:11px; color:var(--muted); cursor:pointer; font-family:Arial, sans-serif;}
-  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-
-  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; transition: all 0.3s;}
+  .header-btns{display:flex; gap:8px; align-items:center;}
+  .menu-btn, .share-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   
-  @keyframes blinkRedBorder {
-    0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
-    50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
-    100% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 99999; display: none; }
+  .drawer-overlay.active { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: -100%; width: 80%; max-width: 340px; height: 100%; background: #fff; z-index: 100000;
+    transition: right 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.2); padding: 20px; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif;
   }
-  .chat-item.pending {
-    animation: blinkRedBorder 1.2s infinite;
-    background: #FFFDE7;
+  .drawer.active { right: 0; }
+  .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--leaf); padding-bottom: 12px; margin-bottom: 16px; }
+  .drawer-header h2 { margin: 0; font-size: 18px; color: var(--dark); }
+  .drawer-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); }
+  
+  .drawer-menu { list-style: none; padding: 0; margin: 0; }
+  .drawer-menu li { margin-bottom: 10px; }
+  .drawer-menu a {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 12px; color: var(--dark); text-decoration: none; font-size: 15px; font-weight: bold; transition: background 0.2s;
   }
-  .chat-item.completed {
-    background: #F1F8E9 !important;
-    border-color: #81C784 !important;
-    animation: none !important;
-    opacity: 0.9;
+  .drawer-menu a:hover { background: var(--leaf); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 18px; }
+  .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
+  .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
+
+  /* Owner Card Style inside About Modal */
+  .owner-card {
+    text-align: center; background: var(--paper); border: 1.5px solid var(--line);
+    border-radius: 16px; padding: 14px; margin-bottom: 12px;
+  }
+  .owner-img {
+    width: 95px; height: 95px; border-radius: 50%; border: 3px solid var(--dark);
+    object-fit: cover; margin: 0 auto 8px; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  .owner-name { font-size: 17.5px; font-weight: bold; color: var(--dark); margin-bottom: 2px; }
+  .owner-tag { font-size: 12px; color: var(--mid); font-weight: bold; margin-bottom: 8px; }
+
+  .install-banner {
+    background: linear-gradient(135deg, var(--accent), #E65100); color: #fff; padding: 12px 16px; margin: 12px 16px 0; border-radius: 14px;
+    display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(255,111,0,0.3); cursor: pointer;
+  }
+  .install-banner span { font-size: 14px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
+  .install-banner button { background: #fff; color: var(--accent); border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+  .cover-banner{
+    width:100%; max-width: 448px; height: 180px; margin: 12px auto 8px; 
+    overflow:hidden; border-radius:16px; display:none; background: var(--leaf);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1.5px solid var(--line);
+  }
+  .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .cover-slide{ min-width:100%; width:100%; height: 100%; }
+  .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .features-scroll-wrap{ overflow:hidden; position:relative; padding:10px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .features-scroll{ display:flex; width:max-content; gap:12px; animation: smoothMarquee 25s linear infinite; }
+  @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+
+  .feature-card{
+    flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:8px 16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; align-items:center; gap:6px;
+  }
+  .feature-card .ic{font-size:16px;}
+  .feature-card .tx{font-size:11.5px; color:var(--dark); font-weight:bold; white-space:nowrap; font-family: Arial, sans-serif;}
+
+  .featured-section{
+    margin:10px 16px 14px; padding:16px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
+    border-radius:22px; border:2.5px solid var(--brown); position:relative; overflow:hidden; box-shadow:0 10px 30px rgba(93,64,55,0.15);
+  }
+  .shout-title { font-size: 17.5px; font-weight: bold; color: var(--brown); text-transform: uppercase; text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; font-family: Arial, sans-serif; }
+  .deal-grid { display: flex; gap: 12px; justify-content: center; }
+  .deal-card{
+    flex: 1; background:#fff; border:1.5px solid #D7CCC8; border-radius:16px; padding:10px; text-align:center; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.06);
+  }
+  .deal-card img, .deal-card .deal-icon-box{
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; background: var(--leaf);
+    display: flex; align-items:center; justify-content:center; font-size: 38px;
+  }
+  .deal-card .d-name{ font-size: 15px; font-weight: bold; margin-top: 6px; color: var(--ink); line-height: 1.3; font-family: Arial, sans-serif; }
+  .deal-card .d-rate{ font-size: 14.5px; font-weight: bold; color: var(--price); margin-top: 2px; font-family: Arial, sans-serif; }
+
+  .sticky-top-container{ position: sticky; top: 0; z-index: 10; background: var(--paper); box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-bottom: 1.5px solid var(--line); }
+  .search-wrap{padding:10px 16px 6px; background:var(--paper);}
+  #search{ width:100%; padding:12px 14px; font-size:15px; border-radius:14px; border:1.5px solid var(--line); background:#fff; font-family: Arial, sans-serif; direction:rtl; text-align:right; outline:none; font-weight: bold; }
+
+  .cat-section{padding:4px 0 10px; background:var(--paper);}
+  .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:4px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; cursor: grab; }
+  .cat-marquee-wrap::-webkit-scrollbar { display: none; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:10px; direction:rtl; }
+
+  .cat-chip{
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; background:var(--leaf); color:var(--dark);
+    border:1.5px solid #cfe8d1; border-radius:24px; padding:9px 18px; font-size:13.5px; font-weight:bold; white-space:nowrap; cursor:pointer; font-family: Arial, sans-serif; box-shadow:0 2px 8px rgba(21,58,32,0.06);
+  }
+  .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
+
+  .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 16px; }
+  .home-cat-card{
+    background: #fff; border: 1.5px solid var(--line); border-radius: 18px; padding: 12px; text-align: center;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+  }
+  .home-cat-img-wrap{
+    width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; background: var(--leaf); overflow: hidden;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative;
+  }
+  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; }
+  .home-cat-name { font-size: 15.5px; font-weight: bold; color: var(--dark); font-family: Arial, sans-serif; line-height: 1.3; }
+  .home-cat-urdu { font-size: 12px; color: var(--muted); font-family: "Jameel Noori Nastaleeq", serif; margin-top: 2px; }
+
+  .back-cat-btn{
+    background: var(--leaf); color: var(--dark); border: 1.5px solid var(--mid); border-radius: 12px;
+    padding: 8px 16px; font-size: 13.5px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
   }
 
-  .chat-header{padding:12px 14px; font-weight:bold; font-size:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.03); font-family:Arial, sans-serif;}
-  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right; font-family:Arial, sans-serif;}
-  .chat-item.open .chat-body{display:block;}
-
-  .time-badge{
-    font-family: Arial, sans-serif; font-size: 11.5px; font-weight: bold;
-    padding: 4px 8px; border-radius: 6px; direction: ltr; display: flex; align-items: center; gap: 4px;
-    background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
+  main{padding:6px 16px 100px;}
+  .cat-title{
+    font-size:18px; font-weight:bold; color:var(--dark); margin:10px 2px 14px; padding-right:10px; border-right:4px solid var(--dark);
+    font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:space-between;
   }
-  .time-badge.done { background: #E8F5E9; color: #1B5E20; }
-  .challenge-tag { color: #FFF; font-size: 10.5px; font-weight: bold; padding: 3px 6px; border-radius: 4px; margin-left: 4px; background: #D32F2F; font-family:Arial, sans-serif; }
-
-  .cat-select{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
-  .cat-select select{flex:1; margin-bottom:0;}
-  .product-row{
-    background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px;
-    display:flex; flex-direction:column; gap:8px;
+  
+  .item{
+    display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:16px;
+    padding:14px; margin-bottom:10px; text-align:right;
   }
-  .row-top{display:flex; align-items:center; gap:8px;}
-  .thumb-box{
-    flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf);
-    display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; cursor:pointer;
+  .item.active{ border-color:var(--mid); box-shadow:0 4px 15px rgba(46,125,50,0.12); }
+  .item-row-top{display:flex; align-items:center; gap:12px;}
+  .item-thumb{
+    flex:0 0 75px; width:75px; height:75px; border-radius:12px; background:var(--leaf);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.06);
   }
-  .thumb-box img{width:100%; height:100%; object-fit:cover;}
-  .thumb-box input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
-  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+  .item .info{min-width:0; flex:1;}
+  .item .name{ font-size: 17.5px; font-weight: bold; color: var(--ink); line-height: 1.3; font-family: Arial, sans-serif; }
+  .item .meta{font-size:13px; color:var(--muted); margin-top:4px; font-weight: bold; font-family: Arial, sans-serif;}
+  .item .meta b{color:var(--price); font-weight:bold; font-size:14.5px;}
 
-  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
-  .unit-row input{margin-bottom:0;}
-  .unit-row input.u-label{flex:2;}
-  .unit-row input.u-rate{flex:1;}
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;}
+  .unit-select{ flex:1; border:1.5px solid var(--mid); border-radius:10px; padding:8px 10px; font-size:13.5px; font-weight:bold; background:#fff; color:var(--dark); font-family: Arial, sans-serif; }
+  .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .status-label { font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; padding: 1px 6px; border-radius: 4px; }
+  .status-label.available { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+  .status-label.out-of-stock { background: #FFCDD2; color: #B71C1C; border: 1px solid #EF9A9A; }
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .qty-box{display:flex; align-items:center; gap:6px;}
+  .qty-box button{ width:36px; height:36px; border-radius:10px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box input{ width:40px; text-align:center; border:1px solid var(--line); border-radius:8px; font-size:16px; font-weight:bold; padding:4px; }
 
-  .savebar{
-    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
-    padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;
+  #billbar, .cart-details, .pay-card, .checkout-box, .bill-summary { font-family: "Jameel Noori Nastaleeq", serif !important; }
+  .cart-item-line { font-family: "Jameel Noori Nastaleeq", serif !important; font-size: 15.5px; }
+
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
+    border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.25); padding:14px 18px; z-index:99999; display:flex; flex-direction:column;
+    width:100%; max-width:480px; margin:0 auto; max-height:85vh; touch-action: pan-y;
   }
-  .toast{
-    position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
-    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200; font-family:Arial, sans-serif; font-weight:bold;
+  #billbar.collapsed .cart-details{display:none;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select: none;}
+  .bill-summary .total{font-size:24px; font-weight:bold; color:var(--dark);}
+  .cart-details{overflow-y:auto; max-height:60vh; margin-top:10px; border-top:1px dashed var(--line); padding-top:10px;}
+  
+  .pay-card{ background:linear-gradient(135deg,#1B5E20,#2E7D32); border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff; }
+  .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95;}
+  .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
+  .pay-number-row{ display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:6px 10px; margin:0 auto; max-width:260px; }
+  .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
+  #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
+  .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right;}
+
+  .checkout-box{background:var(--leaf); border-radius:12px; padding:12px; margin-top:10px;}
+  .checkout-box input{ width:100%; border:1px solid #cfe8d1; border-radius:9px; padding:9px; font-size:14px; margin-bottom:8px; background:#fff; font-weight: bold; font-family: "Jameel Noori Nastaleeq", serif; }
+  
+  .pay-method{display:flex; gap:8px; margin-bottom:8px;}
+  .pay-method label{ flex:1; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:bold; background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:8px; cursor:pointer; color:var(--dark); }
+  .pay-method label.checked{border-color:var(--mid); background:var(--leaf);}
+  .pay-method input{width:15px; height:15px;}
+
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:12px; padding:12px; font-size:16px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px;}
+  
+  footer{text-align:center; font-size:11.5px; color:var(--muted); padding:18px 16px 20px; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold;}
+  .social-links{display:flex; justify-content:center; gap:10px; margin:12px 0;}
+  .social-btn{ display:inline-flex; align-items:center; gap:5px; background:var(--dark); color:#fff; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:bold; text-decoration:none; font-family: Arial, sans-serif; }
+  .social-btn.fb{background:#1877F2;} .social-btn.tk{background:#000000;} .social-btn.yt{background:#FF0000;} .social-btn.ig{background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);}
+
+  .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:130; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.hidden{display:none;}
+  .lightbox img{max-width:100%; max-height:80vh; border-radius:14px;}
+  .lightbox-close{position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:38px; height:38px; font-size:18px; cursor:pointer;}
+
+  .toast{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:150; font-family: "Jameel Noori Nastaleeq", serif; font-weight: bold; }
+  .toast.show{opacity:1;}
+
+  @media print {
+    body * { visibility: hidden; }
+    #printableReceipt, #printableReceipt * { visibility: visible; }
+    #printableReceipt {
+      position: absolute; left: 0; top: 0; width: 100%; max-width: 80mm;
+      direction: rtl; font-family: Arial, sans-serif; padding: 5px; color: #000;
+      font-size: 12px; line-height: 1.4;
+    }
   }
-  .toast.show{opacity:1; top:26px;}
-  .toast.err{background:#B71C1C;}
-  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; font-family:Arial, sans-serif;}
 </style>
 </head>
-<body>
+<body translate="no">
 
+<!-- Top Header with Professional English Styling -->
 <header>
-  <h1>⚙️ SJ Online — ایڈمن و سائڈ کیٹگری کنٹرول سینٹر</h1>
-  <p>لائیو فائر بیس آرڈرز، پروڈکٹس اور سائڈ مینو کیٹگریز ایڈٹر</p>
+  <div class="header-title-box">
+    <h1>SJ ONLINE</h1>
+    <p>🥦 Fresh Produce, Groceries & Daily Essentials 🚚</p>
+  </div>
+  <div class="header-btns">
+    <button class="share-btn" id="shareBtn" title="Share">➦</button>
+    <button class="menu-btn" onclick="toggleDrawer(true)" title="Menu">☰</button>
+  </div>
 </header>
 
-<div class="wrap">
-
-  <div class="dash-grid">
-    <div class="dash-card">
-      <div class="dash-lbl">📦 کل آرڈرز</div>
-      <div class="dash-num" id="statTotalOrders">0</div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-lbl">⏳ پینڈنگ</div>
-      <div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-lbl">💵 کل سیلز</div>
-      <div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div>
-    </div>
+<!-- Sidebar Panel Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2>📋 مینو اور معلومات</h2>
+    <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
   </div>
-
-  <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو آرڈرز</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ پروڈکٹس و ریٹس (🔒)</div>
-  </div>
-
-  <!-- SECTION 1: LIVE ORDERS -->
-  <div id="secOrders">
-    <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
-      <div style="display:flex; gap:6px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
-        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 ٹیسٹ بیل</button>
-      </div>
-    </div>
-    <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
-  </div>
-
-  <!-- SECTION 2: PRODUCTS & SIDEBAR CATEGORIES CONTROL (PASSWORD PROTECTED) -->
-  <div id="secProducts" style="display:none;">
-    <div class="card" id="setupCard" style="display:none;">
-      <h3>🔑 گیٹ ہب (GitHub) سیٹ اپ</h3>
-      <p>ریٹس اور پروڈکٹس کو لائیو اپڈیٹ کرنے کے لیے ایک بار گٹ ہب کی معلومات درج کریں:</p>
-      <label>GitHub یوزر نیم</label>
-      <input type="text" id="cfgOwner" value="sjfoodsonline">
-      <label>ریپازٹری کا نام</label>
-      <input type="text" id="cfgRepo" value="sj-foods">
-      <label>Personal Access Token</label>
-      <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">محفوظ کریں اور جڑیں</button>
-    </div>
-
-    <div id="mainProductsPanel" style="display:none;">
-      <div class="card">
-        <div class="cat-select">
-          <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
-          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 سائڈ کیٹگریز و معلومات (About, SOPs...)</button>
-          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 ری سیٹ</button>
-        </div>
-        <div class="hint">جس کیٹگری کے پروڈکٹس یا ریٹس بدلنے ہوں وہ منتخب کریں۔ سائڈ مینو کی تمام معلومات (About Us, Careers, SOPs) ایڈٹ کرنے کے لیے نارنجی بٹن دبائیں۔</div>
-      </div>
-
-      <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none;" onclick="addNewProductItem()">➕ نیا پروڈکٹ شامل کریں</button>
-    </div>
-  </div>
-
+  <ul class="drawer-menu">
+    <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
+    <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (About Us)</a></li>
+    <li><a href="#" onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</a></li>
+    <li><a href="#" onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</a></li>
+    <li><a href="#" onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز (Terms)</a></li>
+  </ul>
 </div>
 
-<!-- Side Categories & About Settings Modal (Password Protected via Admin 3799) -->
-<div class="modal-overlay" id="adminSiteSettingsModal" style="display:none;">
-  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">⚙️ سائڈ مینو کیٹگریز و اباؤٹ ایڈٹر</h3>
-      <button onclick="closeSiteSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+<!-- Modal Dialog for About Us with Sulaiman Jan's Story -->
+<div class="modal-overlay" id="modalAbout">
+  <div class="modal-box">
+    <h3>👨‍💼 ہمارے بارے میں اور بانی کا پیغام</h3>
+    
+    <div class="owner-card">
+      <img src="images/owner.jpg" alt="Sulaiman Jan" class="owner-img" id="aboutOwnerImg" onerror="this.src='https://via.placeholder.com/95?text=Sulaiman+Jan'">
+      <div class="owner-name" id="aboutOwnerName">سلیمان جان (ولد قاسم جان)</div>
+      <div class="owner-tag">Founder & CEO — SJ Online Mingora</div>
     </div>
 
-    <!-- About Us Section -->
-    <div style="background:#F9F8F3; padding:10px; border-radius:12px; margin-bottom:12px; border:1px solid var(--line);">
-      <h4 style="margin:0 0 8px; color:var(--mid);">👨‍💼 ہمارے بارے میں (About Us) & بانی پروفائل</h4>
+    <!-- Urdu Section -->
+    <div style="border-bottom: 1.5px dashed var(--line); padding-bottom: 12px; margin-bottom: 12px;">
+      <h4 style="color: var(--dark); margin: 0 0 6px; font-size: 15px;">🇵🇰 اردو پیغام:</h4>
+      <p style="text-align: justify; line-height: 1.9; font-size: 14px; margin: 0 0 8px;" id="aboutUrduMsg">
+        <b>سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</b><br>
+        مینگورہ سوات میں مسلسل <b>20 سال تک میڈیا انڈسٹری</b> میں خدمات سرانجام دینے کے بعد، میں نے جدید ٹیکنالوجی کا استعمال کرتے ہوئے <b>SJ Online</b> کا آغاز کیا ہے۔<br>
+        ہم جانتے ہیں کہ روزمرہ کی مصروفیات، ٹریفک کے مسائل، ہجوم یا بیماری کی وجہ سے بازار جانا ہر کسی کے لیے آسان نہیں ہوتا۔ ہمارا مقصد یہ ہے کہ آپ اپنے گھر پر سکون سے بیٹھیں اور صرف <b>ایک کلک</b> پر آپ کی ضرورت کی ہر چیز (تازہ سبزیاں، پھل، کریانہ اور زندگی کی تمام ضروریات) سیدھی آپ کی دہلیز پر پہنچ جائے۔
+      </p>
+      <p style="text-align: justify; line-height: 1.9; font-size: 14px; background: var(--leaf); padding: 10px; border-radius: 10px; border-right: 4px solid var(--mid); margin: 0;">
+        🤝 <b>امانت اور دیانت داری کی ضمانت:</b><br>
+        مینگورہ کا بچہ بچہ جانتا ہے کہ ہم نے 20 سال میڈیا کے ذریعے ہمیشہ سچائی اور دیانت داری سے آپ کی خدمت کی ہے اور کبھی کسی کے ساتھ بے ایمانی نہیں کی۔ آپ کی رقم ہمارے پاس <b>اللہ کی امانت</b> ہے۔ اگر آپ کی بھیجی گئی رقم کے بدلے سامان دستیاب نہ ہوا، تو <b>100% رقم فوری واپس</b> کی جائے گی۔ خیانت ہمارے ایمان اور اصول کے خلاف ہے۔ آپ آنکھیں بند کر کے ہم پر بھروسہ کر سکتے ہیں!
+      </p>
+    </div>
+
+    <!-- English Section -->
+    <div>
+      <h4 style="color: var(--dark); margin: 0 0 6px; font-size: 14px; font-family: Arial, sans-serif;">🇬🇧 English Message:</h4>
+      <p style="text-align: justify; line-height: 1.7; font-size: 13px; font-family: Arial, sans-serif; margin: 0 0 8px;" dir="ltr" id="aboutEnglishMsg">
+        <b>Greetings! I am Sulaiman Jan (S/O Qasim Jan).</b><br>
+        After serving the people of Mingora, Swat for <b>20 years in the media industry</b>, I have built <b>SJ Online</b> to bring convenience to your doorstep using modern technology.<br>
+        We understand that due to busy schedules, traffic, crowds, or health issues, going to the market isn't always easy. Our goal is simple: stay comfortable at home and get fresh vegetables, fruits, groceries, and all daily essentials delivered right to your door with just <b>one click</b>.
+      </p>
+      <p style="text-align: justify; line-height: 1.7; font-size: 13px; font-family: Arial, sans-serif; background: #F4FBF7; padding: 10px; border-radius: 10px; border-left: 4px solid var(--mid); margin: 0;" dir="ltr">
+        🤝 <b>Our Promise of Trust & Honesty:</b><br>
+        The people of Mingora know our 20-year track record of honest and dedicated service in the media. Your money is a <b>sacred trust</b> to us. If any item is unavailable after payment, we guarantee a <b>100% immediate refund</b>. Dishonesty has no place in our faith or values. You can trust us with complete peace of mind!
+      </p>
+    </div>
+
+    <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalCareers">
+  <div class="modal-box">
+    <h3>💼 کیریئرز اور جابز (Careers)</h3>
+    <p>اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Online کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</p>
+    <button class="modal-close-btn" onclick="closeModal('modalCareers')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalFeedback">
+  <div class="modal-box">
+    <h3>💬 عام پبلک کا فیڈ بیک (Customer Feedback)</h3>
+    <p>ہماری سروس یا معیار کے بارے میں اپنی قیمتی رائے یہاں درج کریں:</p>
+    <input type="text" id="fbName" placeholder="آپ کا نام" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
+    <textarea id="fbText" rows="3" placeholder="اپنا پیغام یا رائے یہاں لکھیں..." style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;"></textarea>
+    <button class="wa-btn" style="padding:10px; font-size:14px;" onclick="sendFeedbackWhatsApp()">💬 واٹس ایپ پر فیڈ بیک بھیجیں</button>
+    <button class="modal-close-btn" style="background:#666;" onclick="closeModal('modalFeedback')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSops">
+  <div class="modal-box">
+    <h3>📜 معیاری ضوابط و ایس او پیز (Terms & SOPs)</h3>
+    <p>
+      • ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔<br>
+      • اگر کسی آئٹم میں کوئی مسئلہ یا غلطی ہوئی، تو جانچ پڑتال کے بعد اسے فوری تبدیل کیا جائے گا۔<br>
+      • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔<br>
+      • ڈلیوری سواری اور چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی طے ہوگی۔<br>
+      • سامان وصول کرتے وقت محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف سامان لینے والے کے پاس ہونا چاہیے۔
+    </p>
+    <button class="modal-close-btn" onclick="closeModal('modalSops')">بند کریں</button>
+  </div>
+</div>
+
+<div class="install-banner" id="installBanner" style="display:none;">
+  <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
+  <button id="installAppBtn">انسٹال کریں</button>
+</div>
+
+<div id="homePageWrapper">
+  <div class="cover-banner" id="coverBanner">
+    <div class="cover-slider-track" id="coverSliderTrack"></div>
+  </div>
+
+  <div class="features-scroll-wrap">
+    <div class="features-scroll" id="featuresTrack">
+      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+      <div class="feature-card"><span class="ic">💎</span><span class="tx">Luxury Quality</span></div>
+      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Express Doorstep Delivery</span></div>
+      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure Payments</span></div>
+      <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Direct Order</span></div>
+      <div class="feature-card"><span class="ic">📲</span><span class="tx">EasyPaisa / Bank</span></div>
+    </div>
+  </div>
+
+  <div class="featured-section hidden" id="featuredSection">
+    <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
+    <div class="deal-grid" id="dealBox"></div>
+  </div>
+</div>
+
+<div class="sticky-top-container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+  </div>
+  <div class="cat-section">
+    <div class="cat-marquee-wrap" id="catSliderWrap">
+      <div class="cat-marquee-track" id="chips"></div>
+    </div>
+  </div>
+</div>
+
+<main id="list"></main>
+
+<div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
+<div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+
+<div id="billbar" class="collapsed" style="display:none;">
+  <div class="bill-summary" id="summary">
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز) <span style="font-size:11px; color:var(--muted); margin-right:6px;">(👆 انگلی سے کھولیں/بند کریں)</span></div>
+    <div class="total" id="summaryTotal">Rs. 0</div>
+  </div>
+  <div class="cart-details">
+    <div id="billLines" style="margin-bottom:10px;"></div>
+
+    <div class="checkout-box">
+      <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px; font-family:'Jameel Noori Nastaleeq',serif;">📦 ڈلیوری کی تفصیلات دیں</div>
+      <input id="custName" type="text" placeholder="Name (نام)">
+      <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
+      <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
+
+      <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
+        <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
+        <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 EasyPaisa / Bank</label>
+      </div>
+    </div>
+
+    <!-- Online Payment Card -->
+    <div class="pay-card" id="payCard">
+      <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
+      <div class="pay-amount" id="payAmount">Rs. 0</div>
       
-      <label>🖼️ بانی کی تصویر اپ لوڈ کریں (Sulaiman Jan)</label>
-      <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-        <img id="adminOwnerPreview" src="images/owner.jpg" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid var(--dark);" onerror="this.src='https://via.placeholder.com/60'">
-        <input type="file" id="ownerImgFile" accept="image/*" onchange="handleOwnerImgUpload(event)">
+      <!-- EasyPaisa / JazzCash Number -->
+      <div style="font-size:12.5px; font-weight:bold; margin-bottom:3px;">EasyPaisa / JazzCash:</div>
+      <div class="pay-number-row" style="margin-bottom:8px;">
+        <span class="pay-number" id="payNumber">0334-9353799</span>
+        <button id="copyNumBtn">📋 کاپی</button>
+      </div>
+      <div style="font-size:11.5px; opacity:0.9; margin-bottom:8px;">اکاؤنٹ نام: سلیمان جان</div>
+
+      <!-- Bank of Khyber IBAN -->
+      <div style="border-top:1px dashed rgba(255,255,255,0.3); padding-top:8px; margin-top:8px;">
+        <div style="font-size:12.5px; font-weight:bold; margin-bottom:3px;">Bank of Khyber (IBAN):</div>
+        <div style="font-size:11.5px; font-family:Arial; direction:ltr; font-weight:bold; background:rgba(255,255,255,0.16); padding:4px; border-radius:6px; margin-bottom:2px;">PK53KHYB5012003008539951</div>
+        <div style="font-size:11.5px; opacity:0.9;">اکاؤنٹ نام: سلیمان جان</div>
       </div>
 
-      <label>👤 بانی کا نام</label>
-      <input type="text" id="adminOwnerName" value="سلیمان جان (ولد قاسم جان)">
-
-      <label>🇵🇰 اردو اباؤٹ پیغام</label>
-      <textarea id="adminUrduMsg" rows="3">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔ مینگورہ سوات میں مسلسل 20 سال تک میڈیا انڈسٹری میں خدمات سرانجام دینے کے بعد، میں نے جدید ٹیکنالوجی کا استعمال کرتے ہوئے SJ Online کا آغاز کیا ہے۔</textarea>
-
-      <label>🇬🇧 English About Message</label>
-      <textarea id="adminEnglishMsg" rows="3" dir="ltr">Greetings! I am Sulaiman Jan (S/O Qasim Jan). After serving the people of Mingora, Swat for 20 years in the media industry, I have built SJ Online to bring convenience to your doorstep using modern technology.</textarea>
+      <div class="pay-hint" style="background: rgba(0, 0, 0, 0.25); padding: 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); margin-top: 10px;">
+        📲 <b>ایزی پیسہ یا بینک ٹرانسفر کے بعد واٹس ایپ پر پیمنٹ کا سکرین شاٹ (Screenshot) شیئر کریں۔ ہماری ٹیم کی تصدیق کے بعد آرڈر فوری روانہ کر دیا جائے گا۔</b>
+      </div>
     </div>
 
-    <!-- Careers Section -->
-    <div style="background:#F9F8F3; padding:10px; border-radius:12px; margin-bottom:12px; border:1px solid var(--line);">
-      <h4 style="margin:0 0 8px; color:var(--mid);">💼 کیریئرز و جابز (Careers)</h4>
-      <textarea id="adminCareersMsg" rows="2">اگر آپ ڈلیوری بوائے یا اسٹور مینجمنٹ کے شعبے میں SJ Online کے ساتھ کام کرنا چاہتے ہیں تو آپ واٹس ایپ نمبر پر رابطہ کر سکتے ہیں۔ ہم باصلاحیت اور محنتی افراد کو خوش آمدید کہتے ہیں!</textarea>
-    </div>
-
-    <!-- SOPs & Terms Section -->
-    <div style="background:#F9F8F3; padding:10px; border-radius:12px; margin-bottom:12px; border:1px solid var(--line);">
-      <h4 style="margin:0 0 8px; color:var(--mid);">📜 ضوابط و ایس او پیز (Terms & SOPs)</h4>
-      <textarea id="adminSopsMsg" rows="3">• ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔
-• سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔
-• ڈلیوری چارجز کے حوالے سے باہمی رضامندی طے ہوگی۔</textarea>
-    </div>
-
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 تمام سائڈ کیٹگریز گٹ ہب پر محفوظ کریں</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">⬅️ واپس جائیں (Back)</button>
+    <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
   </div>
 </div>
 
-<div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">⚠️ تبدیلیاں محفوظ نہیں ہوئیں</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 گٹ ہب پر محفوظ کریں</button>
+<footer>
+  SJ Online — Fresh Quality, Fast Delivery 🌿<br>
+  📞 <span id="footerContact">0334-9353799</span>   📧 <span id="footerEmail">sjfoodonline@gmail.com</span><br>
+  📍 Al Basit Plaza, Haji Baba Road, Mingora Swat<br>
+  🕙 Hours: 10:00 AM - 8:00 PM
+  
+  <div class="social-links" id="socialLinksBox">
+    <a href="https://www.facebook.com/sjfoodonline/" target="_blank" class="social-btn fb" id="linkFb">📘 فیس بک</a>
+    <a href="https://www.tiktok.com/@sjfood.online" target="_blank" class="social-btn tk" id="linkTk">🎵 ٹک ٹاک</a>
+    <a href="https://www.youtube.com/@SJFOODONLINE" target="_blank" class="social-btn yt" id="linkYt">▶️ یوٹیوب</a>
+    <a href="https://www.instagram.com/sjfoodonline/" target="_blank" class="social-btn ig" id="linkIg">📸 انسٹاگرام</a>
+  </div>
+</footer>
+
+<div class="lightbox hidden" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">✕</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 
-<div id="printableReceipt" style="display:none;"></div>
 <div class="toast" id="toast"></div>
 
 <!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   const firebaseConfig = {
     databaseURL: "https://sj-foods-default-rtdb.firebaseio.com"
@@ -245,550 +474,560 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
-  function showToast(msg, isErr){
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.className = "toast show" + (isErr ? " err" : "");
-    setTimeout(()=> t.className = "toast", 2600);
-  }
-  window.showToast = showToast;
-
-  function playLoudBeep(){
-    try{
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      let time = ctx.currentTime;
-      for(let loop = 0; loop < 2; loop++){
-        for(let i = 0; i < 4; i++){
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sawtooth";
-          osc.frequency.setValueAtTime(1000 + (i * 200), time);
-          gain.gain.setValueAtTime(3.0, time);
-          gain.gain.exponentialRampToValueAtTime(0.01, time + 0.25);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(time);
-          osc.stop(time + 0.25);
-          time += 0.28;
-        }
-        time += 0.2;
-      }
-    }catch(e){}
-  }
-  window.playTestSound = playLoudBeep;
-
-  window.requestNotificationPermission = function() {
-    if ('Notification' in window) {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') showToast("🟢 نوٹیفکیشن آن ہو گئے ہیں!");
-        else showToast("⚠️ نوٹیفکیشن بلاک ہیں", true);
-      });
-    }
-  }
-
-  const ADMIN_PASSWORD = "3799";
-  let isAdminAuthenticated = false;
-
-  window.checkAdminPasswordAndSwitch = function(tabName){
-    if(isAdminAuthenticated){
-      switchTab(tabName);
-      return;
-    }
-    let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
-    if(pass === ADMIN_PASSWORD){
-      isAdminAuthenticated = true;
-      showToast("🟢 پاسورڈ درست ہے!");
-      switchTab(tabName);
-    } else {
-      showToast("❌ غلط پاسورڈ!", true);
-    }
-  }
-
-  window.switchTab = function(tabName) {
-    document.getElementById('tabOrdersBtn').className = 'tab' + (tabName === 'orders' ? ' active' : '');
-    document.getElementById('tabProductsBtn').className = 'tab' + (tabName === 'products' ? ' active' : '');
-    document.getElementById('secOrders').style.display = tabName === 'orders' ? 'block' : 'none';
-    document.getElementById('secProducts').style.display = tabName === 'products' ? 'block' : 'none';
-    document.getElementById('saveBar').style.display = (tabName === 'products' && window.mainPanelActive) ? 'flex' : 'none';
-
-    if(tabName === 'products' && !window.productsInitialized){
-      window.productsInitialized = true;
-      initGitHubAdmin();
-    }
-  }
-
-  let activeAccordionId = null;
-  window.toggleAccordion = function(id){
-    if(activeAccordionId === id) activeAccordionId = null;
-    else activeAccordionId = id;
-    renderOrdersDOM();
-  }
-
-  let latestOrdersCache = [];
-  let cachedOrdersCount = 0;
-
-  const ordersRef = ref(db, 'orders');
-  onValue(ordersRef, (snapshot) => {
-    const data = snapshot.val() || {};
-    let dataList = Object.values(data);
-    let pendingOrders = [];
-    let completedOrders = [];
-
-    dataList.forEach((row, index) => {
-      let codeVal = row.code;
-      if(codeVal){
-        let st = String(row.status || 'pending').toLowerCase().trim();
-        let itemObj = {
-          id: "fb_" + index,
-          code: codeVal,
-          name: row.name || "Unknown",
-          phone: row.phone || "03000000000",
-          address: row.address || "Mingora Swat",
-          itemsSummary: row.items || "",
-          total: parseFloat(row.total || 0) || 0,
-          otpCode: row.otp || String(codeVal).replace("SJ-", ""),
-          displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
-          status: st
-        };
-        if(st === 'completed') completedOrders.push(itemObj);
-        else pendingOrders.push(itemObj);
-      }
-    });
-
-    pendingOrders.reverse();
-    completedOrders.reverse();
-    latestOrdersCache = [...pendingOrders, ...completedOrders];
-
-    let totalSales = 0;
-    let pendingCount = 0;
-    latestOrdersCache.forEach(o => {
-      if(o.status === 'completed') totalSales += o.total;
-      else pendingCount++;
-    });
-
-    document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
-    document.getElementById("statPendingOrders").textContent = pendingCount;
-    document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
-
-    if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
-      playLoudBeep();
-      showToast("🔔 نیا آرڈر موصول ہوا ہے!");
-    }
-    cachedOrdersCount = latestOrdersCache.length;
-    renderOrdersDOM();
-  });
-
-  window.renderOrdersDOM = function(){
-    const area = document.getElementById("ordersArea");
-    const orders = latestOrdersCache;
-
-    if(orders.length === 0){
-      area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
-      return;
-    }
-
-    area.innerHTML = orders.map((o) => {
-      let isOpen = (activeAccordionId === o.id);
-      let isCompleted = (o.status === 'completed');
-      let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
-      if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
-
-      return `
-        <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
-          <div class="chat-header" onclick="toggleAccordion('${o.id}')">
-            <span style="font-size:14px; font-weight:bold; direction:auto;">
-              📌 ${o.code} — <b>${o.name}</b>
-              ${!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : ''}
-            </span>
-            <div style="display:flex; align-items:center; gap:4px;">
-              <span class="time-badge ${isCompleted ? 'done' : ''}">
-                ${isCompleted ? '✅ گرین (مکمل)' : '🕒 ' + o.displayTime}
-              </span>
-            </div>
-          </div>
-          <div class="chat-body" dir="auto">
-            <div style="font-size:13.5px; line-height:1.8; font-family:Arial, sans-serif;">
-              <b>Name:</b> ${o.name}<br>
-              <b>Phone:</b> <span dir="ltr"><b>${o.phone}</b></span> 
-              <a href="tel:${o.phone}" style="text-decoration:none; margin-right:8px; font-weight:bold; color:var(--mid);">📞 Call</a>
-              <a href="https://wa.me/${cleanPhoneForWA}" target="_blank" style="text-decoration:none; margin-right:8px; font-weight:bold; color:#25D366;">💬 WhatsApp</a><br>
-              <b>Address:</b> ${o.address}<br>
-              <b>OTP Code:</b> <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
-              <b>Order Time & Date:</b> <b style="color:var(--dark);">${o.displayTime}</b><br>
-              <b>Items Details:</b> <div style="background:#F9F8F3; padding:8px; border-radius:8px; margin-top:4px; font-family:Arial, sans-serif; font-size:13px;" dir="auto">${o.itemsSummary}</div>
-              <b>Total Amount:</b> <b style="font-size:15px; color:var(--price);">Rs. ${o.total}</b><br>
-              <b>Status:</b> <b>${isCompleted ? 'Completed' : 'Pending Delivery'}</b>
-            </div>
-            
-            <div style="margin-top:12px; display:flex; gap:5px; flex-wrap:wrap;">
-              ${!isCompleted ? `
-                <button class="btn-secondary" style="background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیق</button>
-              ` : ''}
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}')">🖨️ پرنٹ</button>
-              ${!isCompleted ? `
-                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل ہو گئی</button>
-              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر ڈلیور اور مکمل ہو چکا ہے</div>`}
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  window.completeOrderAndThank = async function(code, phone){
-    if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل کرنا چاہتے ہیں؟")) return;
-    try {
-      await update(ref(db, 'orders/' + code), { status: "completed" });
-    } catch(e){}
-    const msg = `SJ Online — Order Completed\n\nمحترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Online کا شکریہ!`;
-    let cleanPhone = phone.replace(/[^0-9]/g, "");
-    if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-    showToast("✅ آرڈر مکمل (Green) ہو گیا ہے!");
-  }
+  window.dbRef = { ref, set, db };
 </script>
 
-<!-- GitHub Admin Script -->
 <script>
-const CATEGORIES_INDEX_FILE = "categories_index.json";
-let CFG = null;
-let CATEGORIES_INDEX = [];
-let currentCategoryFile = null;
-let currentItems = [];
-let currentSha = null;
-let dirty = false;
+let CATEGORIES_DATA = {};
+let CATEGORIES_META = [];
+let ITEMS = [];
 
-function openSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "flex"; }
-function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "none"; }
+let SHOP_WHATSAPP = "923349353799";
+let SHOP_PAY_NUMBER = "0334-9353799";
 
-function handleOwnerImgUpload(event){
-  const file = event.target.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      document.getElementById("adminOwnerPreview").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
+let currentSelectedCategory = null;
+let coverImagesList = [];
+let deferredPrompt = null;
+
+function toggleDrawer(show){
+  document.getElementById('drawerOverlay').classList.toggle('active', show);
+  document.getElementById('drawer').classList.toggle('active', show);
 }
 
-async function saveSiteSettingsToGitHub(){
-  showToast("⏳ سائڈ کیٹگریز اور تصاویر گٹ ہب پر محفوظ ہو رہی ہیں...");
-  try{
-    const fileInput = document.getElementById("ownerImgFile");
-    if(fileInput.files.length > 0){
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function(evt){
-        const base64 = evt.target.result.split(",")[1];
-        await ghPutBinary("images/owner.jpg", base64, "Update Owner Photo via Admin");
-      };
-      reader.readAsDataURL(file);
+function openModal(id){
+  toggleDrawer(false);
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      document.getElementById('installBanner').style.display = 'none';
     }
-    showToast("✅ تمام سائڈ کیٹگریز اور معلومات محفوظ ہو گئیں!");
-    closeSiteSettingsModal();
-  }catch(e){
-    showToast("❌ محفوظ نہیں ہو سکا: " + e.message, true);
+    deferredPrompt = null;
   }
-}
+});
 
-function markDirty(){
-  dirty = true;
-  document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں — نیچے 'گٹ ہب پر محفوظ کریں' دبائیں";
-}
-function markClean(){
-  dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
-}
-
-function utf8ToBase64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = "";
-  bytes.forEach(b => bin += String.fromCharCode(b));
-  return btoa(bin);
-}
-function base64ToUtf8(b64){
-  const bin = atob(b64.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
-}
-
-async function ghRequest(path, options){
-  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
-  const res = await fetch(url, Object.assign({
-    headers: {
-      "Authorization": "token " + CFG.token,
-      "Accept": "application/vnd.github+json"
-    }
-  }, options || {}));
-  if(!res.ok){
-    const errText = await res.text().catch(()=> "");
-    throw new Error(`GitHub API error (${res.status}): ${errText.slice(0,200)}`);
+window.addEventListener('popstate', (event) => {
+  if (event.state && event.state.cat) {
+    currentSelectedCategory = event.state.cat;
+  } else {
+    currentSelectedCategory = null;
   }
-  return res.json();
-}
-async function ghGetJson(path){
-  const data = await ghRequest(path);
-  return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
-}
-async function ghPutJson(path, obj, sha, message){
-  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content, sha, branch: "main" })
-  });
-}
-async function ghPutBinary(path, base64Content, message){
-  let sha;
-  try{
-    const existing = await ghRequest(path);
-    sha = existing.sha;
-  }catch(e){}
-  return ghRequest(path, {
-    method: "PUT",
-    body: JSON.stringify({ message, content: base64Content, sha, branch: "main" })
-  });
-}
+  renderChips();
+  renderMainView();
+});
 
-function loadConfig(){
-  const raw = localStorage.getItem("sjfoods-admin-config");
-  if(!raw) return null;
-  try{ return JSON.parse(raw); }catch(e){ return null; }
-}
-function saveConfig(cfg){
-  localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg));
-}
+const slider = document.getElementById('catSliderWrap');
+let isDown = false, startX, scrollLeft;
+slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+slider.addEventListener('mouseleave', () => { isDown = false; });
+slider.addEventListener('mouseup', () => { isDown = false; });
+slider.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+});
+slider.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+slider.addEventListener('touchend', () => { isDown = false; });
+slider.addEventListener('touchmove', (e) => {
+  if(!isDown) return;
+  const x = e.touches[0].pageX - slider.offsetLeft;
+  const walk = (x - startX) * 2;
+  slider.scrollLeft = scrollLeft - walk;
+}, {passive: true});
 
-document.getElementById("saveConfigBtn").onclick = async ()=>{
-  const owner = document.getElementById("cfgOwner").value.trim();
-  const repo = document.getElementById("cfgRepo").value.trim();
-  const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){
-    showToast("براہ کرم تمام خانے پُر کریں", true);
-    return;
-  }
-  CFG = { owner, repo, token };
-  try{
-    await ghRequest(CATEGORIES_INDEX_FILE);
-    saveConfig(CFG);
-    showToast("✅ کنکشن کامیاب!");
-    startMainGitHubPanel();
-  }catch(e){
-    showToast("❌ ٹوکن یا ریپازٹری کا نام غلط ہے", true);
-  }
-};
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
-document.getElementById("changeAccountBtn").onclick = ()=>{
-  if(!confirm("گیٹ ہب اکاؤنٹ سیٹنگز ری سیٹ کریں؟")) return;
-  localStorage.removeItem("sjfoods-admin-config");
-  location.reload();
-};
-
-async function initGitHubAdmin(){
-  CFG = loadConfig();
-  if(!CFG){
-    document.getElementById("setupCard").style.display = "block";
-    document.getElementById("mainProductsPanel").style.display = "none";
-    return;
-  }
-  try{
-    await startMainGitHubPanel();
-  }catch(e){
-    document.getElementById("setupCard").style.display = "block";
-    document.getElementById("mainProductsPanel").style.display = "none";
-    localStorage.removeItem("sjfoods-admin-config");
-  }
-}
-
-async function startMainGitHubPanel(){
-  document.getElementById("setupCard").style.display = "none";
-  document.getElementById("mainProductsPanel").style.display = "block";
-  window.mainPanelActive = true;
-  document.getElementById("saveBar").style.display = "flex";
-
-  const { json } = await ghGetJson(CATEGORIES_INDEX_FILE);
-  CATEGORIES_INDEX = json;
-
-  const picker = document.getElementById("categoryPicker");
-  picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon} ${c.category}</option>`).join("");
-  
-  await loadCategory(CATEGORIES_INDEX[0].file);
-}
-
-async function loadCategory(file){
-  if(dirty && !confirm("غیر محفوظ تبدیلیاں ضائع ہو جائیں گی۔ آگے بڑھیں؟")) {
-    document.getElementById("categoryPicker").value = currentCategoryFile;
-    return;
-  }
-  currentCategoryFile = file;
-  const area = document.getElementById("productsArea");
-  area.innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
-  document.getElementById("addProductBtn").style.display = "none";
-  try{
-    const { json, sha } = await ghGetJson(file);
-    currentItems = json.map(normalizeItem);
-    currentSha = sha;
-    renderProducts();
-    markClean();
-    document.getElementById("addProductBtn").style.display = "block";
-  }catch(e){
-    area.innerHTML = `<div class="loading">❌ لوڈ نہیں ہو سکا: ${e.message}</div>`;
-  }
-}
-
-function normalizeItem(it){
-  const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "کلو", rate: it.rate || 0}];
-  return {
-    name: it.name || "",
-    name_roman: it.name_roman || undefined,
-    available: it.available !== false,
-    image: it.image || "",
-    featured: it.featured === true,
-    units
+function urduUnit(label) {
+  const map = {
+    "KG": "کلو", "Kg": "کلو", "kg": "کلو",
+    "G": "گرام", "g": "گرام",
+    "Ltr": "لیٹر", "Litre": "لیٹر", "L": "لیٹر",
+    "Pkt": "پیکٹ", "Packet": "پیکٹ",
+    "Pcs": "عدد", "Piece": "عدد",
+    "Dozen": "درجن"
   };
+  return map[label] || label;
 }
 
-function renderProducts(){
-  const area = document.getElementById("productsArea");
-  area.innerHTML = "";
-  currentItems.forEach((it, idx) => area.appendChild(buildRow(it, idx)));
+/* Shuffle function for Cover Images Random Mix */
+function shuffleArray(array) {
+  let arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
-function buildRow(it, idx){
+async function loadData(){
+  try{
+    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const index = await idxRes.json();
+    const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
+    
+    CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
+    ITEMS = [];
+    CATEGORIES_DATA = {};
+
+    index.forEach((entry, i) => {
+      let catName = entry.category;
+      let itemsList = catResults[i];
+      CATEGORIES_DATA[catName] = itemsList;
+
+      if(entry.image) coverImagesList.push(entry.image);
+      itemsList.forEach((it, ii) => {
+        if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
+        let cleanUnits = (it.units && it.units.length)
+          ? it.units.map(u => ({label: u.label, rate: u.rate}))
+          : [{label: it.unit || "KG", rate: it.rate}];
+
+        ITEMS.push({
+          id: i+"-"+ii, cat: catName, icon: entry.icon,
+          name: it.name, name_roman: it.name_roman || "",
+          units: cleanUnits, unitIndex: 0,
+          available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0
+        });
+      });
+    });
+
+    coverImagesList = shuffleArray(coverImagesList);
+    setupCoverSlider();
+    
+    let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
+    if(initialHash && CATEGORIES_META.some(c => c.name === initialHash)){
+      currentSelectedCategory = initialHash;
+    } else {
+      currentSelectedCategory = null;
+    }
+
+    renderChips();
+    renderMainView();
+    renderFeatured();
+    loadSavedCustomerDetails();
+    document.getElementById("loadingMsg").style.display = "none";
+    document.getElementById("billbar").style.display = "flex";
+  }catch(e){
+    document.getElementById("loadingMsg").textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی";
+  }
+}
+
+async function loadSettings(){
+  try{
+    const res = await fetch("settings.json", {cache:"no-store"});
+    const s = await res.json();
+    SHOP_WHATSAPP = "923349353799";
+    SHOP_PAY_NUMBER = "0334-9353799";
+    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
+
+    if(s.cover_image && !coverImagesList.includes(s.cover_image)){
+      coverImagesList.unshift(s.cover_image);
+      setupCoverSlider();
+    }
+    if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
+    if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
+    if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
+    if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
+  }catch(e){
+    SHOP_WHATSAPP = "923349353799";
+    SHOP_PAY_NUMBER = "0334-9353799";
+  }
+}
+
+function setupCoverSlider(){
+  const track = document.getElementById("coverSliderTrack");
+  const banner = document.getElementById("coverBanner");
+  if(coverImagesList.length === 0) return;
+  banner.style.display = "block";
+  track.innerHTML = coverImagesList.map(img => `<div class="cover-slide"><img src="${img}" alt="Cover Slide"></div>`).join("");
+
+  let currentSlide = 0;
+  if(coverImagesList.length > 1){
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % coverImagesList.length;
+      track.style.transform = `translateX(${currentSlide * 100}%)`;
+    }, 4000);
+  }
+}
+
+function loadSavedCustomerDetails(){
+  const savedName = localStorage.getItem("sj_cust_name") || "";
+  const savedPhone = localStorage.getItem("sj_cust_phone") || "";
+  const savedAddr = localStorage.getItem("sj_cust_addr") || "";
+  if(savedName) document.getElementById("custName").value = savedName;
+  if(savedPhone) document.getElementById("custPhone").value = savedPhone;
+  if(savedAddr) document.getElementById("custAddr").value = savedAddr;
+
+  document.getElementById("custName").oninput = (e) => localStorage.setItem("sj_cust_name", e.target.value);
+  document.getElementById("custPhone").oninput = (e) => localStorage.setItem("sj_cust_phone", e.target.value);
+  document.getElementById("custAddr").oninput = (e) => localStorage.setItem("sj_cust_addr", e.target.value);
+}
+
+function renderChips(){
+  const chips = CATEGORIES_META.map(c => 
+    `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman || c.name}</button>`
+  ).join("");
+  document.getElementById("chips").innerHTML = `<div style="display:flex; gap:10px;">${chips}</div>`;
+}
+
+function selectCategory(catName){
+  if(catName){
+    history.pushState({cat: catName}, "", "#" + encodeURIComponent(catName));
+    currentSelectedCategory = catName;
+  } else {
+    history.pushState({cat: null}, "", window.location.pathname);
+    currentSelectedCategory = null;
+  }
+  renderChips();
+  renderMainView();
+  window.scrollTo({top: 0, behavior: 'auto'});
+}
+
+function resetToHome(){
+  selectCategory(null);
+}
+
+function renderMainView(filter=""){
+  const main = document.getElementById("list");
+  main.innerHTML = "";
+  const homeWrapper = document.getElementById("homePageWrapper");
+
+  if(filter){
+    homeWrapper.style.display = "none";
+    let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    let container = document.createElement("div");
+    container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+    if(filteredItems.length > 0){
+      filteredItems.forEach(it => container.appendChild(createItemRow(it)));
+    } else {
+      container.innerHTML += `<div style="text-align:center; padding:20px; color:var(--muted);">کوئی آئٹم نہیں ملا</div>`;
+    }
+    main.appendChild(container);
+  } 
+  else if(currentSelectedCategory){
+    homeWrapper.style.display = "none";
+    let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory);
+    let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
+    if(items.length > 0){
+      let titleDiv = document.createElement("div");
+      titleDiv.className = "cat-title";
+      titleDiv.innerHTML = `<span>${catObj.icon} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back to Categories</button>`;
+      main.appendChild(titleDiv);
+      items.forEach(it => main.appendChild(createItemRow(it)));
+    }
+  } 
+  else {
+    homeWrapper.style.display = "block";
+    let grid = document.createElement("div");
+    grid.className = "home-cats-grid";
+    
+    CATEGORIES_META.forEach(cat => {
+      let card = document.createElement("div");
+      card.className = "home-cat-card";
+      card.onclick = () => selectCategory(cat.name);
+      
+      let catItems = CATEGORIES_DATA[cat.name] || [];
+      let imagesList = catItems.filter(it => it.image).map(it => it.image);
+      let defaultImg = cat.image || (imagesList.length > 0 ? imagesList[0] : "");
+
+      card.innerHTML = `
+        <div class="home-cat-img-wrap" id="cat_img_wrap_${cat.name}">
+          ${defaultImg ? `<img src="${defaultImg}" alt="${cat.name}" id="cat_img_${cat.name}">` : `<div style="font-size:38px;">${cat.icon}</div>`}
+        </div>
+        <div class="home-cat-name">${cat.name_roman || cat.name}</div>
+        <div class="home-cat-urdu">${cat.name}</div>
+      `;
+      grid.appendChild(card);
+    });
+    main.appendChild(grid);
+  }
+  document.getElementById("noResult").style.display = "none";
+}
+
+function createItemRow(it){
+  const u = it.units[it.unitIndex];
   const row = document.createElement("div");
-  row.className = "product-row";
-  row.dataset.idx = idx;
-
-  const thumbHtml = it.image ? `<img src="${it.image}" alt="${it.name}">` : `<span class="ic">🛒</span>`;
+  row.className = "item" + (it.qty>0 ? " active":"");
+  row.id = "row-"+it.id;
+  
+  let primaryName = it.name_roman ? it.name_roman : it.name;
+  let secondaryName = it.name_roman ? `(${it.name})` : '';
 
   row.innerHTML = `
-    <div class="row-top">
-      <span class="drag-handle">↕️</span>
-      <div class="thumb-box" title="تصویر بدلنے کے لیے دبائیں">
-        ${thumbHtml}
-        <input type="file" accept="image/*" class="img-input">
+    <div class="item-row-top">
+      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${primaryName}')">
+        ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
       </div>
-      <div class="row-fields">
-        <input type="text" class="f-name" placeholder="پروڈکٹ کا نام (اردو)" value="${it.name}">
-        <input type="text" class="f-name-en" placeholder="Roman Urdu name" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
+      <div class="info">
+        <div class="name">${primaryName} ${secondaryName ? '<span style="font-size:13px; color:var(--muted); font-weight:normal; font-family:\'Jameel Noori Nastaleeq\',serif;">'+secondaryName+'</span>' : ''}</div>
+        <div class="meta">Per ${urduUnit(u.label)} — <b>${fmt(u.rate)}</b></div>
       </div>
     </div>
-    <div class="thumb-actions" style="justify-content:flex-end;">
-      ${it.image ? `<button class="btn-danger remove-img-btn" style="font-size:10px; padding:4px 6px;">🗑️ تصویر ہٹائیں</button>` : ""}
-    </div>
-    <div class="units-box"></div>
-    <button class="add-unit-btn" onclick="addUnitToItem(${idx})">➕ سائز/قیمت شامل کریں</button>
-    <div class="row-bottom">
-      <div class="row-flags">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
-        <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
+    <div class="item-row-bottom">
+      ${it.units.length > 1 ? `<select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${urduUnit(x.label)} (${fmt(x.rate)})</option>`).join("")}</select>` : '<span></span>'}
+      <div class="qty-box-wrapper">
+        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
+        <div class="qty-box">
+          <button onclick="changeQty('${it.id}', -1)">−</button>
+          <input type="number" value="${it.qty}" readonly>
+          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+        </div>
       </div>
-      <button class="btn-danger remove-row-btn" onclick="removeProductItem(${idx})">🗑️ حذف کریں</button>
     </div>
   `;
-
-  const unitsBox = row.querySelector(".units-box");
-  it.units.forEach((u, ui) => {
-    const ur = document.createElement("div");
-    ur.className = "unit-row";
-    ur.innerHTML = `
-      <input type="text" class="u-label" placeholder="یونٹ (مثلاً KG)" value="${u.label}">
-      <input type="number" class="u-rate" placeholder="قیمت" value="${u.rate}">
-      ${it.units.length > 1 ? `<button onclick="removeUnitFromItem(${idx}, ${ui})">✕</button>` : ""}
-    `;
-    ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
-    ur.querySelector(".u-rate").oninput = (e)=>{ u.rate = parseFloat(e.target.value)||0; markDirty(); };
-    unitsBox.appendChild(ur);
-  });
-
-  row.querySelector(".f-name").oninput = (e)=>{ it.name = e.target.value; markDirty(); };
-  row.querySelector(".f-name-en").oninput = (e)=>{ it.name_roman = e.target.value.trim() || undefined; markDirty(); };
-  row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
-  row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
-
-  const removeImgBtn = row.querySelector(".remove-img-btn");
-  if(removeImgBtn) removeImgBtn.onclick = ()=>{ it.image = ""; renderProducts(); markDirty(); };
-
-  row.querySelector(".img-input").onchange = async (e)=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    showToast("⏳ تصویر اپ لوڈ ہو رہی ہے...");
-    try{
-      const reader = new FileReader();
-      reader.onload = async function(evt){
-        const base64 = evt.target.result.split(",")[1];
-        const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}.jpg`;
-        await ghPutBinary(path, base64, `Upload image for ${it.name}`);
-        it.image = path;
-        renderProducts();
-        markDirty();
-        showToast("✅ تصویر اپ لوڈ ہو گئی!");
-      };
-      reader.readAsDataURL(file);
-    }catch(err){
-      showToast("❌ تصویر اپ لوڈ نہ ہو سکی: " + err.message, true);
-    }
-  };
-
-  row._item = it;
   return row;
 }
 
-window.addUnitToItem = function(idx){
-  currentItems[idx].units.push({label:"", rate:0});
-  renderProducts();
-  markDirty();
-}
-
-window.removeUnitFromItem = function(idx, ui){
-  currentItems[idx].units.splice(ui, 1);
-  renderProducts();
-  markDirty();
-}
-
-window.addNewProductItem = function(){
-  currentItems.push({ name:"", available:true, image:"", featured:false, units:[{label:"KG", rate:0}] });
-  renderProducts();
-  markDirty();
-  window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"});
-}
-
-window.removeProductItem = function(idx){
-  if(!confirm("کیا آپ اس پروڈکٹ کو حذف کرنا چاہتے ہیں؟")) return;
-  currentItems.splice(idx, 1);
-  renderProducts();
-  markDirty();
-}
-
-window.saveProductsToGitHub = async function(){
-  const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item);
-
-  document.getElementById("saveStatus").textContent = "⏳ گٹ ہب پر محفوظ ہو رہا ہے...";
-  try{
-    const fresh = await ghRequest(currentCategoryFile);
-    const payload = currentItems.map(it => {
-      const obj = {
-        name: it.name,
-        units: it.units,
-        available: it.available,
-        image: it.image,
-        featured: it.featured
-      };
-      if(it.name_roman) obj.name_roman = it.name_roman;
-      return obj;
-    });
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update prices via admin panel`);
-    markClean();
-    showToast("✅ ریٹس کامیابی سے محفوظ ہو گئے!");
-  }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ محفوظ نہیں ہو سکا";
-    showToast("❌ خرابی: " + e.message, true);
+function changeUnit(id, idx){
+  const it = ITEMS.find(x => x.id === id);
+  if(it){
+    it.unitIndex = parseInt(idx);
+    renderMainView(document.getElementById("search").value);
+    renderBill();
   }
 }
-</script>
 
+function changeQty(id, delta){
+  const it = findItem(id);
+  if(!it || !it.available) return;
+  it.qty = Math.max(0, it.qty + delta);
+  renderMainView(document.getElementById("search").value);
+  renderBill();
+}
+
+function findItem(id){ return ITEMS.find(i=>i.id===id); }
+
+function renderBill(){
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  let subtotal = 0;
+  
+  document.getElementById("billLines").innerHTML = chosen.map(it => {
+    const u = it.units[it.unitIndex];
+    const total = it.qty * u.rate;
+    subtotal += total;
+    let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
+    return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px;">
+      • [${it.cat}] ${displayName} — ${it.qty} ${urduUnit(u.label)} = <b>${fmt(total)}</b>
+    </div>`;
+  }).join("");
+
+  document.getElementById("itemCount").textContent = chosen.length;
+  document.getElementById("summaryTotal").textContent = fmt(subtotal);
+  document.getElementById("payAmount").textContent = fmt(subtotal);
+  if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
+}
+
+const billbarEl = document.getElementById("billbar");
+const summaryEl = document.getElementById("summary");
+let touchStartY = 0;
+billbarEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
+billbarEl.addEventListener('touchend', (e) => {
+  let touchEndY = e.changedTouches[0].clientY;
+  if(touchEndY - touchStartY > 50) billbarEl.classList.add("collapsed");
+  else if(touchStartY - touchEndY > 50) billbarEl.classList.remove("collapsed");
+});
+summaryEl.onclick = () => { billbarEl.classList.toggle("collapsed"); };
+
+document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
+
+document.getElementById("copyNumBtn").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText("03349353799");
+    showToast("✅ نمبر کاپی ہوگیا");
+  }catch(e){ showToast("نمبر: 0334-9353799"); }
+};
+
+const payCod = document.getElementById("payCod");
+const payEasy = document.getElementById("payEasy");
+const lblCod = document.getElementById("lblCod");
+const lblEasy = document.getElementById("lblEasy");
+
+function updatePayMethodUI(){
+  lblCod.classList.toggle("checked", payCod.checked);
+  lblEasy.classList.toggle("checked", payEasy.checked);
+}
+payCod.addEventListener("change", updatePayMethodUI);
+payEasy.addEventListener("change", updatePayMethodUI);
+
+function showToast(text){
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.className = "toast show";
+  setTimeout(()=> t.className = "toast", 2200);
+}
+
+function sendFeedbackWhatsApp(){
+  let name = document.getElementById("fbName").value.trim() || "گمنام صارف";
+  let text = document.getElementById("fbText").value.trim();
+  if(!text){ alert("براہ کرم اپنا فیڈ بیک یا رائے درج کریں!"); return; }
+  let fbMsg = `SJ Online — Customer Feedback\n\nName: ${name}\nFeedback: ${text}`;
+  window.open(`https://wa.me/923349353799?text=${encodeURIComponent(fbMsg)}`, "_blank");
+}
+
+document.getElementById("shareBtn").onclick = async () => {
+  if(navigator.share){ await navigator.share({title: "SJ Online", url: window.location.href}).catch(()=>{}); }
+  else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
+};
+
+document.getElementById("waBtn").onclick = () => {
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  if(chosen.length === 0){ alert("Cart is empty"); return; }
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  
+  if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
+
+  let payMethodWA = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
+  let payMethodClean = "Cash on Delivery (COD)";
+  
+  if(payEasy.checked){
+    payMethodWA = `EasyPaisa / Bank Transfer (Online Payment) — [سکرین شاٹ برائے تصدیق]`;
+    payMethodClean = `EasyPaisa / Bank Transfer (Online Payment)`;
+  }
+
+  const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let subtotal = 0;
+  
+  let msg = `SJ Online — New Order [${orderCode}]\n\n`;
+  msg += `Name: ${name}\n`;
+  msg += `Phone: ${phone}\n`;
+  msg += `Address: ${addr}\n`;
+  msg += `Payment Method: ${payMethodWA}\n\n`;
+  msg += `Order Details:\n`;
+  
+  let receiptItems = "";
+  
+  const grouped = {};
+  chosen.forEach(it => {
+    const u = it.units[it.unitIndex];
+    const t = it.qty * u.rate;
+    subtotal += t;
+    if (!grouped[it.cat]) grouped[it.cat] = [];
+    grouped[it.cat].push({ it, u, t });
+  });
+
+  Object.keys(grouped).forEach(cat => {
+    msg += `\n📂 ${cat}:\n`;
+    receiptItems += `<br><b>📂 ${cat}:</b><br>`;
+
+    grouped[cat].forEach(({ it, u, t }) => {
+      let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
+      let unitUrdu = urduUnit(u.label);
+
+      msg += `   • ${displayName} — ${it.qty} ${unitUrdu} = ${fmt(t)}\n`;
+      receiptItems += `&nbsp;&nbsp;&nbsp;• ${displayName} — ${it.qty} ${unitUrdu} = ${fmt(t)}<br>`;
+    });
+  });
+
+  receiptItems += `<br><b>Payment Method:</b> ${payMethodClean}`;
+  msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
+  if(payEasy.checked){
+    msg += `⚠️ نوٹ: میں نے ایزی پیسہ / بینک پیمنٹ کر دی ہے، سکرین شاٹ نیچے شیئر کر رہا/رہی ہوں۔\n\n`;
+  }
+  msg += `Please dispatch my order as soon as possible. Thank you!`;
+
+  let formattedCleanReceipt = `Payment Method: ${payMethodClean}<br>Items Summary:<br>` + receiptItems;
+
+  let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
+    timeZone: 'Asia/Karachi', 
+    weekday: 'short', 
+    day: 'numeric', 
+    month: 'short', 
+    year: 'numeric',
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true 
+  }).format(new Date());
+
+  try {
+    if(window.dbRef) {
+      const orderRef = window.dbRef.ref(window.dbRef.db, 'orders/' + orderCode);
+      window.dbRef.set(orderRef, {
+        code: orderCode, name: name, phone: phone, address: addr,
+        items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+        timestamp: nowFormatted, status: "pending"
+      });
+    }
+  } catch(e){}
+
+  window.open(`https://wa.me/923349353799?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ Order saved to Firebase and sent to WhatsApp!");
+};
+
+function renderFeatured(){
+  const feat = ITEMS.filter(i => i.featured && i.available);
+  const box = document.getElementById("dealBox");
+  const sec = document.getElementById("featuredSection");
+  if(feat.length === 0) return;
+  sec.classList.remove("hidden");
+  let currentIndex = 0;
+
+  const updateFeaturedGrid = () => {
+    if(feat.length === 0) return;
+    let first = feat[currentIndex % feat.length];
+    let second = feat[(currentIndex + 1) % feat.length];
+    
+    let fName = first.name_roman ? `${first.name_roman} <span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:'Jameel Noori Nastaleeq',serif;">(${first.name})</span>` : first.name;
+    let sName = second.name_roman ? `${second.name_roman} <span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:'Jameel Noori Nastaleeq',serif;">(${second.name})</span>` : second.name;
+
+    box.innerHTML = `
+      <div class="deal-card" onclick="jumpToItem('${first.cat}', '${first.id}')">
+        ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
+        <div class="d-name">${fName}</div>
+        <div class="d-rate">${fmt(first.units[0].rate)}</div>
+      </div>
+      <div class="deal-card" onclick="jumpToItem('${second.cat}', '${second.id}')">
+        ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon}</div>`}
+        <div class="d-name">${sName}</div>
+        <div class="d-rate">${fmt(second.units[0].rate)}</div>
+      </div>
+    `;
+    currentIndex += 2;
+  };
+  updateFeaturedGrid();
+  if(feat.length > 2) setInterval(updateFeaturedGrid, 4000);
+}
+
+function jumpToItem(catName, itemId){
+  selectCategory(catName);
+  setTimeout(() => { scrollToMainItem(itemId); }, 100);
+}
+
+function scrollToMainItem(id){
+  const el = document.getElementById("row-"+id);
+  if(el){
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.style.transition = "background 0.4s";
+    el.style.backgroundColor = "#FFF3CD";
+    setTimeout(()=> { el.style.backgroundColor = ""; }, 1500);
+  }
+}
+
+function openLightbox(src, name){
+  if(!src) return;
+  document.getElementById("lightboxImg").src = src;
+  document.getElementById("lightbox").classList.remove("hidden");
+}
+document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
+
+loadData();
+loadSettings();
+</script>
 </body>
 </html>

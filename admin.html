@@ -285,14 +285,15 @@
   window.sendConfirmationMsg = function(phone, code) {
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if (cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
-    const msg = `السلام علیکم! ایس جے آن لائن میں خوش آمدید 🌿۔\n\nآپ نے جو سامان سلیکٹ کیا ہے، کیا آپ اپنے اس آرڈر [${code}] کی تصدیق کرنا چاہتے ہیں تاکہ ہم فوراً آپ کے سامان کی ڈلیوری کی تیاری شروع کر دیں؟\n\nبراہ کرم اس میسج کا جواب دے کر یا 'OK' لکھ کر کنفرم کر دیں۔ شکریہ! ✨`;
+    // پاک اور سیدھی ترتیب (اردو اور انگریزی لائنیں الگ)
+    const msg = `SJ Online — Order Confirmation\n\nآپ کا آرڈر [${code}] موصول ہو گیا ہے۔ کیا آپ اس کی تصدیق کرتے ہیں تاکہ ڈلیوری شروع کی جا سکے؟\n\nبراہ کرم اوکے (OK) لکھ کر تصدیق کریں۔ شکریہ!`;
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
   window.requestLocation = function(phone){
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-    let msg = "Mohtaram Customer! Meharbani karke apne ghar ya dukan ki Live Location WhatsApp par share kar dein taake delivery boy asani se pohnch sake. Shukriya!";
+    let msg = "SJ Online — Live Location\n\nمحترم کسٹمر، براہ کرم اپنے گھر یا دکان کی لائیو لوکیشن واٹس ایپ پر شیئر کریں تاکہ ڈلیوری بوائے آسانی سے پہنچ سکے۔ شکریہ!";
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
@@ -444,7 +445,7 @@
     try {
       await update(ref(db, 'orders/' + code), { status: "completed" });
     } catch(e){}
-    const msg = `السلام علیکم! محترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Online کا شکریہ! 🌿`;
+    const msg = `SJ Online — Order Completed\n\nمحترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Online کا شکریہ!`;
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");

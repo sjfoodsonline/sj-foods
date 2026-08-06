@@ -1,0 +1,16 @@
+[
+  {
+    "name": "چپس",
+    "unit": "پیکٹ",
+    "rate": 60,
+    "available": true,
+    "name_roman": "Chips"
+  },
+  {
+    "name": "بسکٹ (چھوٹا پیک)",
+    "unit": "پیکٹ",
+    "rate": 40,
+    "available": true,
+    "name_roman": "Biscuit (Chhota Pack)"
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "name": "دودھ (تازہ)",
+    "units": [
+      {
+        "label": "لیٹر",
+        "rate": 200
+      }
+    ],
+    "available": true,
+    "image": "products/dairy-0-1785956359785.jpg",
+    "featured": false,
+    "name_roman": "Doodh (Taza)"
+  },
+  {
+    "name": "دہی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 180
+      }
+    ],
+    "available": true,
+    "image": "products/dairy-1-1785956375884.jpg",
+    "featured": false,
+    "name_roman": "Dahi"
+  },
+  {
+    "name": "دودھ پیکٹ (چھوٹا پیک)",
+    "units": [
+      {
+        "label": "ایک پیکٹ",
+        "rate": 0
+      },
+      {
+        "label": "ایک کارٹن (24 پیکٹ)",
+        "rate": 0
+      }
+    ],
+    "available": false,
+    "image": "",
+    "featured": false,
+    "name_roman": "Doodh Packet (Chhota Pack)"
+  }
+]

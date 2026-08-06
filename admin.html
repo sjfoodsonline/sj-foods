@@ -148,7 +148,7 @@
     <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
 
-  <!-- SECTION 2: PRODUCTS & SIDEBAR CATEGORIES CONTROL (PASSWORD PROTECTED) -->
+  <!-- SECTION 2: PRODUCTS & SIDEBAR CATEGORIES CONTROL (3799 PASSWORD PROTECTED) -->
   <div id="secProducts" style="display:none;">
     <div class="card" id="setupCard" style="display:none;">
       <h3>🔑 گیٹ ہب (GitHub) سیٹ اپ</h3>
@@ -166,10 +166,10 @@
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
-          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 سائڈ کیٹگریز و معلومات (About, SOPs...)</button>
+          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 سائڈ کیٹگریز ایڈٹر (About, SOPs...)</button>
           <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 ری سیٹ</button>
         </div>
-        <div class="hint">جس کیٹگری کے پروڈکٹس یا ریٹس بدلنے ہوں وہ منتخب کریں۔ سائڈ مینو کی تمام معلومات (About Us, Careers, SOPs) ایڈٹ کرنے کے لیے نارنجی بٹن دبائیں۔</div>
+        <div class="hint">جس کیٹگری کے پروڈکٹس یا ریٹس بدلنے ہوں وہ منتخب کریں۔ سائڈ مینو کی تمام معلومات (About Us, Careers, SOPs) ایڈٹ کرنے کے لیے '📋 سائڈ کیٹگریز ایڈٹر' دبائیں۔</div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
@@ -179,7 +179,7 @@
 
 </div>
 
-<!-- Side Categories & About Settings Modal (Password Protected via Admin 3799) -->
+<!-- Side Categories & About Settings Modal (Password Protected via 3799) -->
 <div class="modal-overlay" id="adminSiteSettingsModal" style="display:none;">
   <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
@@ -200,11 +200,15 @@
       <label>👤 بانی کا نام</label>
       <input type="text" id="adminOwnerName" value="سلیمان جان (ولد قاسم جان)">
 
-      <label>🇵🇰 اردو اباؤٹ پیغام</label>
-      <textarea id="adminUrduMsg" rows="3">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔ مینگورہ سوات میں مسلسل 20 سال تک میڈیا انڈسٹری میں خدمات سرانجام دینے کے بعد، میں نے جدید ٹیکنالوجی کا استعمال کرتے ہوئے SJ Online کا آغاز کیا ہے۔</textarea>
+      <label>🇵🇰 اردو اباؤٹ پیغام (20 سالہ میڈیا تجربہ و دیانت داری)</label>
+      <textarea id="adminUrduMsg" rows="4">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔ مینگورہ سوات میں مسلسل 20 سال تک میڈیا انڈسٹری میں خدمات سرانجام دینے کے بعد، میں نے جدید ٹیکنالوجی کا استعمال کرتے ہوئے SJ Online کا آغاز کیا ہے۔ 
+ہم جانتے ہیں کہ روزمرہ کی مصروفیات، ٹریفک کے مسائل، ہجوم یا بیماری کی وجہ سے بازار جانا ہر کسی کے لیے آسان نہیں ہوتا۔ ہمارا مقصد یہ ہے کہ آپ اپنے گھر پر سکون سے بیٹھیں اور صرف ایک کلک پر آپ کی ضرورت کی ہر چیز (تازہ سبزیاں، پھل، کریانہ اور زندگی کی تمام ضروریات) سیدھی آپ کی دہلیز پر پہنچ جائے۔
+آپ کی رقم ہمارے پاس اللہ کی امانت ہے۔ اگر آپ کی بھیجی گئی رقم کے بدلے سامان دستیاب نہ ہوا، تو 100% رقم فوری واپس کی جائے گی۔ خیانت ہمارے ایمان اور اصول کے خلاف ہے۔ آپ آنکھیں بند کر کے ہم پر بھروسہ کر سکتے ہیں!</textarea>
 
       <label>🇬🇧 English About Message</label>
-      <textarea id="adminEnglishMsg" rows="3" dir="ltr">Greetings! I am Sulaiman Jan (S/O Qasim Jan). After serving the people of Mingora, Swat for 20 years in the media industry, I have built SJ Online to bring convenience to your doorstep using modern technology.</textarea>
+      <textarea id="adminEnglishMsg" rows="4" dir="ltr">Greetings! I am Sulaiman Jan (S/O Qasim Jan). After serving the people of Mingora, Swat for 20 years in the media industry, I have built SJ Online to bring convenience to your doorstep using modern technology.
+We understand that due to busy schedules, traffic, crowds, or health issues, going to the market isn't always easy. Our goal is simple: stay comfortable at home and get fresh vegetables, fruits, groceries, and all daily essentials delivered right to your door with just one click.
+The people of Mingora know our 20-year track record of honest and dedicated service in the media. Your money is a sacred trust to us. If any item is unavailable after payment, we guarantee a 100% immediate refund. Dishonesty has no place in our faith or values. You can trust us with complete peace of mind!</textarea>
     </div>
 
     <!-- Careers Section -->
@@ -218,7 +222,8 @@
       <h4 style="margin:0 0 8px; color:var(--mid);">📜 ضوابط و ایس او پیز (Terms & SOPs)</h4>
       <textarea id="adminSopsMsg" rows="3">• ہر پروڈکٹ 100% معیاری، تازہ اور تول میں پوری دی جاتی ہے۔
 • سپورٹ اوقات: صبح 10:00 سے رات 8:00 بجے تک۔
-• ڈلیوری چارجز کے حوالے سے باہمی رضامندی طے ہوگی۔</textarea>
+• ڈلیوری سواری اور چارجز کے حوالے سے واٹس ایپ پر باہمی رضامندی طے ہوگی۔
+• سامان وصول کرتے وقت محفوظ اور ذاتی سیکیورٹی کوڈ (OTP) صرف سامان لینے والے کے پاس ہونا چاہیے۔</textarea>
     </div>
 
     <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 تمام سائڈ کیٹگریز گٹ ہب پر محفوظ کریں</button>
@@ -449,7 +454,7 @@
   }
 </script>
 
-<!-- GitHub Admin Script -->
+<!-- GitHub Admin & Side Categories Controller Script -->
 <script>
 const CATEGORIES_INDEX_FILE = "categories_index.json";
 let CFG = null;

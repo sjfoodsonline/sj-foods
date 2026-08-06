@@ -13,10 +13,9 @@
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
-    font-family: Arial, sans-serif; direction: rtl; padding-bottom: 160px;
+    font-family: Arial, sans-serif; direction: rtl; padding-bottom: 220px;
   }
   
-  /* اردو فونٹس کے لیے کلاس */
   .urdu-text {
     font-family: "Noto Nastaliq Urdu", serif !important;
   }
@@ -42,6 +41,12 @@
     transition: all 0.2s;
   }
   .cat-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+
+  /* کیٹگری سیکشن ہیڈر */
+  .category-section-title {
+    font-size: 16px; font-weight: bold; color: var(--dark); margin: 18px 0 10px;
+    border-bottom: 2px solid var(--mid); padding-bottom: 4px; font-family: "Noto Nastaliq Urdu", serif;
+  }
 
   /* پروڈکٹ کارڈ */
   .product-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 20px; }
@@ -115,11 +120,11 @@
 <div class="wrap">
   <!-- کیٹگریز کی پٹی -->
   <div class="categories-bar" id="categoriesBar">
-    <button class="cat-btn active urdu-text">🛒 تمام سامان</button>
+    <button class="cat-btn active urdu-text" onclick="filterCategory('all', this)">🛒 تمام سامان</button>
   </div>
 
   <!-- پروڈکٹس لسٹ -->
-  <div class="product-grid" id="productGrid">
+  <div id="productContainer">
     <div style="text-align:center; padding:30px; color:var(--muted);" class="urdu-text">سامان لوڈ ہو رہا ہے...</div>
   </div>
 </div>
@@ -165,8 +170,144 @@
 </div>
 
 <script>
-let cart = [];
+let allProductsData = [];
+let cart = {};
 let totalAmount = 0;
+let currentFilter = 'all';
+
+// گیٹ ہب سے کیٹگریز اور پروڈکٹس لوڈ کرنا
+async function loadStoreData() {
+    try {
+        const indexRes = await fetch('categories_index.json');
+        const categories = await indexRes.json();
+        
+        const bar = document.getElementById('categoriesBar');
+        // تمام سامان کا بٹن پہلے سے موجود ہے، باقی کیٹگریز کے بٹن شامل کریں
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'cat-btn urdu-text';
+            btn.innerHTML = `${cat.icon || '📦'} ${cat.category}`;
+            btn.onclick = (e) => filterCategory(cat.file, e.currentTarget);
+            bar.appendChild(btn);
+        });
+
+        allProductsData = [];
+        for (const cat of categories) {
+            try {
+                const prodRes = await fetch(cat.file);
+                const items = await prodRes.json();
+                items.forEach(item => {
+                    allProductsData.push({
+                        ...item,
+                        categoryFile: cat.file,
+                        categoryName: cat.category
+                    });
+                });
+            } catch (err) {
+                console.error(`Error loading ${cat.file}:`, err);
+            }
+        }
+        renderProducts();
+    } catch (e) {
+        document.getElementById('productContainer').innerHTML = `<div style="text-align:center; padding:20px; color:var(--price);">ڈیٹا لوڈ کرنے میں خرابی پیش آئی!</div>`;
+    }
+}
+
+function filterCategory(file, btnElement) {
+    currentFilter = file;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+    renderProducts();
+}
+
+function renderProducts() {
+    const container = document.getElementById('productContainer');
+    let filtered = allProductsData;
+    if (currentFilter !== 'all') {
+        filtered = allProductsData.filter(p => p.categoryFile === currentFilter);
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--muted);" class="urdu-text">کوئی پروڈکٹ موجود نہیں</div>`;
+        return;
+    }
+
+    // کیٹگری کے لحاظ سے گروپ بندی تاکہ نام ہمیشہ اوپر ہو
+    let grouped = {};
+    filtered.forEach(p => {
+        if (!grouped[p.categoryName]) grouped[p.categoryName] = [];
+        grouped[p.categoryName].push(p);
+    });
+
+    let html = '';
+    for (let catName in grouped) {
+        html += `<div class="category-section-title">📂 ${catName}</div>`;
+        html += `<div class="product-grid">`;
+        
+        grouped[catName].forEach((p, idx) => {
+            let imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div class="product-img">🛒</div>`;
+            let unitsHtml = '';
+            
+            if (p.units && p.units.length > 0) {
+                p.units.forEach((u, uIdx) => {
+                    let cartKey = `${p.name}_${u.label}`;
+                    let qty = cart[cartKey] ? cart[cartKey].qty : 0;
+                    unitsHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);">
+                            <div>
+                                <span style="font-size:13px; font-weight:bold; color:var(--dark);" class="urdu-text">${u.label}</span>
+                                <span style="font-size:13px; font-weight:bold; color:var(--price); margin-right:8px;">Rs. ${u.rate}</span>
+                            </div>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQty('${p.name}', '${u.label}', ${u.rate}, '${catName}', -1)">-</button>
+                                <input type="text" class="qty-input" id="qty_${p.name}_${u.label}" value="${qty}" readonly>
+                                <button class="qty-btn" onclick="updateQty('${p.name}', '${u.label}', ${u.rate}, '${catName}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `
+                <div class="product-card">
+                    ${imgTag}
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        ${unitsHtml}
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+    container.innerHTML = html;
+}
+
+function updateQty(name, unit, price, category, change) {
+    let cartKey = `${name}_${unit}`;
+    if (!cart[cartKey]) {
+        cart[cartKey] = { name, unit, price, category, qty: 0 };
+    }
+    cart[cartKey].qty += change;
+    if (cart[cartKey].qty < 0) cart[cartKey].qty = 0;
+    
+    if (cart[cartKey].qty === 0) {
+        delete cart[cartKey];
+    }
+
+    let inputElem = document.getElementById(`qty_${name}_${unit}`);
+    if (inputElem) inputElem.value = cart[cartKey] ? cart[cartKey].qty : 0;
+
+    calculateTotal();
+}
+
+function calculateTotal() {
+    totalAmount = 0;
+    for (let key in cart) {
+        totalAmount += cart[key].price * cart[key].qty;
+    }
+    document.getElementById('cartTotalDisplay').textContent = `Rs. ${totalAmount}`;
+}
 
 function switchPaymentMethod(method) {
     const tidContainer = document.getElementById('tidContainer');
@@ -206,7 +347,8 @@ function sendOrderToWhatsApp() {
         return;
     }
 
-    if (cart.length === 0) {
+    let cartItemsArray = Object.values(cart);
+    if (cartItemsArray.length === 0) {
         alert("براہ کرم کارٹ میں کم از کم ایک پروڈکٹ شامل کریں!");
         return;
     }
@@ -227,7 +369,7 @@ function sendOrderToWhatsApp() {
     message += `\nOrder Details:\n`;
 
     let currentCat = "";
-    cart.forEach(item => {
+    cartItemsArray.forEach(item => {
         if (item.category !== currentCat) {
             currentCat = item.category;
             message += `\n🔹 Category: ${currentCat}\n`;
@@ -244,6 +386,9 @@ function sendOrderToWhatsApp() {
 
     window.open(whatsappUrl, '_blank');
 }
+
+// صفحہ کھلتے ہی ڈیٹا لوڈ کریں
+window.onload = loadStoreData;
 </script>
 </body>
 </html>

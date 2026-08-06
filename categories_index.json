@@ -70,6 +70,13 @@
     "image": ""
   },
   {
+    "file": "biryani.json",
+    "category": "ملا بابا اسٹوڈنٹ بریانی",
+    "category_roman": "Mulla Baba Student Biryani",
+    "icon": "🍲",
+    "image": ""
+  },
+  {
     "file": "drinks.json",
     "category": "مشروبات",
     "icon": "🥤",

@@ -339,7 +339,7 @@
       <input id="custName" type="text" placeholder="Name (نام)">
       <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
       <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
-      <input id="payTxId" type="text" placeholder="EasyPaisa / Bank Transaction ID (TID)" style="display:none;">
+      <input id="payTxId" type="text" placeholder="EasyPaisa / Bank Transaction ID (TID) [آپشنل]" style="display:none;">
 
       <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
@@ -347,7 +347,7 @@
       </div>
     </div>
 
-    <!-- اپ ڈیٹ شدہ آن لائن پیمنٹ کارڈ -->
+    <!-- آن لائن پیمنٹ کارڈ -->
     <div class="pay-card" id="payCard">
       <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
@@ -367,7 +367,7 @@
         <div style="font-size:11.5px; opacity:0.9;">اکاؤنٹ نام: سلیمان جان</div>
       </div>
 
-      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد اوپر ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
+      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد رسید یا TID درج کر سکتے ہیں، یا بغیر TID بھی آرڈر بھیج سکتے ہیں۔</div>
     </div>
 
     <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
@@ -817,6 +817,7 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
+// 📌 فائنل واٹس ایپ اور فائر بیس آرڈر بھیجنے کا فنکشن (بغیر کسی ضروری TID الرٹ کے)
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
@@ -825,15 +826,15 @@ document.getElementById("waBtn").onclick = () => {
   const addr = document.getElementById("custAddr").value.trim();
   let txId = payTxId.value.trim();
   
+  if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
+
   let payMethodWA = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
   let payMethodClean = "Cash on Delivery (COD)";
   
   if(payEasy.checked){
-    if(!txId){ alert("⚠️ Please enter EasyPaisa / Bank Transaction ID (TID)!"); payTxId.focus(); return; }
-    payMethodWA = `EasyPaisa / Bank Transfer (Online Payment) — TID: ${txId}`;
-    payMethodClean = `EasyPaisa / Bank Transfer (TID: ${txId})`;
+    payMethodWA = `EasyPaisa / Bank Transfer (Online Payment)` + (txId ? ` — TID: ${txId}` : '');
+    payMethodClean = `EasyPaisa / Bank Transfer` + (txId ? ` (TID: ${txId})` : '');
   }
-  if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;

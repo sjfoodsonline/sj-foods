@@ -338,16 +338,6 @@
   <div class="cart-details">
     <div id="billLines" style="margin-bottom:10px;"></div>
 
-    <div class="pay-card" id="payCard">
-      <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
-      <div class="pay-amount" id="payAmount">Rs. 0</div>
-      <div class="pay-number-row">
-        <span class="pay-number" id="payNumber">0315-5166034</span>
-        <button id="copyNumBtn">📋 کاپی</button>
-      </div>
-      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد نیچے ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
-    </div>
-
     <div class="checkout-box">
       <div style="font-size:14px; font-weight:bold; color:var(--dark); margin-bottom:6px; font-family:'Jameel Noori Nastaleeq',serif;">📦 ڈلیوری کی تفصیلات دیں</div>
       <input id="custName" type="text" placeholder="Name (نام)">
@@ -359,6 +349,16 @@
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
         <label id="lblEasy"><input type="radio" name="paymethod" id="payEasy" value="easypaisa"> 📲 EasyPaisa / Bank</label>
       </div>
+    </div>
+
+    <div class="pay-card" id="payCard">
+      <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
+      <div class="pay-amount" id="payAmount">Rs. 0</div>
+      <div class="pay-number-row">
+        <span class="pay-number" id="payNumber">0315-5166034</span>
+        <button id="copyNumBtn">📋 کاپی</button>
+      </div>
+      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد نیچے ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
     </div>
 
     <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>

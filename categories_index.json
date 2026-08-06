@@ -72,9 +72,9 @@
   {
     "file": "fish.json",
     "category": "عمر فقیر لالا فش",
-    "category_roman": "Umar Faqeer Lala Fish",
     "icon": "🐟",
-    "image": ""
+    "image": "",
+    "category_roman": "Umar Faqeer Lala Fish"
   },
   {
     "file": "drinks.json",

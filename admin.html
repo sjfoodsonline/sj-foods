@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — مکمل ایڈمن و پرائس کنٹرول سینٹر</title>
+<title>SJ Online — مکمل ایڈمن و پرائس کنٹرول سینٹر</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -12,35 +12,35 @@
     --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
   }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; direction:rtl; padding-bottom:110px;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Noto Nastaliq Urdu", "Segoe UI", system-ui, sans-serif; direction:rtl; padding-bottom:110px;}
   header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
   header h1{margin:0; font-size:18px; font-family:"Noto Nastaliq Urdu",serif;}
-  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
+  header p{margin:4px 0 0; font-size:11.5px; opacity:.9; font-family:"Noto Nastaliq Urdu",serif;}
 
   .wrap{padding:14px;}
   
   .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
   .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
   .dash-num{font-size:16px; font-weight:800; color:var(--dark); margin-top:2px;}
-  .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:700;}
+  .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:700; font-family:"Noto Nastaliq Urdu",serif;}
 
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
-  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px;}
+  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark); font-family:"Noto Nastaliq Urdu",serif;}
+  .card p{font-size:12px; color:var(--muted); line-height:1.7; margin:0 0 10px; font-family:"Noto Nastaliq Urdu",serif;}
   
   input[type=text], input[type=password], input[type=number], select, textarea{
     width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:inherit; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+    font-size:13px; font-family:"Noto Nastaliq Urdu",serif,system-ui,sans-serif; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
   }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
-  button{font-family:inherit; cursor:pointer; border:none;}
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px; font-family:"Noto Nastaliq Urdu",serif;}
+  button{font-family:"Noto Nastaliq Urdu",serif,system-ui,sans-serif; cursor:pointer; border:none;}
   .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; font-weight:700; width:100%;}
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px; font-weight:700;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700;}
-  .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6;}
+  .hint{font-size:11px; color:var(--muted); margin-top:4px; line-height:1.6; font-family:"Noto Nastaliq Urdu",serif;}
 
   .tabs{display:flex; gap:6px; margin-bottom:14px;}
-  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer;}
+  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-weight:700; font-size:11px; color:var(--muted); cursor:pointer; font-family:"Noto Nastaliq Urdu",serif;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
   /* Live Orders Styling */
@@ -62,8 +62,8 @@
     opacity: 0.9;
   }
 
-  .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02);}
-  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right;}
+  .chat-header{padding:12px 14px; font-weight:800; font-size:14.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.02); font-family:"Noto Nastaliq Urdu",serif;}
+  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px; direction:rtl; text-align:right; font-family:"Noto Nastaliq Urdu",serif;}
   .chat-item.open .chat-body{display:block;}
 
   .time-badge{
@@ -72,7 +72,7 @@
     background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;
   }
   .time-badge.done { background: #E8F5E9; color: #1B5E20; }
-  .challenge-tag { color: #FFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 4px; background: #D32F2F; }
+  .challenge-tag { color: #FFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 4px; background: #D32F2F; font-family:"Noto Nastaliq Urdu",serif; }
 
   /* Product Catalog Styles */
   .cat-select{display:flex; gap:8px; margin-bottom:10px;}
@@ -95,7 +95,7 @@
   .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
   .row-fields input{margin-bottom:0;}
   .row-flags{display:flex; align-items:center; gap:10px; font-size:11.5px;}
-  .row-flags label{display:flex; align-items:center; gap:4px; margin:0; color:var(--ink);}
+  .row-flags label{display:flex; align-items:center; gap:4px; margin:0; color:var(--ink); font-family:"Noto Nastaliq Urdu",serif;}
 
   .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
   .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
@@ -103,7 +103,7 @@
   .unit-row input.u-label{flex:2;}
   .unit-row input.u-rate{flex:1;}
   .unit-row button{flex:0 0 auto; font-size:14px; background:none; color:var(--price); padding:2px 6px;}
-  .add-unit-btn{font-size:11px; background:none; color:var(--mid); font-weight:700; padding:2px 4px;}
+  .add-unit-btn{font-size:11px; background:none; color:var(--mid); font-weight:700; padding:2px 4px; font-family:"Noto Nastaliq Urdu",serif;}
   .row-bottom{display:flex; justify-content:space-between; align-items:center;}
   #addProductBtn{margin:6px 0 16px;}
 
@@ -111,28 +111,28 @@
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
     padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;
   }
-  .savebar .status{flex:1; font-size:11.5px; color:var(--muted);}
+  .savebar .status{flex:1; font-size:11.5px; color:var(--muted); font-family:"Noto Nastaliq Urdu",serif;}
   .savebar button{flex:0 0 auto; border-radius:10px; padding:11px 18px; font-size:13px; font-weight:700;}
 
   .toast{
     position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff;
-    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200;
+    padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200; font-family:"Noto Nastaliq Urdu",serif;
   }
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
-  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; font-family:"Noto Nastaliq Urdu",serif;}
 
   @media print {
     body * { visibility: hidden; }
     #printableReceipt, #printableReceipt * { visibility: visible; }
-    #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; font-family: Arial, sans-serif; padding: 10px; color: #000; }
+    #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; direction: rtl; font-family: "Noto Nastaliq Urdu", Arial, sans-serif; padding: 10px; color: #000; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن & پرائس کنٹرول سینٹر</h1>
+  <h1>⚙️ SJ Online — ایڈمن & پرائس کنٹرول سینٹر</h1>
   <p>لائیو فائر بیس آرڈرز اور گیٹ ہب پروڈکٹ مینجمنٹ</p>
 </header>
 
@@ -285,7 +285,7 @@
   window.sendConfirmationMsg = function(phone, code) {
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if (cleanPhone.startsWith("0")) { cleanPhone = "92" + cleanPhone.slice(1); }
-    const msg = `السلام علیکم! ایس جے فوڈز آن لائن میں خوش آمدید 🌿۔\n\nآپ نے جو سامان سلیکٹ کیا ہے، کیا آپ اپنے اس آرڈر [${code}] کی تصدیق کرنا چاہتے ہیں تاکہ ہم فوراً آپ کے سامان کی ڈلیوری کی تیاری شروع کر دیں؟\n\nبراہ کرم اس میسج کا جواب دے کر یا 'OK' لکھ کر کنفرم کر دیں۔ شکریہ! ✨`;
+    const msg = `السلام علیکم! ایس جے آن لائن میں خوش آمدید 🌿۔\n\nآپ نے جو سامان سلیکٹ کیا ہے، کیا آپ اپنے اس آرڈر [${code}] کی تصدیق کرنا چاہتے ہیں تاکہ ہم فوراً آپ کے سامان کی ڈلیوری کی تیاری شروع کر دیں؟\n\nبراہ کرم اس میسج کا جواب دے کر یا 'OK' لکھ کر کنفرم کر دیں۔ شکریہ! ✨`;
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
@@ -302,7 +302,7 @@
     let printDiv = document.getElementById('printableReceipt');
     printDiv.style.display = 'block';
     printDiv.innerHTML = `
-      <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:5px;">SJ FOODS ONLINE</div>
+      <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:5px;">SJ ONLINE</div>
       <div style="text-align:center; font-size:12px; margin-bottom:10px;">Al Basit Plaza, Haji Baba Road, Mingora Swat</div>
       <hr style="border-top:1px dashed #000;">
       <div style="font-size:13px;"><b>Order ID:</b> ${o.code}</div>
@@ -444,7 +444,7 @@
     try {
       await update(ref(db, 'orders/' + code), { status: "completed" });
     } catch(e){}
-    const msg = `السلام علیکم! محترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Foods Online کا شکریہ! 🌿`;
+    const msg = `السلام علیکم! محترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Online کا شکریہ! 🌿`;
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -465,7 +465,7 @@ let dirty = false;
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں — نیچے 'گھٹ ہب پر محفوظ کریں' دبائیں";
+  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں — نیچے 'گٹ ہب پر محفوظ کریں' دبائیں";
 }
 function markClean(){
   dirty = false;

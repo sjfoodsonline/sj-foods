@@ -14,6 +14,13 @@
     "category_roman": "Phal"
   },
   {
+    "file": "biryani.json",
+    "category": "مولا بابا سٹوڈنٹ بریانی",
+    "icon": "🍱",
+    "image": "",
+    "category_roman": "Mula Baba Student Biryani"
+  },
+  {
     "file": "oil_ghee.json",
     "category": "تیل و گھی",
     "icon": "🛢️",

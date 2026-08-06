@@ -1024,6 +1024,31 @@ function openLightbox(src, name){
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
 }
+  [
+  {
+    "name": "چکن بریانی (سنگل بوٹی)",
+    "name_roman": "Chicken Biryani (Single)",
+    "available": true,
+    "custom_rates": true,
+    "featured": true,
+    "units": [
+      { "label": "Full Parcel", "rate": 280 },
+      { "label": "Half Parcel", "rate": 150 }
+    ]
+  },
+  {
+    "name": "سادہ بریانی",
+    "name_roman": "Plain Biryani",
+    "available": true,
+    "custom_rates": true,
+    "featured": false,
+    "units": [
+      { "label": "Full Parcel", "rate": 180 },
+      { "label": "Half Parcel", "rate": 100 }
+    ]
+  }
+]
+  
 document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
 
 loadData();

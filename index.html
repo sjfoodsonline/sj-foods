@@ -32,7 +32,6 @@
   .header-btns{display:flex; gap:8px; align-items:center;}
   .menu-btn, .share-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:12px; width:38px; height:38px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   
-  /* Slide Drawer Styles */
   .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 99999; display: none; }
   .drawer-overlay.active { display: block; }
   .drawer {
@@ -52,7 +51,6 @@
   }
   .drawer-menu a:hover { background: var(--leaf); }
 
-  /* Modal Popup Styles */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.active { display: flex; }
   .modal-box { background: #fff; border-radius: 20px; padding: 20px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: "Jameel Noori Nastaleeq", serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -187,7 +185,7 @@
   .pay-card{ background:linear-gradient(135deg,#1B5E20,#2E7D32); border-radius:14px; padding:12px; margin-top:10px; text-align:center; color:#fff; }
   .pay-card-title{font-size:13.5px; font-weight:bold; opacity:.95;}
   .pay-amount{font-size:24px; font-weight:bold; margin:2px 0 6px;}
-  .pay-number-row{ display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:6px 10px; margin:0 auto; max-width:240px; }
+  .pay-number-row{ display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:6px 10px; margin:0 auto; max-width:260px; }
   .pay-number{font-size:16px; font-weight:bold; direction:ltr; font-family: Arial, sans-serif;}
   #copyNumBtn{ background:#fff; color:var(--dark); border:none; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:bold; cursor:pointer; font-family: Arial, sans-serif; }
   .pay-hint{color:#FFF3CD; font-size:12.5px; margin-top:8px; line-height:1.6; text-align:right;}
@@ -229,7 +227,6 @@
   </div>
 </header>
 
-<!-- Sidebar Panel Drawer -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
@@ -245,7 +242,6 @@
   </ul>
 </div>
 
-<!-- Modal Dialogs for Menu Items -->
 <div class="modal-overlay" id="modalAbout">
   <div class="modal-box">
     <h3>👨‍💼 ہمارے بارے میں (About Us & Owner)</h3>
@@ -351,14 +347,27 @@
       </div>
     </div>
 
+    <!-- اپ ڈیٹ شدہ آن لائن پیمنٹ کارڈ -->
     <div class="pay-card" id="payCard">
       <div class="pay-card-title">📲 ایزی پیسہ یا بینک ٹرانسفر (ترجیحی ادائیگی)</div>
       <div class="pay-amount" id="payAmount">Rs. 0</div>
-      <div class="pay-number-row">
-        <span class="pay-number" id="payNumber">0315-5166034</span>
+      
+      <!-- ایزی پیسہ / جاز کیش نمبر -->
+      <div style="font-size:12.5px; font-weight:bold; margin-bottom:3px;">EasyPaisa / JazzCash:</div>
+      <div class="pay-number-row" style="margin-bottom:8px;">
+        <span class="pay-number" id="payNumber">0334-9353799</span>
         <button id="copyNumBtn">📋 کاپی</button>
       </div>
-      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد نیچے ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
+      <div style="font-size:11.5px; opacity:0.9; margin-bottom:8px;">اکاؤنٹ نام: سلیمان جان</div>
+
+      <!-- بینک آف خیبر IBAN -->
+      <div style="border-top:1px dashed rgba(255,255,255,0.3); padding-top:8px; margin-top:8px;">
+        <div style="font-size:12.5px; font-weight:bold; margin-bottom:3px;">Bank of Khyber (IBAN):</div>
+        <div style="font-size:11.5px; font-family:Arial; direction:ltr; font-weight:bold; background:rgba(255,255,255,0.16); padding:4px; border-radius:6px; margin-bottom:2px;">PK53KHYB5012003008539951</div>
+        <div style="font-size:11.5px; opacity:0.9;">اکاؤنٹ نام: سلیمان جان</div>
+      </div>
+
+      <div class="pay-hint">✅ ایزی پیسہ یا بینک ٹرانسفر کرنے کے بعد اوپر ٹرانزیکشن آئی ڈی (TID) یا رسید کا نمبر لازمی درج کریں تاکہ آپ کا آرڈر فوری تصدیق ہو سکے!</div>
     </div>
 
     <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
@@ -367,7 +376,7 @@
 
 <footer>
   SJ Online — Fresh Quality, Fast Delivery 🌿<br>
-  📞 <span id="footerContact">0315-5166034</span>   📧 <span id="footerEmail">sjfoodonline@gmail.com</span><br>
+  📞 <span id="footerContact">0334-9353799</span>   📧 <span id="footerEmail">sjfoodonline@gmail.com</span><br>
   📍 Al Basit Plaza, Haji Baba Road, Mingora Swat<br>
   🕙 Hours: 10:00 AM - 8:00 PM
   
@@ -386,15 +395,27 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    databaseURL: "https://sj-foods-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  window.dbRef = { ref, set, db };
+</script>
+
 <script>
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
 
-let SHOP_WHATSAPP = "923155166034";
-let SHOP_PAY_NUMBER = "0315-5166034";
-
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzTDns65unUDyPLOCBpS5tylqtyCACwsQwBFTGwMzmtExVoh4aQPdEAtXilqq2KKqLh/exec";
+let SHOP_WHATSAPP = "923349353799";
+let SHOP_PAY_NUMBER = "0334-9353799";
 
 let currentSelectedCategory = null;
 let coverImagesList = [];
@@ -540,8 +561,8 @@ async function loadSettings(){
   try{
     const res = await fetch("settings.json", {cache:"no-store"});
     const s = await res.json();
-    SHOP_WHATSAPP = "923155166034";
-    SHOP_PAY_NUMBER = "0315-5166034";
+    SHOP_WHATSAPP = "923349353799";
+    SHOP_PAY_NUMBER = "0334-9353799";
     document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
 
     if(s.cover_image && !coverImagesList.includes(s.cover_image)){
@@ -553,8 +574,8 @@ async function loadSettings(){
     if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
     if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
   }catch(e){
-    SHOP_WHATSAPP = "923155166034";
-    SHOP_PAY_NUMBER = "0315-5166034";
+    SHOP_WHATSAPP = "923349353799";
+    SHOP_PAY_NUMBER = "0334-9353799";
   }
 }
 
@@ -756,9 +777,9 @@ document.getElementById("search").oninput = (e) => renderMainView(e.target.value
 
 document.getElementById("copyNumBtn").onclick = async ()=>{
   try{
-    await navigator.clipboard.writeText("03155166034");
+    await navigator.clipboard.writeText("03349353799");
     showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){ showToast("نمبر: 0315-5166034"); }
+  }catch(e){ showToast("نمبر: 0334-9353799"); }
 };
 
 const payCod = document.getElementById("payCod");
@@ -788,7 +809,7 @@ function sendFeedbackWhatsApp(){
   let text = document.getElementById("fbText").value.trim();
   if(!text){ alert("براہ کرم اپنا فیڈ بیک یا رائے درج کریں!"); return; }
   let fbMsg = `SJ Online — Customer Feedback\n\nName: ${name}\nFeedback: ${text}`;
-  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(fbMsg)}`, "_blank");
+  window.open(`https://wa.me/923349353799?text=${encodeURIComponent(fbMsg)}`, "_blank");
 }
 
 document.getElementById("shareBtn").onclick = async () => {
@@ -866,15 +887,18 @@ document.getElementById("waBtn").onclick = () => {
   }).format(new Date());
 
   try {
-    navigator.sendBeacon(SHEET_URL, JSON.stringify({
-      code: orderCode, name: name, phone: phone, address: addr,
-      items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
-      timestamp: nowFormatted, status: "pending"
-    }));
+    if(window.dbRef) {
+      const orderRef = window.dbRef.ref(window.dbRef.db, 'orders/' + orderCode);
+      window.dbRef.set(orderRef, {
+        code: orderCode, name: name, phone: phone, address: addr,
+        items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+        timestamp: nowFormatted, status: "pending"
+      });
+    }
   } catch(e){}
 
-  window.open(`https://wa.me/923155166034?text=${encodeURIComponent(msg)}`, "_blank");
-  showToast("✅ Order sent to WhatsApp and saved!");
+  window.open(`https://wa.me/923349353799?text=${encodeURIComponent(msg)}`, "_blank");
+  showToast("✅ Order saved to Firebase and sent to WhatsApp!");
 };
 
 function renderFeatured(){

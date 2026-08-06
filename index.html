@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Online — گروسری اور ہوم ڈیلیوری</title>
+<title>SJ Online — Groceries & Home Delivery</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -13,7 +13,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
-    font-family: Arial, sans-serif; direction: rtl; padding-bottom: 220px;
+    font-family: Arial, sans-serif; direction: rtl; padding-bottom: 240px;
   }
   
   .urdu-text {
@@ -21,14 +21,14 @@
   }
 
   header {
-    background: linear-gradient(160deg, var(--dark), var(--mid)); color: #fff; padding: 18px; text-align: center; border-radius: 0 0 20px 20px;
+    background: linear-gradient(160deg, var(--dark), var(--mid)); color: #fff; padding: 16px; text-align: center; border-radius: 0 0 18px 18px;
   }
-  header h1 { margin: 0; font-size: 19px; font-family: "Noto Nastaliq Urdu", serif; }
-  header p { margin: 6px 0 0; font-size: 12px; opacity: .95; font-family: "Noto Nastaliq Urdu", serif; }
+  header h1 { margin: 0; font-size: 18px; font-family: "Noto Nastaliq Urdu", serif; }
+  header p { margin: 4px 0 0; font-size: 11.5px; opacity: .95; font-family: "Noto Nastaliq Urdu", serif; }
 
   .wrap { padding: 14px; max-width: 600px; margin: 0 auto; }
 
-  /* کیٹگری بار */
+  /* Category Bar */
   .categories-bar {
     display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px;
     scrollbar-width: none;
@@ -36,45 +36,42 @@
   .categories-bar::-webkit-scrollbar { display: none; }
   .cat-btn {
     background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 14px;
-    font-family: "Noto Nastaliq Urdu", serif; font-size: 13px; font-weight: 700; color: var(--ink);
+    font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; color: var(--ink);
     white-space: nowrap; cursor: pointer; display: flex; align-items: center; gap: 6px;
-    transition: all 0.2s;
   }
   .cat-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
 
-  /* کیٹگری سیکشن ہیڈر */
   .category-section-title {
-    font-size: 16px; font-weight: bold; color: var(--dark); margin: 18px 0 10px;
-    border-bottom: 2px solid var(--mid); padding-bottom: 4px; font-family: "Noto Nastaliq Urdu", serif;
+    font-size: 15px; font-weight: bold; color: var(--dark); margin: 16px 0 8px;
+    border-bottom: 2px solid var(--mid); padding-bottom: 4px; font-family: Arial, sans-serif;
   }
 
-  /* پروڈکٹ کارڈ */
-  .product-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 20px; }
+  /* Product Card */
+  .product-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
   .product-card {
-    background: #fff; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px;
-    display: flex; gap: 12px; align-items: center; position: relative;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 14px; padding: 10px;
+    display: flex; gap: 12px; align-items: center;
   }
   .product-img {
-    width: 75px; height: 75px; border-radius: 10px; background: var(--leaf);
-    object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 28px;
+    width: 70px; height: 70px; border-radius: 10px; background: var(--leaf);
+    object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 26px;
   }
   .product-info { flex: 1; }
-  .product-name { font-size: 15px; font-weight: bold; color: var(--dark); margin: 0 0 4px; font-family: "Noto Nastaliq Urdu", serif; }
-  .product-price { font-size: 14px; font-weight: bold; color: var(--price); margin-bottom: 8px; font-family: Arial, sans-serif; }
+  .product-name { font-size: 14.5px; font-weight: bold; color: var(--dark); margin: 0 0 4px; font-family: Arial, sans-serif; }
   
   .qty-control { display: flex; align-items: center; gap: 8px; }
   .qty-btn {
-    background: var(--leaf); color: var(--dark); border: none; width: 30px; height: 30px;
-    border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    background: var(--leaf); color: var(--dark); border: none; width: 28px; height: 28px;
+    border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
-  .qty-input { width: 45px; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: 4px; font-family: Arial, sans-serif; font-size: 13px; }
+  .qty-input { width: 40px; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: 3px; font-family: Arial, sans-serif; font-size: 12.5px; font-weight: bold; }
 
-  /* فکسڈ کارٹ اور چیک آؤٹ بار (سب سے نیچے فکسڈ) */
+  /* Fixed Cart & Checkout Panel */
   .checkout-container {
     position: fixed; bottom: 0; right: 0; left: 0;
-    background: #ffffff; padding: 12px 15px; border-top: 2px solid var(--dark);
+    background: #ffffff; padding: 12px 14px; border-top: 2.5px solid var(--dark);
     box-shadow: 0 -6px 20px rgba(0,0,0,0.15); z-index: 9999;
-    max-height: 85vh; overflow-y: auto; direction: rtl; text-align: right;
+    max-height: 50vh; overflow-y: auto; direction: rtl; text-align: right;
     font-family: Arial, sans-serif;
   }
 
@@ -84,10 +81,10 @@
   }
 
   .sj-payment-box {
-    background: var(--dark); color: #ffffff; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; font-size: 11.5px; line-height: 1.4;
+    background: var(--dark); color: #ffffff; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; font-size: 11.5px; line-height: 1.5;
   }
   .sj-payment-item {
-    background: rgba(255, 255, 255, 0.1); padding: 4px 6px; border-radius: 6px; margin-bottom: 3px; font-family: Arial, sans-serif;
+    background: rgba(255, 255, 255, 0.1); padding: 4px 8px; border-radius: 6px; margin-bottom: 3px; font-weight: bold;
   }
 
   .sj-input-field {
@@ -105,56 +102,56 @@
 
   .sj-submit-btn {
     width: 100%; background: #25D366; color: white; border: none; padding: 11px;
-    border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center;
-    font-family: "Noto Nastaliq Urdu", serif;
+    border-radius: 8px; font-size: 14.5px; font-weight: bold; cursor: pointer; text-align: center;
+    font-family: Arial, sans-serif;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1 class="urdu-text">SJ Online — گروسری اسٹور</h1>
-  <p class="urdu-text">منگورہ سوات — تازہ سامان آپ کی دہلیز پر</p>
+  <h1 class="urdu-text">SJ Online — Groceries Store</h1>
+  <p class="urdu-text">Mingora Swat — Taza saaman aap ki dehlij par</p>
 </header>
 
 <div class="wrap">
-  <!-- کیٹگریز کی پٹی -->
+  <!-- Categories Bar -->
   <div class="categories-bar" id="categoriesBar">
-    <button class="cat-btn active urdu-text" onclick="filterCategory('all', this)">🛒 تمام سامان</button>
+    <button class="cat-btn active" onclick="filterCategory('all', this)">🛒 Tamam Saaman</button>
   </div>
 
-  <!-- پروڈکٹس لسٹ -->
+  <!-- Products List -->
   <div id="productContainer">
-    <div style="text-align:center; padding:30px; color:var(--muted);" class="urdu-text">سامان لوڈ ہو رہا ہے...</div>
+    <div style="text-align:center; padding:30px; color:var(--muted);">Saaman load ho raha hai...</div>
   </div>
 </div>
 
-<!-- فکسڈ کارٹ اور چیک آؤٹ پینل (سب سے نیچے فکسڈ) -->
+<!-- Fixed Cart and Checkout Panel -->
 <div class="checkout-container">
   <div class="cart-header">
-    <span class="urdu-text">🛒 کارٹ (آرڈر کی تفصیل)</span>
+    <span>🛒 Cart (Order Details)</span>
     <span id="cartTotalDisplay" style="color:var(--price);">Rs. 0</span>
   </div>
 
   <div class="sj-payment-box">
-    <div style="font-weight: bold; margin-bottom: 4px;" class="urdu-text">💳 آن لائن پیمنٹ کی معلومات</div>
-    <div class="sj-payment-item"><strong>EasyPaisa / JazzCash:</strong> 0315-5166034 (سلیمان جان)</div>
-    <div class="sj-payment-item"><strong>Bank of Khyber (IBAN):</strong> PK53KHYB5012003008539951 (سلیمان جان)</div>
-    <div style="font-size: 10.5px; color: #ffeb3b; margin-top: 2px;" class="urdu-text">⚠️ پیمنٹ سے پہلے رابطہ کریں۔ سامان نہ ہونے پر سو فیصد رقم واپسی!</div>
+    <div style="font-weight: bold; margin-bottom: 4px;">💳 Online Payment Information</div>
+    <div class="sj-payment-item">EasyPaisa / JazzCash: 0315-5166034 (Sulaiman Jan)</div>
+    <div class="sj-payment-item">Bank of Khyber (IBAN): PK53KHYB5012003008539951 (Sulaiman Jan)</div>
+    <div style="font-size: 10.5px; color: #ffeb3b; margin-top: 2px;">⚠️ Payment se pehle rabta karein. Saaman mojood na ho toh 100% raqam wapas hogi!</div>
   </div>
 
-  <div style="font-weight: bold; color: var(--dark); margin-bottom: 4px; font-size: 12px;" class="urdu-text">📦 ڈلیوری کی تفصیلات دیں</div>
+  <div style="font-weight: bold; color: var(--dark); margin-bottom: 4px; font-size: 12px;">📦 Delivery Details</div>
   
-  <input type="text" id="customerName" class="sj-input-field" placeholder="آپ کا نام (Full Name)">
-  <input type="tel" id="customerPhone" class="sj-input-field" placeholder="فون نمبر (Phone Number)">
-  <textarea id="customerAddress" class="sj-input-field" placeholder="مکمل پتہ (Address)" style="height: 42px; resize: none;"></textarea>
+  <input type="text" id="customerName" class="sj-input-field" placeholder="Aap ka naam (Full Name)">
+  <input type="tel" id="customerPhone" class="sj-input-field" placeholder="Phone Number">
+  <textarea id="customerAddress" class="sj-input-field" placeholder="Mukammal pata (Address)" style="height: 40px; resize: none;"></textarea>
   
   <div class="sj-radio-group">
-    <label class="sj-radio-label active urdu-text" id="labelOnline">
+    <label class="sj-radio-label active" id="labelOnline">
       <input type="radio" name="paymentMethod" value="Online" checked onclick="switchPaymentMethod('Online')">
       <span>EasyPaisa / Bank</span>
     </label>
-    <label class="sj-radio-label urdu-text" id="labelCOD">
+    <label class="sj-radio-label" id="labelCOD">
       <input type="radio" name="paymentMethod" value="COD" onclick="switchPaymentMethod('COD')">
       <span>Cash on Delivery</span>
     </label>
@@ -165,7 +162,7 @@
   </div>
 
   <button onclick="sendOrderToWhatsApp()" class="sj-submit-btn">
-    ✅ واٹس ایپ پر آرڈر بھیجیں
+    ✅ WhatsApp par Order Bhejiye
   </button>
 </div>
 
@@ -175,17 +172,15 @@ let cart = {};
 let totalAmount = 0;
 let currentFilter = 'all';
 
-// گیٹ ہب سے کیٹگریز اور پروڈکٹس لوڈ کرنا
 async function loadStoreData() {
     try {
         const indexRes = await fetch('categories_index.json');
         const categories = await indexRes.json();
         
         const bar = document.getElementById('categoriesBar');
-        // تمام سامان کا بٹن پہلے سے موجود ہے، باقی کیٹگریز کے بٹن شامل کریں
         categories.forEach(cat => {
             const btn = document.createElement('button');
-            btn.className = 'cat-btn urdu-text';
+            btn.className = 'cat-btn';
             btn.innerHTML = `${cat.icon || '📦'} ${cat.category}`;
             btn.onclick = (e) => filterCategory(cat.file, e.currentTarget);
             bar.appendChild(btn);
@@ -203,13 +198,11 @@ async function loadStoreData() {
                         categoryName: cat.category
                     });
                 });
-            } catch (err) {
-                console.error(`Error loading ${cat.file}:`, err);
-            }
+            } catch (err) {}
         }
         renderProducts();
     } catch (e) {
-        document.getElementById('productContainer').innerHTML = `<div style="text-align:center; padding:20px; color:var(--price);">ڈیٹا لوڈ کرنے میں خرابی پیش آئی!</div>`;
+        document.getElementById('productContainer').innerHTML = `<div style="text-align:center; padding:20px; color:var(--price);">Data load karne mein kharabi pesh aayi!</div>`;
     }
 }
 
@@ -228,11 +221,10 @@ function renderProducts() {
     }
 
     if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--muted);" class="urdu-text">کوئی پروڈکٹ موجود نہیں</div>`;
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--muted);">Koi product mojood nahi</div>`;
         return;
     }
 
-    // کیٹگری کے لحاظ سے گروپ بندی تاکہ نام ہمیشہ اوپر ہو
     let grouped = {};
     filtered.forEach(p => {
         if (!grouped[p.categoryName]) grouped[p.categoryName] = [];
@@ -244,19 +236,19 @@ function renderProducts() {
         html += `<div class="category-section-title">📂 ${catName}</div>`;
         html += `<div class="product-grid">`;
         
-        grouped[catName].forEach((p, idx) => {
+        grouped[catName].forEach((p) => {
             let imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div class="product-img">🛒</div>`;
             let unitsHtml = '';
             
             if (p.units && p.units.length > 0) {
-                p.units.forEach((u, uIdx) => {
+                p.units.forEach((u) => {
                     let cartKey = `${p.name}_${u.label}`;
                     let qty = cart[cartKey] ? cart[cartKey].qty : 0;
                     unitsHtml += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px; padding-top:5px; border-top:1.5px dashed var(--line);">
                             <div>
-                                <span style="font-size:13px; font-weight:bold; color:var(--dark);" class="urdu-text">${u.label}</span>
-                                <span style="font-size:13px; font-weight:bold; color:var(--price); margin-right:8px;">Rs. ${u.rate}</span>
+                                <span style="font-size:13px; font-weight:bold; color:var(--dark);">${u.label}</span>
+                                <span style="font-size:13px; color:var(--price); margin-right:8px;">Rs. ${u.rate}</span>
                             </div>
                             <div class="qty-control">
                                 <button class="qty-btn" onclick="updateQty('${p.name}', '${u.label}', ${u.rate}, '${catName}', -1)">-</button>
@@ -338,24 +330,24 @@ function sendOrderToWhatsApp() {
     const tid = document.getElementById('transactionId') ? document.getElementById('transactionId').value.trim() : "";
 
     if (!name || !phone || !address) {
-        alert("براہ کرم اپنا نام، فون نمبر اور مکمل پتہ درج کریں!");
+        alert("Barah karam apna naam, phone number aur mukammal pata darj karein!");
         return;
     }
 
     if (paymentMethod === "Online" && !tid) {
-        alert("براہ کرم EasyPaisa / Bank Transaction ID (TID) درج کریں!");
+        alert("Barah karam EasyPaisa / Bank Transaction ID (TID) darj karein!");
         return;
     }
 
     let cartItemsArray = Object.values(cart);
     if (cartItemsArray.length === 0) {
-        alert("براہ کرم کارٹ میں کم از کم ایک پروڈکٹ شامل کریں!");
+        alert("Barah karam cart mein kam az kam aik product shamil karein!");
         return;
     }
 
     let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
     
-    let message = `SJ Online — نیا آرڈر [${orderCode}]\n\n`;
+    let message = `SJ Online — New Order [${orderCode}]\n\n`;
     message += `Name: ${name}\n`;
     message += `Phone: ${phone}\n`;
     message += `Address: ${address}\n`;
@@ -365,7 +357,7 @@ function sendOrderToWhatsApp() {
         message += `Transaction ID (TID): ${tid}\n`;
     }
     
-    message += `\nکوڈ OTP سامان وصول کرتے وقت بتا کر سامان وصول کرکے سائن کرنا ہوگا۔\n`;
+    message += `\nOTP code saaman وصول karte waqt bata kar saaman وصول karke sign karna hoga.\n`;
     message += `\nOrder Details:\n`;
 
     let currentCat = "";
@@ -374,7 +366,7 @@ function sendOrderToWhatsApp() {
             currentCat = item.category;
             message += `\n🔹 Category: ${currentCat}\n`;
         }
-        message += `• ${item.name} (${item.unit}) - ${item.qty} عدد = Rs. ${item.price * item.qty}\n`;
+        message += `• ${item.name} (${item.unit}) - ${item.qty} adad = Rs. ${item.price * item.qty}\n`;
     });
 
     message += `\nTotal Amount: Rs. ${totalAmount}\n`;
@@ -387,7 +379,6 @@ function sendOrderToWhatsApp() {
     window.open(whatsappUrl, '_blank');
 }
 
-// صفحہ کھلتے ہی ڈیٹا لوڈ کریں
 window.onload = loadStoreData;
 </script>
 </body>

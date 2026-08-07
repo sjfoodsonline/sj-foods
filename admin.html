@@ -340,8 +340,10 @@
       let codeVal = row.code;
       if(codeVal){
         let st = String(row.status || 'pending').toLowerCase().trim();
-        // فالتو پیمنٹ میسج کو صاف کرنا تاکہ ڈبل نہ آئے
-        let cleanItemsSummary = (row.items || "").replace(/Payment Method: Cash on Delivery \(COD\)/gi, "").replace(/<br\s*[\/]?>\s*<br\s*[\/]?>/gi, '<br>').trim();
+        
+        // فالتو اور ڈبل پیمنٹ کے تمام الفاظ اور فقرے مکمل صاف کرنا
+        let rawItems = (row.items || "").replace(/Payment Method: Cash on Delivery \(COD\)/gi, "").replace(/Cash on Delivery \(COD\)/gi, "");
+        let cleanItemsSummary = rawItems.replace(/<br\s*[\/]?>\s*<br\s*[\/]?>/gi, '<br>').replace(/(<br\s*[\/]?>)+$/, '').trim();
 
         let itemObj = {
           id: "fb_" + index,
@@ -402,7 +404,7 @@
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
       let plainItems = o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
-      const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${plainItems}\n\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
+      const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${plainItems}\n\nطریقہ ادائیگی: Cash on Delivery (COD)\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
       const waUpdateLink = `https://wa.me/${cleanPhoneForWA}?text=${encodeURIComponent(updateMsgText)}`;
 
       const orderDataObj = {

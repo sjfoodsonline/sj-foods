@@ -340,13 +340,16 @@
       let codeVal = row.code;
       if(codeVal){
         let st = String(row.status || 'pending').toLowerCase().trim();
+        // فالتو پیمنٹ میسج کو صاف کرنا تاکہ ڈبل نہ آئے
+        let cleanItemsSummary = (row.items || "").replace(/Payment Method: Cash on Delivery \(COD\)/gi, "").replace(/<br\s*[\/]?>\s*<br\s*[\/]?>/gi, '<br>').trim();
+
         let itemObj = {
           id: "fb_" + index,
           code: codeVal,
           name: row.name || "Unknown",
           phone: row.phone || "03000000000",
           address: row.address || "Mingora Swat",
-          itemsSummary: row.items || "",
+          itemsSummary: cleanItemsSummary,
           total: parseFloat(row.total || 0) || 0,
           otpCode: row.otp || String(codeVal).replace("SJ-", ""),
           displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
@@ -398,12 +401,10 @@
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
-      // صاف ستھرا واٹس ایپ اپ ڈیٹ میسج
-      let plainItems = o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+      let plainItems = o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
       const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${plainItems}\n\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
       const waUpdateLink = `https://wa.me/${cleanPhoneForWA}?text=${encodeURIComponent(updateMsgText)}`;
 
-      // JSON ڈیٹا کو سیف طریقے سے انکوڈ کرنا تاکہ کوئی خرابی نہ آئے
       const orderDataObj = {
         code: o.code,
         name: o.name,
@@ -416,7 +417,6 @@
       };
       const orderDataStr = encodeURIComponent(JSON.stringify(orderDataObj));
 
-      // سیف ایڈیٹنگ پیرامیٹرز
       const safeCode = o.code;
       const safeName = o.name.replace(/'/g, "\\'");
       const safePhone = o.phone.replace(/'/g, "\\'");
@@ -448,7 +448,8 @@
               <b>Order Time:</b> <b style="color:var(--dark);">${o.displayTime}</b><br>
               <div style="margin-top:6px; margin-bottom:6px;"><b>Items Details:</b></div>
               <div style="background:#F9F8F3; padding:10px; border-radius:8px; font-family:Arial, sans-serif; font-size:13px; line-height:1.8;" dir="auto">${o.itemsSummary}</div>
-              <div style="margin-top:6px;"><b>Total Amount:</b> <b style="font-size:15px; color:var(--price);">Rs. ${o.total}</b></div>
+              <div style="margin-top:6px;"><b>Payment Method:</b> <b style="color:var(--dark);">Cash on Delivery (COD)</b></div>
+              <div style="margin-top:4px;"><b>Total Amount:</b> <b style="font-size:15px; color:var(--price);">Rs. ${o.total}</b></div>
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
@@ -471,7 +472,7 @@
     const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
     
-    let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").replace(/Payment Method: Cash on Delivery \(COD\)/gi, "").trim();
+    let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
 
     printDiv.className = "receipt-box";
     printDiv.innerHTML = `
@@ -487,6 +488,7 @@
         <b>[ ] مارک کر کے چیزیں اٹھائیں:</b><br>${cleanItems}
       </div>
       <div style="border-top:1px dashed #000; padding-top:4px; font-size:12px; text-align:left; font-weight:bold;">
+        Payment: Cash on Delivery (COD)<br>
         Total: Rs. ${d.total}
       </div>
       <div style="text-align:center; font-size:9px; margin-top:8px;">
@@ -544,7 +546,6 @@
     showToast("⚡ میسج صاف ہو کر آٹو ایڈجسٹ ہو گیا!");
   }
 
-  // مینول آرڈر موڈل کنٹرول
   window.openManualOrderModal = function(){
     document.getElementById("manualOrderModal").style.display = "flex";
   }
@@ -580,7 +581,6 @@
     showToast("✅ مینول آرڈر کامیابی سے محفوظ ہو گیا!");
   }
 
-  // آرڈر ایڈٹ موڈل کنٹرول
   window.openEditModal = function(code, name, phone, addr, items, total){
     document.getElementById("editOrderCode").value = code;
     document.getElementById("eName").value = name;
@@ -613,7 +613,7 @@
     });
 
     closeEditModal();
-    showToast("✅ آرڈر کامیابی سے اپ ڈیٹ ہو گیا! اب واٹس ایپ بٹن ظاہر ہو گیا ہے۔");
+    showToast("✅ آرڈر کامیابی سے اپ ڈیٹ ہو گیا!");
   }
 
   window.completeOrderAndThank = async function(code, phone){

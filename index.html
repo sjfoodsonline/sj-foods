@@ -65,6 +65,13 @@
   .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
 
+  /* پاپ اپ ونڈو کے لیے نیا ڈیزائن */
+  .confirm-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100005; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .confirm-popup-overlay.active { display: flex; }
+  .confirm-popup-box { background: #fff; border-radius: 20px; padding: 22px; max-width: 380px; width: 100%; box-shadow: 0 15px 40px rgba(0,0,0,0.3); font-family: "Jameel Noori Nastaleeq", serif; text-align: right; }
+  .confirm-popup-box h3 { color: var(--dark); margin-top: 0; font-size: 19px; border-bottom: 2px solid var(--leaf); padding-bottom: 8px; text-align: center; }
+  .confirm-popup-box p { font-size: 14.5px; color: var(--ink); line-height: 1.8; margin: 12px 0; }
+
   .owner-card {
     text-align: center; background: var(--paper); border: 1.5px solid var(--line);
     border-radius: 16px; padding: 14px; margin-bottom: 12px;
@@ -320,6 +327,27 @@
   </div>
 </div>
 
+<!-- یہاں آرڈر کنفرمیشن کے لیے چھوٹی ونڈو (پاپ اپ) بنا دی گئی ہے -->
+<div class="confirm-popup-overlay" id="confirmPopupOverlay">
+  <div class="confirm-popup-box">
+    <h3>🛒 آرڈر کی تصدیق (Order Confirmation)</h3>
+    <p>
+      <b>اردو:</b> براہ کرم تصدیق کریں کہ آپ کو اس آرڈر کی ضرورت ہے اور آپ نمائندے سے کال یا واٹس ایپ پر بات چیت کرنے کے لیے تیار ہیں۔<br><br>
+      <b>Roman Urdu:</b> Baraye karam tasdeeq karein ke aap ko is order ki zaroorat hai aur aap numainday se call ya WhatsApp par baat karne ke liye tayar hain.
+    </p>
+    
+    <div style="background:var(--leaf); padding:10px; border-radius:10px; margin:12px 0; border:1px solid #cfe8d1;">
+      <input type="checkbox" id="popupTermsCheck" style="width:18px; height:18px; vertical-align: middle; margin-left: 6px;">
+      <label for="popupTermsCheck" style="display:inline; font-size:13px; font-weight:bold; color:var(--dark); cursor:pointer;">
+        جی ہاں، مجھے آرڈر کی ضرورت ہے اور میں تصدیق کے لیے تیار ہوں۔ (Yes, I confirm)
+      </label>
+    </div>
+
+    <button class="wa-btn" style="margin-top:4px;" onclick="proceedWithOrder()">آرڈر واٹس ایپ پر بھیجیں ➔</button>
+    <button style="background:#666; color:#fff; width:100%; padding:10px; border-radius:10px; margin-top:8px; font-size:13px; font-weight:bold;" onclick="closeConfirmPopup()">واپس جائیں</button>
+  </div>
+</div>
+
 <div class="install-banner" id="installBanner" style="display:none;">
   <span>📱 تیز ترین رسپانس کے لیے ایپ انسٹال کریں!</span>
   <button id="installAppBtn">انسٹال کریں</button>
@@ -376,14 +404,6 @@
       <input id="custName" type="text" placeholder="Name (نام)">
       <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
       <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
-
-      <!-- یہاں شرط اور حلفیہ تصدیق کا چیک باکس شامل کر دیا گیا ہے -->
-      <div style="background:#fff; padding:10px; border-radius:10px; border:1px solid #cfe8d1; margin-top:8px; margin-bottom:8px; font-family: 'Jameel Noori Nastaleeq', serif; line-height: 1.6;">
-        <input type="checkbox" id="termsCheck" style="width:16px; height:16px; vertical-align: middle; margin-left: 6px;">
-        <label for="termsCheck" style="display:inline; font-size:12.5px; font-weight:bold; color:var(--price); cursor:pointer;">
-          میں حلفاً گواہی دیتا/دیتی ہوں کہ مجھے اس آرڈر کی ضرورت ہے۔ آرڈر کی تصدیق اور ڈلیوری کو یقینی بنانے کے لیے میں آپ کے نمائندے سے کال یا واٹس ایپ پر بات چیت کرنے کے لیے تیار ہوں۔ اگر میں نے رابطہ نہ کیا یا تصدیق نہ کی تو آرڈر منسوخ مانا جائے۔
-        </label>
-      </div>
 
       <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
@@ -867,14 +887,8 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
-// یہاں تصدیق کے چیک باکس کی لازمی جانچ (Validation) لگا دی گئی ہے
+// جب کسٹمر واٹس ایپ آرڈر کے بٹن پر کلک کرے گا تو پہلے چھوٹی ونڈو (پاپ اپ) کھلے گی
 document.getElementById("waBtn").onclick = () => {
-  const terms = document.getElementById("termsCheck");
-  if (!terms.checked) {
-    alert("❌ براہ کرم آرڈر کنفرم کرنے سے پہلے 'شرائط و ضوابط' والے خانے پر لازمی ٹک (Check) لگائیں۔");
-    return;
-  }
-
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
   const name = document.getElementById("custName").value.trim();
@@ -883,7 +897,29 @@ document.getElementById("waBtn").onclick = () => {
   
   if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
 
-  let payMethodWA = "ڈیلیوری کے وقت او ٹی پی کوڈ کنفرمیشن کے لیے بتانا لازمی ہوگا شکریہ ";
+  // پاپ اپ ونڈو کو ظاہر کریں
+  document.getElementById("confirmPopupOverlay").classList.add("active");
+};
+
+function closeConfirmPopup(){
+  document.getElementById("confirmPopupOverlay").classList.remove("active");
+}
+
+// جب کسٹمر پاپ اپ میں ٹک لگا کر آگے بڑھنے کا بٹن دبائے گا
+function proceedWithOrder(){
+  const popupCheck = document.getElementById("popupTermsCheck");
+  if(!popupCheck.checked){
+    alert("❌ براہ کرم تصدیق کے لیے خانے پر ٹک (Check) لگائیں۔");
+    return;
+  }
+  document.getElementById("confirmPopupOverlay").classList.remove("active");
+
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  
+  let payMethodWA = "Cash on Delivery (COD) [سامان وصول کرتے وقت OTP کوڈ بتا کر سامان وصول کرکے سائن کرنا ہوگا]";
   let payMethodClean = "Cash on Delivery (COD)";
   
   if(payEasy.checked){
@@ -899,7 +935,7 @@ document.getElementById("waBtn").onclick = () => {
   msg += `Phone: ${phone}\n`;
   msg += `Address: ${addr}\n`;
   msg += `Payment Method: ${payMethodWA}\n\n`;
-  msg += `[حلفاً تصدیق: کسٹمر نے شرائط و ضوابط تسلیم کر لیے ہیں کہ اسے آرڈر کی ضرورت ہے اور وہ تصدیق کے لیے رابطہ کرنے کے پابند ہیں]\n\n`;
+  msg += `[حلفاً تصدیق: کسٹمر نے پاپ اپ ونڈو پر تصدیق کی ہے کہ اسے آرڈر کی ضرورت ہے]\n\n`;
   msg += `Order Details:\n`;
   
   let receiptItems = "";
@@ -959,7 +995,7 @@ document.getElementById("waBtn").onclick = () => {
 
   window.open(`https://wa.me/923349353799?text=${encodeURIComponent(msg)}`, "_blank");
   showToast("✅ Order saved to Firebase and sent to WhatsApp!");
-};
+}
 
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);

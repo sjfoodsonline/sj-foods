@@ -172,7 +172,7 @@
     </div>
     
     <div style="background:#E8F5E9; padding:8px 10px; border-radius:8px; margin-bottom:10px; font-size:11.5px; color:var(--dark);">
-      💡 <b>اسمارٹ ٹپ:</b> واٹس ایپ یا چیট کا پورا میسج نیچے "سامان کی تفصیلات" میں پیسٹ کریں اور <b>"⚡ آٹو ریڈ"</b> دبائیں۔
+      💡 <b>اسمارٹ ٹپ:</b> واٹس ایپ یا چیٹ کا پورا میسج نیچے "سامان کی تفصیلات" میں پیسٹ کریں اور <b>"⚡ آٹو ریڈ"</b> دبائیں۔
     </div>
 
     <label>👤 کسٹمر کا نام</label>
@@ -491,13 +491,11 @@
       return;
     }
 
-    // فون نمبر تلاش کرنا (03XXXXXXXXX)
     const phoneMatch = text.match(/03\d{9}/);
     if(phoneMatch) {
       document.getElementById("mPhone").value = phoneMatch[0];
     }
 
-    // قیمت تلاش کرنا (مثلاً Rs. 500 یا 1200 روپے)
     const priceMatches = text.match(/(\d+)\s*(روپے|روپیہ|Rs|rs)/gi);
     if(priceMatches) {
       let totalSum = 0;
@@ -508,7 +506,6 @@
       if(totalSum > 0) document.getElementById("mTotal").value = totalSum;
     }
 
-    // نام یا پتے کے لیے عام الفاظ چیک کرنا
     let lines = text.split('\n');
     let itemsArr = [];
     lines.forEach(line => {

@@ -1,28 +1,28 @@
 [
   {
     "name": "آلو",
-    "name_roman": "Aloo",
     "units": [
       {
         "label": "KG",
-        "rate": 50
+        "rate": 5
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 25
+        "rate": 3
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 250
+        "rate": 25
       }
     ],
     "available": true,
     "image": "products/sabzi-0-1785052638035.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Aloo"
   },
   {
     "name": "پیاز ",
-    "name_roman": "Pyaz",
     "units": [
       {
         "label": "KG",
@@ -39,11 +39,12 @@
     ],
     "available": true,
     "image": "products/sabzi-1-1785052754168.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Pyaz"
   },
   {
     "name": "ٹماٹر",
-    "name_roman": "Tamatar",
     "units": [
       {
         "label": "KG",
@@ -60,11 +61,12 @@
     ],
     "available": true,
     "image": "products/sabzi-2-1785053017749.jpg",
-    "featured": true
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Tamatar"
   },
   {
     "name": "کچالو",
-    "name_roman": "Kachalu",
     "units": [
       {
         "label": "KG",
@@ -77,11 +79,12 @@
     ],
     "available": true,
     "image": "products/sabzi-3-1785053762180.jpg",
-    "featured": true
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Kachalu"
   },
   {
     "name": "بھنڈی",
-    "name_roman": "Bhindi",
     "units": [
       {
         "label": "KG",
@@ -94,11 +97,12 @@
     ],
     "available": true,
     "image": "products/sabzi-4-1785050455068.jpg",
-    "featured": true
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Bhindi"
   },
   {
     "name": "مٹر",
-    "name_roman": "Matar",
     "units": [
       {
         "label": "KG",
@@ -111,11 +115,12 @@
     ],
     "available": true,
     "image": "products/sabzi-5-1785053803796.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Matar"
   },
   {
     "name": "توری",
-    "name_roman": "Tori",
     "units": [
       {
         "label": "KG",
@@ -128,11 +133,12 @@
     ],
     "available": true,
     "image": "products/sabzi-6-1785053855241.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Tori"
   },
   {
     "name": "کدو",
-    "name_roman": "Kaddu",
     "units": [
       {
         "label": "KG",
@@ -145,11 +151,12 @@
     ],
     "available": true,
     "image": "products/sabzi-7-1785053981892.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Kaddu"
   },
   {
     "name": "کریلا",
-    "name_roman": "Karela",
     "units": [
       {
         "label": "KG",
@@ -162,11 +169,12 @@
     ],
     "available": true,
     "image": "products/sabzi-8-1785053985277.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Karela"
   },
   {
     "name": "بینگن",
-    "name_roman": "Baingan",
     "units": [
       {
         "label": "KG",
@@ -179,11 +187,12 @@
     ],
     "available": true,
     "image": "products/sabzi-9-1785053990863.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Baingan"
   },
   {
     "name": "شملہ مرچ",
-    "name_roman": "Shimla Mirch",
     "units": [
       {
         "label": "KG",
@@ -196,11 +205,12 @@
     ],
     "available": true,
     "image": "products/sabzi-10-1785054172550.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Shimla Mirch"
   },
   {
     "name": "بند گوبھی",
-    "name_roman": "Band Gobhi",
     "units": [
       {
         "label": "KG",
@@ -213,11 +223,12 @@
     ],
     "available": true,
     "image": "products/sabzi-11-1785054553711.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Band Gobhi"
   },
   {
     "name": "گاجر",
-    "name_roman": "Gajar",
     "units": [
       {
         "label": "KG",
@@ -230,11 +241,12 @@
     ],
     "available": true,
     "image": "products/sabzi-12-1785054633102.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Gajar"
   },
   {
     "name": "کیرا",
-    "name_roman": "Kheera",
     "units": [
       {
         "label": "KG",
@@ -251,11 +263,12 @@
     ],
     "available": true,
     "image": "products/sabzi-13-1785054717941.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Kheera"
   },
   {
     "name": "پھول گھوبی",
-    "name_roman": "Phool Gobhi",
     "units": [
       {
         "label": "KG",
@@ -264,11 +277,12 @@
     ],
     "available": true,
     "image": "products/sabzi-14-1785054720853.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Phool Gobhi"
   },
   {
     "name": "شلغم",
-    "name_roman": "Shalgham",
     "units": [
       {
         "label": "KG",
@@ -281,11 +295,12 @@
     ],
     "available": true,
     "image": "products/sabzi-15-1785054824930.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Shalgham"
   },
   {
     "name": "فراش بین",
-    "name_roman": "Farash Been",
     "units": [
       {
         "label": "KG",
@@ -298,11 +313,12 @@
     ],
     "available": true,
     "image": "products/sabzi-16-1785054904651.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Farash Been"
   },
   {
     "name": "پمنکے",
-    "name_roman": "Pamnkay",
     "units": [
       {
         "label": "KG",
@@ -315,11 +331,12 @@
     ],
     "available": true,
     "image": "products/sabzi-17-1785050682060.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Pamnkay"
   },
   {
     "name": "سبز مرچ",
-    "name_roman": "Hari Mirch",
     "units": [
       {
         "label": "KG",
@@ -332,11 +349,12 @@
     ],
     "available": true,
     "image": "products/sabzi-18-1785050694950.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Hari Mirch"
   },
   {
     "name": "ادرک",
-    "name_roman": "Adrak",
     "units": [
       {
         "label": "KG",
@@ -353,11 +371,12 @@
     ],
     "available": true,
     "image": "products/sabzi-19-1785050711978.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Adrak"
   },
   {
     "name": "ÙÛØ³Ù",
-    "name_roman": "Lehsan",
     "units": [
       {
         "label": "KG",
@@ -374,11 +393,12 @@
     ],
     "available": true,
     "image": "products/sabzi-20-1785050729762.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Lehsan"
   },
   {
     "name": "ÙÛÙÙÚº",
-    "name_roman": "Lemon",
     "units": [
       {
         "label": "KG",
@@ -395,11 +415,12 @@
     ],
     "available": true,
     "image": "products/sabzi-21-1785050769712.jpg",
-    "featured": true
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Lemon"
   },
   {
     "name": "گول ٹینڈے",
-    "name_roman": "Gol Tinday",
     "units": [
       {
         "label": "KG",
@@ -412,11 +433,12 @@
     ],
     "available": true,
     "image": "products/sabzi-22-1785050788775.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Gol Tinday"
   },
   {
     "name": "چقندر",
-    "name_roman": "Chuqandar",
     "units": [
       {
         "label": "KG",
@@ -429,11 +451,12 @@
     ],
     "available": true,
     "image": "products/sabzi-23-1785050808015.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Chuqandar"
   },
   {
     "name": "Ø³Ø¨Ø² Ø¯Ú¾ÙÛØ§",
-    "name_roman": "Sabz Dhania",
     "units": [
       {
         "label": "گیڈی",
@@ -442,11 +465,12 @@
     ],
     "available": true,
     "image": "products/sabzi-24-1785050818856.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Sabz Dhania"
   },
   {
     "name": "پودینہ",
-    "name_roman": "Pudina",
     "units": [
       {
         "label": "گیڈی",
@@ -455,11 +479,12 @@
     ],
     "available": true,
     "image": "products/sabzi-25-1785050829478.jpg",
-    "featured": true
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Pudina"
   },
   {
     "name": "سلاد پتی",
-    "name_roman": "Salad Patti",
     "units": [
       {
         "label": "گیڈی",
@@ -468,11 +493,12 @@
     ],
     "available": true,
     "image": "products/sabzi-26-1785050838827.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Salad Patti"
   },
   {
     "name": "مولی",
-    "name_roman": "Mooli",
     "units": [
       {
         "label": "KG",
@@ -481,11 +507,12 @@
     ],
     "available": false,
     "image": "products/sabzi-27-1785051065277.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Mooli"
   },
   {
     "name": "لمبے ٹینڈے",
-    "name_roman": "Lambay Tinday",
     "units": [
       {
         "label": "KG",
@@ -494,11 +521,12 @@
     ],
     "available": true,
     "image": "products/sabzi-28-1785050851049.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Lambay Tinday"
   },
   {
     "name": "ساگ",
-    "name_roman": "Saag",
     "units": [
       {
         "label": "گیڈی",
@@ -507,11 +535,12 @@
     ],
     "available": true,
     "image": "products/sabzi-29-1785055337912.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Saag"
   },
   {
     "name": "ہری پیاز",
-    "name_roman": "Hari Pyaz",
     "units": [
       {
         "label": "گیڈی",
@@ -520,6 +549,8 @@
     ],
     "available": true,
     "image": "products/sabzi-30-1785050885008.jpg",
-    "featured": false
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Hari Pyaz"
   }
 ]

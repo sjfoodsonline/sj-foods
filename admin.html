@@ -171,10 +171,6 @@
       <button onclick="closeManualOrderModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
     
-    <div style="background:#E8F5E9; padding:8px 10px; border-radius:8px; margin-bottom:10px; font-size:11.5px; color:var(--dark);">
-      💡 <b>اسمارٹ ٹپ:</b> واٹس ایپ یا چیٹ کا پورا میسج نیچے "سامان کی تفصیلات" میں پیسٹ کریں اور <b>"⚡ آٹو ریڈ"</b> دبائیں۔
-    </div>
-
     <label>👤 کسٹمر کا نام</label>
     <input type="text" id="mName" placeholder="نام درج کریں">
     <label>📞 فون نمبر</label>
@@ -189,7 +185,7 @@
     <textarea id="mItems" rows="4" placeholder="یہاں پورا میسج پیسٹ کریں..."></textarea>
     
     <label>💵 کل رقم (Rs)</label>
-    <input type="number" id="mTotal" placeholder="کل قیمت (آٹو کیلکولیٹ ہوگی)">
+    <input type="number" id="mTotal" placeholder="کل قیمت">
     
     <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 آرڈر محفوظ کریں</button>
     <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">واپس جائیں</button>
@@ -214,7 +210,7 @@
     <textarea id="eItems" rows="5"></textarea>
     <label>💵 کل رقم (Rs)</label>
     <input type="number" id="eTotal">
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 تبدیلیاں محفوظ کریں (Updated Bill)</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 تبدیلیاں محفوظ کریں</button>
     <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">واپس جائیں</button>
   </div>
 </div>
@@ -402,6 +398,10 @@
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
+      // واٹس ایپ اپ ڈیٹ میسج کا ٹیکسٹ تیار کرنا (صرف جب ایڈٹ ہو چکا ہو)
+      const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n')}\n\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
+      const waUpdateLink = `https://wa.me/${cleanPhoneForWA}?text=${encodeURIComponent(updateMsgText)}`;
+
       const orderDataStr = encodeURIComponent(JSON.stringify({
         code: o.code,
         name: o.name,
@@ -442,7 +442,10 @@
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ (پکنگ)</button>
-              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${o.code}', '${o.name}', '${o.phone}', '${o.address}', ` + JSON.stringify(o.itemsSummary) + `, ${o.total})">✏️ آرڈر ایڈٹ کریں</button>
+              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${o.code}', '${o.name}', '${o.phone}', '${o.address}', ${JSON.stringify(o.itemsSummary)}, ${o.total})">✏️ آرڈر ایڈٹ کریں</button>
+              ${o.isUpdated ? `
+                <a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; display:inline-flex; align-items:center; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 کسٹمر کو اپ ڈیٹ بل واٹس ایپ کریں</a>
+              ` : ''}
               ${!isCompleted ? `
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
               ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
@@ -491,7 +494,6 @@
       return;
     }
 
-    // فالتو کوڈ یا علامات ہٹانا
     text = text.replace(/<[^>]*>?/gm, '');
 
     const phoneMatch = text.match(/03\d{9}/);
@@ -567,7 +569,7 @@
     showToast("✅ مینول آرڈر کامیابی سے محفوظ ہو گیا!");
   }
 
-  // آرڈر ایڈٹ موڈل کنٹرول
+  // آرڈر ایڈٹ موڈل کنٹرول (درست کردہ سنٹیکس)
   window.openEditModal = function(code, name, phone, addr, items, total){
     document.getElementById("editOrderCode").value = code;
     document.getElementById("eName").value = name;
@@ -600,7 +602,7 @@
     });
 
     closeEditModal();
-    showToast("✅ آرڈر کامیابی سے اپ ڈیٹ ہو گیا!");
+    showToast("✅ آرڈر کامیابی سے اپ ڈیٹ ہو گیا! اب واٹس ایپ بٹن ظاہر ہو گیا ہے۔");
   }
 
   window.completeOrderAndThank = async function(code, phone){
@@ -676,7 +678,7 @@ function loadConfig(){
   const raw = localStorage.getItem("sjfoods-admin-config");
   return raw ? JSON.parse(raw) : null;
 }
-function saveConfig(cfg){ localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
+function saveConfig(cfg){ localStorage.getItem("sjfoods-admin-config", JSON.stringify(cfg)); }
 
 document.getElementById("saveConfigBtn").onclick = async ()=>{
   const owner = document.getElementById("cfgOwner").value.trim();

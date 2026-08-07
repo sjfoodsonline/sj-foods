@@ -78,15 +78,19 @@
   .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; font-family:Arial, sans-serif;}
 
+  /* پرنٹ سٹائلز */
   @media print {
-    body * { visibility: hidden; }
-    #printableReceipt, #printableReceipt * { visibility: visible; }
+    body * { visibility: hidden !important; }
+    #printableReceipt, #printableReceipt * { visibility: visible !important; }
     #printableReceipt {
-      position: absolute; left: 0; top: 0; width: 100%; max-width: 80mm;
-      direction: rtl; font-family: Arial, sans-serif; padding: 5px; color: #000;
-      font-size: 12px; line-height: 1.4; background: #fff;
+      position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important;
+      direction: rtl !important; font-family: Arial, sans-serif !important; padding: 10px !important; color: #000 !important;
+      background: #fff !important; font-size: 14px !important; line-height: 1.6 !important;
     }
   }
+
+  .thermal-receipt-box { width: 80mm; max-width: 100%; margin: 0 auto; background: #fff; padding: 10px; }
+  .a4-receipt-box { width: 100%; max-width: 190mm; margin: 0 auto; background: #fff; padding: 20px; font-size: 16px; }
 </style>
 </head>
 <body>
@@ -336,7 +340,6 @@
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
-      // سیف ڈیٹا ابجیکٹ تاکہ ٹائپنگ کی خرابی نہ ہو
       const orderDataStr = encodeURIComponent(JSON.stringify({
         code: o.code,
         name: o.name,
@@ -375,7 +378,8 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="triggerPrint('${orderDataStr}')">🖨️ پرنٹ (تھرمل / A4)</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printReceipt('${orderDataStr}', 'thermal')">🖨️ تھرمل پرنٹ (80mm)</button>
+              <button class="btn-secondary" style="background:#E3F2FD; color:#0D47A1;" onclick="printReceipt('${orderDataStr}', 'a4')">📄 A4 پیپر پرنٹ</button>
               ${!isCompleted ? `
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
               ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
@@ -386,33 +390,69 @@
     }).join("");
   }
 
-  // پرنٹ کرنے کا محفوظ فنکشن
-  window.triggerPrint = function(encodedData){
+  // الگ الگ پرنٹ فنکشن (تھرمل اور A4 کے لیے)
+  window.printReceipt = function(encodedData, type){
     const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
-    const cleanItems = d.items.replace(/<[^>]*>/g, ' '); 
-    printDiv.innerHTML = `
-      <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:4px;">SJ FOODS MINGORA</div>
-      <div style="text-align:center; font-size:12px; margin-bottom:10px;">Al Basit Plaza, Haji Baba Road, Swat</div>
-      <div style="border-top:1.5px dashed #000; border-bottom:1.5px dashed #000; padding:8px 0; margin-bottom:8px; font-size:13px; line-height:1.6;">
-        <b>Order Code:</b> ${d.code}<br>
-        <b>Customer:</b> ${d.name}<br>
-        <b>Phone:</b> ${d.phone}<br>
-        <b>Address:</b> ${d.address}<br>
-        <b>OTP Code:</b> ${d.otp}
-      </div>
-      <div style="font-size:13px; line-height:1.6; margin-bottom:10px;">
-        <b>Items Details:</b><br>
-        ${cleanItems}
-      </div>
-      <div style="border-top:1.5px dashed #000; padding-top:8px; font-size:15px; text-align:left; font-weight:bold;">
-        Total Amount: Rs. ${d.total}
-      </div>
-      <div style="text-align:center; font-size:12px; margin-top:15px;">
-        Thank you for shopping with SJ Foods!<br>
-        Fresh Quality, Fast Delivery 🌿
-      </div>
-    `;
+    
+    // ایچ ٹی ایم ایل ٹیگز صاف کر کے صاف لسٹ بنانا
+    const cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+
+    if(type === 'thermal'){
+      printDiv.className = "thermal-receipt-box";
+      printDiv.innerHTML = `
+        <div style="text-align:center; font-weight:bold; font-size:16px; margin-bottom:4px;">SJ FOODS MINGORA</div>
+        <div style="text-align:center; font-size:11px; margin-bottom:8px;">Al Basit Plaza, Haji Baba Road, Swat</div>
+        <div style="border-top:1px dashed #000; border-bottom:1px dashed #000; padding:6px 0; margin-bottom:6px; font-size:12px; line-height:1.5;">
+          <b>Order Code:</b> ${d.code}<br>
+          <b>Customer:</b> ${d.name}<br>
+          <b>Phone:</b> ${d.phone}<br>
+          <b>Address:</b> ${d.address}<br>
+          <b>OTP Code:</b> ${d.otp}
+        </div>
+        <div style="font-size:12px; line-height:1.5; margin-bottom:8px; white-space: pre-line;">
+          <b>Items Details:</b><br>${cleanItems}
+        </div>
+        <div style="border-top:1px dashed #000; padding-top:6px; font-size:14px; text-align:left; font-weight:bold;">
+          Total: Rs. ${d.total}
+        </div>
+        <div style="text-align:center; font-size:11px; margin-top:12px;">
+          Thank you for shopping with SJ Foods!
+        </div>
+      `;
+    } else {
+      printDiv.className = "a4-receipt-box";
+      printDiv.innerHTML = `
+        <div style="display:flex; justify-content:space-between; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px;">
+          <div>
+            <h2 style="margin:0; font-size:24px; color:#153A20;">SJ FOODS MINGORA</h2>
+            <p style="margin:4px 0 0; font-size:14px; color:#555;">Fresh Produce, Groceries & Daily Essentials</p>
+          </div>
+          <div style="text-align:left;">
+            <h3 style="margin:0; font-size:18px;">INVOICE / RECEIPT</h3>
+            <p style="margin:4px 0 0; font-size:13px;">Order Code: <b>${d.code}</b></p>
+          </div>
+        </div>
+        <div style="margin-bottom:15px; font-size:14px; line-height:1.8; background:#f9f9f9; padding:10px; border-radius:8px;">
+          <b>Customer Name:</b> ${d.name}<br>
+          <b>Phone Number:</b> ${d.phone}<br>
+          <b>Delivery Address:</b> ${d.address}<br>
+          <b>Security OTP Code:</b> <span style="color:#B71C1C; font-weight:bold;">${d.otp}</span>
+        </div>
+        <div style="margin-bottom:15px; font-size:15px;">
+          <b>Purchased Items:</b><br>
+          <div style="border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:6px; white-space: pre-line; line-height:1.8;">${cleanItems}</div>
+        </div>
+        <div style="text-align:left; font-size:18px; font-weight:bold; border-top:2px solid #000; padding-top:10px;">
+          Total Bill Amount: Rs. ${d.total}
+        </div>
+        <div style="text-align:center; font-size:13px; margin-top:30px; color:#666; border-top:1px dashed #ccc; padding-top:10px;">
+          📍 Address: Al Basit Plaza, Haji Baba Road, Mingora Swat | 📞 Contact: 0334-9353799<br>
+          Thank you for shopping with SJ Foods! Your trust is our asset.
+        </div>
+      `;
+    }
+
     window.print();
   }
 

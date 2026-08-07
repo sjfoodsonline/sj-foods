@@ -363,7 +363,7 @@
             </div>
             
             <div style="margin-top:12px; display:flex; gap:5px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', '${o.otpCode}', ` + JSON.stringify(o.itemsSummary) + `, '${o.total}')">🖨️ تھرمل پرنٹ</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', '${o.otpCode}', ${JSON.stringify(o.itemsSummary)}, '${o.total}')">🖨️ تھرمل پرنٹ</button>
               ${!isCompleted ? `
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
               ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
@@ -374,7 +374,7 @@
     }).join("");
   }
 
-  // تھرمل پرنٹ کا فنکشن (80mm پرنٹر کے لیے پرفیکٹ)
+  // تھرمل پرنٹ کا درست فنکشن
   window.printThermalReceipt = function(code, name, phone, address, otp, itemsSummary, total){
     const printDiv = document.getElementById("printableReceipt");
     const cleanItems = itemsSummary.replace(/<[^>]*>/g, ' '); 
@@ -402,7 +402,6 @@
     window.print();
   }
 
-  // ڈلیوری مکمل ہونے پر بزنس کلوزنگ اور شکریہ کا واٹس ایپ میسج
   window.completeOrderAndThank = async function(code, phone){
     if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل اور بزنس کلوز کرنا چاہتے ہیں؟")) return;
     try {

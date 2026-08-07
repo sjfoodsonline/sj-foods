@@ -363,11 +363,10 @@
             </div>
             
             <div style="margin-top:12px; display:flex; gap:5px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#E8EAF6; color:#1A237E;" onclick="sendConfirmationMsg('${o.phone}', '${o.code}')">💬 تصدیق</button>
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', '${o.otpCode}', ` + JSON.stringify(o.itemsSummary) + `, '${o.total}')">🖨️ پرنٹ</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', '${o.otpCode}', ` + JSON.stringify(o.itemsSummary) + `, '${o.total}')">🖨️ تھرمل پرنٹ</button>
               ${!isCompleted ? `
-                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل ہو گئی</button>
-              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`}
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
+              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
             </div>
           </div>
         </div>
@@ -375,21 +374,13 @@
     }).join("");
   }
 
-  // یہاں تصدیق کا زبردست اور پکا میسج سیٹ ہے
-  window.sendConfirmationMsg = function(phone, code){
-    let cleanPhone = phone.replace(/[^0-9]/g, "");
-    if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-    const msg = `SJ Foods — آرڈر کی تصدیق\n\nمحترم صارف! SJ Foods سے آپ کا آرڈر نمبر [${code}] موصول ہو گیا ہے۔ آرڈر کو حتمی شکل دینے اور روانہ کرنے کے لیے براہ کرم اس پیغام کا جواب دیں اور تصدیق کریں (مثلاً 'ٹھیک ہے، سامان اکٹھا کر کے بھیج دیں') تاکہ ہم آپ کا آرڈر فورا روانہ کر سکیں۔ شکریہ!`;
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-    showToast("✅ تصدیقی پیغام واٹس ایپ پر بھیج دیا گیا ہے!");
-  }
-
+  // تھرمل پرنٹ کا فنکشن (80mm پرنٹر کے لیے پرفیکٹ)
   window.printThermalReceipt = function(code, name, phone, address, otp, itemsSummary, total){
     const printDiv = document.getElementById("printableReceipt");
     const cleanItems = itemsSummary.replace(/<[^>]*>/g, ' '); 
     printDiv.innerHTML = `
       <div style="text-align:center; font-weight:bold; font-size:16px; margin-bottom:4px;">SJ FOODS MINGORA</div>
-      <div style="text-align:center; font-size:11px; margin-bottom:8px;">Fresh Produce & Groceries</div>
+      <div style="text-align:center; font-size:11px; margin-bottom:8px;">Al Basit Plaza, Haji Baba Road</div>
       <div style="border-top:1px dashed #000; border-bottom:1px dashed #000; padding:6px 0; margin-bottom:6px; font-size:12px;">
         <b>Order Code:</b> ${code}<br>
         <b>Customer:</b> ${name}<br>
@@ -411,16 +402,17 @@
     window.print();
   }
 
+  // ڈلیوری مکمل ہونے پر بزنس کلوزنگ اور شکریہ کا واٹس ایپ میسج
   window.completeOrderAndThank = async function(code, phone){
-    if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل کرنا چاہتے ہیں؟")) return;
+    if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل اور بزنس کلوز کرنا چاہتے ہیں؟")) return;
     try {
       await update(ref(db, 'orders/' + code), { status: "completed" });
     } catch(e){}
-    const msg = `SJ Foods — Order Completed\n\nمحترم صارف، آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Foods کا شکریہ!`;
+    const msg = `SJ Foods — آرڈر کی تکمیل اور شکریہ\n\nمحترم صارف! آپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ SJ Foods پر اعتماد کرنے کا بہت شکریہ! مستقبل میں بھی آپ کی خدمت کے لیے حاضر رہیں گے۔`;
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
-    showToast("✅ آرڈر مکمل ہو گیا ہے!");
+    showToast("✅ آرڈر مکمل ہو گیا اور شکریہ کا پیغام بھیج دیا گیا!");
   }
 </script>
 

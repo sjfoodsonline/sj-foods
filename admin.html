@@ -336,6 +336,17 @@
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
+      // سیف ڈیٹا ابجیکٹ تاکہ ٹائپنگ کی خرابی نہ ہو
+      const orderDataStr = encodeURIComponent(JSON.stringify({
+        code: o.code,
+        name: o.name,
+        phone: o.phone,
+        address: o.address,
+        otp: o.otpCode,
+        items: o.itemsSummary,
+        total: o.total
+      }));
+
       return `
         <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
@@ -364,7 +375,7 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printReceipt('${o.code}', '${o.name}', '${o.phone}', '${o.address}', '${o.otpCode}', ${JSON.stringify(o.itemsSummary)}, '${o.total}')">🖨️ پرنٹ (تھرمل / A4)</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="triggerPrint('${orderDataStr}')">🖨️ پرنٹ (تھرمل / A4)</button>
               ${!isCompleted ? `
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
               ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
@@ -375,26 +386,27 @@
     }).join("");
   }
 
-  // پرنٹ کا واحد اور بہترین فنکشن (تھرمل اور A4 دونوں کے لیے)
-  window.printReceipt = function(code, name, phone, address, otp, itemsSummary, total){
+  // پرنٹ کرنے کا محفوظ فنکشن
+  window.triggerPrint = function(encodedData){
+    const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
-    const cleanItems = itemsSummary.replace(/<[^>]*>/g, ' '); 
+    const cleanItems = d.items.replace(/<[^>]*>/g, ' '); 
     printDiv.innerHTML = `
       <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:4px;">SJ FOODS MINGORA</div>
       <div style="text-align:center; font-size:12px; margin-bottom:10px;">Al Basit Plaza, Haji Baba Road, Swat</div>
       <div style="border-top:1.5px dashed #000; border-bottom:1.5px dashed #000; padding:8px 0; margin-bottom:8px; font-size:13px; line-height:1.6;">
-        <b>Order Code:</b> ${code}<br>
-        <b>Customer:</b> ${name}<br>
-        <b>Phone:</b> ${phone}<br>
-        <b>Address:</b> ${address}<br>
-        <b>OTP Code:</b> ${otp}
+        <b>Order Code:</b> ${d.code}<br>
+        <b>Customer:</b> ${d.name}<br>
+        <b>Phone:</b> ${d.phone}<br>
+        <b>Address:</b> ${d.address}<br>
+        <b>OTP Code:</b> ${d.otp}
       </div>
       <div style="font-size:13px; line-height:1.6; margin-bottom:10px;">
         <b>Items Details:</b><br>
         ${cleanItems}
       </div>
       <div style="border-top:1.5px dashed #000; padding-top:8px; font-size:15px; text-align:left; font-weight:bold;">
-        Total Amount: Rs. ${total}
+        Total Amount: Rs. ${d.total}
       </div>
       <div style="text-align:center; font-size:12px; margin-top:15px;">
         Thank you for shopping with SJ Foods!<br>

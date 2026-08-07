@@ -170,16 +170,27 @@
       <h3 style="margin:0; color:var(--dark);">➕ مینول آرڈر درج کریں</h3>
       <button onclick="closeManualOrderModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
+    
+    <div style="background:#E8F5E9; padding:8px 10px; border-radius:8px; margin-bottom:10px; font-size:11.5px; color:var(--dark);">
+      💡 <b>اسمارٹ ٹپ:</b> واٹس ایپ یا چیট کا پورا میسج نیچے "سامان کی تفصیلات" میں پیسٹ کریں اور <b>"⚡ آٹو ریڈ"</b> دبائیں۔
+    </div>
+
     <label>👤 کسٹمر کا نام</label>
     <input type="text" id="mName" placeholder="نام درج کریں">
     <label>📞 فون نمبر</label>
     <input type="text" id="mPhone" placeholder="03XXXXXXXXX">
     <label>📍 مکمل پتہ</label>
     <input type="text" id="mAddr" placeholder="محله / علاقہ">
-    <label>🛒 سامان کی تفصیلات اور قیمتیں</label>
-    <textarea id="mItems" rows="4" placeholder="مثلاً: 2 کلو ٹماٹر - 500 روپے"></textarea>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+      <label style="margin-bottom:0;">🛒 سامان کی تفصیلات اور قیمتیں</label>
+      <button type="button" class="btn-secondary" style="padding:2px 8px; font-size:10.5px; background:var(--dark); color:#fff;" onclick="smartParseText()">⚡ آٹو ریڈ (Smart Parse)</button>
+    </div>
+    <textarea id="mItems" rows="4" placeholder="یہاں پورا میسج پیسٹ کریں..."></textarea>
+    
     <label>💵 کل رقم (Rs)</label>
-    <input type="number" id="mTotal" placeholder="کل قیمت">
+    <input type="number" id="mTotal" placeholder="کل قیمت (آٹو کیلکولیٹ ہوگی)">
+    
     <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 آرڈر محفوظ کریں</button>
     <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">واپس جائیں</button>
   </div>
@@ -470,6 +481,54 @@
     `;
 
     window.print();
+  }
+
+  // اسمارٹ آٹو پارسر فنکشن (واٹس ایپ/چیٹ سے ٹیکسٹ خود الگ کرنا)
+  window.smartParseText = function() {
+    const text = document.getElementById("mItems").value;
+    if(!text.trim()){
+      showToast("❌ پہلے اوپر یا نیچے والے خانے میں میسج پیسٹ کریں!", true);
+      return;
+    }
+
+    // فون نمبر تلاش کرنا (03XXXXXXXXX)
+    const phoneMatch = text.match(/03\d{9}/);
+    if(phoneMatch) {
+      document.getElementById("mPhone").value = phoneMatch[0];
+    }
+
+    // قیمت تلاش کرنا (مثلاً Rs. 500 یا 1200 روپے)
+    const priceMatches = text.match(/(\d+)\s*(روپے|روپیہ|Rs|rs)/gi);
+    if(priceMatches) {
+      let totalSum = 0;
+      priceMatches.forEach(p => {
+        let nums = p.match(/\d+/);
+        if(nums) totalSum += parseInt(nums[0]);
+      });
+      if(totalSum > 0) document.getElementById("mTotal").value = totalSum;
+    }
+
+    // نام یا پتے کے لیے عام الفاظ چیک کرنا
+    let lines = text.split('\n');
+    let itemsArr = [];
+    lines.forEach(line => {
+      let l = line.trim();
+      if(l.includes("نام") || l.includes("Name")) {
+        let parts = l.split(/[:\-]/);
+        if(parts[1]) document.getElementById("mName").value = parts[1].trim();
+      } else if(l.includes("پتہ") || l.includes("Address")) {
+        let parts = l.split(/[:\-]/);
+        if(parts[1]) document.getElementById("mAddr").value = parts[1].trim();
+      } else if(l.length > 2 && !l.includes("03") && !l.includes("روپے")) {
+        itemsArr.push(l);
+      }
+    });
+
+    if(itemsArr.length > 0) {
+      document.getElementById("mItems").value = itemsArr.join('\n');
+    }
+
+    showToast("⚡ میسج کامیابی سے آٹو ایڈجسٹ ہو گیا!");
   }
 
   // مینول آرڈر موڈل کنٹرول

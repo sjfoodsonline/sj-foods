@@ -343,7 +343,6 @@
       if(codeVal){
         let st = String(row.status || 'pending').toLowerCase().trim();
         
-        // یہاں ہم پرانے یا نئے کسی بھی فالتو پیمنٹ میسج کو جڑ سے صاف کر رہے ہیں تاکہ ڈبل شو نہ ہو
         let rawItems = (row.items || "")
           .replace(/Payment Method:\s*([^\n<]+)/gi, "")
           .replace(/Payment:\s*([^\n<]+)/gi, "")

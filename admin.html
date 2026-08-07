@@ -1,24 +1,81 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>SJ Foods - Admin Panel</title>
+    <style>
+        /* CSS وہی پرانی رہے گی، اسے تبدیل نہ کریں */
+        body { font-family: sans-serif; direction: rtl; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 10px; }
+        .loading { color: gray; }
+    </style>
+</head>
+<body>
 
-  const firebaseConfig = { databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" };
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  window.dbRef = { ref, update, db };
+    <header><h1>SJ Foods - ایڈمن پینل</h1></header>
 
-  // پرانے آرڈرز لوڈ کرنے کے لیے درست کنکشن
-  const ordersRef = ref(db, 'orders');
-  onValue(ordersRef, (snapshot) => {
-    const data = snapshot.val();
-    if (!data) {
-      document.getElementById("ordersArea").innerHTML = "کوئی آرڈر موجود نہیں";
-      return;
-    }
-    
-    // ڈیٹا کو لسٹ میں تبدیل کریں
-    let dataList = Object.keys(data).map(key => ({ ...data[key], code: key }));
-    latestOrdersCache = dataList.reverse(); // نئے آرڈرز اوپر آئیں گے
-    renderOrdersDOM();
-  });
-</script>
+    <div class="wrap">
+        <div class="card">
+            <h3>📥 آرڈرز</h3>
+            <div id="ordersArea">لوڈ ہو رہا ہے...</div>
+        </div>
+
+        <div class="card">
+            <h3>🏷️ کیٹگریز و پروڈکٹس</h3>
+            <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
+            <div id="productsArea">کیٹگری منتخب کریں...</div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        
+        const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+        const db = getDatabase(app);
+
+        // آرڈرز لوڈنگ
+        onValue(ref(db, 'orders'), (snapshot) => {
+            const data = snapshot.val();
+            if (!data) return;
+            const orders = Object.keys(data).map(key => ({ ...data[key], code: key })).reverse();
+            document.getElementById("ordersArea").innerHTML = orders.map(o => `
+                <div class="card"><b>آرڈر: ${o.code}</b><br>کسٹمر: ${o.name}<br>ٹوٹل: ${o.total}</div>
+            `).join("");
+        });
+    </script>
+
+    <!-- GitHub Loading Script -->
+    <script>
+        let CFG = JSON.parse(localStorage.getItem("sjfoods-admin-config"));
+        
+        async function init() {
+            if(!CFG) {
+                document.getElementById("productsArea").innerHTML = "گیٹ ہب کنفیگریشن درکار ہے۔";
+                return;
+            }
+            const res = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/categories_index.json`, {
+                headers: { "Authorization": "token " + CFG.token }
+            });
+            const data = await res.json();
+            const index = JSON.parse(atob(data.content));
+            
+            const picker = document.getElementById("categoryPicker");
+            picker.innerHTML = index.map(c => `<option value="${c.file}">${c.category}</option>`).join("");
+            loadCategory(index[0].file);
+        }
+
+        async function loadCategory(file) {
+            const res = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${file}`, {
+                headers: { "Authorization": "token " + CFG.token }
+            });
+            const data = await res.json();
+            const items = JSON.parse(atob(data.content));
+            document.getElementById("productsArea").innerHTML = items.map(it => `<div>${it.name} - ${it.units[0].rate}</div>`).join("");
+        }
+
+        init();
+    </script>
+</body>
+</html>

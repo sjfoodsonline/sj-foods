@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>SJ FOODS — Fresh Vegetables, Fruits, Groceries & Daily Essentials</title>
+<title>SJ Foods — Fresh Vegetables, Fruits, Groceries & Daily Essentials</title>
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -376,6 +376,14 @@
       <input id="custName" type="text" placeholder="Name (نام)">
       <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
       <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
+
+      <!-- یہاں شرط اور حلفیہ تصدیق کا چیک باکس شامل کر دیا گیا ہے -->
+      <div style="background:#fff; padding:10px; border-radius:10px; border:1px solid #cfe8d1; margin-top:8px; margin-bottom:8px; font-family: 'Jameel Noori Nastaleeq', serif; line-height: 1.6;">
+        <input type="checkbox" id="termsCheck" style="width:16px; height:16px; vertical-align: middle; margin-left: 6px;">
+        <label for="termsCheck" style="display:inline; font-size:12.5px; font-weight:bold; color:var(--price); cursor:pointer;">
+          میں حلفاً گواہی دیتا/دیتی ہوں کہ مجھے اس آرڈر کی اشد ضرورت ہے۔ آرڈر کی تصدیق اور ڈلیوری کو یقینی بنانے کے لیے میں آپ کے نمائندے سے کال یا واٹس ایپ پر بات چیت کرنے کے لیے تیار ہوں۔ اگر میں نے رابطہ نہ کیا یا تصدیق نہ کی تو آرڈر منسوخ مانا جائے۔
+        </label>
+      </div>
 
       <div class="pay-method" id="payMethodBox" style="margin-top:8px;">
         <label id="lblCod"><input type="radio" name="paymethod" id="payCod" value="cod" checked> 💵 Cash on Delivery (COD)</label>
@@ -859,7 +867,14 @@ document.getElementById("shareBtn").onclick = async () => {
   else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
 };
 
+// یہاں تصدیق کے چیک باکس کی لازمی جانچ (Validation) لگا دی گئی ہے
 document.getElementById("waBtn").onclick = () => {
+  const terms = document.getElementById("termsCheck");
+  if (!terms.checked) {
+    alert("❌ براہ کرم آرڈر کنفرم کرنے سے پہلے 'شرائط و ضوابط' والے خانے پر لازمی ٹک (Check) لگائیں۔");
+    return;
+  }
+
   const chosen = ITEMS.filter(i => i.qty > 0);
   if(chosen.length === 0){ alert("Cart is empty"); return; }
   const name = document.getElementById("custName").value.trim();
@@ -884,6 +899,7 @@ document.getElementById("waBtn").onclick = () => {
   msg += `Phone: ${phone}\n`;
   msg += `Address: ${addr}\n`;
   msg += `Payment Method: ${payMethodWA}\n\n`;
+  msg += `[حلفاً تصدیق: کسٹمر نے شرائط و ضوابط تسلیم کر لیے ہیں کہ اسے آرڈر کی ضرورت ہے اور وہ تصدیق کے لیے رابطہ کرنے کے پابند ہیں]\n\n`;
   msg += `Order Details:\n`;
   
   let receiptItems = "";
@@ -913,7 +929,7 @@ document.getElementById("waBtn").onclick = () => {
   receiptItems += `<br><b>Payment Method:</b> ${payMethodClean}`;
   msg += `\nTotal Amount: ${fmt(subtotal)}\n\n`;
   if(payEasy.checked){
-    msg += `⚠️ نوٹ: میں نے ایزی پیسہ / بینک پیمنٹ کر دی ہے، سکرین شاٹ نیچے شیئر کر رہا/رہی ہوں۔\n\n`;
+    msg += `⚠️ نوٹ: میں نے ایزی پیسہ / بینک پیمنٹ کر دی ہے، سکرین شاٹ نیچے شیئر کر رہا/رہی ہوں\n\n`;
   }
   msg += `Please dispatch my order as soon as possible. Thank you!`;
 

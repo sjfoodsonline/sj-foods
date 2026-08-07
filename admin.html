@@ -398,20 +398,31 @@
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
-      // واٹس ایپ اپ ڈیٹ میسج کا ٹیکسٹ تیار کرنا (صرف جب ایڈٹ ہو چکا ہو)
-      const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n')}\n\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
+      // صاف ستھرا واٹس ایپ اپ ڈیٹ میسج
+      let plainItems = o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+      const updateMsgText = `SJ Foods — اپ ڈیٹ شدہ بل (${o.code})\n\nمحترم ${o.name}!\nآپ کے آرڈر میں کی گئی تبدیلی کے مطابق نیا بل درج ذیل ہے:\n\n${plainItems}\n\nکل رقم: Rs. ${o.total}\n\nSJ Foods پر اعتماد کرنے کا شکریہ!`;
       const waUpdateLink = `https://wa.me/${cleanPhoneForWA}?text=${encodeURIComponent(updateMsgText)}`;
 
-      const orderDataStr = encodeURIComponent(JSON.stringify({
+      // JSON ڈیٹا کو سیف طریقے سے انکوڈ کرنا تاکہ کوئی خرابی نہ آئے
+      const orderDataObj = {
         code: o.code,
         name: o.name,
         phone: o.phone,
         address: o.address,
         otp: o.otpCode,
-        items: o.itemsSummary,
+        items: plainItems,
         total: o.total,
         isUpdated: o.isUpdated
-      }));
+      };
+      const orderDataStr = encodeURIComponent(JSON.stringify(orderDataObj));
+
+      // سیف ایڈیٹنگ پیرامیٹرز
+      const safeCode = o.code;
+      const safeName = o.name.replace(/'/g, "\\'");
+      const safePhone = o.phone.replace(/'/g, "\\'");
+      const safeAddr = o.address.replace(/'/g, "\\'");
+      const safeItems = plainItems.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      const safeTotal = o.total;
 
       return `
         <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
@@ -442,7 +453,7 @@
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ (پکنگ)</button>
-              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${o.code}', '${o.name}', '${o.phone}', '${o.address}', ${JSON.stringify(o.itemsSummary)}, ${o.total})">✏️ آرڈر ایڈٹ کریں</button>
+              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ آرڈر ایڈٹ کریں</button>
               ${o.isUpdated ? `
                 <a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; display:inline-flex; align-items:center; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 کسٹمر کو اپ ڈیٹ بل واٹس ایپ کریں</a>
               ` : ''}
@@ -486,7 +497,7 @@
     window.print();
   }
 
-  // اسمارٹ آٹو پارسر (فالتو کوڈ اور ڈبل لائن صاف کرنے والا)
+  // اسمارٹ آٹو پارسر
   window.smartParseText = function() {
     let text = document.getElementById("mItems").value;
     if(!text.trim()){
@@ -569,13 +580,13 @@
     showToast("✅ مینول آرڈر کامیابی سے محفوظ ہو گیا!");
   }
 
-  // آرڈر ایڈٹ موڈل کنٹرول (درست کردہ سنٹیکس)
+  // آرڈر ایڈٹ موڈل کنٹرول
   window.openEditModal = function(code, name, phone, addr, items, total){
     document.getElementById("editOrderCode").value = code;
     document.getElementById("eName").value = name;
     document.getElementById("ePhone").value = phone;
     document.getElementById("eAddr").value = addr;
-    document.getElementById("eItems").value = items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+    document.getElementById("eItems").value = items;
     document.getElementById("eTotal").value = total;
     document.getElementById("editOrderModal").style.display = "flex";
   }
@@ -678,7 +689,7 @@ function loadConfig(){
   const raw = localStorage.getItem("sjfoods-admin-config");
   return raw ? JSON.parse(raw) : null;
 }
-function saveConfig(cfg){ localStorage.getItem("sjfoods-admin-config", JSON.stringify(cfg)); }
+function saveConfig(cfg){ localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
 
 document.getElementById("saveConfigBtn").onclick = async ()=>{
   const owner = document.getElementById("cfgOwner").value.trim();

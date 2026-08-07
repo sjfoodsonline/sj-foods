@@ -457,7 +457,7 @@
     const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
     
-    let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+    let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").replace(/Payment Method: Cash on Delivery \(COD\)/gi, "").trim();
 
     printDiv.className = "receipt-box";
     printDiv.innerHTML = `
@@ -483,13 +483,16 @@
     window.print();
   }
 
-  // اسمارٹ آٹو پارسر فنکشن (واٹس ایپ/چیٹ سے ٹیکسٹ خود الگ کرنا)
+  // اسمارٹ آٹو پارسر (فالتو کوڈ اور ڈبل لائن صاف کرنے والا)
   window.smartParseText = function() {
-    const text = document.getElementById("mItems").value;
+    let text = document.getElementById("mItems").value;
     if(!text.trim()){
-      showToast("❌ پہلے اوپر یا نیچے والے خانے میں میسج پیسٹ کریں!", true);
+      showToast("❌ پہلے خانے میں میسج پیسٹ کریں!", true);
       return;
     }
+
+    // فالتو کوڈ یا علامات ہٹانا
+    text = text.replace(/<[^>]*>?/gm, '');
 
     const phoneMatch = text.match(/03\d{9}/);
     if(phoneMatch) {
@@ -516,7 +519,7 @@
       } else if(l.includes("پتہ") || l.includes("Address")) {
         let parts = l.split(/[:\-]/);
         if(parts[1]) document.getElementById("mAddr").value = parts[1].trim();
-      } else if(l.length > 2 && !l.includes("03") && !l.includes("روپے")) {
+      } else if(l.length > 2 && !l.includes("03") && !l.includes("روپے") && !l.includes("Payment Method")) {
         itemsArr.push(l);
       }
     });
@@ -525,7 +528,7 @@
       document.getElementById("mItems").value = itemsArr.join('\n');
     }
 
-    showToast("⚡ میسج کامیابی سے آٹو ایڈجسٹ ہو گیا!");
+    showToast("⚡ میسج صاف ہو کر آٹو ایڈجسٹ ہو گیا!");
   }
 
   // مینول آرڈر موڈل کنٹرول

@@ -337,6 +337,7 @@
     let dataList = Object.values(data);
     let pendingOrders = [];
     let completedOrders = [];
+    let cancelledOrders = [];
 
     dataList.forEach((row, index) => {
       let codeVal = row.code;
@@ -365,21 +366,25 @@
           isUpdated: row.isUpdated || false,
           status: st
         };
-        if(st === 'completed') completedOrders.push(itemObj);
+
+        if(st === 'cancelled') cancelledOrders.push(itemObj);
+        else if(st === 'completed') completedOrders.push(itemObj);
         else pendingOrders.push(itemObj);
       }
     });
 
     pendingOrders.sort((a, b) => b.rawTime - a.rawTime);
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
+    cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    latestOrdersCache = [...pendingOrders, ...completedOrders];
+    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [منسوخ شدہ سب سے نیچے]
+    latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
     let pendingCount = 0;
     latestOrdersCache.forEach(o => {
       if(o.status === 'completed') totalSales += o.total;
-      else if(o.status !== 'cancelled') pendingCount++; // منسوخ شدہ آرڈر کا پینڈنگ میں شمار نہ ہو
+      else if(o.status !== 'cancelled') pendingCount++;
     });
 
     document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;

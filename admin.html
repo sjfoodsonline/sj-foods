@@ -72,13 +72,12 @@
   .unit-row input.u-rate{flex:1;}
 
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .savebar{position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:8mm; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;}
+  .savebar{position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;}
   .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200; font-family:Arial, sans-serif; font-weight:bold;}
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; font-family:Arial, sans-serif;}
 
-  /* 58mm تھرمل پرنٹر کے لیے خاص پرنٹ سیٹنگ */
   @media print {
     body * { visibility: hidden !important; }
     #printableReceipt, #printableReceipt * { visibility: visible !important; }
@@ -129,6 +128,7 @@
         <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
         <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 ٹیسٹ بیل</button>
       </div>
+      <button class="btn-primary" style="margin-top:10px; background:var(--mid);" onclick="openManualOrderModal()">➕ نیا مینول (آف لائن) آرڈر درج کریں</button>
     </div>
     <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
   </div>
@@ -163,6 +163,51 @@
 
 </div>
 
+<!-- Modal: Manual Order -->
+<div class="modal-overlay" id="manualOrderModal" style="display:none;">
+  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
+      <h3 style="margin:0; color:var(--dark);">➕ مینول آرڈر درج کریں</h3>
+      <button onclick="closeManualOrderModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+    </div>
+    <label>👤 کسٹمر کا نام</label>
+    <input type="text" id="mName" placeholder="نام درج کریں">
+    <label>📞 فون نمبر</label>
+    <input type="text" id="mPhone" placeholder="03XXXXXXXXX">
+    <label>📍 مکمل پتہ</label>
+    <input type="text" id="mAddr" placeholder="محله / علاقہ">
+    <label>🛒 سامان کی تفصیلات اور قیمتیں</label>
+    <textarea id="mItems" rows="4" placeholder="مثلاً: 2 کلو ٹماٹر - 500 روپے"></textarea>
+    <label>💵 کل رقم (Rs)</label>
+    <input type="number" id="mTotal" placeholder="کل قیمت">
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 آرڈر محفوظ کریں</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">واپس جائیں</button>
+  </div>
+</div>
+
+<!-- Modal: Edit Order -->
+<div class="modal-overlay" id="editOrderModal" style="display:none;">
+  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
+      <h3 style="margin:0; color:var(--dark);">✏️ آرڈر میں ترمیم کریں (Edit)</h3>
+      <button onclick="closeEditModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+    </div>
+    <input type="hidden" id="editOrderCode">
+    <label>👤 کسٹمر کا نام</label>
+    <input type="text" id="eName">
+    <label>📞 فون نمبر</label>
+    <input type="text" id="ePhone">
+    <label>📍 پتہ</label>
+    <input type="text" id="eAddr">
+    <label>🛒 سامان کی تفصیلات (ترمیم کریں)</label>
+    <textarea id="eItems" rows="5"></textarea>
+    <label>💵 کل رقم (Rs)</label>
+    <input type="number" id="eTotal">
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 تبدیلیاں محفوظ کریں (Updated Bill)</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">واپس جائیں</button>
+  </div>
+</div>
+
 <!-- Modal: Site Settings -->
 <div class="modal-overlay" id="adminSiteSettingsModal" style="display:none;">
   <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
@@ -190,11 +235,15 @@
 <!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   const firebaseConfig = { databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" };
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  window.dbInstance = db;
+  window.dbRef = ref;
+  window.dbUpdate = update;
+  window.dbSet = set;
 
   function showToast(msg, isErr){
     const t = document.getElementById("toast");
@@ -295,6 +344,7 @@
           otpCode: row.otp || String(codeVal).replace("SJ-", ""),
           displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
           rawTime: row.timestamp ? new Date(row.timestamp.replace(/^'/, '')).getTime() : index,
+          isUpdated: row.isUpdated || false,
           status: st
         };
         if(st === 'completed') completedOrders.push(itemObj);
@@ -302,7 +352,6 @@
       }
     });
 
-    // نئے آرڈرز کو ہمیشہ سب سے اوپر رکھنے کے لیے ریورس یا ترتیب دینا
     pendingOrders.sort((a, b) => b.rawTime - a.rawTime);
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     
@@ -349,14 +398,15 @@
         address: o.address,
         otp: o.otpCode,
         items: o.itemsSummary,
-        total: o.total
+        total: o.total,
+        isUpdated: o.isUpdated
       }));
 
       return `
         <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:14px; font-weight:bold; direction:auto;">
-              📌 ${o.code} — <b>${o.name}</b>
+              📌 ${o.code} — <b>${o.name}</b> ${o.isUpdated ? '<span style="color:#B71C1C; font-size:11px;">(اپ ڈیٹ شدہ بل)</span>' : ''}
               ${!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : ''}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
@@ -380,7 +430,8 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ (58mm پکنگ)</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ (پکنگ)</button>
+              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${o.code}', '${o.name}', '${o.phone}', '${o.address}', ` + JSON.stringify(o.itemsSummary) + `, ${o.total})">✏️ آرڈر ایڈٹ کریں</button>
               ${!isCompleted ? `
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
               ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
@@ -391,7 +442,6 @@
     }).join("");
   }
 
-  // صرف 58mm تھرمل پرنٹ کا پرفیکٹ فنکشن
   window.printThermalReceipt = function(encodedData){
     const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
@@ -401,7 +451,7 @@
     printDiv.className = "receipt-box";
     printDiv.innerHTML = `
       <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:2px;">SJ FOODS MINGORA</div>
-      <div style="text-align:center; font-size:10px; margin-bottom:4px;">Picking Slip (پکنگ پرچی)</div>
+      <div style="text-align:center; font-size:10px; margin-bottom:4px;">${d.isUpdated ? '*** UPDATED BILL (اپ ڈیٹ بل) ***' : 'Picking Slip (پکنگ پرچی)'}</div>
       <div style="border-top:1px dashed #000; border-bottom:1px dashed #000; padding:4px 0; margin-bottom:4px; font-size:11px; line-height:1.3;">
         <b>Order:</b> ${d.code} | <b>OTP:</b> ${d.otp}<br>
         <b>Customer:</b> ${d.name}<br>
@@ -422,14 +472,86 @@
     window.print();
   }
 
+  // مینول آرڈر موڈل کنٹرول
+  window.openManualOrderModal = function(){
+    document.getElementById("manualOrderModal").style.display = "flex";
+  }
+  window.closeManualOrderModal = function(){
+    document.getElementById("manualOrderModal").style.display = "none";
+  }
+
+  window.saveManualOrder = async function(){
+    const name = document.getElementById("mName").value.trim();
+    const phone = document.getElementById("mPhone").value.trim();
+    const addr = document.getElementById("mAddr").value.trim();
+    const items = document.getElementById("mItems").value.trim();
+    const total = parseFloat(document.getElementById("mTotal").value) || 0;
+
+    if(!name || !phone || !items){
+      showToast("❌ براہ کرم نام، فون اور آئٹمز درج کریں!", true);
+      return;
+    }
+
+    const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+    const nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
+      timeZone: 'Asia/Karachi', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true 
+    }).format(new Date());
+
+    const orderRef = window.dbRef(window.dbInstance, 'orders/' + orderCode);
+    await window.dbSet(orderRef, {
+      code: orderCode, name: name, phone: phone, address: addr,
+      items: items.replace(/\n/g, '<br>'), total: total, otp: orderCode.replace("SJ-", ""),
+      timestamp: nowFormatted, status: "pending", isUpdated: false
+    });
+
+    closeManualOrderModal();
+    showToast("✅ مینول آرڈر کامیابی سے محفوظ ہو گیا!");
+  }
+
+  // آرڈر ایڈٹ موڈل کنٹرول
+  window.openEditModal = function(code, name, phone, addr, items, total){
+    document.getElementById("editOrderCode").value = code;
+    document.getElementById("eName").value = name;
+    document.getElementById("ePhone").value = phone;
+    document.getElementById("eAddr").value = addr;
+    document.getElementById("eItems").value = items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "");
+    document.getElementById("eTotal").value = total;
+    document.getElementById("editOrderModal").style.display = "flex";
+  }
+  window.closeEditModal = function(){
+    document.getElementById("editOrderModal").style.display = "none";
+  }
+
+  window.saveEditedOrder = async function(){
+    const code = document.getElementById("editOrderCode").value;
+    const name = document.getElementById("eName").value.trim();
+    const phone = document.getElementById("ePhone").value.trim();
+    const addr = document.getElementById("eAddr").value.trim();
+    const items = document.getElementById("eItems").value.trim().replace(/\n/g, '<br>');
+    const total = parseFloat(document.getElementById("eTotal").value) || 0;
+
+    const orderRef = window.dbRef(window.dbInstance, 'orders/' + code);
+    await window.dbUpdate(orderRef, {
+      name: name,
+      phone: phone,
+      address: addr,
+      items: items,
+      total: total,
+      isUpdated: true
+    });
+
+    closeEditModal();
+    showToast("✅ آرڈر کامیابی سے اپ ڈیٹ ہو گیا!");
+  }
+
   window.completeOrderAndThank = async function(code, phone){
     if(!confirm("کیا آپ اس آرڈر کی ڈلیوری مکمل اور بزنس کلوز کرنا چاہتے ہیں؟")) return;
     try {
-      await update(ref(db, 'orders/' + code), { status: "completed" });
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "completed" });
     } catch(e){}
     const msg = `SJ Foods — آرڈر کی تکمیل اور شکریہ\n\nمحترم صارف!\n\nآپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔\n\nSJ Foods پر اعتماد کرنے کا بہت شکریہ!\nمستقبل میں بھی آپ کی خدمت کے لیے حاضر رہیں گے۔`;
     let cleanPhone = phone.replace(/[^0-9]/g, "");
-    if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
+    if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
     showToast("✅ آرڈر مکمل ہو گیا اور شکریہ کا پیغام بھیج دیا گیا!");
   }

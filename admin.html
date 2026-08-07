@@ -43,6 +43,7 @@
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
   .chat-item.pending{animation: blinkRedBorder 1.2s infinite; background:#FFFDE7;}
   .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important;}
+  .chat-item.cancelled{background:#FFEBEE !important; border-color:#D32F2F !important; opacity: 0.85;}
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
@@ -78,7 +79,6 @@
   .toast.err{background:#B71C1C;}
   .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; font-family:Arial, sans-serif;}
 
-  /* پرفیکت تھرمل پرنٹ اسٹائل (صرف 58mm پرچی اور فالتو صفحات کا خاتمہ) */
   @media print {
     @page { margin: 0; size: 58mm auto; }
     body * { visibility: hidden !important; }
@@ -379,7 +379,7 @@
     let pendingCount = 0;
     latestOrdersCache.forEach(o => {
       if(o.status === 'completed') totalSales += o.total;
-      else pendingCount++;
+      else if(o.status !== 'cancelled') pendingCount++; // منسوخ شدہ آرڈر کا پینڈنگ میں شمار نہ ہو
     });
 
     document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
@@ -406,6 +406,7 @@
     area.innerHTML = orders.map((o) => {
       let isOpen = (activeAccordionId === o.id);
       let isCompleted = (o.status === 'completed');
+      let isCancelled = (o.status === 'cancelled');
       let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
       if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
 
@@ -432,16 +433,20 @@
       const safeItems = plainItems.replace(/'/g, "\\'").replace(/\n/g, '\\n');
       const safeTotal = o.total;
 
+      let cardClass = "chat-item pending";
+      if(isCompleted) cardClass = "chat-item completed";
+      if(isCancelled) cardClass = "chat-item cancelled";
+
       return `
-        <div class="chat-item ${isCompleted ? 'completed' : 'pending'} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+        <div class="${cardClass} ${isOpen ? 'open' : ''}" id="card-${o.id}">
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:14px; font-weight:bold; direction:auto;">
               📌 ${o.code} — <b>${o.name}</b> ${o.isUpdated ? '<span style="color:#B71C1C; font-size:11px;">(اپ ڈیٹ شدہ بل)</span>' : ''}
-              ${!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : ''}
+              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">منسوخ شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
               <span class="time-badge">
-                ${isCompleted ? '✅ گرین (مکمل)' : '🕒 ' + o.displayTime}
+                ${isCancelled ? '❌ منسوخ' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
               </span>
             </div>
           </div>
@@ -461,14 +466,13 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ (پکنگ)</button>
-              <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ آرڈر ایڈٹ کریں</button>
-              ${o.isUpdated ? `
-                <a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; display:inline-flex; align-items:center; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 کسٹمر کو اپ ڈیٹ بل واٹس ایپ کریں</a>
-              ` : ''}
-              ${!isCompleted ? `
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ</button>
+              ${!isCancelled && !isCompleted ? `
+                <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ آرڈر ایڈٹ کریں</button>
+                ${o.isUpdated ? `<a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 واٹس ایپ اپ ڈیٹ بھیجیں</a>` : ''}
                 <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
-              ` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل اور بزنس کلوز ہو چکا ہے</div>`}
+                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ آرڈر منسوخ کریں</button>
+              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ آرڈر منسوخ کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
             </div>
           </div>
         </div>
@@ -505,6 +509,22 @@
     `;
 
     window.print();
+  }
+
+  // آرڈر منسوخ کرنے کا فنکشن
+  window.cancelOrder = async function(code, phone, name){
+    if(!confirm(`کیا آپ واقعی آرڈر [${code}] منسوخ کرنا چاہتے ہیں؟`)) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "cancelled" });
+      showToast("❌ آرڈر منسوخ کر دیا گیا ہے!");
+
+      const msg = `SJ Foods — آرڈر منسوخی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] آپ کی ہدایت کے مطابق منسوخ کر دیا گیا ہے۔\n\nمستقبل میں خدمت کا موقع ضرور دیں!\nSJ Foods Mingora Swat`;
+      let cleanPhone = phone.replace(/[^0-9]/g, "");
+      if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
+      window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+    } catch(e) {
+      showToast("❌ خرابی پیش آئی", true);
+    }
   }
 
   // اسمارٹ آٹو پارسر

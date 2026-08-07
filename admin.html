@@ -375,10 +375,11 @@
     }).join("");
   }
 
+  // یہاں تصدیق کا زبردست اور پکا میسج سیٹ ہے
   window.sendConfirmationMsg = function(phone, code){
     let cleanPhone = phone.replace(/[^0-9]/g, "");
     if(cleanPhone.startsWith("0")) cleanPhone = "92" + cleanPhone.slice(1);
-    const msg = `SJ Foods — آرڈر کی تصدیق\n\nمحترم صارف، آپ کا آرڈر نمبر [${code}] ہمیں موصول ہو گیا ہے اور اس کی تصدیق کی جاتی ہے۔ شکریہ!`;
+    const msg = `SJ Foods — آرڈر کی تصدیق\n\nمحترم صارف! SJ Foods سے آپ کا آرڈر نمبر [${code}] موصول ہو گیا ہے۔ آرڈر کو حتمی شکل دینے اور روانہ کرنے کے لیے براہ کرم اس پیغام کا جواب دیں اور تصدیق کریں (مثلاً 'ٹھیک ہے، سامان اکٹھا کر کے بھیج دیں') تاکہ ہم آپ کا آرڈر فورا روانہ کر سکیں۔ شکریہ!`;
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
     showToast("✅ تصدیقی پیغام واٹس ایپ پر بھیج دیا گیا ہے!");
   }

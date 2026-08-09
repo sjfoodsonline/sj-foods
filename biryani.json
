@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "چکن بریانی",
+    "price": 350,
+    "image": "products/chicken_biryani.jpg"
+  },
+  {
+    "id": 2,
+    "name": "مٹن/گوشت بریانی",
+    "price": 550,
+    "image": "products/mutton_biryani.jpg"
+  },
+  {
+    "id": 3,
+    "name": "کابلی پولاو",
+    "price": 450,
+    "image": "products/kabuli_pulao.jpg"
+  },
+  {
+    "id": 4,
+    "name": "ملا بابا سپیشل بریانی",
+    "price": 400,
+    "image": "products/special_biryani.jpg"
+  }
+]

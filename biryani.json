@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "name": "فل پلیٹ",
+    "units": [
+      {
+        "label": "",
+        "rate": 350
+      }
+    ],
+    "available": true,
+    "image": "products/biryani-0-1786353070044.jpg",
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Full Plate"
+  },
+  {
+    "name": "ہاف پلیٹ",
+    "units": [
+      {
+        "label": "",
+        "rate": 200
+      }
+    ],
+    "available": true,
+    "image": "products/biryani-1-1786353119339.jpg",
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Half Plate"
+  },
+  {
+    "name": "فل پارسل",
+    "units": [
+      {
+        "label": "1 KG",
+        "rate": 700
+      }
+    ],
+    "available": true,
+    "image": "products/biryani-2-1786353190355.jpg",
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Full Parcel"
+  }
+]

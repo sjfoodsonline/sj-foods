@@ -8,7 +8,7 @@
       }
     ],
     "available": true,
-    "image": "products/biryani-0-1786357309610.jpg",
+    "image": "https://raw.githubusercontent.com/sjfoodsonline/sj-foods/main/products/1786373041869_mazedar-chicken-biryani_11427.jpg",
     "featured": true,
     "manualOverride": false,
     "name_roman": "Full Plate"
@@ -22,7 +22,7 @@
       }
     ],
     "available": true,
-    "image": "products/biryani-1-1786356062477.jpg",
+    "image": "https://raw.githubusercontent.com/sjfoodsonline/sj-foods/main/products/1786373033259_mazedar-chicken-biryani_11427.jpg",
     "featured": false,
     "manualOverride": false,
     "name_roman": "Half Plate"

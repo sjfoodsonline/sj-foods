@@ -89,5 +89,10 @@
     "icon": "🧼",
     "image": "",
     "category_roman": "Safai o Ghareloo Ashiya"
+  },
+  {
+    "category": "Mulla Baba Special Biryani",
+    "file": "biryani.json",
+    "icon": "🍛"
   }
 ]

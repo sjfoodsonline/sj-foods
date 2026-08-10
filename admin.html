@@ -153,7 +153,11 @@
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
-          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 سائڈ کیٹگریز ایڈٹر</button>
+          <!-- نئی کیٹیگری ایڈ اور ڈیلیٹ کے بٹن -->
+          <button class="btn-secondary" style="background:var(--mid); color:#fff; font-size:12px;" onclick="openAddCategoryModal()">➕ نئی کیٹیگری</button>
+          <button class="btn-danger" style="font-size:12px;" onclick="deleteCurrentCategory()">🗑️ حذف</button>
+          
+          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 اباؤٹ</button>
           <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 ری سیٹ</button>
         </div>
       </div>
@@ -230,6 +234,28 @@
     <textarea id="adminUrduMsg" rows="4">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
     <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 محفوظ کریں</button>
     <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">واپس جائیں</button>
+  </div>
+</div>
+
+<!-- Modal: Add New Category -->
+<div class="modal-overlay" id="addCategoryModal" style="display:none;">
+  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
+      <h3 style="margin:0; color:var(--dark);">➕ نئی کیٹیگری شامل کریں</h3>
+      <button onclick="closeAddCategoryModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+    </div>
+    
+    <label>🏷️ کیٹیگری کا نام (اردو)</label>
+    <input type="text" id="newCatName" placeholder="جیسے: سبزیاں، پھل، وغیرہ">
+    
+    <label>📁 فائل کا نام (انگریزی میں، بغیر spaces کے، آخر میں .json لکھیں)</label>
+    <input type="text" id="newCatFile" placeholder="جیسے: sabzi.json">
+    
+    <label>🎨 آئیکن (ایموجی)</label>
+    <input type="text" id="newCatIcon" placeholder="🥦">
+    
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="createNewCategoryOnGitHub()">💾 کیٹیگری بنائیں اور محفوظ کریں</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeAddCategoryModal()">واپس جائیں</button>
   </div>
 </div>
 
@@ -377,7 +403,6 @@
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [منسوخ شدہ سب سے نیچے]
     latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
@@ -516,7 +541,6 @@
     window.print();
   }
 
-  // آرڈر منسوخ کرنے کا فنکشن
   window.cancelOrder = async function(code, phone, name){
     if(!confirm(`کیا آپ واقعی آرڈر [${code}] منسوخ کرنا چاہتے ہیں؟`)) return;
     try {
@@ -532,7 +556,6 @@
     }
   }
 
-  // اسمارٹ آٹو پارسر
   window.smartParseText = function() {
     let text = document.getElementById("mItems").value;
     if(!text.trim()){
@@ -662,7 +685,7 @@
   }
 </script>
 
-<!-- GitHub Admin Script -->
+<!-- GitHub Admin Script & New Category Functions -->
 <script>
 const CATEGORIES_INDEX_FILE = "categories_index.json";
 let CFG = null;
@@ -674,6 +697,16 @@ let dirty = false;
 
 function openSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "flex"; }
 function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "none"; }
+
+function openAddCategoryModal(){
+  document.getElementById("newCatName").value = "";
+  document.getElementById("newCatFile").value = "";
+  document.getElementById("newCatIcon").value = "";
+  document.getElementById("addCategoryModal").style.display = "flex";
+}
+function closeAddCategoryModal(){
+  document.getElementById("addCategoryModal").style.display = "none";
+}
 
 function markDirty(){
   dirty = true;
@@ -966,7 +999,68 @@ window.saveProductsToGitHub = async function(){
     showToast("❌ خرابی: " + e.message, true);
   }
 }
+
+// نئی کیٹیگری بنانے اور ڈیلیٹ کرنے کے فنکشنز
+window.createNewCategoryOnGitHub = async function(){
+  const categoryName = document.getElementById("newCatName").value.trim();
+  const fileName = document.getElementById("newCatFile").value.trim().toLowerCase();
+  const icon = document.getElementById("newCatIcon").value.trim() || "📦";
+
+  if(!categoryName || !fileName){
+    showToast("❌ براہ کرم کیٹیگری کا نام اور فائل کا نام درج کریں!", true);
+    return;
+  }
+
+  try{
+    showToast("⏳ نئی کیٹیگری بنائی جا رہی ہے...");
+    const emptyProductsArray = [];
+    await ghPutJson(fileName, emptyProductsArray, null, `Create new category: ${categoryName}`);
+
+    const indexData = await ghGetJson(CATEGORIES_INDEX_FILE);
+    const categoriesList = indexData.json;
+
+    if(categoriesList.some(c => c.file === fileName)){
+      showToast("❌ اس نام کی کیٹیگری پہلے سے موجود ہے!", true);
+      return;
+    }
+
+    categoriesList.push({ category: categoryName, file: fileName, icon: icon });
+    await ghPutJson(CATEGORIES_INDEX_FILE, categoriesList, indexData.sha, `Add category ${categoryName} to index`);
+
+    closeAddCategoryModal();
+    showToast("✅ کیٹیگری کامیابی سے بن گئی!");
+    startMainGitHubPanel();
+  }catch(e){
+    showToast("❌ خرابی: " + e.message, true);
+  }
+}
+
+window.deleteCurrentCategory = async function(){
+  if(!currentCategoryFile){
+    showToast("❌ کوئی کیٹیگری سلیکٹ نہیں ہے!", true);
+    return;
+  }
+
+  if(!confirm(`کیا آپ واقعی کیٹیگری [${currentCategoryFile}] کو فہرست سے ہٹانا چاہتے ہیں؟`)) return;
+
+  try{
+    showToast("⏳ کیٹیگری ہٹائی جا رہی ہے...");
+    const indexData = await ghGetJson(CATEGORIES_INDEX_FILE);
+    let categoriesList = indexData.json;
+
+    categoriesList = categoriesList.filter(c => c.file !== currentCategoryFile);
+    await ghPutJson(CATEGORIES_INDEX_FILE, categoriesList, indexData.sha, `Remove category ${currentCategoryFile}`);
+
+    showToast("✅ کیٹیگری کامیابی سے ہٹا دی گئی!");
+    startMainGitHubPanel();
+  }catch(e){
+    showToast("❌ خرابی: " + e.message, true);
+  }
+}
 </script>
+
+<!-- لائیو آرڈرز کی فائل جڑی ہوئی ہے -->
+<script type="module" src="js/admin-orders.js"></script>
 
 </body>
 </html>

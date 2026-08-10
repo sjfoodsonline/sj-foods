@@ -40,5 +40,18 @@
     "featured": true,
     "manualOverride": false,
     "name_roman": "Full Parcel"
+  },
+  {
+    "name": "",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
+      }
+    ],
+    "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false
   }
 ]

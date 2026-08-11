@@ -1,9 +1,9 @@
 [
   {
-    "name": "انگیجمنٹ رنگ",
+    "name": "انگیجمنٹ رنگ 💍",
     "units": [
       {
-        "label": "",
+        "label": "karat 21",
         "rate": 23500
       }
     ],
@@ -11,9 +11,9 @@
     "image": "products/qaisar_jewellers-0-1786445680608.jpg",
     "featured": false,
     "manualOverride": true,
-    "name_roman": "Engagement Ring",
-    "special_order": true,
     "no_qty": true,
-    "enable_qty": false
+    "enable_qty": false,
+    "special_order": true,
+    "name_roman": "Engagement Ring 💍"
   }
 ]

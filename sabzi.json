@@ -4,15 +4,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 50
+        "rate": 90
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 25
+        "rate": 45
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 250
+        "rate": 450
       }
     ],
     "available": true,
@@ -48,15 +48,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 250
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 150
+        "rate": 125
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 1500
+        "rate": 1250
       }
     ],
     "available": true,
@@ -70,11 +70,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 150
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 100
+        "rate": 75
       }
     ],
     "available": true,
@@ -142,11 +142,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 200
+        "rate": 130
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 100
+        "rate": 65
       }
     ],
     "available": true,
@@ -160,11 +160,11 @@
     "units": [
       {
         "label": "KG",
-        "rate": 150
+        "rate": 130
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 75
+        "rate": 65
       }
     ],
     "available": true,

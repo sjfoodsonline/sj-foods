@@ -1,0 +1,56 @@
+[
+  {
+    "name": "ملا بابا چکن بریانی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 700
+      },
+      {
+        "label": "Half KG",
+        "rate": 350
+      }
+    ],
+    "available": true,
+    "image": "products/1786373041869_mazedar-chicken-biryani_11427.jpg",
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Mulla Baba Chicken Biryani"
+  },
+  {
+    "name": "ملا بابا سادہ بریانی",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 500
+      },
+      {
+        "label": "Half KG",
+        "rate": 250
+      }
+    ],
+    "available": true,
+    "image": "products/1786373052259_mazedar-chicken-biryani_11427.jpg",
+    "featured": true,
+    "manualOverride": false,
+    "name_roman": "Mulla Baba Simple Biryani"
+  },
+  {
+    "name": "ملا بابا گوشت والا پلاؤ",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 1000
+      },
+      {
+        "label": "Half KG",
+        "rate": 500
+      }
+    ],
+    "available": true,
+    "image": "products/1786373932794_hq720__2_.jpg",
+    "featured": false,
+    "manualOverride": false,
+    "name_roman": "Mulla Baba Gosht Pulao"
+  }
+]

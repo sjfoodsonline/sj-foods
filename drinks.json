@@ -1,23 +1,57 @@
 [
   {
-    "name": "کولڈ ڈرنک",
-    "unit": "بوتل (1.5 لیٹر)",
-    "rate": 180,
+    "name": "پیپسی ",
+    "units": [
+      {
+        "label": "بوتل (1.5 لیٹر)",
+        "rate": 180
+      },
+      {
+        "label": "بوتل (2.25 لیٹر)",
+        "rate": 220
+      }
+    ],
     "available": true,
-    "name_roman": "Cold Drink"
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
+    "name_roman": "Pepsi"
   },
   {
     "name": "منرل واٹر",
-    "unit": "بوتل (1.5 لیٹر)",
-    "rate": 80,
+    "units": [
+      {
+        "label": "بوتل (1.5 لیٹر)",
+        "rate": 80
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Mineral Water"
   },
   {
     "name": "جوس",
-    "unit": "بوتل (1 لیٹر)",
-    "rate": 200,
+    "units": [
+      {
+        "label": "بوتل (1 لیٹر)",
+        "rate": 200
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Juice"
   }
 ]

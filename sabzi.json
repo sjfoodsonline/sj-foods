@@ -4,19 +4,19 @@
     "units": [
       {
         "label": "KG",
-        "rate": 80
+        "rate": 300
       },
       {
         "label": "آدھا کلو ✅",
-        "rate": 40
+        "rate": 150
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 400
+        "rate": 1500
       }
     ],
     "available": true,
-    "image": "products/sabzi-0-1786433460447.jpg",
+    "image": "products/sabzi-0-1786436201607.jpg",
     "featured": false,
     "manualOverride": false,
     "name_roman": "Aloo"

@@ -1,23 +1,53 @@
 [
   {
     "name": "ڈش واش لیکوڈ",
-    "unit": "بوتل",
-    "rate": 250,
+    "units": [
+      {
+        "label": "بوتل",
+        "rate": 250
+      }
+    ],
     "available": true,
+    "image": "products/cleaning-0-1786507550065.jpg",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Dish Wash Liquid"
   },
   {
     "name": "نہانے کا صابن",
-    "unit": "عدد",
-    "rate": 90,
+    "units": [
+      {
+        "label": "عدد",
+        "rate": 90
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Nahanay ka Sabun"
   },
   {
     "name": "سرف/واشنگ پاؤڈر",
-    "unit": "KG",
-    "rate": 300,
+    "units": [
+      {
+        "label": "KG",
+        "rate": 300
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Surf/Washing Powder"
   }
 ]

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SJ Online — Master Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial,"Segoe UI",sans-serif; padding-bottom:40px;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:14px 16px; border-radius:0 0 16px 16px;}
+  header h1{font-size:17px; margin:0;}
+  header p{font-size:11px; opacity:.9; margin:2px 0 0;}
+  .wrap{max-width:520px; margin:0 auto; padding:14px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .card h3{font-size:15px; color:var(--dark); margin:0 0 10px;}
+  label{display:block; font-size:12px; color:var(--muted); margin:8px 0 4px; font-weight:bold;}
+  input{width:100%; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px; font-size:14px; font-weight:bold;}
+  .btn{background:var(--dark); color:#fff; border:none; border-radius:10px; padding:11px 14px; font-size:13px; font-weight:bold; cursor:pointer;}
+  .btn-sec{background:var(--leaf); color:var(--dark); border:1px solid var(--mid);}
+  .btn-danger{background:#B71C1C; color:#fff;}
+  .btn-ok{background:#2E7D32; color:#fff;}
+  .btn-sm{padding:7px 10px; font-size:12px;}
+  .toast{position:fixed; top:14px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; transition:.25s; z-index:99; font-weight:bold;}
+  .toast.show{opacity:1;}
+  .toast.err{background:var(--price);}
+  .hidden{display:none !important;}
+  .v-row{border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; background:#fff;}
+  .v-row .name{font-size:15px; font-weight:bold; color:var(--dark);}
+  .v-row .meta{font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5;}
+  .v-actions{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .pill{display:inline-block; font-size:11px; padding:2px 8px; border-radius:12px; font-weight:bold;}
+  .pill-pending{background:#FFF3CD; color:#856404;}
+  .pill-approved{background:#E8F5E9; color:#2E7D32;}
+  .pill-blocked{background:#FFCDD2; color:#B71C1C;}
+  .note{font-size:12.5px; color:var(--muted); line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div id="loginBox" class="wrap" style="max-width:360px; margin-top:40px;">
+  <div class="card">
+    <h3 style="text-align:center;">🔑 Master Admin</h3>
+    <p class="note" style="text-align:center;">صرف آپ کے لیے</p>
+    <label>Admin PIN</label>
+    <input type="password" id="adminPin" placeholder="****" dir="ltr" style="text-align:left" maxlength="8">
+    <button class="btn" style="width:100%; margin-top:12px;" onclick="adminLogin()">لاگ ان</button>
+    <button class="btn btn-sec" style="width:100%; margin-top:8px;" onclick="location.href='index.html'">← مین سائٹ</button>
+  </div>
+</div>
+
+<div id="adminDash" class="hidden">
+  <header>
+    <h1>SJ Online — Master Admin</h1>
+    <p>وینڈرز کنٹرول · منظور · بلاک · ڈیلیٹ</p>
+  </header>
+  <div class="wrap">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">🏪 تمام وینڈرز</h3>
+        <button class="btn btn-sm btn-sec" onclick="loadVendors()">ریفریش</button>
+      </div>
+      <p class="note" id="vendorCount">—</p>
+      <div id="vendorList"></div>
+    </div>
+    <button class="btn btn-sec" style="width:100%;" onclick="doAdminLogout()">لاگ آؤٹ</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = "https://sj-foods-default-rtdb.firebaseio.com";
+// Change this PIN to your secret (keep it private)
+const ADMIN_PIN = "sj2026";
+
+function toast(msg, err){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " err" : "");
+  setTimeout(() => t.className = "toast", 2600);
+}
+
+function adminLogin(){
+  const p = document.getElementById("adminPin").value.trim();
+  if(p !== ADMIN_PIN){ toast("PIN غلط", true); return; }
+  sessionStorage.setItem("sj_admin", "1");
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("adminDash").classList.remove("hidden");
+  loadVendors();
+}
+
+function doAdminLogout(){
+  sessionStorage.removeItem("sj_admin");
+  document.getElementById("adminDash").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("adminPin").value = "";
+}
+
+async function loadVendors(){
+  const box = document.getElementById("vendorList");
+  box.innerHTML = "<p class='note'>لوڈ...</p>";
+  try{
+    const res = await fetch(DB + "/vendors.json");
+    const data = await res.json() || {};
+    const ids = Object.keys(data);
+    document.getElementById("vendorCount").textContent = "کل: " + ids.length;
+
+    if(ids.length === 0){
+      box.innerHTML = "<p class='note' style='text-align:center;'>کوئی وینڈر نہیں</p>";
+      return;
+    }
+
+    // sort: pending first, then approved, then blocked
+    ids.sort((a,b) => {
+      const sa = data[a].status || "pending";
+      const sb = data[b].status || "pending";
+      const order = { pending: 0, approved: 1, blocked: 2 };
+      return (order[sa] ?? 9) - (order[sb] ?? 9);
+    });
+
+    box.innerHTML = ids.map(id => {
+      const v = data[id];
+      const st = v.status || "pending";
+      const pillClass = st === "approved" ? "pill-approved" : st === "blocked" ? "pill-blocked" : "pill-pending";
+      return `<div class="v-row">
+        <div class="name">${v.shop_name || "—"} <span class="pill ${pillClass}">${st}</span></div>
+        <div class="meta">
+          ID: <b dir="ltr">${id}</b><br>
+          مالک: ${v.owner_name || "—"} · ${v.phone || ""}<br>
+          WhatsApp: <span dir="ltr">${v.whatsapp || ""}</span> · ${v.city || ""}
+        </div>
+        <div class="v-actions">
+          ${st !== "approved" ? `<button class="btn btn-sm btn-ok" onclick="setStatus('${id}','approved')">✓ منظور</button>` : ""}
+          ${st !== "blocked" ? `<button class="btn btn-sm btn-sec" onclick="setStatus('${id}','blocked')">بلاک</button>` : ""}
+          ${st === "blocked" ? `<button class="btn btn-sm btn-ok" onclick="setStatus('${id}','approved')">ان بلاک</button>` : ""}
+          <button class="btn btn-sm btn-danger" onclick="deleteVendor('${id}','${(v.shop_name||"").replace(/'/g,"")}')">ڈیلیٹ</button>
+        </div>
+      </div>`;
+    }).join("");
+  }catch(e){
+    box.innerHTML = "<p class='note'>لوڈ فیل</p>";
+  }
+}
+
+async function setStatus(id, status){
+  try{
+    await fetch(DB + "/vendors/" + id + "/status.json", {
+      method: "PUT",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(status)
+    });
+    if(status === "blocked"){
+      await fetch(DB + "/vendors/" + id + "/blocked.json", {
+        method: "PUT", headers: {"Content-Type":"application/json"}, body: "true"
+      });
+    } else {
+      await fetch(DB + "/vendors/" + id + "/blocked.json", {
+        method: "PUT", headers: {"Content-Type":"application/json"}, body: "false"
+      });
+    }
+    toast(status === "approved" ? "منظور کر دیا ✓" : status === "blocked" ? "بلاک کر دیا" : "اپڈیٹ");
+    loadVendors();
+  }catch(e){ toast("فیل", true); }
+}
+
+async function deleteVendor(id, name){
+  if(!confirm("ڈیلیٹ کریں؟\n\n" + name + "\n" + id + "\n\nیہ واپس نہیں آئے گا!")) return;
+  try{
+    await fetch(DB + "/vendors/" + id + ".json", { method: "DELETE" });
+    toast("ڈیلیٹ ہو گیا");
+    loadVendors();
+  }catch(e){ toast("ڈیلیٹ فیل", true); }
+}
+
+// auto session
+if(sessionStorage.getItem("sj_admin") === "1"){
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("adminDash").classList.remove("hidden");
+  loadVendors();
+}
+</script>
+</body>
+</html>

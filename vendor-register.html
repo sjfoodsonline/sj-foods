@@ -71,13 +71,18 @@
     <label>Confirm PIN *</label>
     <input type="password" id="pin2" placeholder="Again" dir="ltr" style="text-align:left" maxlength="6" required>
 
+    <label>شناختی کارڈ (CNIC) کی تصویر *</label>
+    <input type="file" id="cnic_file" accept="image/*" required>
+    <p class="note" style="margin-top:4px;">سامنے یا پیچھے واضح تصویر لگائیں</p>
+    <img id="cnicPreview" style="display:none; width:100%; max-height:160px; object-fit:contain; border-radius:10px; margin-top:6px; border:1px solid var(--line);">
+
     <div class="rules">
       <b>قواعد (آپ ان کے پابند ہوں گے):</b><br>
       • اپنی ڈیلیوری خود کریں گے<br>
       • آرڈرز مکس نہیں — صرف اپنی شاپ<br>
-      • غلط / جعلی معلومات → اکاؤنٹ بند<br>
+      • غلط / جعلی معلومات یا جعلی CNIC → اکاؤنٹ بند<br>
       • کمیشن / پلیٹ فارم قواعد Master Admin کے مطابق<br>
-      • CNIC تصدیق بعد میں مانگی جا سکتی ہے
+      • CNIC صرف تصدیق کے لیے محفوظ رہے گی
     </div>
 
     <label style="display:flex; align-items:flex-start; gap:8px; margin-top:12px; font-size:13px; color:var(--ink);">
@@ -121,6 +126,50 @@ function toWA(num){
   return d;
 }
 
+function compressImage(file, maxW, quality){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var w = img.width, h = img.height;
+        if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+        var c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL("image/jpeg", quality || 0.65));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("cnic_file").addEventListener("change", async function(){
+  if(!this.files || !this.files[0]) return;
+  try{
+    var url = await compressImage(this.files[0], 800, 0.6);
+    var prev = document.getElementById("cnicPreview");
+    prev.src = url; prev.style.display = "block";
+    window._cnicData = url;
+  }catch(e){ toast("CNIC تصویر نہیں پڑھی", true); }
+});
+
+function makeVendorId(shopName){
+  var slug = String(shopName || "shop")
+    .replace(/[^\u0600-\u06FFa-zA-Z0-9\s]/g, "")
+    .trim()
+    .replace(/\s+/g, "_")
+    .substring(0, 24) || "shop";
+  // keep ASCII-friendly for Firebase key safety
+  slug = slug.replace(/[^\w]/g, "");
+  if(!slug) slug = "shop";
+  var num = Date.now().toString().slice(-5);
+  return "v" + num + "_" + slug;
+}
+
 async function submitReg(){
   const shop_name = document.getElementById("shop_name").value.trim();
   const owner_name = document.getElementById("owner_name").value.trim();
@@ -137,6 +186,7 @@ async function submitReg(){
   if(pin.length < 4){ toast("PIN کم از کم 4 ہندسے", true); return; }
   if(pin !== pin2){ toast("PIN میچ نہیں", true); return; }
   if(!agree){ toast("قواعد قبول کریں", true); return; }
+  if(!window._cnicData){ toast("CNIC تصویر لگائیں", true); return; }
 
   const wa = toWA(whatsapp);
   if(wa.length < 11){ toast("WhatsApp نمبر درست نہیں", true); return; }
@@ -145,7 +195,7 @@ async function submitReg(){
   btn.disabled = true;
   btn.textContent = "Submitting...";
 
-  const id = "v" + Date.now().toString().slice(-8);
+  const id = makeVendorId(shop_name);
   const payload = {
     shop_name: shop_name,
     owner_name: owner_name,
@@ -156,6 +206,7 @@ async function submitReg(){
     status: "pending",
     blocked: false,
     cover_image: "",
+    cnic_image: window._cnicData,
     created_at: new Date().toISOString()
   };
 

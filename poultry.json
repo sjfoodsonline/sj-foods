@@ -10,6 +10,10 @@
     "available": true,
     "image": "products/poultry-0-1785581520617.jpg",
     "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": true,
+    "special_order": false,
     "name_roman": "Murghi (Farmi) — Per KG"
   },
   {
@@ -23,6 +27,10 @@
     "available": true,
     "image": "products/poultry-1-1785581561521.jpg",
     "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Murgi (Farmi, Chhoti Saaf Shuda)"
   },
   {
@@ -36,6 +44,10 @@
     "available": true,
     "image": "products/poultry-2-1785581608235.jpg",
     "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Murgi (Farmi, Darmiani Saaf Shuda)"
   },
   {
@@ -48,7 +60,11 @@
     ],
     "available": true,
     "image": "products/poultry-3-1785580803850.jpg",
-    "featured": false,
+    "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "🥩 Boneless (Farmi Murgi)"
   },
   {
@@ -62,6 +78,10 @@
     "available": true,
     "image": "products/poultry-4-1785580078303.jpg",
     "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "🍗 Leg Pieces (Farmi Murgi)"
   },
   {
@@ -75,6 +95,10 @@
     "available": true,
     "image": "products/poultry-5-1785580216199.jpg",
     "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "🥩 Mix Gosht (Farmi Murgi)"
   },
   {
@@ -88,6 +112,10 @@
     "available": true,
     "image": "products/poultry-6-1785580260811.jpg",
     "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "Wings (Farmi Murgi)"
   },
   {
@@ -101,6 +129,10 @@
     "available": true,
     "image": "products/poultry-7-1785580298673.jpg",
     "featured": false,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "🍲 Pota Kaleji (Farmi Murgi)"
   },
   {
@@ -118,6 +150,10 @@
     "available": true,
     "image": "products/poultry-8-1785580352762.jpg",
     "featured": true,
+    "manualOverride": false,
+    "no_qty": false,
+    "enable_qty": false,
+    "special_order": false,
     "name_roman": "🐾 Panje (Farmi Murgi)"
   }
 ]

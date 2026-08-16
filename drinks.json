@@ -97,7 +97,7 @@
     ],
     "available": true,
     "image": "products/drinks-2-1786842610433.jpg",
-    "featured": false,
+    "featured": true,
     "manualOverride": true,
     "name_roman": "7UP"
   },

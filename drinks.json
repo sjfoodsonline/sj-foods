@@ -68,21 +68,50 @@
     "name_roman": "Coca-Cola"
   },
   {
-    "name": "",
+    "name": "سیون اپ",
     "units": [
       {
         "label": "سیون اپ (345ml چھوٹی بوتل)",
-        "rate": 7
+        "rate": 70
       },
       {
         "label": "سیون اپ (500ml درمیانی بوتل)",
-        "rate": 4
+        "rate": 110
+      },
+      {
+        "label": "سیون اپ (1 لیٹر بوتل)",
+        "rate": 150
+      },
+      {
+        "label": "سیون اپ (1.5 لیٹر ڈیڑھ لیٹر بوتل)",
+        "rate": 190
+      },
+      {
+        "label": "سیون اپ (2.25 لیٹر جمبو بوتل)",
+        "rate": 240
+      },
+      {
+        "label": "سیون اپ (کین / Can)",
+        "rate": 100
+      }
+    ],
+    "available": true,
+    "image": "products/drinks-2-1786842610433.jpg",
+    "featured": false,
+    "manualOverride": true,
+    "name_roman": "7UP"
+  },
+  {
+    "name": "",
+    "units": [
+      {
+        "label": "KG",
+        "rate": 0
       }
     ],
     "available": true,
     "image": "",
     "featured": false,
-    "manualOverride": false,
-    "name_roman": "Juice"
+    "manualOverride": false
   }
 ]

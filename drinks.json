@@ -54,7 +54,7 @@
     "available": true,
     "image": "products/drinks-0-1786841947564.jpg",
     "featured": false,
-    "manualOverride": false,
+    "manualOverride": true,
     "name_roman": "Pepsi"
   },
   {
@@ -112,7 +112,7 @@
     "available": true,
     "image": "products/drinks-1-1786842291857.jpg",
     "featured": false,
-    "manualOverride": false,
+    "manualOverride": true,
     "name_roman": "Coca-Cola"
   },
   {

@@ -4,19 +4,31 @@
     "units": [
       {
         "label": "پیپسی (345ml چھوٹی بوتل)",
-        "rate": 7
+        "rate": 70
       },
       {
-        "label": "(2.25 لیٹر جمبو بوتل)",
+        "label": "پیپسی (500ml درمیانی بوتل)",
+        "rate": 110
+      },
+      {
+        "label": "پیپسی (1 لیٹر بوتل)",
+        "rate": 150
+      },
+      {
+        "label": "پیپسی (1.5 لیٹر ڈیڑھ لیٹر بوتل)",
+        "rate": 190
+      },
+      {
+        "label": "پیپسی (2.25 لیٹر جمبو بوتل) ",
         "rate": 250
       },
       {
-        "label": "",
-        "rate": 0
+        "label": "پیپسی (کین / Can)",
+        "rate": 100
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/drinks-0-1786841947564.jpg",
     "featured": false,
     "manualOverride": false,
     "name_roman": "Cold Drink"

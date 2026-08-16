@@ -34,18 +34,38 @@
     "name_roman": "Pepsi"
   },
   {
-    "name": "منرل واٹر",
+    "name": "کوکاکولا ",
     "units": [
       {
-        "label": "بوتل (1.5 لیٹر)",
-        "rate": 80
+        "label": "کوکا کولا (345ml چھوٹی بوتل)",
+        "rate": 70
+      },
+      {
+        "label": "کوکا کولا (500ml درمیانی بوتل)",
+        "rate": 110
+      },
+      {
+        "label": "کوکا کولا (1 لیٹر بوتل) ",
+        "rate": 150
+      },
+      {
+        "label": "کوکا کولا (1.5 لیٹر ڈیڑھ لیٹر بوتل)",
+        "rate": 190
+      },
+      {
+        "label": "کوکا کولا (2.25 لیٹر جمبو بوتل)",
+        "rate": 240
+      },
+      {
+        "label": "کوکا کولا (کین / Can)",
+        "rate": 100
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/drinks-1-1786842291857.jpg",
     "featured": false,
     "manualOverride": false,
-    "name_roman": "Mineral Water"
+    "name_roman": "Coca-Cola"
   },
   {
     "name": "جوس",

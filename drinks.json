@@ -174,16 +174,57 @@
     "name_roman": "7UP"
   },
   {
-    "name": "",
+    "name": "مرینڈا",
     "units": [
       {
-        "label": "KG",
-        "rate": 0
+        "label": "345ml چھوٹی بوتل",
+        "rate": 70
+      },
+      {
+        "label": "500ml درمیانی بوتل",
+        "rate": 110
+      },
+      {
+        "label": "1 لیٹر بوتل",
+        "rate": 150
+      },
+      {
+        "label": "1.5 لیٹر ڈیڑھ لیٹر بوتل",
+        "rate": 190
+      },
+      {
+        "label": "2.25 لیٹر جمبو بوتل",
+        "rate": 240
+      },
+      {
+        "label": "کین / Can",
+        "rate": 100
+      },
+      {
+        "label": "(345ml چھوٹی بوتل - کارٹن 24 پیس)",
+        "rate": 1680
+      },
+      {
+        "label": "500ml درمیانی بوتل - کارٹن 12 پیس",
+        "rate": 1320
+      },
+      {
+        "label": "1 لیٹر بوتل - کارٹن 12 پیس",
+        "rate": 1800
+      },
+      {
+        "label": "1.5 لیٹر ڈیڑھ لیٹر بوتل - کارٹن 6 پیس",
+        "rate": 1440
+      },
+      {
+        "label": "کین - کارٹن 24 پیس",
+        "rate": 2400
       }
     ],
     "available": true,
-    "image": "",
+    "image": "products/drinks-3-1786844311141.jpg",
     "featured": false,
-    "manualOverride": false
+    "manualOverride": false,
+    "name_roman": "Mirinda"
   }
 ]

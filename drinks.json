@@ -1,23 +1,52 @@
 [
   {
-    "name": "کولڈ ڈرنک",
-    "unit": "بوتل (1.5 لیٹر)",
-    "rate": 180,
+    "name": "",
+    "units": [
+      {
+        "label": "پیپسی (345ml چھوٹی بوتل)",
+        "rate": 7
+      },
+      {
+        "label": "(2.25 لیٹر جمبو بوتل)",
+        "rate": 250
+      },
+      {
+        "label": "",
+        "rate": 0
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
     "name_roman": "Cold Drink"
   },
   {
     "name": "منرل واٹر",
-    "unit": "بوتل (1.5 لیٹر)",
-    "rate": 80,
+    "units": [
+      {
+        "label": "بوتل (1.5 لیٹر)",
+        "rate": 80
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
     "name_roman": "Mineral Water"
   },
   {
     "name": "جوس",
-    "unit": "بوتل (1 لیٹر)",
-    "rate": 200,
+    "units": [
+      {
+        "label": "بوتل (1 لیٹر)",
+        "rate": 200
+      }
+    ],
     "available": true,
+    "image": "",
+    "featured": false,
+    "manualOverride": false,
     "name_roman": "Juice"
   }
 ]

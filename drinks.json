@@ -68,11 +68,15 @@
     "name_roman": "Coca-Cola"
   },
   {
-    "name": "جوس",
+    "name": "",
     "units": [
       {
-        "label": "بوتل (1 لیٹر)",
-        "rate": 200
+        "label": "سیون اپ (345ml چھوٹی بوتل)",
+        "rate": 7
+      },
+      {
+        "label": "سیون اپ (500ml درمیانی بوتل)",
+        "rate": 4
       }
     ],
     "available": true,

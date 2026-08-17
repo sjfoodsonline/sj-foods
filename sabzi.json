@@ -7,7 +7,7 @@
         "rate": 50
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 25
       },
       {
@@ -145,8 +145,12 @@
         "rate": 200
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 100
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 1000
       }
     ],
     "available": true,
@@ -163,8 +167,12 @@
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -181,8 +189,12 @@
         "rate": 200
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 100
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 1000
       }
     ],
     "available": true,
@@ -199,8 +211,12 @@
         "rate": 280
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 140
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 1400
       }
     ],
     "available": true,
@@ -217,8 +233,12 @@
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -235,8 +255,12 @@
         "rate": 200
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 100
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 1000
       }
     ],
     "available": true,
@@ -253,11 +277,11 @@
         "rate": 200
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 100
       },
       {
-        "label": "دڑی 5KG",
+        "label": "دڑی (5 KG)",
         "rate": 1000
       }
     ],
@@ -273,6 +297,14 @@
       {
         "label": "KG",
         "rate": 180
+      },
+      {
+        "label": "آدھا کلو",
+        "rate": 90
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 900
       }
     ],
     "available": true,
@@ -289,8 +321,12 @@
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -307,8 +343,12 @@
         "rate": 250
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 125
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 1250
       }
     ],
     "available": true,
@@ -325,8 +365,12 @@
         "rate": 1000
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 500
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 5000
       }
     ],
     "available": true,
@@ -343,8 +387,12 @@
         "rate": 180
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 90
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 900
       }
     ],
     "available": true,
@@ -361,56 +409,64 @@
         "rate": 600
       },
       {
-        "label": "پاؤ (250 گرام)",
+        "label": "آدھا کلو",
+        "rate": 300
+      },
+      {
+        "label": "پاؤ",
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
-        "rate": 300
+        "label": "دڑی (5 KG)",
+        "rate": 3000
       }
     ],
     "available": true,
     "image": "products/sabzi-19-1785050711978.jpg",
-    "featured": false,
+    "featured": true,
     "manualOverride": false,
     "name_roman": "Adrak"
   },
   {
-    "name": "ÙÛØ³Ù",
+    "name": "لسن",
     "units": [
       {
         "label": "KG",
         "rate": 320
       },
       {
-        "label": "پاؤ (250 گرام)",
-        "rate": 80
+        "label": "آدھا کلو",
+        "rate": 160
       },
       {
-        "label": "آدھا کلو ✅",
-        "rate": 160
+        "label": "دڑی (5 KG)",
+        "rate": 1600
       }
     ],
     "available": true,
     "image": "products/sabzi-20-1785050729762.jpg",
-    "featured": false,
+    "featured": true,
     "manualOverride": false,
     "name_roman": "Lehsan"
   },
   {
-    "name": "ÙÛÙÙÚº",
+    "name": "لیموں ",
     "units": [
       {
         "label": "KG",
         "rate": 200
       },
       {
-        "label": "پاؤ (250 گرام)",
+        "label": "آدھا کلو",
+        "rate": 100
+      },
+      {
+        "label": "پاؤ",
         "rate": 50
       },
       {
-        "label": "آدھا کلو ✅",
-        "rate": 100
+        "label": "دڑی (5 KG)",
+        "rate": 1000
       }
     ],
     "available": true,
@@ -427,8 +483,12 @@
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -445,8 +505,12 @@
         "rate": 150
       },
       {
-        "label": "آدھا کلو ✅",
+        "label": "آدھا کلو",
         "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -507,7 +571,7 @@
     ],
     "available": false,
     "image": "products/sabzi-27-1785051065277.jpg",
-    "featured": false,
+    "featured": true,
     "manualOverride": false,
     "name_roman": "Mooli"
   },
@@ -517,6 +581,14 @@
       {
         "label": "KG",
         "rate": 150
+      },
+      {
+        "label": "آدھا کلو",
+        "rate": 75
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 750
       }
     ],
     "available": true,
@@ -549,7 +621,7 @@
     ],
     "available": true,
     "image": "products/sabzi-30-1785050885008.jpg",
-    "featured": false,
+    "featured": true,
     "manualOverride": false,
     "name_roman": "Hari Pyaz"
   }

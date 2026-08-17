@@ -1,18 +1,30 @@
 {
-  "name": "SJ Admin",
-  "short_name": "SJ Admin",
-  "start_url": "/sj-foods/admin.html",
-  "scope": "/sj-foods/",
+  "name": "SJ Online — Swat Mingora Market",
+  "short_name": "SJ Online",
+  "description": "سوات مینگورہ کا پہلا آن لائن مارکیٹ — گلی محلے کے دکاندار",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "background_color": "#FFFDF8",
   "theme_color": "#153A20",
-  "description": "SJ Online Admin Panel",
-  "id": "/sj-foods/admin.html",
+  "lang": "ur",
+  "dir": "rtl",
+  "id": "./index.html",
   "icons": [
     {
-      "src": "https://avatars.githubusercontent.com/u/9919",
+      "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "categories": ["shopping", "food", "business"],
+  "prefer_related_applications": false
 }

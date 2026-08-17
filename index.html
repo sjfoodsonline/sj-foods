@@ -4,7 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
+<meta name="theme-color" content="#153A20">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SJ Online">
 <title>SJ Online — سوات مینگورہ کا پہلا آن لائن مارکیٹ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -1106,9 +1114,10 @@ window.backToShops = function(){
 loadShopsList();
 window.bootHomeDealsRefresh = async function(){
   try{
-    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const bust = "?v=" + Date.now();
+    const idxRes = await fetch("categories_index.json" + bust, {cache:"no-store"});
     const index = await idxRes.json();
-    const catResults = await Promise.all(index.map(function(e){ return fetch(e.file, {cache:"no-store"}).then(function(r){ return r.json(); }); }));
+    const catResults = await Promise.all(index.map(function(e){ return fetch(e.file + bust, {cache:"no-store"}).then(function(r){ return r.json(); }); }));
 
     coverImagesList = [];
     index.forEach(function(entry, i){
@@ -1317,9 +1326,10 @@ function shuffleArray(array) {
 
 async function loadData(){
   try{
-    const idxRes = await fetch("categories_index.json", {cache:"no-store"});
+    const bust = "?v=" + Date.now();
+    const idxRes = await fetch("categories_index.json" + bust, {cache:"no-store"});
     const index = await idxRes.json();
-    const catResults = await Promise.all(index.map(e => fetch(e.file, {cache:"no-store"}).then(r=>r.json())));
+    const catResults = await Promise.all(index.map(e => fetch(e.file + bust, {cache:"no-store"}).then(r=>r.json())));
     
     CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
     ITEMS = [];
@@ -1573,8 +1583,9 @@ function createItemRow(it){
       </div>
       <div class="info">
         <div class="name">${primaryName} ${secondaryName ? '<span style="font-size:13px; color:var(--muted); font-weight:normal; font-family:\'Jameel Noori Nastaleeq\',serif;">'+secondaryName+'</span>' : ''}</div>
-        <div class="meta">Per ${urduUnit(u.label)} — <b>${fmt(u.rate)}</b>
-          ${(it.premium||it.call_only||it.visit_required)?' <span style="background:#FFF3E0;color:#E65100;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:bold;">💎 خاص / کال یا وزٹ</span>':''}
+        <div class="meta" dir="ltr" style="text-align:right;">
+          <b>${fmt(u.rate)}</b> — ${urduUnit(u.label)}
+          ${(it.premium||it.call_only||it.visit_required)?' <span style="background:#FFF3E0;color:#E65100;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:bold;">💎 خاص</span>':''}
         </div>
         ${it.extra_text ? `<details style="margin-top:4px;font-size:12px;color:var(--muted);"><summary style="cursor:pointer;color:var(--mid);font-weight:bold;">تفصیل ▼</summary><div style="padding:6px 0;line-height:1.5;">${it.extra_text}</div></details>` : ''}
       </div>
@@ -2017,6 +2028,15 @@ document.getElementById("closeLightbox").onclick = () => { document.getElementBy
 // loadData();
 
 loadSettings();
+
+/* PWA Service Worker — offline shell + catalog cache */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js").then(function (reg) {
+      try { reg.update(); } catch (e) {}
+    }).catch(function () {});
+  });
+}
 </script>
 </body>
 </html>

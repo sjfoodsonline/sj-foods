@@ -169,8 +169,40 @@
     "name": "کوثر آئل کین (16 لیٹر)",
     "units": [
       {
-        "label": "کین",
+        "label": "کوثر آئل کین (16 لیٹر)",
         "rate": 9350
+      },
+      {
+        "label": "کوثر آئل کین (10 لیٹر)",
+        "rate": 5700
+      },
+      {
+        "label": "کوثر بالٹی گھی (10 KG)",
+        "rate": 5700
+      },
+      {
+        "label": "کوثر بالٹی گھی (16 KG)",
+        "rate": 9300
+      },
+      {
+        "label": "کوثر بالٹی گھی (5 KG)",
+        "rate": 5000
+      },
+      {
+        "label": "کوثر بالٹی گھی (2.5 KG)",
+        "rate": 1500
+      },
+      {
+        "label": "کوثر آئل کین (5 لیٹر)",
+        "rate": 2950
+      },
+      {
+        "label": "کین",
+        "rate": 1850
+      },
+      {
+        "label": "کوثر آئل کین (3 لیٹر)",
+        "rate": 2850
       }
     ],
     "available": true,
@@ -178,117 +210,5 @@
     "featured": true,
     "manualOverride": false,
     "name_roman": "Kausar Oil Can"
-  },
-  {
-    "name": "کوثر آئل کین (10 لیٹر)",
-    "units": [
-      {
-        "label": "کین",
-        "rate": 5700
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-20-1785083421597.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Oil Can"
-  },
-  {
-    "name": "کوثر بالٹی گھی (16 KG)",
-    "units": [
-      {
-        "label": "بالٹی",
-        "rate": 9300
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-21-1785083444273.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Balti Ghee"
-  },
-  {
-    "name": "کوثر بالٹی گھی (10 KG)",
-    "units": [
-      {
-        "label": "بالٹی",
-        "rate": 5700
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-22-1785083478421.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Balti Ghee"
-  },
-  {
-    "name": "کوثر بالٹی گھی (5 KG)",
-    "units": [
-      {
-        "label": "بالٹی",
-        "rate": 2900
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-23-1785083540703.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Balti Ghee"
-  },
-  {
-    "name": "کوثر بالٹی گھی (2.5 KG)",
-    "units": [
-      {
-        "label": "بالٹی",
-        "rate": 1500
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-24-1785083609158.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Balti Ghee"
-  },
-  {
-    "name": "کوثر آئل کین (5 لیٹر)",
-    "units": [
-      {
-        "label": "کین",
-        "rate": 2950
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-25-1785083633876.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Oil Can"
-  },
-  {
-    "name": "کوثر آئل کین (3 لیٹر)",
-    "units": [
-      {
-        "label": "کین",
-        "rate": 1850
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-26-1785083663323.jpg",
-    "featured": true,
-    "manualOverride": false,
-    "name_roman": "Kausar Oil Can"
-  },
-  {
-    "name": "کوثر پاؤچ کارٹن (1 لیٹر)",
-    "units": [
-      {
-        "label": "کارٹن",
-        "rate": 2850
-      }
-    ],
-    "available": true,
-    "image": "products/oil_ghee-27-1785083693883.jpg",
-    "featured": false,
-    "manualOverride": false,
-    "name_roman": "Kausar Pouch Carton"
   }
 ]

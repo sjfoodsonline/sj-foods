@@ -7,8 +7,12 @@
         "rate": 700
       },
       {
-        "label": "Half KG",
+        "label": "آدھا کلو",
         "rate": 350
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 3500
       }
     ],
     "available": true,
@@ -25,8 +29,12 @@
         "rate": 500
       },
       {
-        "label": "Half KG",
+        "label": "آدھا کلو",
         "rate": 250
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 2500
       }
     ],
     "available": true,
@@ -43,8 +51,12 @@
         "rate": 1000
       },
       {
-        "label": "Half KG",
+        "label": "آدھا کلو",
         "rate": 500
+      },
+      {
+        "label": "دڑی (5 KG)",
+        "rate": 5000
       }
     ],
     "available": true,

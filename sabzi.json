@@ -4,15 +4,15 @@
     "units": [
       {
         "label": "KG",
-        "rate": 50
+        "rate": 56
       },
       {
         "label": "آدھا کلو",
-        "rate": 25
+        "rate": 28
       },
       {
         "label": "دڑی (5 KG)",
-        "rate": 250
+        "rate": 280
       }
     ],
     "available": true,

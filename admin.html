@@ -16,7 +16,16 @@
   header h1{margin:0; font-size:18px; font-family:Arial, sans-serif; font-weight:bold;}
   header p{margin:4px 0 0; font-size:11.5px; opacity:.9; font-family:Arial, sans-serif;}
 
-  .wrap{padding:14px;}
+  .wrap{padding:14px; max-width:720px; margin:0 auto; width:100%;}
+  .savebar{max-width:720px; left:50%; transform:translateX(-50%); width:calc(100% - 16px);}
+  @media(min-width:900px){
+    .wrap{max-width:800px; padding:18px 20px;}
+  }
+  @media(max-width:480px){
+    .wrap{padding:10px;}
+    .dash-lbl{font-size:9.5px;}
+    .unit-row input.u-rate{max-width:100px;}
+  }
   
   .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
   .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
@@ -67,10 +76,14 @@
   .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
 
   .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
   .unit-row input{margin-bottom:0;}
-  .unit-row input.u-label{flex:2;}
-  .unit-row input.u-rate{flex:1;}
+  .unit-row input.u-label{flex:1 1 120px; min-width:100px; max-width:220px;}
+  .unit-row input.u-rate{flex:0 0 110px; width:110px; max-width:120px; direction:ltr; text-align:left; font-variant-numeric:tabular-nums;}
+  .product-card, #productsArea > .card, #productsArea > div{max-width:100%;}
+  input.u-rate-field, input[inputmode=decimal]{direction:ltr; text-align:left;}
+  .cat-select{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .cat-select select{flex:1 1 160px; min-width:140px; max-width:100%;}
 
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
   .savebar{position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;}
@@ -96,7 +109,7 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن و سائیڈ کیٹگری کنٹرول سینٹر</h1>
+  <h1>⚙️ SJ Foods — Admin Control Center</h1>
   <p>Live orders · Products · Vendors control</p>
 </header>
 
@@ -228,19 +241,33 @@
   </div>
 </div>
 
-<!-- Modal: Site Settings -->
+<!-- Modal: Site Settings + Categories -->
 <div class="modal-overlay" id="adminSiteSettingsModal" style="display:none;">
-  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
+  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:520px; margin:20px auto; max-height:90vh; overflow-y:auto; position:relative;">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">⚙️ اباؤٹ و ایس او پیز ایڈٹر</h3>
-      <button onclick="closeSiteSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+      <h3 style="margin:0; color:var(--dark);">⚙️ Categories & About</h3>
+      <button type="button" onclick="closeSiteSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
-    <label>👤 بانی کا نام</label>
+    <label>👤 Owner name</label>
     <input type="text" id="adminOwnerName" value="سلیمان جان (ولد قاسم جان)">
-    <label>🇵🇰 اردو اباؤٹ پیغام</label>
-    <textarea id="adminUrduMsg" rows="4">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 Save</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">Back</button>
+    <label>📝 About / banner message</label>
+    <textarea id="adminUrduMsg" rows="3" placeholder="Message shown on site">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
+
+    <h4 style="margin:16px 0 8px; color:var(--dark); font-size:14px;">📂 Product categories</h4>
+    <p style="font-size:11px;color:var(--muted);margin:0 0 8px;">Add, edit note/icon, or remove a category. Removing does not delete the JSON file on disk until you Save.</p>
+    <div id="catEditorList" style="max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:10px;"></div>
+
+    <div style="background:var(--leaf);border-radius:12px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:bold;margin-bottom:6px;">➕ Add category</div>
+      <input type="text" id="newCatName" placeholder="Name (Urdu) e.g. مشروبات">
+      <input type="text" id="newCatRoman" placeholder="Roman e.g. Drinks" dir="ltr" style="text-align:left">
+      <input type="text" id="newCatIcon" placeholder="Icon emoji e.g. 🥤" style="max-width:100px">
+      <input type="text" id="newCatFile" placeholder="file e.g. drinks.json" dir="ltr" style="text-align:left">
+      <button type="button" class="btn-secondary" style="width:100%;background:var(--dark);color:#fff;" onclick="addCategoryInEditor()">Add to list</button>
+    </div>
+
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 Save categories & about</button>
+    <button type="button" class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">Back</button>
   </div>
 </div>
 
@@ -864,7 +891,61 @@ let currentItems = [];
 let currentSha = null;
 let dirty = false;
 
-function openSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "flex"; }
+function openSiteSettingsModal(){
+  document.getElementById("adminSiteSettingsModal").style.display = "flex";
+  if(typeof renderCategoryEditorList === "function") renderCategoryEditorList();
+}
+function renderCategoryEditorList(){
+  const box = document.getElementById("catEditorList");
+  if(!box) return;
+  const list = CATEGORIES_INDEX || [];
+  if(!list.length){ box.innerHTML = "<i style=\"color:#888\">No categories loaded — connect admin first</i>"; return; }
+  box.innerHTML = list.map(function(c, i){
+    return '<div style="border:1px solid #eee;border-radius:8px;padding:8px;margin-bottom:6px;background:#fafafa;">'+
+      '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">'+
+      '<input type="text" value="'+(c.icon||"")+'" style="width:48px;margin:0;" onchange="CATEGORIES_INDEX['+i+'].icon=this.value">'+
+      '<input type="text" value="'+(c.category||"").replace(/"/g,"&quot;")+'" style="flex:1;min-width:100px;margin:0;" onchange="CATEGORIES_INDEX['+i+'].category=this.value">'+
+      '<span style="font-size:10px;color:#888;direction:ltr">'+(c.file||"")+'</span>'+
+      '<button type="button" class="btn-danger" style="padding:4px 8px;" onclick="removeCategoryInEditor('+i+')">Delete</button>'+
+      '</div>'+
+      '<input type="text" value="'+(c.note||"").replace(/"/g,"&quot;")+'" placeholder="Banner / note for this category" style="width:100%;margin:6px 0 0;font-size:12px;" onchange="CATEGORIES_INDEX['+i+'].note=this.value">'+
+      '</div>';
+  }).join("");
+}
+function removeCategoryInEditor(i){
+  if(!confirm("Remove this category from the list?")) return;
+  CATEGORIES_INDEX.splice(i, 1);
+  renderCategoryEditorList();
+}
+function addCategoryInEditor(){
+  const name = (document.getElementById("newCatName").value||"").trim();
+  const roman = (document.getElementById("newCatRoman").value||"").trim();
+  const icon = (document.getElementById("newCatIcon").value||"📦").trim();
+  let file = (document.getElementById("newCatFile").value||"").trim();
+  if(!name){ showToast("Enter category name", true); return; }
+  if(!file){
+    file = (roman || name).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"") + ".json";
+  }
+  if(!file.endsWith(".json")) file += ".json";
+  if((CATEGORIES_INDEX||[]).some(function(c){ return c.file === file; })){
+    showToast("File already exists in list", true); return;
+  }
+  CATEGORIES_INDEX.push({
+    file: file,
+    category: name,
+    category_roman: roman || name,
+    icon: icon,
+    image: "",
+    note: "",
+    open_time: "08:00",
+    close_time: "21:00"
+  });
+  document.getElementById("newCatName").value = "";
+  document.getElementById("newCatRoman").value = "";
+  document.getElementById("newCatFile").value = "";
+  renderCategoryEditorList();
+  showToast("Added — press Save categories");
+}
 function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "none"; }
 
 function markDirty(){
@@ -902,7 +983,10 @@ async function ghGetJson(path){
 }
 async function ghPutJson(path, obj, sha, message){
   const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content, sha, branch: "main" }) });
+  const branch = (CFG && CFG.branch) || "vendors_ledger";
+  const body = { message: message || "Update", content, branch };
+  if(sha) body.sha = sha;
+  return ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
 }
 async function ghPutBinary(path, base64Content, message){
   let sha;
@@ -1186,6 +1270,64 @@ window.removeProductItem = function(idx){
   renderProducts();
   markDirty();
 }
+
+
+window.saveSiteSettingsToGitHub = async function(){
+  try{
+    if(!CFG || !CFG.token){
+      showToast("Connect admin first", true);
+      return;
+    }
+    // 1) categories_index.json
+    if(CATEGORIES_INDEX && CATEGORIES_INDEX.length){
+      const freshIdx = await ghRequest(CATEGORIES_INDEX_FILE);
+      await ghPutJson(CATEGORIES_INDEX_FILE, CATEGORIES_INDEX, freshIdx.sha, "Update categories index");
+      // create empty json for brand-new category files if missing
+      for(const c of CATEGORIES_INDEX){
+        if(!c.file) continue;
+        try{
+          await ghRequest(c.file);
+        }catch(e){
+          try{
+            await ghPutJson(c.file, [], null, "Create category " + c.file);
+          }catch(e2){
+            // put with no sha via create helper if exists
+            try{
+              if(typeof ghPutNew === "function") await ghPutNew(c.file, btoa(unescape(encodeURIComponent("[]"))), "Create " + c.file);
+            }catch(e3){}
+          }
+        }
+      }
+      // refresh picker
+      const picker = document.getElementById("categoryPicker");
+      if(picker){
+        picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon||""} ${c.category}</option>`).join("");
+      }
+    }
+    // 2) settings.json about (optional)
+    try{
+      const owner = (document.getElementById("adminOwnerName")||{}).value || "";
+      const msg = (document.getElementById("adminUrduMsg")||{}).value || "";
+      let settings = {};
+      let sha = null;
+      try{
+        const s = await ghGetJson("settings.json");
+        settings = s.json || {};
+        sha = s.sha;
+      }catch(e){ settings = {}; }
+      settings.owner_name = owner;
+      settings.about_urdu = msg;
+      settings.banner_message = msg;
+      await ghPutJson("settings.json", settings, sha, "Update about / banner");
+    }catch(e){ console.warn("settings save", e); }
+
+    showToast("✅ Categories & about saved");
+    closeSiteSettingsModal();
+  }catch(e){
+    console.error(e);
+    showToast("❌ " + (e.message || "Save failed"), true);
+  }
+};
 
 window.saveProductsToGitHub = async function(){
   const rows = [...document.getElementById("productsArea").children];

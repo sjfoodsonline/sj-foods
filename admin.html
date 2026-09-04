@@ -16,7 +16,15 @@
   header h1{margin:0; font-size:18px; font-family:Arial, sans-serif; font-weight:bold;}
   header p{margin:4px 0 0; font-size:11.5px; opacity:.9; font-family:Arial, sans-serif;}
 
-  .wrap{padding:14px;}
+  .wrap{padding:14px; max-width:720px; margin:0 auto; width:100%;}
+  @media(min-width:900px){
+    .wrap{max-width:800px; padding:18px 20px;}
+  }
+  @media(max-width:480px){
+    .wrap{padding:10px;}
+    .dash-lbl{font-size:9.5px;}
+    .unit-row input.u-rate{max-width:100px;}
+  }
   
   .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
   .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
@@ -67,13 +75,35 @@
   .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
 
   .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
   .unit-row input{margin-bottom:0;}
-  .unit-row input.u-label{flex:2;}
-  .unit-row input.u-rate{flex:1;}
+  .unit-row input.u-label{flex:1 1 120px; min-width:100px; max-width:220px;}
+  .unit-row input.u-rate{flex:0 0 110px; width:110px; max-width:120px; direction:ltr; text-align:left; font-variant-numeric:tabular-nums;}
+  .product-card, #productsArea > .card, #productsArea > div{max-width:100%;}
+  input.u-rate-field, input[inputmode=decimal]{direction:ltr; text-align:left;}
+  .cat-select{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .cat-select select{flex:1 1 160px; min-width:140px; max-width:100%;}
 
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .savebar{position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:8px; align-items:center; box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;}
+  .savebar{
+    position:fixed; bottom:0; right:0; left:0;
+    background:#fff; border-top:1.5px solid var(--line);
+    padding:10px 12px; display:flex; gap:10px; align-items:center;
+    box-shadow:0 -6px 18px rgba(0,0,0,0.08); z-index:90;
+    max-width:800px; margin:0 auto;
+    box-sizing:border-box;
+  }
+  .savebar .status{
+    flex:1 1 auto; min-width:0;
+    font-size:12px; font-weight:bold; color:var(--price);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    direction:ltr; text-align:left;
+  }
+  .savebar .status.ok{ color: var(--mid); }
+  .savebar #saveBtn{
+    flex:0 0 auto; width:auto !important; min-width:110px;
+    padding:10px 16px; white-space:nowrap;
+  }
   .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s, top .25s; z-index:200; font-family:Arial, sans-serif; font-weight:bold;}
   .toast.show{opacity:1; top:26px;}
   .toast.err{background:#B71C1C;}
@@ -96,55 +126,66 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — ایڈمن و سائیڈ کیٹگری کنٹرول سینٹر</h1>
-  <p>لائیو فائر بیس آرڈرز، پروڈکٹس اور سائیڈ مینو مینیجر</p>
+  <h1>⚙️ SJ Foods — Admin Control Center</h1>
+  <p>Live orders · Products · Vendors control</p>
 </header>
 
 <div class="wrap">
 
   <div class="dash-grid">
     <div class="dash-card">
-      <div class="dash-lbl">📦 کل آرڈرز</div>
+      <div class="dash-lbl">📦 Orders</div>
       <div class="dash-num" id="statTotalOrders">0</div>
     </div>
     <div class="dash-card">
-      <div class="dash-lbl">⏳ پینڈنگ</div>
+      <div class="dash-lbl">⏳ Pending</div>
       <div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div>
     </div>
     <div class="dash-card">
-      <div class="dash-lbl">💵 کل سیلز</div>
+      <div class="dash-lbl">💵 Sales</div>
       <div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو آرڈرز</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ پروڈکٹس و ریٹس (🔒)</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors</div>
   </div>
 
   <!-- SECTION 1: LIVE ORDERS -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+      <h3>🔔 Customer live orders</h3>
       <div style="display:flex; gap:6px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
-        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 ٹیسٹ بیل</button>
+        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 Enable notifications</button>
+        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 Test sound</button>
       </div>
-      <button class="btn-primary" style="margin-top:10px; background:var(--mid);" onclick="openManualOrderModal()">➕ نیا مینول (آف لائن) آرڈر درج کریں</button>
+      <button class="btn-primary" style="margin-top:10px; background:var(--mid);" onclick="openManualOrderModal()">➕ Add manual (offline) order</button>
     </div>
-    <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ Loading orders…</div></div>
+  </div>
+
+  <!-- SECTION 3: VENDORS CONTROL -->
+  <div id="secVendors" style="display:none;">
+    <div class="card">
+      <h3>🏪 Vendors control</h3>
+      <p style="font-size:12px; color:var(--muted); margin:0 0 10px;">Approve · Block · Delete — master admin only</p>
+      <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
+    </div>
+    <div id="vendorsAdminList"><div class="loading">⏳ Loading vendors…</div></div>
   </div>
 
   <!-- SECTION 2: PRODUCTS & CATEGORIES CONTROL -->
   <div id="secProducts" style="display:none;">
     <div class="card" id="setupCard" style="display:none;">
-      <h3>🔑 گیٹ ہب (GitHub) سیٹ اپ</h3>
-      <p>ریٹس اور کیٹگریز کنٹرول کرنے کے لیے ایک بار گٹ ہب کی معلومات درج کریں:</p>
-      <label>GitHub یوزر نیم</label>
+      <h3>🔑 Admin connection</h3>
+      <p>Connect once to save product rates (admin only):</p>
+      <label>Username</label>
       <input type="text" id="cfgOwner" value="sjfoodsonline">
-      <label>ریپازٹری کا نام</label>
+      <label>Repository</label>
       <input type="text" id="cfgRepo" value="sj-foods">
-      <label>Personal Access Token</label>
+      <label>Access token</label>
       <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
       <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">Save & Connect</button>
     </div>
@@ -153,14 +194,13 @@
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
-          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 اباؤٹ ایڈٹر</button>
-          <button class="btn-secondary" style="background:#1565C0; color:#fff; font-size:12px;" onclick="openCategoriesManager()">📁 کیٹگریز مینج</button>
-          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 ری سیٹ</button>
+          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 Category editor</button>
+          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 Reset</button>
         </div>
       </div>
 
-      <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ نیا پروڈکٹ شامل کریں</button>
+      <div id="productsArea"><div class="loading">⏳ Loading…</div></div>
+      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add product</button>
     </div>
   </div>
 
@@ -183,15 +223,15 @@
     
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
       <label style="margin-bottom:0;">🛒 سامان کی تفصیلات اور قیمتیں</label>
-      <button type="button" class="btn-secondary" style="padding:2px 8px; font-size:10.5px; background:var(--dark); color:#fff;" onclick="smartParseText()">⚡ آٹو ریڈ (Smart Parse)</button>
+      <button type="button" class="btn-secondary" style="padding:2px 8px; font-size:10.5px; background:var(--dark); color:#fff;" onclick="smartParseText()">⚡ Smart Parse</button>
     </div>
     <textarea id="mItems" rows="4" placeholder="یہاں پورا میسج پیسٹ کریں..."></textarea>
     
     <label>💵 کل رقم (Rs)</label>
     <input type="number" id="mTotal" placeholder="کل قیمت">
     
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 Save Order</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">واپس جائیں</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 Save order</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">Back</button>
   </div>
 </div>
 
@@ -199,7 +239,7 @@
 <div class="modal-overlay" id="editOrderModal" style="display:none;">
   <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">✏️ آرڈر میں ترمیم کریں (Edit)</h3>
+      <h3 style="margin:0; color:var(--dark);">✏️ آرڈر میں Edit کریں (Edit)</h3>
       <button onclick="closeEditModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
     <input type="hidden" id="editOrderCode">
@@ -209,74 +249,48 @@
     <input type="text" id="ePhone">
     <label>📍 پتہ</label>
     <input type="text" id="eAddr">
-    <label>🛒 سامان کی تفصیلات (ترمیم کریں)</label>
+    <label>🛒 سامان کی تفصیلات (Edit کریں)</label>
     <textarea id="eItems" rows="5"></textarea>
     <label>💵 کل رقم (Rs)</label>
     <input type="number" id="eTotal">
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 Save Changes</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">واپس جائیں</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 Save changes</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">Back</button>
   </div>
 </div>
 
-<!-- Modal: Site Settings -->
+<!-- Modal: Site Settings + Categories -->
 <div class="modal-overlay" id="adminSiteSettingsModal" style="display:none;">
-  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
+  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:520px; margin:20px auto; max-height:90vh; overflow-y:auto; position:relative;">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">⚙️ اباؤٹ و ایس او پیز ایڈٹر</h3>
-      <button onclick="closeSiteSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+      <h3 style="margin:0; color:var(--dark);">⚙️ Categories & About</h3>
+      <button type="button" onclick="closeSiteSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
-    <label>👤 بانی کا نام</label>
+    <label>👤 Owner name</label>
     <input type="text" id="adminOwnerName" value="سلیمان جان (ولد قاسم جان)">
-    <label>🇵🇰 اردو اباؤٹ پیغام</label>
-    <textarea id="adminUrduMsg" rows="4">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 Save</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">واپس جائیں</button>
-  </div>
-</div>
+    <label>📝 About / banner message</label>
+    <textarea id="adminUrduMsg" rows="3" placeholder="Message shown on site">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
 
+    <h4 style="margin:16px 0 8px; color:var(--dark); font-size:14px;">📂 Product categories</h4>
+    <p style="font-size:11px;color:var(--muted);margin:0 0 8px;">Add, edit note/icon, or remove a category. Removing does not delete the JSON file on disk until you Save.</p>
+    <div id="catEditorList" style="max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:10px;"></div>
 
-<!-- Modal: Categories Manager -->
-<div class="modal-overlay" id="categoriesManagerModal" style="display:none;">
-  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:480px; margin:20px auto; max-height:90vh; overflow-y:auto; position:relative;">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">📁 کیٹگریز مینجمنٹ</h3>
-      <button onclick="closeCategoriesManager()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
+    <div style="background:var(--leaf);border-radius:12px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:bold;margin-bottom:6px;">➕ Add category</div>
+      <input type="text" id="newCatName" placeholder="Name (Urdu) e.g. مشروبات">
+      <input type="text" id="newCatRoman" placeholder="Roman e.g. Drinks" dir="ltr" style="text-align:left">
+      <input type="text" id="newCatIcon" placeholder="Icon emoji e.g. 🥤" style="max-width:100px">
+      <input type="text" id="newCatFile" placeholder="file e.g. drinks.json" dir="ltr" style="text-align:left">
+      <button type="button" class="btn-secondary" style="width:100%;background:var(--dark);color:#fff;" onclick="addCategoryInEditor()">Add to list</button>
     </div>
-    <button class="btn-primary" style="background:var(--mid); margin-bottom:14px;" onclick="openAddCategoryForm()">➕ نئی کیٹگری بنائیں</button>
-    <div id="categoriesListArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-  </div>
-</div>
 
-<!-- Modal: Add / Edit Category -->
-<div class="modal-overlay" id="addCategoryModal" style="display:none;">
-  <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:90vh; overflow-y:auto; position:relative;">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);" id="addCatTitle">➕ نئی کیٹگری</h3>
-      <button onclick="closeAddCategoryForm()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
-    </div>
-    <input type="hidden" id="editCatIndex" value="-1">
-    <label>اردو نام (کیٹگری)</label>
-    <input type="text" id="newCatUrdu" placeholder="مثال: ملا بابا سپیشل بریانی">
-    <label>Roman / English نام</label>
-    <input type="text" id="newCatRoman" placeholder="Mulla Baba Special Biryani" style="direction:ltr; text-align:left;">
-    <label>آئیکن (ایموجی)</label>
-    <input type="text" id="newCatIcon" placeholder="🍛" style="direction:ltr; text-align:left; font-size:20px;">
-    <label>فائل نام</label>
-    <input type="text" id="newCatFile" placeholder="biryani.json" style="direction:ltr; text-align:left;">
-    <label>کھلنے کا وقت</label>
-    <input type="text" id="newCatOpen" placeholder="08:00" style="direction:ltr; text-align:left;">
-    <label>بند ہونے کا وقت</label>
-    <input type="text" id="newCatClose" placeholder="22:00" style="direction:ltr; text-align:left;">
-    <label>نوٹ</label>
-    <textarea id="newCatNote" rows="2" placeholder="باہر وقت آرڈر پینڈنگ رہے گا"></textarea>
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveNewCategory()">💾 Save</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeAddCategoryForm()">واپس</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 Save categories & about</button>
+    <button type="button" class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">Back</button>
   </div>
 </div>
 
 <div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">⚠️ Changes not saved</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save to GitHub</button>
+  <div class="status" id="saveStatus">⚠️ Unsaved</div>
+  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save</button>
 </div>
 
 <div id="printableReceipt"></div>
@@ -328,8 +342,8 @@
   window.requestNotificationPermission = function() {
     if ('Notification' in window) {
       Notification.requestPermission().then(permission => {
-        if (permission === 'granted') showToast("🟢 نوٹیفکیشن آن ہو گئے ہیں!");
-        else showToast("⚠️ نوٹیفکیشن بلاک ہیں", true);
+        if (permission === 'granted') showToast("🟢 Notifications enabled");
+        else showToast("⚠️ Notifications blocked", true);
       });
     }
   }
@@ -339,28 +353,199 @@
 
   window.checkAdminPasswordAndSwitch = function(tabName){
     if(isAdminAuthenticated){ switchTab(tabName); return; }
-    let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
+    let pass = prompt("🔒 Enter admin password:");
     if(pass === ADMIN_PASSWORD){
       isAdminAuthenticated = true;
-      showToast("🟢 پاسورڈ درست ہے!");
+      showToast("🟢 Password OK");
       switchTab(tabName);
     } else {
-      showToast("❌ غلط پاسورڈ!", true);
+      showToast("❌ Wrong password", true);
     }
   }
 
   window.switchTab = function(tabName) {
     document.getElementById('tabOrdersBtn').className = 'tab' + (tabName === 'orders' ? ' active' : '');
     document.getElementById('tabProductsBtn').className = 'tab' + (tabName === 'products' ? ' active' : '');
+    var tv = document.getElementById('tabVendorsBtn');
+    if(tv) tv.className = 'tab' + (tabName === 'vendors' ? ' active' : '');
     document.getElementById('secOrders').style.display = tabName === 'orders' ? 'block' : 'none';
     document.getElementById('secProducts').style.display = tabName === 'products' ? 'block' : 'none';
+    var sv = document.getElementById('secVendors');
+    if(sv) sv.style.display = tabName === 'vendors' ? 'block' : 'none';
     document.getElementById('saveBar').style.display = (tabName === 'products' && window.mainPanelActive) ? 'flex' : 'none';
 
     if(tabName === 'products' && !window.productsInitialized){
       window.productsInitialized = true;
       initGitHubAdmin();
     }
+    if(tabName === 'vendors') loadVendorsAdmin();
   }
+
+  const VDB = "https://sj-foods-default-rtdb.firebaseio.com";
+  window.loadVendorsAdmin = async function(){
+    const box = document.getElementById("vendorsAdminList");
+    if(!box) return;
+    box.innerHTML = '<div class="loading">⏳ Loading…</div>';
+    try{
+      const [vres, ores] = await Promise.all([
+        fetch(VDB + "/vendors.json"),
+        fetch(VDB + "/orders.json")
+      ]);
+      const data = await vres.json() || {};
+      window._lastVendorsMap = data;
+      const orders = await ores.json() || {};
+      const stats = {};
+      Object.keys(orders).forEach(function(code){
+        const o = orders[code] || {};
+        const vid = o.vendor_id || "";
+        if(!vid) return;
+        if(!stats[vid]) stats[vid] = { total:0, pending:0, delivered:0, cancelled:0, sales:0 };
+        stats[vid].total++;
+        const st = (o.status || "pending").toLowerCase();
+        if(st === "cancelled") stats[vid].cancelled++;
+        else if(st === "delivered" || st === "completed"){ stats[vid].delivered++; stats[vid].sales += parseFloat(o.total)||0; }
+        else stats[vid].pending++;
+      });
+      const ids = Object.keys(data).filter(function(id){ return id !== "_market"; });
+      if(ids.length === 0){ box.innerHTML = '<div class="loading">کوئی وینڈر نہیں</div>'; return; }
+      ids.sort(function(a,b){ return a==="v001"?-1:b==="v001"?1:0; });
+      box.innerHTML = ids.map(function(id){
+        const v = data[id] || {};
+        const st = v.blocked ? "blocked" : (v.status || "pending");
+        const stColor = st==="approved" ? "#2E7D32" : st==="blocked" ? "#B71C1C" : "#856404";
+        const stBg = st==="approved" ? "#E8F5E9" : st==="blocked" ? "#FFCDD2" : "#FFF3CD";
+        const itemsN = v.items ? Object.keys(v.items).length : 0;
+        const cover = v.cover_image || "";
+        const cnic = v.cnic_image || "";
+        const s = stats[id] || { total:0, pending:0, delivered:0, cancelled:0, sales:0 };
+        const coverHtml = cover
+          ? '<img src="'+cover+'" style="width:72px;height:72px;object-fit:cover;border-radius:12px;border:1px solid var(--line);flex-shrink:0;" onerror="this.style.display=\'none\'">'
+          : '<div style="width:72px;height:72px;border-radius:12px;background:var(--leaf);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🏪</div>';
+        return '<div class="card" style="margin-bottom:10px;">'+
+          '<div style="display:flex;gap:12px;align-items:flex-start;">'+coverHtml+
+          '<div style="text-align:right;flex:1;min-width:0;">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">'+
+          '<div style="font-size:16px;font-weight:bold;color:var(--dark);">'+(v.shop_name||id)+'</div>'+
+          '<span style="font-size:11px;padding:3px 10px;border-radius:20px;background:'+stBg+';color:'+stColor+';font-weight:bold;">'+st+'</span></div>'+
+          '<div style="font-size:11px;color:var(--muted);direction:ltr;text-align:right;">ID: <b>'+id+'</b></div>'+
+          '<div style="font-size:12px;margin-top:6px;">👤 '+(v.owner_name||'—')+'</div>'+
+          '<div style="font-size:12px;">📞 '+(v.phone||'—')+' · 💬 '+(v.whatsapp||'—')+'</div>'+
+          '<div style="font-size:12px;">آئٹمز: <b>'+itemsN+'</b></div>'+
+          '<div style="margin-top:8px;padding:8px;background:#E8F5E9;border-radius:10px;font-size:12px;line-height:1.7;">'+
+          '📊 Orders: <b>'+s.total+'</b> · ⏳ Incomplete: <b style="color:#B71C1C">'+s.pending+'</b><br>'+
+          '✅ Delivered: <b>'+s.delivered+'</b> · ✕ Cancelled: <b>'+s.cancelled+'</b><br>'+
+          '💵 Sales: <b>Rs. '+Math.round(s.sales).toLocaleString()+'</b></div>'+
+          (cnic?'<div style="margin-top:6px;">CNIC: <img src="'+cnic+'" style="width:48px;height:32px;object-fit:cover;border-radius:4px;vertical-align:middle;"></div>':'')+
+          '</div></div>'+
+          '<div style="margin-top:8px;padding:8px;background:#E3F2FD;border-radius:10px;font-size:12px;">'+
+          '⭐ Performance: <b>'+vendorPerfScore(s)+'%</b> · 24h سے زیادہ pending پر اثر</div>'+
+          '<div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">'+
+          (st!=='approved'&&!v.blocked?'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ Approve</button>':'')+
+          (!v.blocked?'<button class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 Block</button>':'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 Unblock</button>')+
+          '<button class="btn-secondary" style="background:#1565C0;color:#fff;" onclick="viewVendorCatalog(\''+id+'\')">📋 View catalog</button>'+
+          (id!=='v001'?'<button class="btn-secondary" style="background:#B71C1C;color:#fff;" onclick="deleteVendor(\''+id+'\')">🗑 Delete permanently</button>':'')+
+          '</div>'+
+          '<div id="vcatalog-'+id+'" style="display:none;margin-top:10px;max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#FAFAFA;font-size:12px;"></div>'+
+          '</div>';
+      }).join("");
+    }catch(e){
+      box.innerHTML = '<div class="loading" style="color:var(--price);">لوڈ Failed</div>';
+    }
+  };
+  window.setVendorStatus = async function(id, status){
+    try{
+      if(status === "blocked"){
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"true"});
+        await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify("blocked")});
+      } else {
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"false"});
+        await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(status)});
+      }
+      showToast("Updated ✓");
+      loadVendorsAdmin();
+    }catch(e){ showToast("Failed", true); }
+  };
+
+  /** بے وجہ / غیر فعال وینڈر مستقل Delete — v001 محفوظ */
+  window.deleteVendor = async function(id){
+    if(!id || id === "v001"){
+      showToast("SJ Foods (v001) cannot be deleted", true);
+      return;
+    }
+    const name = (window._lastVendorsMap && window._lastVendorsMap[id] && window._lastVendorsMap[id].shop_name) || id;
+    if(!confirm("⚠️ Delete permanently?\n\nShop: "+name+"\nID: "+id+"\n\nThis cannot be undone. Block only hides; Delete removes all data.")) return;
+    if(!confirm("آخری تصدیق: واقعی Delete؟")) return;
+    try{
+      const res = await fetch(VDB+"/vendors/"+id+".json", { method: "DELETE" });
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      showToast("Deleted ✓");
+      loadVendorsAdmin();
+    }catch(e){
+      console.error(e);
+      showToast("ڈیلیٹ Failed — Rules/نیٹ ورک چیک کریں", true);
+    }
+  };
+
+  /** کارکردگی % — ڈیلیورڈ بمقابلہ کل؛ pending زیادہ ہو تو کم */
+  window.vendorPerfScore = function(s){
+    s = s || {};
+    const total = s.total || 0;
+    if(total === 0) return 100;
+    const good = s.delivered || 0;
+    const bad = (s.cancelled || 0) + Math.min(s.pending || 0, total);
+    let pct = Math.round((good / total) * 100);
+    if((s.pending || 0) > 0 && total > 2) pct = Math.max(0, pct - 10);
+    return Math.max(0, Math.min(100, pct));
+  };
+
+  /** وینڈر کیٹلاگ اندر سے دیکھیں — ترتیب / غلطیاں */
+  window.viewVendorCatalog = async function(id){
+    const box = document.getElementById("vcatalog-"+id);
+    if(!box) return;
+    if(box.style.display === "block" && box.getAttribute("data-loaded") === "1"){
+      box.style.display = "none";
+      return;
+    }
+    box.style.display = "block";
+    box.innerHTML = "Loading…";
+    try{
+      const res = await fetch(VDB+"/vendors/"+id+"/items.json");
+      const items = await res.json() || {};
+      const keys = Object.keys(items);
+      if(!keys.length){
+        box.innerHTML = "<i>No items yet</i>";
+        box.setAttribute("data-loaded","1");
+        return;
+      }
+      // group by category
+      const byCat = {};
+      keys.forEach(function(k){
+        const it = items[k] || {};
+        const c = it.category || "دیگر";
+        if(!byCat[c]) byCat[c] = [];
+        byCat[c].push({k:k, it:it});
+      });
+      let html = "<b>کیٹلاگ چیک — ترتیب اور یونٹ دیکھیں</b><br><span style='color:var(--muted)'>غلطی ہو تو وینڈر کو رہنمائی دیں یا Firebase سے درست کریں</span><hr style='border:none;border-top:1px solid #ddd;margin:8px 0;'>";
+      Object.keys(byCat).forEach(function(cat){
+        html += "<div style='margin:8px 0 4px;font-weight:bold;color:var(--dark);'>📁 "+cat+" ("+byCat[cat].length+")</div>";
+        byCat[cat].forEach(function(row){
+          const it = row.it;
+          const units = (it.units && it.units.length) ? it.units.map(function(u){ return (u.label||"?")+":"+u.rate; }).join(" · ") : ((it.unit||"")+" "+(it.rate||""));
+          const prem = it.premium ? " 💎" : "";
+          html += "<div style='padding:6px 0;border-bottom:1px dashed #eee;'>"+
+            "<b>"+(it.name_roman||it.name||row.k)+"</b>"+prem+
+            (it.name && it.name_roman ? " <span style='color:#888'>("+(it.name)+")</span>" : "")+
+            "<br><span dir='ltr' style='font-size:11px;'>"+units+"</span>"+
+            (it.extra_text ? "<br><span style='font-size:11px;color:#666;'>"+it.extra_text+"</span>" : "")+
+            "</div>";
+        });
+      });
+      box.innerHTML = html;
+      box.setAttribute("data-loaded","1");
+    }catch(e){
+      box.innerHTML = "لوڈ نہیں ہوا";
+    }
+  };
 
   let activeAccordionId = null;
   window.toggleAccordion = function(id){
@@ -418,7 +603,7 @@
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [منسوخ شدہ سب سے نیچے]
+    // فائنل لسٹ: [Pending اوپر] -> [مکمل بیچ میں] -> [Cancel شدہ سب سے نیچے]
     latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
@@ -488,11 +673,11 @@
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:14px; font-weight:bold; direction:auto;">
               📌 ${o.code} — <b>${o.name}</b> ${o.isUpdated ? '<span style="color:#B71C1C; font-size:11px;">(اپ ڈیٹ شدہ بل)</span>' : ''}
-              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">منسوخ شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
+              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">Cancel شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
               <span class="time-badge">
-                ${isCancelled ? '❌ منسوخ' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
+                ${isCancelled ? '❌ Cancel' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
               </span>
             </div>
           </div>
@@ -512,13 +697,13 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ Thermal print</button>
               ${!isCancelled && !isCompleted ? `
-                <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ آرڈر ایڈٹ کریں</button>
+                <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ Edit order</button>
                 ${o.isUpdated ? `<a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 واٹس ایپ اپ ڈیٹ بھیجیں</a>` : ''}
-                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
-                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ آرڈر منسوخ کریں</button>
-              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ آرڈر منسوخ کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ Delivered + thanks</button>
+                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ Cancel order</button>
+              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ Cancel order کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
             </div>
           </div>
         </div>
@@ -557,14 +742,14 @@
     window.print();
   }
 
-  // آرڈر منسوخ کرنے کا فنکشن
+  // Cancel order کرنے کا فنکشن
   window.cancelOrder = async function(code, phone, name){
-    if(!confirm(`کیا آپ واقعی آرڈر [${code}] منسوخ کرنا چاہتے ہیں؟`)) return;
+    if(!confirm(`کیا آپ واقعی آرڈر [${code}] Cancel کرنا چاہتے ہیں؟`)) return;
     try {
       await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "cancelled" });
-      showToast("❌ آرڈر منسوخ کر دیا گیا ہے!");
+      showToast("❌ Cancel order کر دیا گیا ہے!");
 
-      const msg = `SJ Foods — آرڈر منسوخی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] آپ کی ہدایت کے مطابق منسوخ کر دیا گیا ہے۔\n\nمستقبل میں خدمت کا موقع ضرور دیں!\nSJ Foods Mingora Swat`;
+      const msg = `SJ Foods — Cancel orderی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] آپ کی ہدایت کے مطابق Cancel کر دیا گیا ہے۔\n\nمستقبل میں خدمت کا موقع ضرور دیں!\nSJ Foods Mingora Swat`;
       let cleanPhone = phone.replace(/[^0-9]/g, "");
       if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
       window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -652,7 +837,7 @@
     });
 
     closeManualOrderModal();
-    showToast("✅ Manual order saved!");
+    showToast("✅ مینول آرڈر کامیابی سے محفوظ ہو گیا!");
   }
 
   window.openEditModal = function(code, name, phone, addr, items, total){
@@ -705,6 +890,16 @@
 
 <!-- GitHub Admin Script -->
 <script>
+window.safeStorage = (function(){
+  var mem = {};
+  function can(){ try{ var k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } }
+  var ok = can();
+  return {
+    getItem: function(k){ try{ return ok ? localStorage.getItem(k) : (mem[k]||null); }catch(e){ return mem[k]||null; } },
+    setItem: function(k,v){ try{ if(ok) localStorage.setItem(k,v); else mem[k]=String(v); }catch(e){ mem[k]=String(v); } },
+    removeItem: function(k){ try{ if(ok) localStorage.removeItem(k); else delete mem[k]; }catch(e){ delete mem[k]; } }
+  };
+})();
 const CATEGORIES_INDEX_FILE = "categories_index.json";
 let CFG = null;
 let CATEGORIES_INDEX = [];
@@ -713,17 +908,71 @@ let currentItems = [];
 let currentSha = null;
 let dirty = false;
 
-function openSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "flex"; }
+function openSiteSettingsModal(){
+  document.getElementById("adminSiteSettingsModal").style.display = "flex";
+  if(typeof renderCategoryEditorList === "function") renderCategoryEditorList();
+}
+function renderCategoryEditorList(){
+  const box = document.getElementById("catEditorList");
+  if(!box) return;
+  const list = CATEGORIES_INDEX || [];
+  if(!list.length){ box.innerHTML = "<i style=\"color:#888\">No categories loaded — connect admin first</i>"; return; }
+  box.innerHTML = list.map(function(c, i){
+    return '<div style="border:1px solid #eee;border-radius:8px;padding:8px;margin-bottom:6px;background:#fafafa;">'+
+      '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">'+
+      '<input type="text" value="'+(c.icon||"")+'" style="width:48px;margin:0;" onchange="CATEGORIES_INDEX['+i+'].icon=this.value">'+
+      '<input type="text" value="'+(c.category||"").replace(/"/g,"&quot;")+'" style="flex:1;min-width:100px;margin:0;" onchange="CATEGORIES_INDEX['+i+'].category=this.value">'+
+      '<span style="font-size:10px;color:#888;direction:ltr">'+(c.file||"")+'</span>'+
+      '<button type="button" class="btn-danger" style="padding:4px 8px;" onclick="removeCategoryInEditor('+i+')">Delete</button>'+
+      '</div>'+
+      '<input type="text" value="'+(c.note||"").replace(/"/g,"&quot;")+'" placeholder="Banner / note for this category" style="width:100%;margin:6px 0 0;font-size:12px;" onchange="CATEGORIES_INDEX['+i+'].note=this.value">'+
+      '</div>';
+  }).join("");
+}
+function removeCategoryInEditor(i){
+  if(!confirm("Remove this category from the list?")) return;
+  CATEGORIES_INDEX.splice(i, 1);
+  renderCategoryEditorList();
+}
+function addCategoryInEditor(){
+  const name = (document.getElementById("newCatName").value||"").trim();
+  const roman = (document.getElementById("newCatRoman").value||"").trim();
+  const icon = (document.getElementById("newCatIcon").value||"📦").trim();
+  let file = (document.getElementById("newCatFile").value||"").trim();
+  if(!name){ showToast("Enter category name", true); return; }
+  if(!file){
+    file = (roman || name).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"") + ".json";
+  }
+  if(!file.endsWith(".json")) file += ".json";
+  if((CATEGORIES_INDEX||[]).some(function(c){ return c.file === file; })){
+    showToast("File already exists in list", true); return;
+  }
+  CATEGORIES_INDEX.push({
+    file: file,
+    category: name,
+    category_roman: roman || name,
+    icon: icon,
+    image: "",
+    note: "",
+    open_time: "08:00",
+    close_time: "21:00"
+  });
+  document.getElementById("newCatName").value = "";
+  document.getElementById("newCatRoman").value = "";
+  document.getElementById("newCatFile").value = "";
+  renderCategoryEditorList();
+  showToast("Added — press Save categories");
+}
 function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsModal").style.display = "none"; }
 
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ Unsaved changes — press Save to GitHub below";
+  var _ss=document.getElementById("saveStatus"); if(_ss){ _ss.textContent = "⚠️ Unsaved — tap Save"; _ss.classList.remove("ok"); }
 }
 function markClean(){
   dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ All saved";
+  var _ss=document.getElementById("saveStatus"); if(_ss){ _ss.textContent = "✅ Saved"; _ss.classList.add("ok"); }
 }
 
 function utf8ToBase64(str){
@@ -738,15 +987,27 @@ function base64ToUtf8(b64){
 }
 
 async function ghRequest(path, options){
-  options = options || {};
-  const isWrite = options.method && options.method !== "GET";
-  const url = isWrite
-    ? `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`
-    : `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=Main---2`;
-  const res = await fetch(url, Object.assign({
-    headers: { "Authorization": "token " + CFG.token, "Accept": "application/vnd.github+json" }
-  }, options));
-  if(!res.ok){ throw new Error(`GitHub API error (${res.status})`); }
+  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
+  const headers = {
+    "Authorization": "token " + String(CFG.token || "").trim(),
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "SJ-Foods-Admin"
+  };
+  const opts = Object.assign({}, options || {});
+  if(opts.body && typeof opts.body === "string") headers["Content-Type"] = "application/json";
+  opts.headers = Object.assign(headers, opts.headers || {});
+  const res = await fetch(url, opts);
+  if(!res.ok){
+    let detail = "";
+    try{ const j = await res.json(); detail = j.message || JSON.stringify(j); }catch(e){}
+    console.error("GH", res.status, detail);
+    if(res.status === 401) throw new Error("Token invalid — Reset, paste new token, Save & Connect");
+    if(res.status === 403) throw new Error("403 Forbidden — Token needs repo scope (classic) or Contents:Read/Write");
+    if(res.status === 404) throw new Error("File not found — check branch/repo name");
+    throw new Error((detail || "Request failed") + " (" + res.status + ")");
+  }
+  if(res.status === 204) return {};
   return res.json();
 }
 async function ghGetJson(path){
@@ -755,25 +1016,49 @@ async function ghGetJson(path){
 }
 async function ghPutJson(path, obj, sha, message){
   const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content, sha, branch: "Main---2" }) });
+  const branches = [];
+  if(CFG && CFG.branch) branches.push(CFG.branch);
+  branches.push("vendors_ledger", "main");
+  const tried = [];
+  let lastErr = null;
+  for(const branch of branches){
+    if(tried.indexOf(branch) >= 0) continue;
+    tried.push(branch);
+    try{
+      // refresh sha for this branch if possible
+      let useSha = sha;
+      try{
+        const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+        const res = await fetch(url, { headers: { "Authorization": "Bearer " + CFG.token, "Accept": "application/vnd.github+json" } });
+        if(res.ok){ const d = await res.json(); useSha = d.sha; }
+      }catch(e){}
+      const body = { message: message || "Update", content, branch };
+      if(useSha) body.sha = useSha;
+      const result = await ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
+      CFG.branch = branch;
+      try{ saveConfig(CFG); }catch(e){}
+      return result;
+    }catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error("Save failed");
 }
 async function ghPutBinary(path, base64Content, message){
   let sha;
   try{ const existing = await ghRequest(path); sha = existing.sha; }catch(e){}
-  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content: base64Content, sha, branch: "Main---2" }) });
+  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content: base64Content, sha, branch: "main" }) });
 }
 
 function loadConfig(){
-  const raw = localStorage.getItem("sjfoods-admin-config");
+  const raw = safeStorage.getItem("sjfoods-admin-config");
   return raw ? JSON.parse(raw) : null;
 }
-function saveConfig(cfg){ localStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
+function saveConfig(cfg){ safeStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
 
 document.getElementById("saveConfigBtn").onclick = async ()=>{
   const owner = document.getElementById("cfgOwner").value.trim();
   const repo = document.getElementById("cfgRepo").value.trim();
   const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){ showToast("تمام خانے پُر کریں", true); return; }
+  if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
   CFG = { owner, repo, token };
   try{
     await ghRequest(CATEGORIES_INDEX_FILE);
@@ -785,7 +1070,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
 
 document.getElementById("changeAccountBtn").onclick = ()=>{
   if(!confirm("ری سیٹ کریں؟")) return;
-  localStorage.removeItem("sjfoods-admin-config");
+  safeStorage.removeItem("sjfoods-admin-config");
   location.reload();
 };
 
@@ -799,7 +1084,7 @@ async function initGitHubAdmin(){
   try{ await startMainGitHubPanel(); }catch(e){
     document.getElementById("setupCard").style.display = "block";
     document.getElementById("mainProductsPanel").style.display = "none";
-    localStorage.removeItem("sjfoods-admin-config");
+    safeStorage.removeItem("sjfoods-admin-config");
   }
 }
 
@@ -824,7 +1109,7 @@ async function loadCategory(file){
   }
   currentCategoryFile = file;
   const area = document.getElementById("productsArea");
-  area.innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
+  area.innerHTML = `<div class="loading">⏳ Loading…</div>`;
   document.getElementById("addProductBtn").style.display = "none";
   try{
     const { json, sha } = await ghGetJson(file);
@@ -871,25 +1156,36 @@ function buildRow(it, idx){
         <input type="file" accept="image/*" class="img-input">
       </div>
       <div class="row-fields">
-        <input type="text" class="f-name" placeholder="پروڈکٹ نام (اردو)" value="${it.name}">
+        <input type="text" class="f-name" placeholder="Product name (Urdu)" value="${it.name}">
         <input type="text" class="f-name-en" placeholder="Roman Urdu name" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
       </div>
     </div>
     
     <div style="background:#F4ECE1; padding:6px 10px; border-radius:8px; font-size:11.5px; display:flex; align-items:center; gap:6px;">
       <input type="checkbox" class="f-override" ${it.manualOverride ? "checked" : ""}> 
-      <span>🔓 آٹو ریٹ کیلکولیشن بند کریں (خود ہاتھ سے ریٹ لکھیں)</span>
+      <span>🔓 Lock rates (manual entry)</span>
     </div>
 
     <div class="units-box"></div>
-    <button class="btn-secondary" style="width:48%; margin-top:6px;" onclick="addUnitToItem(${idx})">➕ نیا یونٹ</button>
-    <button class="btn-secondary" style="width:48%; margin-top:6px; background:#1565C0; color:#fff;" onclick="recalcItemRates(${idx})">⚡ آٹو حساب</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px;" onclick="addUnitToItem(${idx})">➕ Add unit</button>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'weight')">⚖️ Weight</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'liquid')">🧴 Litre</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'pcs')">📦 Pcs</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'dozen')">🥚 Dozen</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'bottle')">🍾 Bottle</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gold')">🥇 Gold</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gem')">💎 Carat</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'meter')">📏 Meter</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'service')">🛠️ Service</button>
+    </div>
     <div class="row-bottom" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-      <div class="row-flags" style="display:flex; gap:10px;">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
+      <div class="row-flags" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> Available</label>
         <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
+        <label><input type="checkbox" class="f-premium" ${it.premium ? "checked" : ""}> 💎 Premium / Call</label>
       </div>
-      <button class="btn-danger" onclick="removeProductItem(${idx})">🗑️ حذف کریں</button>
+      <button class="btn-danger" onclick="removeProductItem(${idx})">🗑️ Delete</button>
     </div>
   `;
 
@@ -899,30 +1195,55 @@ function buildRow(it, idx){
     ur.className = "unit-row";
     ur.innerHTML = `
       <input type="text" class="u-label" placeholder="یونٹ (KG/پاؤ)" value="${u.label}">
-      <input type="text" inputmode="numeric" class="u-rate u-rate-field" placeholder="قیمت" value="${u.rate}" style="direction:ltr;text-align:left;font-size:16px;">
+      <input type="number" class="u-rate u-rate-field" placeholder="قیمت" value="${u.rate}">
       ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnitFromItem(${idx}, ${ui})">✕</button>` : ""}
     `;
     
     ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
     
     const rateInput = ur.querySelector(".u-rate-field");
-    // ٹائپنگ کے دوران کچھ نہ کریں (کی بورڈ محفوظ)
-    rateInput.addEventListener("blur", function(){
-      var val = parseFloat(this.value) || 0;
-      this.value = val;
+    // موبائل: number کی بجائے text + inputmode تاکہ کی بورڈ مستحکم رہے
+    rateInput.setAttribute("type", "text");
+    rateInput.setAttribute("inputmode", "decimal");
+    rateInput.setAttribute("pattern", "[0-9]*\\.?[0-9]*");
+    rateInput.setAttribute("autocomplete", "off");
+    rateInput.oninput = (e)=>{
+      // صرف ہندسے اور ڈاٹ
+      let raw = e.target.value.replace(/[^0-9.]/g, "");
+      if(raw !== e.target.value) e.target.value = raw;
+      const val = parseFloat(raw) || 0;
       u.rate = val;
       markDirty();
+
+      // خودکار یونٹ قیمتیں — بغیر پورا صفحہ ری رینڈر (کی بورڈ بند نہ ہو)
       if(ui === 0 && !it.manualOverride && it.units.length > 1){
-        autoCalculateUnits(it, val);
-        var inputs = row.querySelectorAll(".u-rate-field");
-        for(var oIdx = 1; oIdx < it.units.length; oIdx++){
-          if(inputs[oIdx]) inputs[oIdx].value = it.units[oIdx].rate;
-        }
+        const allRateInputs = unitsBox.querySelectorAll(".u-rate-field");
+        it.units.forEach((otherU, oIdx) => {
+          if(oIdx > 0){
+            let lbl = (otherU.label || "").toLowerCase();
+            let nr = otherU.rate;
+            if(lbl.includes("پاؤ") || lbl.includes("250")) {
+              nr = Math.round(val / 4);
+            } else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) {
+              nr = Math.round(val / 2);
+            } else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) {
+              nr = Math.round(val * 5);
+            }
+            otherU.rate = nr;
+            if(allRateInputs[oIdx] && document.activeElement !== allRateInputs[oIdx]){
+              allRateInputs[oIdx].value = nr;
+            }
+          }
+        });
+        // renderProducts() یہاں نہیں — فوکس برقرار
       }
-    });
-    rateInput.addEventListener("keydown", function(e){
-      if(e.key === "Enter"){ e.preventDefault(); this.blur(); }
-    });
+    };
+    // بلا ر پر حتمی سیو (اضافی محفوظ)
+    rateInput.onblur = ()=>{
+      const val = parseFloat(rateInput.value) || 0;
+      u.rate = val;
+      markDirty();
+    };
     unitsBox.appendChild(ur);
   });
 
@@ -930,22 +1251,27 @@ function buildRow(it, idx){
   row.querySelector(".f-name-en").oninput = (e)=>{ it.name_roman = e.target.value.trim() || undefined; markDirty(); };
   row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
   row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
+  const prem = row.querySelector(".f-premium");
+  if(prem) prem.onchange = (e)=>{ it.premium = e.target.checked; markDirty(); };
   row.querySelector(".f-override").onchange = (e)=>{ it.manualOverride = e.target.checked; markDirty(); };
 
   row.querySelector(".img-input").onchange = async (e)=>{
     const file = e.target.files[0];
     if(!file) return;
-    if(file.size > 15*1024*1024){ showToast("❌ فائل بہت بڑی ہے", true); return; }
-    showToast("⏳ تصویر کمپریس/اپ لوڈ...");
+    showToast("⏳ اپ لوڈ ہو رہا ہے...");
     try{
-      const base64 = await compressImageFile(file, 900, 0.75);
-      const path = "products/" + currentCategoryFile.replace(".json","") + "-" + idx + "-" + Date.now() + ".jpg";
-      await ghPutBinary(path, base64, "Upload image");
-      it.image = path;
-      markDirty();
-      showToast("✅ Image uploaded! Press Save below");
-      renderProducts();
-    }catch(err){ showToast("❌ خرابی: " + (err.message||""), true); }
+      const reader = new FileReader();
+      reader.onload = async function(evt){
+        const base64 = evt.target.result.split(",")[1];
+        const path = `products/${currentCategoryFile.replace('.json','')}-${idx}-${Date.now()}.jpg`;
+        await ghPutBinary(path, base64, `Upload image`);
+        it.image = path;
+        renderProducts();
+        markDirty();
+        showToast("✅ تصویر اپ لوڈ ہو گئی!");
+      };
+      reader.readAsDataURL(file);
+    }catch(err){ showToast("❌ خرابی", true); }
   };
 
   row._item = it;
@@ -957,6 +1283,27 @@ window.addUnitToItem = function(idx){
   renderProducts();
   markDirty();
 }
+
+window.applyAdminUnitPreset = function(idx, type){
+  const it = currentItems[idx]; if(!it) return;
+  const base = (it.units && it.units[0]) ? (parseFloat(it.units[0].rate)||0) : 0;
+  const presets = {
+    weight: [{label:"KG",rate:base},{label:"آدھا کلو",rate:Math.round(base/2)},{label:"پاؤ",rate:Math.round(base/4)},{label:"دڑی (5 KG)",rate:Math.round(base*5)}],
+    liquid: [{label:"Ltr",rate:base},{label:"½ Ltr",rate:Math.round(base/2)},{label:"250 ml",rate:Math.round(base/4)},{label:"5 Ltr",rate:Math.round(base*5)}],
+    pcs: [{label:"Pcs",rate:base},{label:"Pkt",rate:base},{label:"Box",rate:base}],
+    dozen: [{label:"عدد",rate:base},{label:"درجن",rate:Math.round(base*12)}],
+    bottle: [{label:"Bottle",rate:base},{label:"Can",rate:base},{label:"1.5 Ltr",rate:base}],
+    gold: [{label:"Tola",rate:base},{label:"Gram",rate:base},{label:"22K / g",rate:base},{label:"21K / g",rate:base}],
+    gem: [{label:"Carat",rate:base},{label:"Gram",rate:base},{label:"Piece",rate:base}],
+    meter: [{label:"Meter",rate:base},{label:"Yard",rate:base},{label:"Foot",rate:base}],
+    service: [{label:"Job",rate:base},{label:"Hour",rate:base},{label:"Visit",rate:base}]
+  };
+  it.units = presets[type] || [{label:"Unit",rate:base}];
+  if(type==="gold"||type==="gem") it.premium = true;
+  renderProducts();
+  markDirty();
+  showToast("یونٹ سیٹ ✓ — ریٹ چیک کریں");
+};
 
 window.removeUnitFromItem = function(idx, ui){
   currentItems[idx].units.splice(ui, 1);
@@ -972,18 +1319,80 @@ window.addNewProductItem = function(){
 }
 
 window.removeProductItem = function(idx){
-  if(!confirm("حذف کریں؟")) return;
+  if(!confirm("Delete؟")) return;
   currentItems.splice(idx, 1);
   renderProducts();
   markDirty();
 }
 
+
+window.saveSiteSettingsToGitHub = async function(){
+  try{
+    if(!CFG || !CFG.token){
+      showToast("Connect admin first", true);
+      return;
+    }
+    // 1) categories_index.json
+    if(CATEGORIES_INDEX && CATEGORIES_INDEX.length){
+      const freshIdx = await ghRequest(CATEGORIES_INDEX_FILE);
+      await ghPutJson(CATEGORIES_INDEX_FILE, CATEGORIES_INDEX, freshIdx.sha, "Update categories index");
+      // create empty json for brand-new category files if missing
+      for(const c of CATEGORIES_INDEX){
+        if(!c.file) continue;
+        try{
+          await ghRequest(c.file);
+        }catch(e){
+          try{
+            await ghPutJson(c.file, [], null, "Create category " + c.file);
+          }catch(e2){
+            // put with no sha via create helper if exists
+            try{
+              if(typeof ghPutNew === "function") await ghPutNew(c.file, btoa(unescape(encodeURIComponent("[]"))), "Create " + c.file);
+            }catch(e3){}
+          }
+        }
+      }
+      // refresh picker
+      const picker = document.getElementById("categoryPicker");
+      if(picker){
+        picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon||""} ${c.category}</option>`).join("");
+      }
+    }
+    // 2) settings.json about (optional)
+    try{
+      const owner = (document.getElementById("adminOwnerName")||{}).value || "";
+      const msg = (document.getElementById("adminUrduMsg")||{}).value || "";
+      let settings = {};
+      let sha = null;
+      try{
+        const s = await ghGetJson("settings.json");
+        settings = s.json || {};
+        sha = s.sha;
+      }catch(e){ settings = {}; }
+      settings.owner_name = owner;
+      settings.about_urdu = msg;
+      settings.banner_message = msg;
+      await ghPutJson("settings.json", settings, sha, "Update about / banner");
+    }catch(e){ console.warn("settings save", e); }
+
+    showToast("✅ Categories & about saved");
+    closeSiteSettingsModal();
+  }catch(e){
+    console.error(e);
+    showToast("❌ " + (e.message || "Save failed"), true);
+  }
+};
+
 window.saveProductsToGitHub = async function(){
   const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item);
+  currentItems = rows.map(r => r._item).filter(Boolean);
 
-  document.getElementById("saveStatus").textContent = "⏳ Saving to GitHub...";
+  const st = document.getElementById("saveStatus");
+  if(st) st.textContent = "⏳ Saving…";
   try{
+    if(!CFG || !CFG.token){
+      throw new Error("Open Admin connection and Save & Connect first");
+    }
     const fresh = await ghRequest(currentCategoryFile);
     const payload = currentItems.map(it => {
       const obj = {
@@ -995,175 +1404,19 @@ window.saveProductsToGitHub = async function(){
         manualOverride: it.manualOverride
       };
       if(it.name_roman) obj.name_roman = it.name_roman;
+      if(it.premium) obj.premium = true;
       return obj;
     });
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update prices`);
-    markClean();
-    showToast("✅ Saved successfully!");
+    await ghPutJson(currentCategoryFile, payload, fresh.sha, "Update prices");
+    if(typeof markClean === "function") markClean();
+    if(st) st.textContent = "✅ Saved";
+    showToast("✅ Saved successfully");
   }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ Save failed";
-    showToast("❌ خرابی: " + e.message, true);
+    console.error(e);
+    if(st) st.textContent = "❌ Could not save";
+    showToast("❌ " + (e.message || "Save failed"), true);
   }
 }
-
-function autoCalculateUnits(it, kgRate){
-  kgRate = parseFloat(kgRate) || 0;
-  for(var oIdx = 1; oIdx < it.units.length; oIdx++){
-    var lbl = (it.units[oIdx].label || "").toLowerCase();
-    if(lbl.indexOf("آدھا") >= 0 || lbl.indexOf("ادھا") >= 0 || lbl.indexOf("half") >= 0 || lbl.indexOf("500") >= 0){
-      it.units[oIdx].rate = Math.round(kgRate / 2);
-    } else if(lbl.indexOf("پاؤ") >= 0 || lbl.indexOf("250") >= 0){
-      it.units[oIdx].rate = Math.round(kgRate / 4);
-    } else if(lbl.indexOf("دڑی") >= 0 || lbl.indexOf("دری") >= 0 || lbl.indexOf("5kg") >= 0 || lbl.indexOf("5 کلو") >= 0 || lbl.indexOf("5کلو") >= 0){
-      it.units[oIdx].rate = Math.round(kgRate * 5);
-    }
-  }
-}
-window.recalcItemRates = function(idx){
-  var it = currentItems[idx];
-  if(!it || !it.units || !it.units.length) return;
-  if(it.manualOverride){ showToast("پہلے آٹو کیلکولیشن چیک باکس کھولیں", true); return; }
-  autoCalculateUnits(it, it.units[0].rate);
-  renderProducts();
-  markDirty();
-  showToast("✅ آدھا/دڑی اپ ڈیٹ");
-};
-function compressImageFile(file, maxW, quality){
-  return new Promise(function(resolve, reject){
-    var reader = new FileReader();
-    reader.onload = function(e){
-      var img = new Image();
-      img.onload = function(){
-        var c = document.createElement("canvas");
-        var w = img.width, h = img.height;
-        if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
-        c.width = w; c.height = h;
-        c.getContext("2d").drawImage(img, 0, 0, w, h);
-        resolve(c.toDataURL("image/jpeg", quality).split(",")[1]);
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function openCategoriesManager(){
-  document.getElementById("categoriesManagerModal").style.display = "flex";
-  renderCategoriesList();
-}
-function closeCategoriesManager(){
-  document.getElementById("categoriesManagerModal").style.display = "none";
-}
-function renderCategoriesList(){
-  var area = document.getElementById("categoriesListArea");
-  if(!CATEGORIES_INDEX || !CATEGORIES_INDEX.length){
-    area.innerHTML = "<div class=\"loading\">کوئی کیٹگری نہیں</div>";
-    return;
-  }
-  area.innerHTML = CATEGORIES_INDEX.map(function(c, i){
-    return '<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-      '<div><div style="font-size:15px;font-weight:bold;">' + (c.icon||"📦") + " " + c.category + '</div>' +
-      '<div style="font-size:11px;color:var(--muted);direction:ltr;text-align:right;">' + (c.category_roman||"") + " • " + c.file + '</div></div>' +
-      '<div style="display:flex;gap:6px;">' +
-      '<button class="btn-secondary" style="padding:6px 10px;font-size:11px;" onclick="editCategory(' + i + ')">✏️</button>' +
-      '<button class="btn-danger" style="padding:6px 10px;font-size:11px;" onclick="deleteCategory(' + i + ')">🗑️</button>' +
-      '</div></div></div>';
-  }).join("");
-}
-function openAddCategoryForm(){
-  document.getElementById("editCatIndex").value = "-1";
-  document.getElementById("addCatTitle").textContent = "➕ نئی کیٹگری";
-  document.getElementById("newCatUrdu").value = "";
-  document.getElementById("newCatRoman").value = "";
-  document.getElementById("newCatIcon").value = "🍛";
-  document.getElementById("newCatFile").value = "";
-  document.getElementById("newCatOpen").value = "08:00";
-  document.getElementById("newCatClose").value = "22:00";
-  document.getElementById("newCatNote").value = "";
-  document.getElementById("addCategoryModal").style.display = "flex";
-}
-function closeAddCategoryForm(){
-  document.getElementById("addCategoryModal").style.display = "none";
-}
-function editCategory(idx){
-  var c = CATEGORIES_INDEX[idx];
-  document.getElementById("editCatIndex").value = idx;
-  document.getElementById("addCatTitle").textContent = "✏️ کیٹگری ایڈٹ";
-  document.getElementById("newCatUrdu").value = c.category || "";
-  document.getElementById("newCatRoman").value = c.category_roman || "";
-  document.getElementById("newCatIcon").value = c.icon || "📦";
-  document.getElementById("newCatFile").value = c.file || "";
-  document.getElementById("newCatOpen").value = c.open_time || "08:00";
-  document.getElementById("newCatClose").value = c.close_time || "22:00";
-  document.getElementById("newCatNote").value = c.note || "";
-  document.getElementById("addCategoryModal").style.display = "flex";
-}
-async function saveNewCategory(){
-  var urdu = document.getElementById("newCatUrdu").value.trim();
-  var roman = document.getElementById("newCatRoman").value.trim();
-  var icon = document.getElementById("newCatIcon").value.trim() || "📦";
-  var file = document.getElementById("newCatFile").value.trim();
-  var openT = document.getElementById("newCatOpen").value.trim();
-  var closeT = document.getElementById("newCatClose").value.trim();
-  var note = document.getElementById("newCatNote").value.trim();
-  var editIdx = parseInt(document.getElementById("editCatIndex").value);
-  if(!urdu){ showToast("اردو نام ضروری ہے", true); return; }
-  if(!file){
-    file = (roman || urdu).toLowerCase().replace(/[^a-z0-9]+/gi, "_").replace(/^_|_$/g, "").substring(0, 30) + ".json";
-    if(!/^[a-z0-9_]+\.json$/i.test(file)) file = "cat_" + Date.now() + ".json";
-  }
-  if(file.indexOf(".json") < 0) file += ".json";
-  var entry = { file: file, category: urdu, category_roman: roman || urdu, icon: icon, image: "", open_time: openT, close_time: closeT, note: note };
-  try{
-    showToast("⏳ Saving...");
-    if(editIdx >= 0){
-      CATEGORIES_INDEX[editIdx] = Object.assign({}, CATEGORIES_INDEX[editIdx], entry);
-    } else {
-      try { await ghPutJson(file, [], null, "Create " + file); }
-      catch(e){
-        var content = utf8ToBase64("[]");
-        await ghRequest(file, { method: "PUT", body: JSON.stringify({ message: "Create " + file, content: content, branch: "Main---2" }) });
-      }
-      CATEGORIES_INDEX.push(entry);
-    }
-    var fresh = await ghRequest(CATEGORIES_INDEX_FILE);
-    await ghPutJson(CATEGORIES_INDEX_FILE, CATEGORIES_INDEX, fresh.sha, "Update categories index");
-    var picker = document.getElementById("categoryPicker");
-    picker.innerHTML = CATEGORIES_INDEX.map(function(c){ return '<option value="' + c.file + '">' + c.icon + " " + c.category + '</option>'; }).join("");
-    closeAddCategoryForm();
-    renderCategoriesList();
-    showToast("✅ Category saved");
-  }catch(e){ showToast("❌ " + e.message, true); }
-}
-async function deleteCategory(idx){
-  var c = CATEGORIES_INDEX[idx];
-  if(!confirm('حذف: "' + c.category + '"؟')) return;
-  var pass = prompt("🔒 پاسورڈ (3799):");
-  if(pass !== "3799"){ showToast("❌ غلط پاسورڈ", true); return; }
-  try{
-    showToast("⏳ حذف...");
-    try{
-      var fileData = await ghRequest(c.file);
-      await fetch("https://api.github.com/repos/" + CFG.owner + "/" + CFG.repo + "/contents/" + c.file, {
-        method: "DELETE",
-        headers: { "Authorization": "token " + CFG.token, "Accept": "application/vnd.github+json" },
-        body: JSON.stringify({ message: "Delete " + c.file, sha: fileData.sha, branch: "Main---2" })
-      });
-    }catch(e){}
-    CATEGORIES_INDEX.splice(idx, 1);
-    var fresh = await ghRequest(CATEGORIES_INDEX_FILE);
-    await ghPutJson(CATEGORIES_INDEX_FILE, CATEGORIES_INDEX, fresh.sha, "Remove category");
-    var picker = document.getElementById("categoryPicker");
-    picker.innerHTML = CATEGORIES_INDEX.map(function(c){ return '<option value="' + c.file + '">' + c.icon + " " + c.category + '</option>'; }).join("");
-    if(CATEGORIES_INDEX.length) await loadCategory(CATEGORIES_INDEX[0].file);
-    renderCategoriesList();
-    showToast("✅ حذف ہو گیا");
-  }catch(e){ showToast("❌ " + e.message, true); }
-}
-
 </script>
 
 </body>

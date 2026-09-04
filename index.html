@@ -1867,9 +1867,9 @@ if(summaryEl){
     touchStartOnSummary = false;
     const touchEndY = e.changedTouches[0].clientY;
     const dy = touchEndY - touchStartY;
-    // 90px سے زیادہ نیچے = بند، اوپر = کھول
-    if(dy > 90) billbarEl.classList.add("collapsed");
-    else if(dy < -90) billbarEl.classList.remove("collapsed");
+    // summary پر نیچے سوائپ = minimize، اوپر = کھول
+    if(dy > 40) billbarEl.classList.add("collapsed");
+    else if(dy < -40) billbarEl.classList.remove("collapsed");
   }, {passive: true});
   summaryEl.onclick = (e) => {
     // بٹن/لنک پر کلک ہو تو ٹوگل نہ کریں

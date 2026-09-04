@@ -466,14 +466,13 @@
     }catch(e){ showToast("Failed", true); }
   };
 
-  /** بے وجہ / غیر فعال وینڈر مستقل Delete — v001 محفوظ */
   window.deleteVendor = async function(id){
     if(!id || id === "v001"){
       showToast("SJ Foods (v001) cannot be deleted", true);
       return;
     }
     const name = (window._lastVendorsMap && window._lastVendorsMap[id] && window._lastVendorsMap[id].shop_name) || id;
-    if(!confirm("⚠️ Delete permanently?\n\nShop: "+name+"\nID: "+id+"\n\nThis cannot be undone. Block only hides; Delete removes all data.")) return;
+    if(!confirm("⚠️ Delete permanently?\n\nShop: "+name+"\nID: "+id+"\n\nThis cannot be undone.")) return;
     if(!confirm("آخری تصدیق: واقعی Delete؟")) return;
     try{
       const res = await fetch(VDB+"/vendors/"+id+".json", { method: "DELETE" });
@@ -482,11 +481,10 @@
       loadVendorsAdmin();
     }catch(e){
       console.error(e);
-      showToast("ڈیلیٹ Failed — Rules/نیٹ ورک چیک کریں", true);
+      showToast("ڈیلیٹ Failed — Rules چیک کریں", true);
     }
   };
 
-  /** کارکردگی % — ڈیلیورڈ بمقابلہ کل؛ pending زیادہ ہو تو کم */
   window.vendorPerfScore = function(s){
     s = s || {};
     const total = s.total || 0;
@@ -498,7 +496,6 @@
     return Math.max(0, Math.min(100, pct));
   };
 
-  /** وینڈر کیٹلاگ اندر سے دیکھیں — ترتیب / غلطیاں */
   window.viewVendorCatalog = async function(id){
     const box = document.getElementById("vcatalog-"+id);
     if(!box) return;
@@ -517,7 +514,6 @@
         box.setAttribute("data-loaded","1");
         return;
       }
-      // group by category
       const byCat = {};
       keys.forEach(function(k){
         const it = items[k] || {};
@@ -525,7 +521,7 @@
         if(!byCat[c]) byCat[c] = [];
         byCat[c].push({k:k, it:it});
       });
-      let html = "<b>کیٹلاگ چیک — ترتیب اور یونٹ دیکھیں</b><br><span style='color:var(--muted)'>غلطی ہو تو وینڈر کو رہنمائی دیں یا Firebase سے درست کریں</span><hr style='border:none;border-top:1px solid #ddd;margin:8px 0;'>";
+      let html = "<b>کیٹلاگ چیک — ترتیب اور یونٹ دیکھیں</b><hr style='border:none;border-top:1px solid #ddd;margin:8px 0;'>";
       Object.keys(byCat).forEach(function(cat){
         html += "<div style='margin:8px 0 4px;font-weight:bold;color:var(--dark);'>📁 "+cat+" ("+byCat[cat].length+")</div>";
         byCat[cat].forEach(function(row){
@@ -536,7 +532,6 @@
             "<b>"+(it.name_roman||it.name||row.k)+"</b>"+prem+
             (it.name && it.name_roman ? " <span style='color:#888'>("+(it.name)+")</span>" : "")+
             "<br><span dir='ltr' style='font-size:11px;'>"+units+"</span>"+
-            (it.extra_text ? "<br><span style='font-size:11px;color:#666;'>"+it.extra_text+"</span>" : "")+
             "</div>";
         });
       });
@@ -603,7 +598,6 @@
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    // فائنل لسٹ: [Pending اوپر] -> [مکمل بیچ میں] -> [Cancel شدہ سب سے نیچے]
     latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
@@ -714,7 +708,6 @@
   window.printThermalReceipt = function(encodedData){
     const d = JSON.parse(decodeURIComponent(encodedData));
     const printDiv = document.getElementById("printableReceipt");
-    
     let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
 
     printDiv.className = "receipt-box";
@@ -742,7 +735,6 @@
     window.print();
   }
 
-  // Cancel order کرنے کا فنکشن
   window.cancelOrder = async function(code, phone, name){
     if(!confirm(`کیا آپ واقعی آرڈر [${code}] Cancel کرنا چاہتے ہیں؟`)) return;
     try {
@@ -758,7 +750,6 @@
     }
   }
 
-  // اسمارٹ آٹو پارسر
   window.smartParseText = function() {
     let text = document.getElementById("mItems").value;
     if(!text.trim()){
@@ -901,9 +892,6 @@ window.safeStorage = (function(){
   };
 })();
 const CATEGORIES_INDEX_FILE = "categories_index.json";
-
-// ⭐ فکس: لائیو سائٹ ہمیشہ اسی برانچ سے چلتی ہے (GitHub Pages Settings کے مطابق)۔
-// ہر لکھائی صرف اسی برانچ پر ہوگی — اب کبھی خاموشی سے "main" پر نہیں جائے گی۔
 const LIVE_BRANCH = "vendors_ledger";
 
 let CFG = null;
@@ -980,21 +968,35 @@ function markClean(){
   var _ss=document.getElementById("saveStatus"); if(_ss){ _ss.textContent = "✅ Saved"; _ss.classList.add("ok"); }
 }
 
+// درست UTF-8 اور Base64 طریقہ جو اردو کو کرپٹ نہیں کرتا
 function utf8ToBase64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = ""; bytes.forEach(b => bin += String.fromCharCode(b));
-  return btoa(bin);
+  return new Promise((resolve, reject) => {
+    const blob = new Blob([str], { type: 'text/plain;charset=utf-8' });
+    const reader = new FileReader();
+    reader.onload = () => {
+      const b64 = reader.result.split(',')[1];
+      resolve(b64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
+
 function base64ToUtf8(b64){
-  const bin = atob(b64.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
+  try{
+    const bin = atob(b64.replace(/\s/g, ""));
+    const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return new TextDecoder("utf-8").decode(bytes);
+  }catch(e){
+    return decodeURIComponent(escape(atob(b64)));
+  }
 }
 
 async function ghRequest(path, options){
+  const cleanToken = String(CFG.token || "").trim().replace(/^token\s+/i, "").replace(/^Bearer\s+/i, "");
   const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
   const headers = {
-    "Authorization": "token " + String(CFG.token || "").trim(),
+    "Authorization": "token " + cleanToken,
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "SJ-Foods-Admin"
@@ -1008,38 +1010,49 @@ async function ghRequest(path, options){
     try{ const j = await res.json(); detail = j.message || JSON.stringify(j); }catch(e){}
     console.error("GH", res.status, detail);
     if(res.status === 401) throw new Error("Token invalid — Reset, paste new token, Save & Connect");
-    if(res.status === 403) throw new Error("403 Forbidden — Token needs repo scope (classic) or Contents:Read/Write");
-    if(res.status === 404) throw new Error("File not found — check branch/repo name");
+    if(res.status === 403) throw new Error("403 Forbidden — Check token repo permissions");
+    if(res.status === 404) throw new Error("File or branch not found (" + path + ")");
     throw new Error((detail || "Request failed") + " (" + res.status + ")");
   }
   if(res.status === 204) return {};
   return res.json();
 }
+
 async function ghGetJson(path){
   const data = await ghRequest(path + "?ref=" + encodeURIComponent(LIVE_BRANCH));
   return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
 }
 
-// ⭐ فکس: اب یہ فنکشن ہمیشہ صرف LIVE_BRANCH پر لکھتا ہے۔
-// نہ کوئی fallback برانچ، نہ خاموشی سے دوسری برانچ پر منتقلی — ناکامی پر صاف ایرر آگے پھینکا جاتا ہے۔
 async function ghPutJson(path, obj, sha, message){
-  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
+  const jsonStr = JSON.stringify(obj, null, 2);
+  const content = await utf8ToBase64(jsonStr);
 
-  // ہمیشہ تازہ sha لائیو برانچ سے دوبارہ لیں (sha conflict بگ سے بچاؤ)
   let useSha = sha;
   try{
+    const cleanToken = String(CFG.token || "").trim().replace(/^token\s+/i, "").replace(/^Bearer\s+/i, "");
     const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(LIVE_BRANCH)}`;
-    const res = await fetch(url, { headers: { "Authorization": "Bearer " + CFG.token, "Accept": "application/vnd.github+json" } });
-    if(res.ok){ const d = await res.json(); useSha = d.sha; }
+    const res = await fetch(url, { 
+      headers: { 
+        "Authorization": "token " + cleanToken, 
+        "Accept": "application/vnd.github+json" 
+      } 
+    });
+    if(res.ok){ 
+      const d = await res.json(); 
+      useSha = d.sha; 
+    }
   }catch(e){}
 
-  const body = { message: message || "Update", content, branch: LIVE_BRANCH };
+  const body = { 
+    message: message || "Update from Admin", 
+    content: content, 
+    branch: LIVE_BRANCH 
+  };
   if(useSha) body.sha = useSha;
 
   return await ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
 }
 
-// ⭐ فکس: تصویریں بھی اب ہمیشہ LIVE_BRANCH پر اپلوڈ ہوں گی (پہلے یہ ہارڈ کوڈ "main" پر جاتی تھیں)
 async function ghPutBinary(path, base64Content, message){
   let sha;
   try{ const existing = await ghRequest(path + "?ref=" + encodeURIComponent(LIVE_BRANCH)); sha = existing.sha; }catch(e){}
@@ -1056,14 +1069,16 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
   const owner = document.getElementById("cfgOwner").value.trim();
   const repo = document.getElementById("cfgRepo").value.trim();
   const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
+  if(!owner || !repo || !token){ showToast("تمام خانے پر کریں", true); return; }
   CFG = { owner, repo, token };
   try{
     await ghRequest(CATEGORIES_INDEX_FILE + "?ref=" + encodeURIComponent(LIVE_BRANCH));
     saveConfig(CFG);
     showToast("✅ کنکشن کامیاب!");
     startMainGitHubPanel();
-  }catch(e){ showToast("❌ ٹوکن غلط ہے", true); }
+  }catch(e){ 
+    showToast("❌ کنکشن فیل: " + e.message, true); 
+  }
 };
 
 document.getElementById("changeAccountBtn").onclick = ()=>{
@@ -1079,7 +1094,9 @@ async function initGitHubAdmin(){
     document.getElementById("mainProductsPanel").style.display = "none";
     return;
   }
-  try{ await startMainGitHubPanel(); }catch(e){
+  try{ 
+    await startMainGitHubPanel(); 
+  }catch(e){
     document.getElementById("setupCard").style.display = "block";
     document.getElementById("mainProductsPanel").style.display = "none";
     safeStorage.removeItem("sjfoods-admin-config");
@@ -1101,7 +1118,7 @@ async function startMainGitHubPanel(){
 }
 
 async function loadCategory(file){
-  if(dirty && !confirm("Unsaved changes will be lost. Continue?")) {
+  if(dirty && !confirm("غیر محفوظ تبدیلیاں ضائع ہو جائیں گی۔ جاری رکھیں؟")) {
     document.getElementById("categoryPicker").value = currentCategoryFile;
     return;
   }
@@ -1117,7 +1134,7 @@ async function loadCategory(file){
     markClean();
     document.getElementById("addProductBtn").style.display = "block";
   }catch(e){
-    area.innerHTML = `<div class="loading">❌ لوڈ نہ ہو سکا</div>`;
+    area.innerHTML = `<div class="loading">❌ فائل لوڈ نہیں ہو سکی (${file})</div>`;
   }
 }
 
@@ -1200,20 +1217,17 @@ function buildRow(it, idx){
     ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
     
     const rateInput = ur.querySelector(".u-rate-field");
-    // موبائل: number کی بجائے text + inputmode تاکہ کی بورڈ مستحکم رہے
     rateInput.setAttribute("type", "text");
     rateInput.setAttribute("inputmode", "decimal");
     rateInput.setAttribute("pattern", "[0-9]*\\.?[0-9]*");
     rateInput.setAttribute("autocomplete", "off");
     rateInput.oninput = (e)=>{
-      // صرف ہندسے اور ڈاٹ
       let raw = e.target.value.replace(/[^0-9.]/g, "");
       if(raw !== e.target.value) e.target.value = raw;
       const val = parseFloat(raw) || 0;
       u.rate = val;
       markDirty();
 
-      // خودکار یونٹ قیمتیں — بغیر پورا صفحہ ری رینڈر (کی بورڈ بند نہ ہو)
       if(ui === 0 && !it.manualOverride && it.units.length > 1){
         const allRateInputs = unitsBox.querySelectorAll(".u-rate-field");
         it.units.forEach((otherU, oIdx) => {
@@ -1233,10 +1247,8 @@ function buildRow(it, idx){
             }
           }
         });
-        // renderProducts() یہاں نہیں — فوکس برقرار
       }
     };
-    // بلا ر پر حتمی سیو (اضافی محفوظ)
     rateInput.onblur = ()=>{
       const val = parseFloat(rateInput.value) || 0;
       u.rate = val;
@@ -1323,18 +1335,15 @@ window.removeProductItem = function(idx){
   markDirty();
 }
 
-
 window.saveSiteSettingsToGitHub = async function(){
   try{
     if(!CFG || !CFG.token){
       showToast("Connect admin first", true);
       return;
     }
-    // 1) categories_index.json
     if(CATEGORIES_INDEX && CATEGORIES_INDEX.length){
       const freshIdx = await ghRequest(CATEGORIES_INDEX_FILE + "?ref=" + encodeURIComponent(LIVE_BRANCH));
       await ghPutJson(CATEGORIES_INDEX_FILE, CATEGORIES_INDEX, freshIdx.sha, "Update categories index");
-      // create empty json for brand-new category files if missing
       for(const c of CATEGORIES_INDEX){
         if(!c.file) continue;
         try{
@@ -1345,13 +1354,11 @@ window.saveSiteSettingsToGitHub = async function(){
           }catch(e2){}
         }
       }
-      // refresh picker
       const picker = document.getElementById("categoryPicker");
       if(picker){
         picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon||""} ${c.category}</option>`).join("");
       }
     }
-    // 2) settings.json about (optional)
     try{
       const owner = (document.getElementById("adminOwnerName")||{}).value || "";
       const msg = (document.getElementById("adminUrduMsg")||{}).value || "";
@@ -1384,7 +1391,7 @@ window.saveProductsToGitHub = async function(){
   if(st) st.textContent = "⏳ Saving…";
   try{
     if(!CFG || !CFG.token){
-      throw new Error("Open Admin connection and Save & Connect first");
+      throw new Error("Admin connection میں ٹوکن کنیکٹ کریں");
     }
     const fresh = await ghRequest(currentCategoryFile + "?ref=" + encodeURIComponent(LIVE_BRANCH));
     const payload = currentItems.map(it => {
@@ -1400,10 +1407,10 @@ window.saveProductsToGitHub = async function(){
       if(it.premium) obj.premium = true;
       return obj;
     });
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, "Update prices");
+    await ghPutJson(currentCategoryFile, payload, fresh.sha, "Update prices: " + currentCategoryFile);
     if(typeof markClean === "function") markClean();
     if(st) st.textContent = "✅ Saved";
-    showToast("✅ Saved successfully");
+    showToast("✅ ریٹس کامیابی سے محفوظ ہو گئے!");
   }catch(e){
     console.error(e);
     if(st) st.textContent = "❌ Could not save";

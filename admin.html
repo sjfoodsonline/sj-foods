@@ -988,10 +988,26 @@ function base64ToUtf8(b64){
 
 async function ghRequest(path, options){
   const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}`;
-  const res = await fetch(url, Object.assign({
-    headers: { "Authorization": "token " + CFG.token, "Accept": "application/vnd.github+json" }
-  }, options || {}));
-  if(!res.ok){ throw new Error(`GitHub API error (${res.status})`); }
+  const headers = {
+    "Authorization": "token " + String(CFG.token || "").trim(),
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "SJ-Foods-Admin"
+  };
+  const opts = Object.assign({}, options || {});
+  if(opts.body && typeof opts.body === "string") headers["Content-Type"] = "application/json";
+  opts.headers = Object.assign(headers, opts.headers || {});
+  const res = await fetch(url, opts);
+  if(!res.ok){
+    let detail = "";
+    try{ const j = await res.json(); detail = j.message || JSON.stringify(j); }catch(e){}
+    console.error("GH", res.status, detail);
+    if(res.status === 401) throw new Error("Token invalid — Reset, paste new token, Save & Connect");
+    if(res.status === 403) throw new Error("403 Forbidden — Token needs repo scope (classic) or Contents:Read/Write");
+    if(res.status === 404) throw new Error("File not found — check branch/repo name");
+    throw new Error((detail || "Request failed") + " (" + res.status + ")");
+  }
+  if(res.status === 204) return {};
   return res.json();
 }
 async function ghGetJson(path){
@@ -1000,10 +1016,31 @@ async function ghGetJson(path){
 }
 async function ghPutJson(path, obj, sha, message){
   const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  const branch = (CFG && CFG.branch) || "vendors_ledger";
-  const body = { message: message || "Update", content, branch };
-  if(sha) body.sha = sha;
-  return ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
+  const branches = [];
+  if(CFG && CFG.branch) branches.push(CFG.branch);
+  branches.push("vendors_ledger", "main");
+  const tried = [];
+  let lastErr = null;
+  for(const branch of branches){
+    if(tried.indexOf(branch) >= 0) continue;
+    tried.push(branch);
+    try{
+      // refresh sha for this branch if possible
+      let useSha = sha;
+      try{
+        const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+        const res = await fetch(url, { headers: { "Authorization": "Bearer " + CFG.token, "Accept": "application/vnd.github+json" } });
+        if(res.ok){ const d = await res.json(); useSha = d.sha; }
+      }catch(e){}
+      const body = { message: message || "Update", content, branch };
+      if(useSha) body.sha = useSha;
+      const result = await ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
+      CFG.branch = branch;
+      try{ saveConfig(CFG); }catch(e){}
+      return result;
+    }catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error("Save failed");
 }
 async function ghPutBinary(path, base64Content, message){
   let sha;

@@ -43,6 +43,10 @@
   .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
   .unit-row input.u-label{flex:1 1 120px;}
   .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
+
+  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
+  .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
+  .preset-pill:hover{background:var(--dark); color:#fff;}
   
   .savebar{
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
@@ -138,7 +142,6 @@
   window.showToast = showToast;
 
   let currentVendorId = localStorage.getItem("sj_vendor_id") || "";
-  let vendorDataCache = {};
   let currentCatalog = {};
   let activeCategory = "";
   let catalogDirty = false;
@@ -236,6 +239,8 @@
       return;
     }
 
+    const presets = ["KG", "آدھا کلو", "پاؤ", "دڑی (5 KG)", "Litre", "Bottle", "Pcs", "Dozen", "Weight", "Service", "Meter", "Carat", "Gold"];
+
     area.innerHTML = keys.map(k => {
       let it = itemsObj[k];
       if(!it.units) it.units = [{label: it.unit||"KG", rate: it.rate||0}];
@@ -244,19 +249,26 @@
           <div class="row-top">
             <div class="thumb-box">${it.image ? `<img src="${it.image}" style="width:100%;height:100%;object-fit:cover;">` : '🛒'}</div>
             <div class="row-fields">
-              <input type="text" value="${it.name||''}" placeholder="Product Name" oninput="updateItemField('${k}','name',this.value)">
+              <input type="text" value="${it.name||''}" placeholder="Product Name (Urdu)" oninput="updateItemField('${k}','name',this.value)">
               <input type="text" value="${it.name_roman||''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="updateItemField('${k}','name_roman',this.value)">
             </div>
           </div>
           <div class="units-box">
             ${it.units.map((u, ui) => `
               <div class="unit-row">
-                <input type="text" class="u-label" value="${u.label}" oninput="updateUnitField('${k}',${ui},'label',this.value)">
-                <input type="number" class="u-rate" value="${u.rate}" oninput="updateUnitRate('${k}',${ui},this.value)">
+                <input type="text" class="u-label" value="${u.label}" placeholder="Unit" oninput="updateUnitField('${k}',${ui},'label',this.value)">
+                <input type="number" class="u-rate" value="${u.rate}" placeholder="Rate" oninput="updateUnitRate('${k}',${ui},this.value)">
+                ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnit('${k}',${ui})">✕</button>` : ''}
               </div>
             `).join('')}
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="preset-pills">
+            ${presets.map(p => `<button type="button" class="preset-pill" onclick="addPresetUnit('${k}','${p}')">+ ${p}</button>`).join('')}
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addCustomUnit('${k}')">➕ Add Unit</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
             <label><input type="checkbox" ${it.available!==false?'checked':''} onchange="updateItemField('${k}','available',this.checked)"> Available</label>
             <button class="btn-danger" onclick="deleteVendorItem('${k}')">🗑️ Delete</button>
           </div>
@@ -284,11 +296,31 @@
         if(i === 0) return;
         let lbl = u.label.toLowerCase();
         if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
-        else if(lbl.includes("آدھا") || lbl.includes("500")) u.rate = Math.round(val / 2);
-        else if(lbl.includes("دڑی") || lbl.includes("5kg")) u.rate = Math.round(val * 5);
+        else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) u.rate = Math.round(val / 2);
+        else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) u.rate = Math.round(val * 5);
       });
       renderVendorProducts();
     }
+    markDirty();
+  }
+
+  window.addPresetUnit = function(k, label){
+    let it = currentCatalog[activeCategory][k];
+    it.units.push({label: label, rate: 0});
+    renderVendorProducts();
+    markDirty();
+  }
+
+  window.addCustomUnit = function(k){
+    let it = currentCatalog[activeCategory][k];
+    it.units.push({label: "", rate: 0});
+    renderVendorProducts();
+    markDirty();
+  }
+
+  window.removeUnit = function(k, ui){
+    currentCatalog[activeCategory][k].units.splice(ui, 1);
+    renderVendorProducts();
     markDirty();
   }
 

@@ -1,1208 +1,378 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="ur" dir="rtl" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Online — Vendor Panel</title>
+<title>SJ Online — Vendor Control Panel</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
     --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial,"Segoe UI",sans-serif; padding-bottom:40px;}
-  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:14px 16px; border-radius:0 0 16px 16px; display:flex; justify-content:space-between; align-items:center;}
-  header h1{font-size:17px; margin:0;}
-  header p{font-size:11px; opacity:.9; margin:2px 0 0;}
-  .wrap{max-width:480px; margin:0 auto; padding:14px;}
-  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px;}
-  .card h3{font-size:15px; color:var(--dark); margin:0 0 10px;}
-  label{display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; font-weight:bold;}
-  input, textarea, select{
-    width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px;
-    font-size:14px; font-weight:bold; font-family:inherit;
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding-bottom:110px; font-weight:bold;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
+  header h1{margin:0; font-size:18px;}
+  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
+
+  .wrap{padding:14px; max-width:720px; margin:0 auto; width:100%;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
+  
+  input[type=text], input[type=password], input[type=number], select, textarea{
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
+    font-size:13px; font-family:Arial, sans-serif; font-weight:bold; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
   }
-  .btn{background:var(--dark); color:#fff; border:none; border-radius:10px; padding:12px 16px; font-size:14px; font-weight:bold; width:100%; cursor:pointer; margin-top:10px;}
-  .btn:disabled{opacity:.55; cursor:not-allowed;}
-  .btn-sec{background:var(--leaf); color:var(--dark); border:1px solid var(--mid);}
-  .btn-danger{background:#B71C1C; color:#fff;}
-  .btn-sm{padding:8px 12px; font-size:12px; width:auto; margin:0;}
-  .toast{position:fixed; top:14px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; transition:.25s; z-index:99; font-weight:bold;}
-  .toast.show{opacity:1; top:20px;}
-  .toast.err{background:var(--price);}
-  .hidden{display:none !important;}
-  .cover-preview{width:100%; height:140px; object-fit:cover; border-radius:12px; background:var(--leaf); margin-bottom:10px; display:block;}
-  .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,.04);}
-  .prow-top{display:flex; gap:10px; align-items:flex-start;}
-  .prow-thumb{width:72px; height:72px; border-radius:14px; background:var(--leaf); overflow:hidden; flex-shrink:0; position:relative; border:1px solid var(--line);}
-  .prow-thumb img{width:100%; height:100%; object-fit:cover;}
-  .prow-thumb input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
-  .prow-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
-  .prow-fields input{margin:0; padding:10px 12px; font-size:14px; border-radius:10px;}
-  .unit-box{background:#F7F5EE; border-radius:12px; padding:10px; margin-top:10px;}
-  .unit-line{display:flex; gap:8px; margin-bottom:8px; align-items:center;}
-  .unit-line input{margin:0; padding:9px 10px; font-size:13px; border-radius:10px; border:1px solid var(--line); background:#fff;}
-  .unit-line .u-rate{width:88px; direction:ltr; text-align:left; font-weight:bold;}
-  .unit-line .u-label{flex:1; text-align:right;}
-  .unit-line .rm{background:#FFEBEE; color:#B71C1C; border:none; border-radius:10px; width:34px; height:34px; font-weight:bold; cursor:pointer;}
-  .flag-row{display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; font-size:12.5px; align-items:center;}
-  .flag-row label{display:flex; align-items:center; gap:5px; margin:0; font-weight:normal; color:var(--ink); font-size:12.5px;}
-  .btn-add-unit{background:#E8F5E9; color:var(--dark); border:none; border-radius:10px; padding:8px 14px; font-weight:bold; font-size:12.5px; cursor:pointer;}
-  .btn-auto{background:#1565C0; color:#fff; border:none; border-radius:10px; padding:8px 14px; font-weight:bold; font-size:12.5px; cursor:pointer;}
-  .btn-del{background:#FFEBEE; color:#B71C1C; border:none; border-radius:10px; padding:8px 12px; font-weight:bold; font-size:12.5px; cursor:pointer;}
-  .cat-bar{display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; align-items:center;}
-  .cat-bar select{flex:1; margin:0;}
-  .btn-cat{background:#1565C0; color:#fff; border:none; border-radius:10px; padding:10px 14px; font-weight:bold; font-size:12.5px; cursor:pointer;}
-  .btn-new{background:var(--mid); color:#fff; border:none; border-radius:12px; padding:12px; font-weight:bold; width:100%; cursor:pointer; margin-top:4px;}
-  .savebar{position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 14px; display:none; gap:8px; align-items:center; z-index:50; max-width:480px; margin:0 auto; box-shadow:0 -6px 18px rgba(0,0,0,.08);}
-  .savebar.show{display:flex;}
-  .savebar .status{flex:1; font-size:12.5px; color:var(--muted);}
-  .savebar .btn-save{background:var(--dark); color:#fff; border:none; border-radius:12px; padding:12px 18px; font-weight:bold; cursor:pointer;}
-  body{padding-bottom:90px;}
-  .vtabs{display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;}
-  .vtab{flex:1; min-width:90px; text-align:center; padding:10px 8px; border-radius:12px; border:1.5px solid var(--line); background:#fff; font-size:12px; font-weight:bold; color:var(--muted); cursor:pointer;}
-  .vtab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-  .vtab .badge{display:inline-block; background:var(--price); color:#fff; border-radius:10px; padding:1px 6px; font-size:10px; margin-right:4px;}
-  .vsec{display:none;}
-  .vsec.active{display:block;}
-  .login-box{max-width:360px; margin:40px auto 0;}
-  .status-pill{display:inline-block; font-size:11px; padding:3px 10px; border-radius:20px; font-weight:bold;}
-  .status-pending{background:#FFF3CD; color:#856404;}
-  .status-approved{background:#E8F5E9; color:#2E7D32;}
-  .status-blocked{background:#FFCDD2; color:#B71C1C;}
-  .note{font-size:12.5px; color:var(--muted); line-height:1.55; margin-bottom:10px;}
-  .file-btn{display:inline-block; background:var(--leaf); color:var(--dark); border:1px solid var(--mid); border-radius:8px; padding:8px 12px; font-size:12px; font-weight:bold; cursor:pointer;}
-  .file-btn input{display:none;}
-  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
-  .order-card{border:1.5px solid var(--line); border-radius:12px; margin-bottom:10px; background:#fff; font-size:13px; line-height:1.5; overflow:hidden;}
-  .order-card b{color:var(--dark);}
-  .order-card.pending{border-color:#2E7D32; background:#E8F5E9; animation:pulse 1.2s infinite;}
-  .order-card.completed{border-color:#A5D6A7; background:#F1F8E9;}
-  .order-card.cancelled{border-color:#EF9A9A; background:#FFEBEE; opacity:.9;}
-  .order-head{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; user-select:none;}
-  .order-body{display:none; padding:0 12px 12px; border-top:1px dashed var(--line);}
-  .order-card.open .order-body{display:block;}
-  .order-card.open .order-chevron{transform:rotate(180deg);}
-  .order-chevron{transition:transform .2s; font-size:12px; color:var(--muted);}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,125,50,.45);}70%{box-shadow:0 0 0 10px rgba(46,125,50,0);}100%{box-shadow:0 0 0 0 rgba(46,125,50,0);}}
-  .install-banner{background:linear-gradient(135deg,var(--accent),#E65100); color:#fff; padding:12px 14px; border-radius:12px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;}
-  .install-banner button{background:#fff; color:var(--accent); border:none; border-radius:8px; padding:8px 14px; font-weight:bold; font-size:13px; cursor:pointer;}
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
+  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
+  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; width:100%;}
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px;}
+  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px;}
+
+  .tabs{display:flex; gap:6px; margin-bottom:14px;}
+  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:11px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+
+  .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;}
+  .row-top{display:flex; align-items:center; gap:8px;}
+  .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
+
+  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
+  .unit-row input.u-label{flex:1 1 120px;}
+  .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
+  
+  .savebar{
+    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
+    padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto;
+  }
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:200;}
+  .toast.show{opacity:1;}
+  .toast.err{background:#B71C1C;}
+  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
 </style>
-<link rel="manifest" href="vendor-manifest.json">
-<meta name="theme-color" content="#153A20">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="SJ Vendor">
 </head>
 <body>
 
-<!-- ========== LOGIN ========== -->
-<div id="loginScreen" class="wrap login-box">
-  <div class="card">
-    <h3 style="text-align:center;">🔐 Vendor Login</h3>
-    <p class="note" style="text-align:center;">اپنا Vendor ID اور PIN ڈالیں</p>
-    <label>Vendor ID</label>
-    <input type="text" id="loginId" placeholder="v12345678" dir="ltr" style="text-align:left">
-    <label>PIN</label>
-    <input type="password" id="loginPin" placeholder="****" dir="ltr" style="text-align:left" maxlength="6">
-    <button class="btn" id="btnLogin" onclick="doLogin()">لاگ ان</button>
-    <button class="btn btn-sec" onclick="location.href='vendor-register.html'">نیا اکاؤنٹ بنائیں</button>
-    <button class="btn btn-sec" onclick="location.href='index.html'">← مین سائٹ</button>
+<header>
+  <h1>🏪 Vendor Control Panel</h1>
+  <p>Manage your products, rates & live orders</p>
+</header>
+
+<div class="wrap">
+  <!-- LOGIN SECTION -->
+  <div id="loginCard" class="card">
+    <h3>🔐 Vendor Login</h3>
+    <label>Enter your Shop ID or Phone Number</label>
+    <input type="text" id="vendorInputId" placeholder="e.g. v002 or 03000000000">
+    <button class="btn-primary" onclick="loginVendor()">Login to Panel</button>
+    <div style="margin-top:10px; text-align:center;">
+      <a href="vendor-register.html" style="color:var(--mid); font-size:13px;">Don't have a shop? Register here</a>
+    </div>
   </div>
-</div>
 
-<!-- ========== DASHBOARD ========== -->
-<div id="dashScreen" class="hidden">
-  <header>
-    <div>
-      <h1 id="dashShopName">شاپ</h1>
-      <p id="dashVendorId" dir="ltr"></p>
-    </div>
-    <button class="btn btn-sm" style="background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.4); width:auto;" onclick="doLogout()">لاگ آؤٹ</button>
-  </header>
-
-  <div class="wrap">
-    <div class="install-banner" id="installBanner" style="display:none;">
-      <span style="font-size:13px; font-weight:bold;">📱 ایپ انسٹال کریں — آرڈر نوٹیفکیشن کے لیے</span>
-      <button id="installBtn" onclick="triggerInstall()">انسٹال</button>
-    </div>
-
-    <div class="vtabs">
-      <div class="vtab active" id="tabOrders" onclick="switchVendorTab('orders')">📥 آرڈرز <span class="badge" id="pendingBadge" style="display:none;">0</span></div>
-      <div class="vtab" id="tabProducts" onclick="switchVendorTab('products')">📦 پروڈکٹس</div>
-      <div class="vtab" id="tabShop" onclick="switchVendorTab('shop')">⚙️ شاپ سیٹنگ</div>
-    </div>
-
-    <!-- TAB: ORDERS (main) -->
-    <div class="vsec active" id="secOrders">
-      <div class="card">
-        <h3>🧾 لائیو آرڈرز</h3>
-        <p class="note">نئے آرڈر سبز بلنک کریں گے۔ مکمل ہونے تک ہر 10 منٹ الرٹ۔</p>
-        <div id="ordersList"></div>
-        <p id="noOrders" class="note" style="text-align:center;">ابھی کوئی آرڈر نہیں</p>
-        <button class="btn btn-sec btn-sm" style="margin-top:8px;" onclick="loadOrders()">🔄 ریفریش</button>
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboardSec" style="display:none;">
+    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h3 id="shopTitleDisplay" style="margin:0;">Shop Name</h3>
+        <p id="shopStatusDisplay" style="margin:2px 0 0; font-size:11px; color:var(--mid);">Status: Approved</p>
       </div>
+      <button class="btn-danger" style="padding:6px 10px;" onclick="logoutVendor()">Logout</button>
     </div>
 
-    <!-- TAB: PRODUCTS -->
-    <div class="vsec" id="secProducts">
+    <div class="tabs">
+      <div class="tab active" id="tabOrders" onclick="switchVendorTab('orders')">📥 Live Orders</div>
+      <div class="tab" id="tabCatalog" onclick="switchVendorTab('catalog')">🏷️ Products & Rates</div>
+    </div>
+
+    <!-- TAB 1: ORDERS -->
+    <div id="secVendorOrders">
+      <div id="vendorOrdersArea"><div class="loading">⏳ Loading orders...</div></div>
+    </div>
+
+    <!-- TAB 2: CATALOG -->
+    <div id="secVendorCatalog" style="display:none;">
       <div class="card">
-        <h3>📦 پروڈکٹس و ریٹس</h3>
-        <div class="cat-bar">
-          <select id="catFilter" onchange="renderItems()">
-            <option value="">سب کیٹگریز</option>
-          </select>
-          <button class="btn-cat" type="button" onclick="promptNewCategory()">📁 کیٹگری</button>
+        <label>Select Category</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="newCatName" placeholder="New Category Name (e.g. سبزی, Beverages)">
+          <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="addNewCategory()">➕ Add</button>
         </div>
-        <button class="btn-new" type="button" onclick="addBlankProduct()">➕ نیا پروڈکٹ</button>
-        <div id="itemsList" style="margin-top:12px;"></div>
-        <p id="noItems" class="note" style="text-align:center;">ابھی کوئی آئٹم نہیں</p>
+        <select id="vendorCategoryPicker" onchange="loadVendorCategory(this.value)" style="margin-top:8px;"></select>
       </div>
-    </div>
 
-    <!-- TAB: SHOP SETTINGS -->
-    <div class="vsec" id="secShop">
-      <div class="card" id="statusCard">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span>اکاؤنٹ سٹیٹس</span>
-          <span id="statusPill" class="status-pill">—</span>
-        </div>
-        <p class="note" id="statusNote" style="margin:8px 0 0;"></p>
-      </div>
-      <div class="card">
-        <h3>📞 پیمنٹ / رابطہ</h3>
-        <p class="note">کسٹمر کو یہی نمبر دکھے گا — لازمی بھریں</p>
-        <label>فون</label>
-        <input type="text" id="vdPhone" placeholder="03XXXXXXXXX" dir="ltr" style="text-align:left">
-        <label>WhatsApp (آرڈر یہاں)</label>
-        <input type="text" id="vdWhatsapp" placeholder="03XX یا 923..." dir="ltr" style="text-align:left">
-        <label>EasyPaisa / JazzCash</label>
-        <input type="text" id="vdPay" placeholder="03XXXXXXXXX" dir="ltr" style="text-align:left">
-        <label>بینک تفصیل</label>
-        <input type="text" id="vdBank" placeholder="Bank — Title — Account">
-        <button class="btn btn-sec" type="button" onclick="saveOrderDetails()">💾 سیو</button>
-      </div>
-      <div class="card">
-        <h3>🖼️ شاپ کور</h3>
-        <img id="coverPreview" class="cover-preview" src="" alt="Cover" onerror="this.style.display='none'">
-        <label class="file-btn">📷 کور اپلوڈ
-          <input type="file" id="coverFile" accept="image/*" onchange="uploadCover(this)">
-        </label>
-        <button class="btn btn-sec btn-sm" style="margin-top:8px;" onclick="clearCover()">کور ہٹائیں</button>
-      </div>
-      <div class="card">
-        <h3>🏷️ ٹیگ لائن</h3>
-        <input type="text" id="shopTagline" placeholder="تازہ سبزی · تیز ڈیلیوری">
-        <button class="btn btn-sec" onclick="saveTagline()">💾 سیو</button>
-      </div>
-      <button class="btn btn-sec" onclick="location.href='index.html'">مین سائٹ پر شاپ دیکھیں</button>
+      <div id="vendorProductsArea"><div class="loading">⏳ Loading products...</div></div>
+      <button class="btn-secondary" style="width:100%; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addVendorProduct()">➕ Add New Product</button>
     </div>
   </div>
 </div>
 
-<div class="savebar" id="vendorSaveBar">
-  <div class="status" id="saveStatusTxt">تبدیلیاں محفوظ کریں</div>
-  <button class="btn-save" type="button" onclick="saveAllItems()">💾 Save</button>
+<div class="savebar" id="saveBar" style="display:none;">
+  <div class="status" id="saveStatus" style="flex:1; font-size:12px; color:var(--price);">⚠️ Unsaved changes</div>
+  <button class="btn-primary" style="width:auto; min-width:110px;" onclick="saveVendorCatalog()">💾 Save Changes</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-window.safeStorage = (function(){
-  var mem = {};
-  function can(){ try{ var k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } }
-  var ok = can();
-  return {
-    getItem: function(k){ try{ return ok ? localStorage.getItem(k) : (mem[k]||null); }catch(e){ return mem[k]||null; } },
-    setItem: function(k,v){ try{ if(ok) localStorage.setItem(k,v); else mem[k]=String(v); }catch(e){ mem[k]=String(v); } },
-    removeItem: function(k){ try{ if(ok) localStorage.removeItem(k); else delete mem[k]; }catch(e){ delete mem[k]; } }
-  };
-})();
-const DB = "https://sj-foods-default-rtdb.firebaseio.com";
-let VENDOR = null; // current logged vendor object + id
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-function toast(msg, err){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show" + (err ? " err" : "");
-  setTimeout(() => t.className = "toast", err ? 5200 : 2800);
-}
+  const firebaseConfig = { databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  window.dbInstance = db;
+  window.dbRef = ref;
+  window.dbUpdate = update;
+  window.dbSet = set;
 
-/* ---------- Firebase REST helpers ---------- */
-function firebaseErrorMessage(status, data, action){
-  const raw = data && (data.error || data.message) ? String(data.error || data.message) : "";
-  const msg = raw || "";
-  if(status === 401) return action + " فیل: Firebase نے اجازت/Authentication رد کر دی (401)۔";
-  if(status === 403) return action + " فیل: Firebase Permission Denied (403) — Database Rules چیک کریں۔";
-  if(status === 404) return action + " فیل: Firebase میں مطلوبہ راستہ نہیں ملا (404)۔";
-  if(status === 409) return action + " فیل: Firebase conflict (409)۔ دوبارہ کوشش کریں۔";
-  if(status === 429) return action + " فیل: بہت زیادہ requests آ رہی ہیں (429)۔ چند سیکنڈ بعد دوبارہ کوشش کریں۔";
-  if(status >= 500) return action + " فیل: Firebase server error (" + status + ")۔";
-  return action + " فیل (" + status + ")" + (msg ? ": " + msg : "۔");
-}
+  function showToast(msg, isErr){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "toast show" + (isErr ? " err" : "");
+    setTimeout(()=> t.className = "toast", 2600);
+  }
+  window.showToast = showToast;
 
-async function firebaseRequest(path, options, action){
-  const opts = Object.assign({}, options || {});
-  const url = DB + path;
-  try{
-    const res = await fetch(url, opts);
-    const text = await res.text();
-    let data = null;
-    if(text){
-      try{ data = JSON.parse(text); }catch(e){ data = text; }
+  let currentVendorId = localStorage.getItem("sj_vendor_id") || "";
+  let vendorDataCache = {};
+  let currentCatalog = {};
+  let activeCategory = "";
+  let catalogDirty = false;
+
+  window.markDirty = function(){
+    catalogDirty = true;
+    document.getElementById("saveBar").style.display = "flex";
+  }
+
+  window.loginVendor = async function(){
+    let id = document.getElementById("vendorInputId").value.trim();
+    if(!id){ alert("Please enter your Shop ID or Phone"); return; }
+    showToast("Checking...");
+    try{
+      const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + id + ".json");
+      const v = await res.json();
+      if(!v){ alert("Shop not found!"); return; }
+      if(v.blocked){ alert("Your shop has been blocked by admin."); return; }
+      
+      currentVendorId = id;
+      localStorage.setItem("sj_vendor_id", id);
+      initVendorDashboard(v);
+    }catch(e){ alert("Login failed"); }
+  }
+
+  window.logoutVendor = function(){
+    localStorage.removeItem("sj_vendor_id");
+    location.reload();
+  }
+
+  if(currentVendorId){
+    fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + currentVendorId + ".json")
+      .then(r => r.json())
+      .then(v => {
+        if(v && !v.blocked) initVendorDashboard(v);
+        else logoutVendor();
+      }).catch(() => {});
+  }
+
+  function initVendorDashboard(v){
+    document.getElementById("loginCard").style.display = "none";
+    document.getElementById("dashboardSec").style.display = "block";
+    document.getElementById("shopTitleDisplay").textContent = v.shop_name || currentVendorId;
+    document.getElementById("shopStatusDisplay").textContent = "Status: " + (v.status || "approved");
+    
+    currentCatalog = v.items || {};
+    initVendorCategories();
+    watchVendorOrders();
+  }
+
+  window.switchVendorTab = function(tab){
+    document.getElementById("tabOrders").className = "tab" + (tab==='orders'?' active':'');
+    document.getElementById("tabCatalog").className = "tab" + (tab==='catalog'?' active':'');
+    document.getElementById("secVendorOrders").style.display = (tab==='orders'?'block':'none');
+    document.getElementById("secVendorCatalog").style.display = (tab==='catalog'?'block':'none');
+    document.getElementById("saveBar").style.display = (tab==='catalog' && catalogDirty)?'flex':'none';
+  }
+
+  function initVendorCategories(){
+    const picker = document.getElementById("vendorCategoryPicker");
+    const cats = Object.keys(currentCatalog);
+    if(cats.length === 0){
+      currentCatalog = { "سبزی": {} };
+      cats.push("سبزی");
     }
-    if(!res.ok){
-      console.error("Firebase API Error", { action, status: res.status, url, response: data });
-      throw new Error(firebaseErrorMessage(res.status, data, action || "Firebase request"));
-    }
-    return { status: res.status, data: data };
-  }catch(e){
-    console.error("Firebase request failed", { action, url, error: e });
-    if(e && e.message && e.message.indexOf(" فیل") !== -1) throw e;
-    throw new Error((action || "Firebase request") + " فیل: نیٹ ورک/Firebase سے رابطہ نہیں ہو سکا۔ انٹرنیٹ اور Firebase Rules چیک کریں۔");
+    picker.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join("");
+    activeCategory = cats[0];
+    renderVendorProducts();
   }
-}
 
-function stableStringify(value){
-  if(value === null || typeof value !== "object") return JSON.stringify(value);
-  if(Array.isArray(value)) return "[" + value.map(stableStringify).join(",") + "]";
-  return "{" + Object.keys(value).sort().map(function(k){
-    return JSON.stringify(k) + ":" + stableStringify(value[k]);
-  }).join(",") + "}";
-}
-
-async function firebaseWriteAndVerify(path, value, method, action){
-  await firebaseRequest(path, {
-    method: method || "PUT",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(value)
-  }, action || "Save");
-
-  // Verify that Firebase actually stored the value.
-  const check = await firebaseRequest(path, { method: "GET" }, (action || "Save") + " verification");
-  if(stableStringify(check.data) !== stableStringify(value)){
-    console.error("Firebase verification mismatch", { path, expected: value, received: check.data });
-    throw new Error((action || "Save") + " مکمل نہیں ہوا: Firebase نے محفوظ شدہ data کی تصدیق نہیں کی۔");
-  }
-  return check.data;
-}
-
-async function firebaseDeleteAndVerify(path, action){
-  await firebaseRequest(path, { method: "DELETE" }, action || "Delete");
-  const check = await firebaseRequest(path, { method: "GET" }, (action || "Delete") + " verification");
-  if(check.data !== null){
-    throw new Error((action || "Delete") + " مکمل نہیں ہوا: Firebase میں data ابھی موجود ہے۔");
-  }
-  return true;
-}
-
-/* ---------- Image compress (client-side) ---------- */
-function compressImage(file, maxW, maxH, quality){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let w = img.width, h = img.height;
-        if(w > maxW || h > maxH){
-          const r = Math.min(maxW / w, maxH / h);
-          w = Math.round(w * r);
-          h = Math.round(h * r);
-        }
-        const canvas = document.createElement("canvas");
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", quality || 0.72));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ---------- Login ---------- */
-async function doLogin(){
-  const id = document.getElementById("loginId").value.trim();
-  const pin = document.getElementById("loginPin").value.trim();
-  if(!id || !pin){ toast("ID اور PIN دونوں لکھیں", true); return; }
-
-  const btn = document.getElementById("btnLogin");
-  btn.disabled = true; btn.textContent = "چیک ہو رہا ہے...";
-
-  try{
-    const result = await firebaseRequest("/vendors/" + encodeURIComponent(id) + ".json", { method: "GET" }, "Vendor login");
-    const data = result.data;
-    if(!data || !data.pin){ toast("Vendor ID غلط ہے", true); btn.disabled=false; btn.textContent="لاگ ان"; return; }
-    if(String(data.pin) !== String(pin)){ toast("PIN غلط ہے", true); btn.disabled=false; btn.textContent="لاگ ان"; return; }
-    if(data.blocked){ toast("اکاؤنٹ بلاک ہے — ایڈمن سے رابطہ کریں", true); btn.disabled=false; btn.textContent="لاگ ان"; return; }
-
-    VENDOR = { id, ...data };
-    if(!VENDOR.items) VENDOR.items = {};
-    safeStorage.setItem("sj_vendor_session", JSON.stringify({ id, pin }));
-    showDashboard();
-  }catch(e){
-    toast(e.message || "نیٹ ورک / Firebase مسئلہ", true);
-    btn.disabled = false; btn.textContent = "لاگ ان";
-  }
-}
-
-function doLogout(){
-  safeStorage.removeItem("sj_vendor_session");
-  VENDOR = null;
-  document.getElementById("dashScreen").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-  document.getElementById("loginId").value = "";
-  document.getElementById("loginPin").value = "";
-  document.getElementById("btnLogin").disabled = false;
-  document.getElementById("btnLogin").textContent = "لاگ ان";
-}
-
-/* ---------- Dashboard ---------- */
-window.switchVendorTab = function(name){
-  ["orders","products","shop"].forEach(function(n){
-    var t = document.getElementById("tab" + n.charAt(0).toUpperCase() + n.slice(1));
-    var s = document.getElementById("sec" + n.charAt(0).toUpperCase() + n.slice(1));
-    if(t) t.classList.toggle("active", n === name);
-    if(s) s.classList.toggle("active", n === name);
-  });
-  // fix tab ids: tabOrders, tabProducts, tabShop
-  document.getElementById("tabOrders").classList.toggle("active", name==="orders");
-  document.getElementById("tabProducts").classList.toggle("active", name==="products");
-  document.getElementById("tabShop").classList.toggle("active", name==="shop");
-  document.getElementById("secOrders").classList.toggle("active", name==="orders");
-  document.getElementById("secProducts").classList.toggle("active", name==="products");
-  document.getElementById("secShop").classList.toggle("active", name==="shop");
-  var sb = document.getElementById("vendorSaveBar");
-  if(sb) sb.classList.toggle("show", name==="products");
-  if(name==="orders") loadOrders();
-  if(name==="products") renderItems();
-};
-
-/* Web Audio beep for new/pending orders */
-function playOrderBeep(){
-  try{
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var o = ctx.createOscillator();
-    var g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value = 880;
-    g.gain.value = 0.15;
-    o.start();
-    setTimeout(function(){ o.stop(); ctx.close(); }, 350);
-  }catch(e){}
-  if(navigator.vibrate) try{ navigator.vibrate([200,100,200]); }catch(e){}
-}
-
-window._pendingOrderTimer = null;
-function startPendingOrderWatch(){
-  if(window._pendingOrderTimer) clearInterval(window._pendingOrderTimer);
-  window._pendingOrderTimer = setInterval(function(){
-    if(!VENDOR) return;
-    loadOrders(true); // silent refresh + beep if pending
-  }, 10 * 60 * 1000); // 10 minutes
-}
-
-function showDashboard(){
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("dashScreen").classList.remove("hidden");
-  document.getElementById("dashShopName").textContent = VENDOR.shop_name || "شاپ";
-  var tl = document.getElementById("shopTagline");
-  if(tl) tl.value = VENDOR.tagline || "";
-  document.getElementById("dashVendorId").textContent = VENDOR.id;
-
-  const st = VENDOR.status || "pending";
-  const pill = document.getElementById("statusPill");
-  pill.textContent = st === "approved" ? "Approved ✓" : st === "blocked" ? "Blocked" : "Pending";
-  pill.className = "status-pill " + (st === "approved" ? "status-approved" : st === "blocked" ? "status-blocked" : "status-pending");
-  document.getElementById("statusNote").textContent =
-    st === "approved" ? "آپ کی شاپ مین سائٹ پر نظر آ رہی ہے۔" :
-    st === "blocked" ? "اکاؤنٹ بلاک ہے۔ ایڈمن سے رابطہ کریں。" :
-    "منظوری کا انتظار ہے — منظوری کے بعد مین سائٹ پر دکھے گی۔";
-
-  // Cover
-  var elP = document.getElementById("vdPhone"); if(elP) elP.value = VENDOR.phone || "";
-  var elW = document.getElementById("vdWhatsapp"); if(elW) elW.value = VENDOR.whatsapp || "";
-  var elPay = document.getElementById("vdPay"); if(elPay) elPay.value = VENDOR.pay_number || "";
-  var elB = document.getElementById("vdBank"); if(elB) elB.value = VENDOR.bank_detail || "";
-  const cover = getEffectiveCover();
-  const img = document.getElementById("coverPreview");
-  if(cover){ img.src = cover; img.style.display = "block"; }
-  else { img.style.display = "none"; }
-
-  renderItems();
-  loadOrders();
-  startPendingOrderWatch();
-  switchVendorTab("orders");
-  checkInstall();
-}
-
-function getEffectiveCover(){
-  if(VENDOR.cover_image) return VENDOR.cover_image;
-  // fallback: first item that has image
-  const items = VENDOR.items || {};
-  for(const k of Object.keys(items)){
-    if(items[k] && items[k].image) return items[k].image;
-  }
-  return "";
-}
-
-/* ---------- Cover upload ---------- */
-async function uploadCover(input){
-  const file = input.files && input.files[0];
-  if(!file) return;
-  if(file.size > 8 * 1024 * 1024){ toast("تصویر 8MB سے کم رکھیں", true); return; }
-
-  toast("تصویر تیار ہو رہی ہے...");
-  try{
-    const dataUrl = await compressImage(file, 900, 500, 0.7);
-    // Save data URL directly (small after compress). For production can switch to free host.
-    await saveVendorField("cover_image", dataUrl);
-    VENDOR.cover_image = dataUrl;
-    document.getElementById("coverPreview").src = dataUrl;
-    document.getElementById("coverPreview").style.display = "block";
-    toast("کور سیو ہو گئی ✓");
-  }catch(e){
-    toast(e.message || "کور اپلوڈ فیل", true);
-  }
-  input.value = "";
-}
-
-async function clearCover(){
-  try{
-    await saveVendorField("cover_image", "");
-    VENDOR.cover_image = "";
-    const img = document.getElementById("coverPreview");
-    const fallback = getEffectiveCover();
-    if(fallback){ img.src = fallback; img.style.display = "block"; }
-    else { img.style.display = "none"; }
-    toast("کور ہٹا دی گئی ✓");
-  }catch(e){
-    toast(e.message || "کور نہیں ہٹائی جا سکی", true);
-  }
-}
-
-/* ---------- Products (same flow as SJ Foods admin) ---------- */
-function refreshCatFilter(){
-  const sel = document.getElementById("catFilter");
-  if(!sel) return;
-  const cur = sel.value;
-  const cats = {};
-  Object.values(VENDOR.items || {}).forEach(it => { if(it.category) cats[it.category] = true; });
-  const list = Object.keys(cats).sort();
-  sel.innerHTML = '<option value="">سب کیٹگریز</option>' + list.map(c => `<option value="${c}">${c}</option>`).join("");
-  if(cur) sel.value = cur;
-}
-
-function renderItems(){
-  const list = document.getElementById("itemsList");
-  const items = VENDOR.items || {};
-  let keys = Object.keys(items);
-  const filter = (document.getElementById("catFilter") && document.getElementById("catFilter").value) || "";
-  if(filter) keys = keys.filter(k => (items[k].category||"") === filter);
-  document.getElementById("noItems").style.display = keys.length ? "none" : "block";
-  refreshCatFilter();
-
-  list.innerHTML = keys.map(k => {
-    const it = items[k];
-    if(!it.units || !it.units.length) it.units = [{label: it.unit||"KG", rate: it.rate||0}];
-    const manual = it.manualOverride === true;
-    const unitsHtml = it.units.map((u, ui) =>
-      `<div class="unit-line">
-        <button type="button" class="rm" onclick="removeUnit('${k}',${ui})" title="ہٹائیں">✕</button>
-        <input class="u-rate" type="number" min="0" step="any" value="${u.rate||0}" onchange="setUnitField('${k}',${ui},'rate',this.value); if(!VENDOR.items['${k}'].manualOverride) autoCalcFromBase('${k}'); markDirty();">
-        <input class="u-label" type="text" value="${u.label||""}" onchange="setUnitField('${k}',${ui},'label',this.value); markDirty();">
-      </div>`
-    ).join("");
-    return `<div class="product-row" id="item-${k}">
-      <div class="prow-top">
-        <div class="prow-fields" style="order:1;">
-          <input type="text" value="${it.name||""}" placeholder="نام (اردو) — مثلاً آلو" onchange="VENDOR.items['${k}'].name=this.value; markDirty();">
-          <input type="text" value="${it.name_roman||""}" placeholder="Roman — Aloo" dir="ltr" style="text-align:left" onchange="VENDOR.items['${k}'].name_roman=this.value; markDirty();">
-          <input type="text" value="${it.category||"سامان"}" placeholder="کیٹگری: سبزیاں / زمرد / جوتے / کپڑے..." onchange="onCategoryChange('${k}', this.value)">
-          <div style="font-size:11px;color:#2E7D32;margin-top:4px;">یونٹ کیٹگری سے: <b>${(detectPresetForItem(it))}</b> — غلط KG ہو تو کیٹگری درست لکھیں یا ٹیمپلیٹ دبائیں</div>
-        </div>
-        <div class="prow-thumb" title="تصویر بدلیں" style="order:2;">
-          ${it.image?`<img src="${it.image}">`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:26px;color:var(--muted);">🖼️</div>`}
-          <input type="file" accept="image/*" onchange="uploadItemImage('${k}',this)">
-        </div>
-      </div>
-      <div style="background:#FFF8E1;border-radius:10px;padding:8px 10px;margin-top:8px;font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <label style="margin:0;font-weight:normal;display:flex;align-items:center;gap:4px;">
-          <input type="checkbox" ${manual?"checked":""} onchange="VENDOR.items['${k}'].manualOverride=this.checked; markDirty();">
-          🔒 آٹو ریٹ بند (خود قیمت لکھیں)
-        </label>
-      </div>
-      <div class="unit-box">
-        <div style="font-size:12px;font-weight:bold;color:var(--dark);margin-bottom:6px;">① فروخت کا یونٹ + قیمت (روپے) — گاہک یہی چنے گا</div>
-        ${unitsHtml}
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-          <button type="button" class="btn-add-unit" onclick="addUnit('${k}')">➕ نیا یونٹ</button>
-          <button type="button" class="btn-auto" onclick="autoCalcUnits('${k}')">⚡ Auto Calc (صرف وزن/لیٹر)</button>
-        </div>
-        <button type="button" class="btn-add-unit" style="margin-top:8px;width:100%;background:#1B5E20;color:#fff;" onclick="applyUnitPreset('${k}', detectPresetForItem(VENDOR.items['${k}']))">✨ صحیح یونٹ لگاؤ (زیور = صرف Piece)</button>
-        <div style="margin-top:8px;font-size:11px;color:var(--muted);font-weight:bold;">یا ٹیمپلیٹ خود چنیں:</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','weight')">🥬 وزن KG</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','liquid')">🧴 لیٹر</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','bottle')">🍾 بوتل</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','pcs')">📦 عدد</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','dozen')">🥚 درجن</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','clothes')">👗 کپڑے</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','shoes')">👟 جوتے</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','fabric')">🧵 میٹر</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','cosmetics')">💄 کاسمیٹکس</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','pharmacy')">💊 دوا</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','electronics')">📱 الیکٹرانکس</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','hardware')">🔧 ہارڈویئر</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','gold')">🥇 سونا (فی تولہ/گرام)</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','one_price')">💎 ایک قیمت (پتھر/زیور/خاص)</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','service')">🛠️ سروس</button>
-          <button type="button" class="btn-add-unit" style="font-size:10px;padding:5px 7px;" onclick="applyUnitPreset('${k}','custom')">✏️ کسٹم</button>
-        </div>
-      </div>
-
-      <details style="margin-top:10px;border:1.5px solid #C8E6C9;border-radius:12px;padding:10px;background:#FAFFF8;">
-        <summary style="cursor:pointer;font-weight:bold;color:var(--dark);">② وضاحت / سائز / وزن / کوالٹی (اختیاری — گاہک کو دکھے گی)</summary>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;dir:ltr;" dir="ltr">
-          <label style="font-size:11px;">Size / سائز<br><input dir="ltr" type="text" value="${it.spec_size||''}" placeholder="e.g. 16 / 42 / L" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_size',this.value)"></label>
-          <label style="font-size:11px;">Color / رنگ<br><input dir="ltr" type="text" value="${it.spec_color||''}" placeholder="Green / Black" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_color',this.value)"></label>
-          <label style="font-size:11px;">Material / Metal<br><input dir="ltr" type="text" value="${it.spec_material||''}" placeholder="Silver 925 / Gold 22K / Cotton" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_material',this.value)"></label>
-          <label style="font-size:11px;">Weight / وزن<br><input dir="ltr" type="text" value="${it.spec_weight||''}" placeholder="3.2g or 1.5 carat" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_weight',this.value)"></label>
-          <label style="font-size:11px;">Quality / کوالٹی<br><input dir="ltr" type="text" value="${it.spec_quality||''}" placeholder="AAA / Natural / New" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_quality',this.value)"></label>
-          <label style="font-size:11px;">Shape / Design<br><input dir="ltr" type="text" value="${it.spec_shape||''}" placeholder="Oval / Round / Handmade" style="width:100%;padding:7px;border-radius:8px;border:1px solid #ccc;" onchange="setSpec('${k}','spec_shape',this.value)"></label>
-        </div>
-        <button type="button" class="btn-add-unit" style="margin-top:8px;width:100%;" onclick="buildExtraFromSpecs('${k}')">📋 وضاحت سے تفصیل بنائیں</button>
-      </details>
-
-      ${ it.premium ? `
-      <details style="margin-top:10px;padding:10px;background:#FFF8E1;border:1px solid #FFE082;border-radius:12px;font-size:12px;" dir="ltr">
-        <summary style="cursor:pointer;font-weight:bold;" dir="rtl">💎 قیمتی آئٹم — قیمت کا حساب (کلک)</summary>
-        <p style="margin:8px 0;font-size:11px;color:#5D4037;" dir="rtl">کیریٹ/گرام <b>وضاحت</b> ہیں، الگ فروخت یونٹ نہیں۔ حساب لگا کر <b>ایک Piece قیمت</b> لگے گی۔</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-          <label>Stone carat<br><input type="number" step="0.01" id="j_ct_${k}" value="${it.j_carat||''}" placeholder="1.5" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-          <label>Rs per carat<br><input type="number" id="j_ct_rate_${k}" value="${it.j_carat_rate||''}" placeholder="12000" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-          <label>Metal grams (0=stone only)<br><input type="number" step="0.01" id="j_g_${k}" value="${it.j_gram||''}" placeholder="0" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-          <label>Rs per gram<br><input type="number" id="j_g_rate_${k}" value="${it.j_gram_rate||''}" placeholder="200" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-          <label>Making charges<br><input type="number" id="j_make_${k}" value="${it.j_making||''}" placeholder="0" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-          <label>Note / size<br><input type="text" id="j_size_${k}" value="${it.j_size||''}" placeholder="ring 16 / loose" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;"></label>
-        </div>
-        <button type="button" class="btn-add-unit" style="margin-top:8px;width:100%;background:#1B5E20;color:#fff;" onclick="calcUniqueJewelry('${k}')">Calculate → set Piece price</button>
-      </details>` : ``}
-
-      <div style="margin-top:8px;">
-        <label style="font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <input type="checkbox" ${it.show_detail!==false?"checked":""} onchange="VENDOR.items['${k}'].show_detail=this.checked; markDirty(); renderItems();">
-          📋 دکان پر تفصیل دکھائیں
-        </label>
-        <textarea dir="auto" style="width:100%;min-height:52px;border:1.5px solid var(--line);border-radius:10px;padding:8px;font-size:13px;${it.show_detail===false?'opacity:.45;':''}" placeholder="Size, weight, material, quality..." onchange="VENDOR.items['${k}'].extra_text=this.value; markDirty();">${it.extra_text||""}</textarea>
-      </div>
-      <div class="flag-row">
-        <button type="button" class="btn-del" onclick="deleteItem('${k}')">🗑️ حذف کریں</button>
-        <label><input type="checkbox" ${it.featured?"checked":""} onchange="VENDOR.items['${k}'].featured=this.checked; markDirty();"> ⭐ نمایاں</label>
-        <label><input type="checkbox" ${it.available!==false?"checked":""} onchange="VENDOR.items['${k}'].available=this.checked; markDirty();"> ✅ دستیاب</label>
-        <label><input type="checkbox" ${it.premium?"checked":""} onchange="VENDOR.items['${k}'].premium=this.checked; markDirty();"> 💎 مہنگا / خاص (کال یا وزٹ)</label>
-      </div>
-    </div>`;
-  }).join("");
-}
-function markDirty(){
-  const s = document.getElementById("saveStatusTxt");
-  if(s) s.textContent = "⚠️ تبدیلیاں محفوظ نہیں — Save دبائیں";
-}
-
-function setUnitField(k, ui, f, val){
-  const it = VENDOR.items[k]; if(!it) return;
-  if(!it.units) it.units = [{label:"KG", rate:0}];
-  if(f==="rate"){ it.units[ui].rate = parseFloat(val)||0; if(ui===0) it.rate = it.units[0].rate; }
-  else it.units[ui].label = val;
-}
-function addUnit(k){
-  const it = VENDOR.items[k]; if(!it) return;
-  if(!it.units) it.units = [{label:"KG", rate:0}];
-  it.units.push({label:"", rate:0});
-  markDirty();
-  renderItems();
-}
-function removeUnit(k, ui){
-  const it = VENDOR.items[k]; if(!it || !it.units || it.units.length<2) return;
-  it.units.splice(ui,1);
-  markDirty();
-  renderItems();
-}
-function autoCalcFromBase(k){
-  const it = VENDOR.items[k]; if(!it || it.manualOverride) return;
-  const base = (it.units && it.units[0]) ? parseFloat(it.units[0].rate)||0 : 0;
-  it.rate = base;
-  // only auto-fill known fraction labels
-  (it.units||[]).forEach(function(u, i){
-    if(i===0) return;
-    const lab = (u.label||"").toLowerCase();
-    if(lab.indexOf("آدھا")>=0 || lab.indexOf("adha")>=0 || lab.indexOf("half")>=0) u.rate = Math.round(base/2);
-    else if(lab.indexOf("پاؤ")>=0 || lab.indexOf("pau")>=0) u.rate = Math.round(base/4);
-    else if(lab.indexOf("دڑی")>=0 || lab.indexOf("dari")>=0) u.rate = Math.round(base*5);
-  });
-}
-function autoCalcUnits(k){
-  const it = VENDOR.items[k]; if(!it) return;
-  const base = (it.units && it.units[0]) ? parseFloat(it.units[0].rate)||0 : parseFloat(it.rate)||0;
-  const u0 = (it.units && it.units[0] && it.units[0].label) ? it.units[0].label : "KG";
-  it.manualOverride = false;
-  it.units = [
-    {label: u0 || "KG", rate: base},
-    {label: "آدھا کلو", rate: Math.round(base/2)},
-    {label: "پاؤ", rate: Math.round(base/4)},
-    {label: "دڑی (5 KG)", rate: Math.round(base*5)}
-  ];
-  it.rate = base;
-  markDirty();
-  renderItems();
-  toast("Auto Calc ✓ — Save دبائیں");
-}
-
-/** کیٹگری/نام سے صحیح یونٹ ٹیمپلیٹ */
-function detectPresetForItem(it){
-  var s = ((it && it.category) || "") + " " + ((it && it.name) || "") + " " + ((it && it.name_roman) || "");
-  s = s.toLowerCase();
-  if(/زمرد|emerald|زیور|jewell|jewel|آنگوٹھ|ring|گولڈ|gold|سونا|چاندی|silver|ہیرا|diamond|پتھر|gem|stone|neclace|necklace|earring/.test(s))
-    return "one_price";
-  if(/جوت|shoe|sandal|چپل|footwear/.test(s)) return "shoes";
-  if(/کپڑ|cloth|dress|قمیض|شلوار|suit|برقع|fabric|لانڈ|lawn/.test(s)) return "clothes";
-  if(/میٹر|than|کپڑا یارڈ/.test(s)) return "fabric";
-  if(/کاسمیٹ|cosmetic|کریم|cream|شیampoo|perfume|عطر|میکاپ/.test(s)) return "cosmetics";
-  if(/دوا|medicine|فارم|pharma|ٹیبلٹ|syrup/.test(s)) return "pharmacy";
-  if(/موبائل|فون|phone|الیکٹر|laptop|چارجر|electronic/.test(s)) return "electronics";
-  if(/ہارڈ|hardware|نل|سکر|pipe|سیمنٹ|رنگ روغن/.test(s)) return "hardware";
-  if(/مشروب|drink|پیپسی|کولا|جوس|water|پانی|بوتل/.test(s)) return "bottle";
-  if(/تیل|گھی|oil|ghee|لیٹر|ltr|دودھ|milk/.test(s)) return "liquid";
-  if(/انڈ|egg|درجن/.test(s)) return "dozen";
-  if(/سروس|service|مرمت|repair/.test(s)) return "service";
-  if(/سبزی|سبز|آلود|آلو|پھل|fruit|چاول|آٹا|چینی|kg|کلو|دڑی/.test(s)) return "weight";
-  return "pcs";
-}
-function defaultUnitsForPreset(type, base){
-  base = base || 0;
-  var map = {
-    weight: [{label:"KG",rate:base},{label:"آدھا کلو",rate:Math.round(base/2)},{label:"پاؤ",rate:Math.round(base/4)},{label:"دڑی (5 KG)",rate:Math.round(base*5)}],
-    liquid: [{label:"Ltr",rate:base},{label:"½ Ltr",rate:Math.round(base/2)},{label:"250 ml",rate:Math.round(base/4)}],
-    bottle: [{label:"Bottle",rate:base},{label:"Can",rate:base},{label:"1.5 Ltr",rate:base}],
-    pcs: [{label:"Pcs",rate:base},{label:"Pkt",rate:base}],
-    dozen: [{label:"عدد",rate:base},{label:"درجن",rate:Math.round(base*12)}],
-    clothes: [{label:"Piece",rate:base},{label:"Suit",rate:base}],
-    shoes: [{label:"Pair",rate:base}],
-    fabric: [{label:"Meter",rate:base},{label:"Yard",rate:base}],
-    cosmetics: [{label:"Pcs",rate:base},{label:"50 ml",rate:base},{label:"100 ml",rate:base}],
-    pharmacy: [{label:"Strip",rate:base},{label:"Box",rate:base}],
-    electronics: [{label:"Pcs",rate:base},{label:"Set",rate:base}],
-    hardware: [{label:"Pcs",rate:base},{label:"KG",rate:base},{label:"Packet",rate:base}],
-    gold: [{label:"Tola",rate:base},{label:"Gram",rate:base},{label:"22K / g",rate:base}],
-    one_price: [{label:"Piece",rate:base}],
-    service: [{label:"Job",rate:base},{label:"Visit",rate:base}],
-    custom: [{label:"Unit",rate:base}]
-  };
-  return map[type] || map.pcs;
-}
-function looksLikeVegUnits(units){
-  if(!units || !units.length) return true;
-  var lab = (units[0].label || "").toLowerCase();
-  return /kg|کلو|دڑی|پاؤ/.test(lab);
-}
-window.onCategoryChange = function(k, val){
-  var it = VENDOR.items[k]; if(!it) return;
-  it.category = val;
-  var preset = detectPresetForItem(it);
-  // اگر پرانے سبزی والے یونٹ ہوں اور کیٹگری زیور/کپڑے وغیرہ ہو تو خود درست کرو
-  if(preset !== "weight" && looksLikeVegUnits(it.units)){
-    var base = (it.units[0] && parseFloat(it.units[0].rate)) || it.rate || 0;
-    it.units = defaultUnitsForPreset(preset, base);
-    it.unit = it.units[0].label;
-    it.rate = base;
-    if(preset === "one_price" || preset === "gold"){ it.premium = true; it.show_detail = true; }
-    toast("کیٹگری کے مطابق یونٹ بدل گئے: " + it.units[0].label);
-  }
-  refreshCatFilter();
-  markDirty();
-  renderItems();
-};
-
-function applyUnitPreset(k, type){
-  const it = VENDOR.items[k]; if(!it) return;
-  // سب یونٹس میں سب سے بڑی قیمت (آنگوٹھی پر Carat/Full ring 18000، Piece غلط 1)
-  let base = 0;
-  (it.units || []).forEach(function(u){
-    const r = parseFloat(u.rate) || 0;
-    if(r > base) base = r;
-  });
-  if(!base) base = parseFloat(it.rate) || 0;
-  if(type === "one_price" || type === "unique_ring"){
-    // صرف ایک Piece — قیمت محفوظ
-    it.units = [{ label: "Piece", rate: base || 0 }];
-    it.rate = base || 0;
-    it.unit = "Piece";
-    it.premium = true;
-    it.show_detail = true;
-    it.manualOverride = true;
+  window.addNewCategory = function(){
+    let name = document.getElementById("newCatName").value.trim();
+    if(!name) return;
+    if(currentCatalog[name]){ alert("Category already exists"); return; }
+    currentCatalog[name] = {};
+    document.getElementById("newCatName").value = "";
+    initVendorCategories();
+    document.getElementById("vendorCategoryPicker").value = name;
+    loadVendorCategory(name);
     markDirty();
-    renderItems();
-    toast(base ? ("✓ Piece = Rs." + base + " — Save دبائیں") : "✓ Piece یونٹ — قیمت لکھیں پھر Save");
-    return;
   }
-  const presets = {
-    weight: [
-      {label:"KG", rate:base},
-      {label:"آدھا کلو", rate:Math.round(base/2)},
-      {label:"پاؤ", rate:Math.round(base/4)},
-      {label:"دڑی (5 KG)", rate:Math.round(base*5)}
-    ],
-    liquid: [
-      {label:"Ltr", rate:base},
-      {label:"½ Ltr", rate:Math.round(base/2)},
-      {label:"250 ml", rate:Math.round(base/4)},
-      {label:"5 Ltr", rate:Math.round(base*5)}
-    ],
-    pcs: [
-      {label:"Pcs", rate:base},
-      {label:"Pkt", rate:base},
-      {label:"Box", rate:base}
-    ],
-    dozen: [
-      {label:"عدد", rate:base},
-      {label:"درجن", rate:Math.round(base*12)}
-    ],
-    bottle: [
-      {label:"Bottle", rate:base},
-      {label:"Can", rate:base},
-      {label:"1.5 Ltr", rate:base}
-    ],
-    gold: [
-      {label:"Tola", rate:base},
-      {label:"Gram", rate:base},
-      {label:"22K / g", rate:base},
-      {label:"21K / g", rate:base},
-      {label:"24K / g", rate:base}
-    ],
-    gem: [
-      {label:"Per carat (loose stone)", rate:base},
-      {label:"Full stone (unique)", rate:base}
-    ],
-    unique_ring: [
-      {label:"Piece", rate:base}
-    ],
-    one_price: [
-      {label:"Piece", rate:base}
-    ],
-    meter: [
-      {label:"Meter", rate:base},
-      {label:"Yard", rate:base},
-      {label:"Foot", rate:base}
-    ],
-    fabric: [
-      {label:"Meter", rate:base},
-      {label:"Yard", rate:base},
-      {label:"Than (full)", rate:base}
-    ],
-    clothes: [
-      {label:"Piece", rate:base},
-      {label:"Suit", rate:base},
-      {label:"Pair", rate:base}
-    ],
-    shoes: [
-      {label:"Pair", rate:base},
-      {label:"Single", rate:base}
-    ],
-    cosmetics: [
-      {label:"Pcs", rate:base},
-      {label:"Set", rate:base},
-      {label:"50 ml", rate:base},
-      {label:"100 ml", rate:base}
-    ],
-    pharmacy: [
-      {label:"Strip", rate:base},
-      {label:"Box", rate:base},
-      {label:"Bottle", rate:base},
-      {label:"Pcs", rate:base}
-    ],
-    electronics: [
-      {label:"Pcs", rate:base},
-      {label:"Set", rate:base},
-      {label:"Unit", rate:base}
-    ],
-    hardware: [
-      {label:"Pcs", rate:base},
-      {label:"KG", rate:base},
-      {label:"Packet", rate:base},
-      {label:"Set", rate:base}
-    ],
-    service: [
-      {label:"Job", rate:base},
-      {label:"Hour", rate:base},
-      {label:"Visit", rate:base}
-    ],
-    custom: [
-      {label:"Unit", rate:base}
-    ],
-    veg: [
-      {label:"KG", rate:base},
-      {label:"آدھا کلو", rate:Math.round(base/2)},
-      {label:"دڑی (5 KG)", rate:Math.round(base*5)}
-    ],
-    ltr: [
-      {label:"Ltr", rate:base},
-      {label:"½ Ltr", rate:Math.round(base/2)},
-      {label:"5 Ltr", rate:Math.round(base*5)}
-    ]
-  };
-  it.units = presets[type] || presets.custom;
-  if(type==="gold" || type==="gem" || type==="unique_ring" || type==="one_price"){
-    it.premium = true;
-    it.show_detail = true;
+
+  window.loadVendorCategory = function(cat){
+    activeCategory = cat;
+    renderVendorProducts();
   }
-  if(type==="clothes" || type==="shoes"){
-    it.show_detail = true; // سائز تفصیل میں لکھیں
-  }
-  it.rate = base;
-  it.unit = it.units[0].label;
-  markDirty();
-  renderItems();
-  toast(type==="unique_ring" ? "یونیک پیس — نیچے حساب سے کل قیمت لگائیں" : "یونٹ سیٹ ہو گئے — ریٹ چیک کر کے Save");
-}
 
-/** یونیک زیور: کیریٹ+گرام+میکنگ = ایک Piece قیمت (eBay طرز) */
+  function renderVendorProducts(){
+    const area = document.getElementById("vendorProductsArea");
+    const itemsObj = currentCatalog[activeCategory] || {};
+    const keys = Object.keys(itemsObj);
 
-window.setSpec = function(k, field, val){
-  if(!VENDOR.items[k]) return;
-  VENDOR.items[k][field] = val;
-  markDirty();
-};
-window.buildExtraFromSpecs = function(k){
-  const it = VENDOR.items[k]; if(!it) return;
-  const lines = [];
-  if(it.spec_size) lines.push("Size: " + it.spec_size);
-  if(it.spec_color) lines.push("Color: " + it.spec_color);
-  if(it.spec_material) lines.push("Material: " + it.spec_material);
-  if(it.spec_weight) lines.push("Weight: " + it.spec_weight);
-  if(it.spec_quality) lines.push("Quality: " + it.spec_quality);
-  if(it.spec_shape) lines.push("Shape/Design: " + it.spec_shape);
-  it.extra_text = lines.join("\n");
-  it.show_detail = true;
-  markDirty();
-  renderItems();
-  toast("تفصیل بن گئی — Save دبائیں");
-};
-
-window.calcUniqueJewelry = function(k){
-  const it = VENDOR.items[k]; if(!it) return;
-  const ct = parseFloat((document.getElementById("j_ct_"+k)||{}).value) || 0;
-  const ctR = parseFloat((document.getElementById("j_ct_rate_"+k)||{}).value) || 0;
-  const g = parseFloat((document.getElementById("j_g_"+k)||{}).value) || 0;
-  const gR = parseFloat((document.getElementById("j_g_rate_"+k)||{}).value) || 0;
-  const mk = parseFloat((document.getElementById("j_make_"+k)||{}).value) || 0;
-  const size = ((document.getElementById("j_size_"+k)||{}).value || "").trim();
-  const stone = Math.round(ct * ctR);
-  const metal = Math.round(g * gR);
-  const total = stone + metal + mk;
-  if(total <= 0){ toast("کیریٹ/گرام/ریٹ بھریں", true); return; }
-  it.j_carat = ct; it.j_carat_rate = ctR; it.j_gram = g; it.j_gram_rate = gR; it.j_making = mk; it.j_size = size;
-  it.premium = true;
-  it.show_detail = true;
-  it.units = [{ label: "Piece", rate: total }];
-  it.rate = total;
-  it.unit = "Piece";
-  it.extra_text =
-    "Unique handmade piece — one only\n" +
-    (ct ? ("Stone: " + ct + " carat" + (ctR ? (" (ref " + ctR + "/ct ≈ Rs." + stone + ")") : "") + "\n") : "") +
-    (g ? ("Metal weight: " + g + "g" + (gR ? (" (ref " + gR + "/g ≈ Rs." + metal + ")") : "") + "\n") : "") +
-    (mk ? ("Making: Rs." + mk + "\n") : "") +
-    (size ? ("Size/note: " + size + "\n") : "") +
-    "Sale price: Rs." + total + " (whole piece)\n" +
-    "Not sold by kg — call/visit or advance+OTP";
-  markDirty();
-  renderItems();
-  toast("کل Rs." + total + " — Piece پر لگ گیا۔ Save دبائیں");
-};
-function promptNewCategory(){
-  const n = prompt("نئی کیٹگری کا نام (مثلاً سبزیاں، پھل، دودھ، سروس):");
-  if(!n || !n.trim()) return;
-  addBlankProduct(n.trim());
-}
-function addBlankProduct(cat){
-  if(!VENDOR.items) VENDOR.items = {};
-  const id = "i" + Date.now().toString(36);
-  var category = cat || ((document.getElementById("catFilter")&&document.getElementById("catFilter").value)||"سامان");
-  var temp = { category: category, name: "" };
-  var preset = detectPresetForItem(temp);
-  var units = defaultUnitsForPreset(preset, 0);
-  VENDOR.items[id] = {
-    name: "", name_roman: "", category: category,
-    rate: 0, unit: units[0].label,
-    units: units,
-    image: "", available: true, featured: false, manualOverride: false, no_qty: false,
-    premium: (preset === "one_price" || preset === "gold"),
-    show_detail: (preset === "one_price" || preset === "gold" || preset === "clothes" || preset === "shoes"),
-    created_at: new Date().toISOString()
-  };
-  markDirty();
-  renderItems();
-  toast("نیا پروڈکٹ ("+units[0].label+") — کیٹگری کے مطابق یونٹ");
-  setTimeout(function(){ const el=document.getElementById("item-"+id); if(el) el.scrollIntoView({behavior:"smooth",block:"center"}); },100);
-}
-async function saveAllItems(){
-  if(!VENDOR || !VENDOR.id) return;
-  const s = document.getElementById("saveStatusTxt");
-  const btn = document.querySelector('#vendorSaveBar .btn-save');
-  if(s) s.textContent = "⏳ محفوظ ہو رہا ہے...";
-  if(btn) btn.disabled = true;
-  toast("پروڈکٹس محفوظ ہو رہے ہیں...");
-  try{
-    await firebaseWriteAndVerify(
-      "/vendors/" + encodeURIComponent(VENDOR.id) + "/items.json",
-      VENDOR.items || {},
-      "PUT",
-      "Products save"
-    );
-    if(s) s.textContent = "✅ محفوظ ہو گیا";
-    toast("تمام پروڈکٹس محفوظ اور verify ہو گئے ✓");
-  }catch(e){
-    if(s) s.textContent = "❌ سیو نہیں ہوا";
-    toast(e.message || "پروڈکٹس سیو فیل", true);
-  }finally{
-    if(btn) btn.disabled = false;
-  }
-}
-
-
-function toDigitsWA(num){
-  let d = String(num || "").replace(/[^0-9]/g, "");
-  if(d.startsWith("0")) d = "92" + d.slice(1);
-  if(d.length === 10 && d.startsWith("3")) d = "92" + d;
-  return d;
-}
-async function saveOrderDetails(){
-  const phone = (document.getElementById("vdPhone").value || "").trim();
-  let wa = (document.getElementById("vdWhatsapp").value || "").trim();
-  const pay = (document.getElementById("vdPay").value || "").trim();
-  const bank = (document.getElementById("vdBank").value || "").trim();
-  if(wa) wa = toDigitsWA(wa);
-  try{
-    if(phone){ await saveVendorField("phone", phone); VENDOR.phone = phone; }
-    if(wa){ await saveVendorField("whatsapp", wa); VENDOR.whatsapp = wa; }
-    await saveVendorField("pay_number", pay); VENDOR.pay_number = pay;
-    await saveVendorField("bank_detail", bank); VENDOR.bank_detail = bank;
-    toast("آرڈر تفصیلات محفوظ اور verify ہو گئیں ✓");
-  }catch(e){ toast(e.message || "سیو فیل", true); }
-}
-
-async function saveTagline(){
-  const val = (document.getElementById("shopTagline").value || "").trim();
-  try{
-    await saveVendorField("tagline", val);
-    VENDOR.tagline = val;
-    toast("ٹیگ لائن محفوظ اور verify ہو گئی ✓");
-  }catch(e){ toast(e.message || "سیو فیل", true); }
-}
-
-async function uploadItemImage(itemId, input){
-  const file = input.files && input.files[0];
-  if(!file) return;
-  toast("تصویر تیار...");
-  try{
-    const dataUrl = await compressImage(file, 600, 600, 0.7);
-    await firebaseWriteAndVerify(
-      "/vendors/" + encodeURIComponent(VENDOR.id) + "/items/" + encodeURIComponent(itemId) + "/image.json",
-      dataUrl,
-      "PUT",
-      "Product image save"
-    );
-    VENDOR.items[itemId].image = dataUrl;
-    renderItems();
-    if(!VENDOR.cover_image){
-      document.getElementById("coverPreview").src = dataUrl;
-      document.getElementById("coverPreview").style.display = "block";
+    if(keys.length === 0){
+      area.innerHTML = `<div class="loading">No products in this category. Click 'Add New Product'.</div>`;
+      return;
     }
-    toast("تصویر سیو ✓");
-  }catch(e){
-    toast(e.message || "تصویر فیل", true);
-  }
-  input.value = "";
-}
 
-async function deleteItem(itemId){
-  if(!confirm("آئٹم ڈیلیٹ کریں؟")) return;
-  try{
-    await firebaseDeleteAndVerify(
-      "/vendors/" + encodeURIComponent(VENDOR.id) + "/items/" + encodeURIComponent(itemId) + ".json",
-      "Product delete"
-    );
-    delete VENDOR.items[itemId];
-  renderItems();
-  // refresh cover if needed
-  if(!VENDOR.cover_image){
-    const fb = getEffectiveCover();
-    const img = document.getElementById("coverPreview");
-    if(fb){ img.src = fb; img.style.display = "block"; }
-    else { img.style.display = "none"; }
-  }
-    toast("آئٹم ڈیلیٹ اور verify ہو گیا ✓");
-  }catch(e){
-    toast(e.message || "آئٹم ڈیلیٹ فیل", true);
-  }
-}
-
-/* ---------- Helpers ---------- */
-async function saveVendorField(field, value){
-  if(!VENDOR || !VENDOR.id) throw new Error("Vendor session موجود نہیں ہے۔ دوبارہ login کریں۔");
-  await firebaseWriteAndVerify(
-    "/vendors/" + encodeURIComponent(VENDOR.id) + "/" + encodeURIComponent(field) + ".json",
-    value,
-    "PUT",
-    "Save " + field
-  );
-}
-
-/* ---------- Orders — accordion like master admin ---------- */
-window._openOrderCode = window._openOrderCode || null;
-window.toggleVendorOrder = function(code){
-  window._openOrderCode = (window._openOrderCode === code) ? null : code;
-  document.querySelectorAll(".order-card").forEach(function(el){
-    el.classList.toggle("open", el.getAttribute("data-code") === window._openOrderCode);
-  });
-};
-async function loadOrders(fromTimer){
-  const box = document.getElementById("ordersList");
-  const empty = document.getElementById("noOrders");
-  if(!fromTimer) box.innerHTML = "<p class='note'>لوڈ ہو رہا ہے...</p>";
-  try{
-    const result = await firebaseRequest("/orders.json", { method: "GET" }, "Orders load");
-    const all = result.data || {};
-    const mine = [];
-    for(const code in all){
-      const o = all[code];
-      // صرف اسی وینڈر — master کے آرڈرز نہیں
-      if(o && o.vendor_id === VENDOR.id){
-        mine.push({ code, ...o });
-      }
-    }
-    const pending = [], completed = [], cancelled = [];
-    mine.forEach(function(o){
-      const st = (o.status || "pending").toLowerCase();
-      if(st === "cancelled") cancelled.push(o);
-      else if(st === "delivered" || st === "completed") completed.push(o);
-      else pending.push(o);
-    });
-    function ts(o){ return o.timestamp || o.created_at || ""; }
-    pending.sort(function(a,b){ return ts(b).localeCompare(ts(a)); });
-    completed.sort(function(a,b){ return ts(b).localeCompare(ts(a)); });
-    cancelled.sort(function(a,b){ return ts(b).localeCompare(ts(a)); });
-    // نیا pending سب سے اوپر، مکمل pending کے نیچے
-    const ordered = pending.concat(completed).concat(cancelled);
-
-    const badge = document.getElementById("pendingBadge");
-    if(badge){
-      if(pending.length){ badge.style.display = "inline-block"; badge.textContent = pending.length; }
-      else badge.style.display = "none";
-    }
-    if(pending.length && (fromTimer || !window._ordersLoadedOnce)){
-      playOrderBeep();
-    }
-    window._ordersLoadedOnce = true;
-    empty.style.display = ordered.length ? "none" : "block";
-    box.innerHTML = ordered.map(function(o){
-      const st = (o.status || "pending").toLowerCase();
-      const isPend = (st === "pending" || st === "new" || st === "seen");
-      const isDone = (st === "delivered" || st === "completed");
-      const isCan = (st === "cancelled");
-      const cls = isCan ? "cancelled" : (isDone ? "completed" : "pending");
-      const codeKey = o.code || "";
-      const isOpen = (window._openOrderCode === codeKey);
-      let ph = String(o.phone||"").replace(/[^0-9]/g,"");
-      if(ph.startsWith("0") && ph.length===11) ph = "92"+ph.slice(1);
-      const tag = isCan ? "منسوخ" : (isDone ? "✅ مکمل" : "🕒 باقی");
-      return `<div class="order-card ${cls}${isOpen?' open':''}" data-code="${codeKey}">
-        <div class="order-head" onclick="toggleVendorOrder('${codeKey}')">
-          <span><b dir="ltr">${codeKey}</b> — ${o.name||""} <span style="font-size:11px;color:var(--muted);">${tag}</span></span>
-          <span class="order-chevron">▼</span>
-        </div>
-        <div class="order-body">
-          <div style="padding-top:8px;">
-            <div>📞 <span dir="ltr"><b>${o.phone||""}</b></span>
-              <a href="tel:${o.phone||""}" style="margin-right:6px;">Call</a>
-              <a href="https://wa.me/${ph}" target="_blank" style="color:#25D366;">WhatsApp</a>
-            </div>
-            <div style="margin-top:4px;">📍 ${o.address||""}</div>
-            <div style="margin-top:4px;">🔑 Code/OTP: <b dir="ltr" style="color:var(--price);">${codeKey}</b></div>
-            <div style="margin-top:4px;font-size:12px;color:var(--muted);">${o.timestamp||""}</div>
-            <div style="margin-top:8px;background:#F9F8F3;padding:8px;border-radius:8px;white-space:pre-wrap;font-size:12.5px;">${o.items||""}</div>
-            <div style="margin-top:6px;"><b>Rs. ${o.total||0}</b> · ${o.payment||o.pay_method||""}</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
-              ${isPend?`<button class="btn btn-sm" style="background:var(--mid);width:auto;" type="button" onclick="setOrderStatus('${codeKey}','delivered')">✅ Delivered</button>
-              <button class="btn btn-sm btn-danger" type="button" onclick="setOrderStatus('${codeKey}','cancelled')">✕ Cancel</button>`:""}
-              <button class="btn btn-sm btn-sec" type="button" onclick="window.open('https://wa.me/${ph}?text='+encodeURIComponent('Order ${codeKey}'))">💬 WhatsApp</button>
+    area.innerHTML = keys.map(k => {
+      let it = itemsObj[k];
+      if(!it.units) it.units = [{label: it.unit||"KG", rate: it.rate||0}];
+      return `
+        <div class="product-row">
+          <div class="row-top">
+            <div class="thumb-box">${it.image ? `<img src="${it.image}" style="width:100%;height:100%;object-fit:cover;">` : '🛒'}</div>
+            <div class="row-fields">
+              <input type="text" value="${it.name||''}" placeholder="Product Name" oninput="updateItemField('${k}','name',this.value)">
+              <input type="text" value="${it.name_roman||''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="updateItemField('${k}','name_roman',this.value)">
             </div>
           </div>
+          <div class="units-box">
+            ${it.units.map((u, ui) => `
+              <div class="unit-row">
+                <input type="text" class="u-label" value="${u.label}" oninput="updateUnitField('${k}',${ui},'label',this.value)">
+                <input type="number" class="u-rate" value="${u.rate}" oninput="updateUnitRate('${k}',${ui},this.value)">
+              </div>
+            `).join('')}
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label><input type="checkbox" ${it.available!==false?'checked':''} onchange="updateItemField('${k}','available',this.checked)"> Available</label>
+            <button class="btn-danger" onclick="deleteVendorItem('${k}')">🗑️ Delete</button>
+          </div>
         </div>
-      </div>`;
+      `;
     }).join("");
-  }catch(e){
-    if(!fromTimer){
-      box.innerHTML = "";
-      empty.style.display = "block";
-      empty.textContent = e.message || "آرڈرز لوڈ نہیں ہوئے";
-      toast(e.message || "آرڈرز لوڈ نہیں ہوئے", true);
+  }
+
+  window.updateItemField = function(k, field, val){
+    currentCatalog[activeCategory][k][field] = val;
+    markDirty();
+  }
+
+  window.updateUnitField = function(k, ui, field, val){
+    currentCatalog[activeCategory][k].units[ui][field] = val;
+    markDirty();
+  }
+
+  window.updateUnitRate = function(k, ui, val){
+    val = parseFloat(val) || 0;
+    let it = currentCatalog[activeCategory][k];
+    it.units[ui].rate = val;
+    if(ui === 0 && it.units.length > 1){
+      it.units.forEach((u, i) => {
+        if(i === 0) return;
+        let lbl = u.label.toLowerCase();
+        if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
+        else if(lbl.includes("آدھا") || lbl.includes("500")) u.rate = Math.round(val / 2);
+        else if(lbl.includes("دڑی") || lbl.includes("5kg")) u.rate = Math.round(val * 5);
+      });
+      renderVendorProducts();
+    }
+    markDirty();
+  }
+
+  window.addVendorProduct = function(){
+    let id = "item_" + Date.now();
+    if(!currentCatalog[activeCategory]) currentCatalog[activeCategory] = {};
+    currentCatalog[activeCategory][id] = { name: "", units: [{label: "KG", rate: 0}], available: true };
+    renderVendorProducts();
+    markDirty();
+  }
+
+  window.deleteVendorItem = function(k){
+    if(!confirm("Delete item?")) return;
+    delete currentCatalog[activeCategory][k];
+    renderVendorProducts();
+    markDirty();
+  }
+
+  window.saveVendorCatalog = async function(){
+    showToast("Saving...");
+    try{
+      await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + currentVendorId + "/items.json", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentCatalog)
+      });
+      catalogDirty = false;
+      document.getElementById("saveBar").style.display = "none";
+      showToast("✅ Saved Successfully!");
+    }catch(e){
+      showToast("❌ Save failed", true);
     }
   }
-}
-async function setOrderStatus(code, status){
-  if(!code) return;
-  try{
-    await firebaseWriteAndVerify(
-      "/orders/" + encodeURIComponent(code) + "/status.json",
-      status,
-      "PUT",
-      "Order status update"
-    );
-    toast("سٹیٹس محفوظ اور verify ہو گیا: " + status + " ✓");
-    await loadOrders();
-  }catch(e){ toast(e.message || "اپڈیٹ فیل", true); }
-}
 
-/* ---------- PWA Install ---------- */
-let deferredPrompt = null;
-function checkInstall(){
-  const banner = document.getElementById("installBanner");
-  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
-  if(isStandalone){ banner.style.display = "none"; return; }
-  if(deferredPrompt){ banner.style.display = "flex"; }
-  else { banner.style.display = "flex"; } // still show tip
-}
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById("installBanner").style.display = "flex";
-});
-window.triggerInstall = async function(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if(outcome === "accepted") document.getElementById("installBanner").style.display = "none";
-    deferredPrompt = null;
-  } else {
-    toast("براؤزر مینو سے Add to Home Screen کریں");
+  function watchVendorOrders(){
+    const ordersRef = ref(db, 'orders');
+    onValue(ordersRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      let list = Object.values(data).filter(o => o.vendor_id === currentVendorId);
+      const area = document.getElementById("vendorOrdersArea");
+      
+      if(list.length === 0){
+        area.innerHTML = `<div class="loading">No orders for your shop yet.</div>`;
+        return;
+      }
+
+      area.innerHTML = list.map(o => {
+        let isDone = (o.status === 'completed' || o.status === 'delivered');
+        let isCan = (o.status === 'cancelled');
+        return `
+          <div class="card" style="border:2px solid ${isCan?'#B71C1C':(isDone?'#81C784':'var(--line))'};">
+            <div><b>Order:</b> ${o.code} | <b>Status:</b> ${o.status || 'Pending'}</div>
+            <div><b>Customer:</b> ${o.name} (${o.phone})</div>
+            <div><b>Address:</b> ${o.address}</div>
+            <div style="background:#F9F8F3; padding:8px; border-radius:6px; margin:6px 0;">${o.items}</div>
+            <div><b>Total:</b> Rs. ${o.total}</div>
+            ${!isDone && !isCan ? `
+              <div style="display:flex; gap:6px; margin-top:10px;">
+                <button class="btn-secondary" style="background:#C8E6C9;" onclick="vendorComplete('${o.code}')">✅ Mark Delivered</button>
+                <button class="btn-danger" onclick="vendorCancel('${o.code}')">❌ Cancel Order</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join("");
+    });
   }
-};
 
-/* ---------- Auto login if session ---------- */
-(async function init(){
-  try{
-    const s = JSON.parse(safeStorage.getItem("sj_vendor_session") || "null");
-    if(s && s.id && s.pin){
-      document.getElementById("loginId").value = s.id;
-      document.getElementById("loginPin").value = s.pin;
-      await doLogin();
-    }
-  }catch(e){}
-})();
+  window.vendorComplete = async function(code){
+    if(!confirm("Mark delivered?")) return;
+    await update(ref(db, 'orders/' + code), { status: "completed" });
+    showToast("Completed ✓");
+  }
+
+  window.vendorCancel = async function(code){
+    let reason = prompt("Enter cancellation reason:");
+    if(!reason) return;
+    await update(ref(db, 'orders/' + code), {
+      status: "cancelled",
+      cancelled_by: "Vendor",
+      cancel_reason: reason
+    });
+    showToast("Cancelled ✕");
+  }
 </script>
 </body>
 </html>

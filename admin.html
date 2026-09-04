@@ -108,19 +108,19 @@
       <div class="dash-num" id="statTotalOrders">0</div>
     </div>
     <div class="dash-card">
-      <div class="dash-lbl">⏳ پینڈنگ</div>
+      <div class="dash-lbl">⏳ Pending</div>
       <div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div>
     </div>
     <div class="dash-card">
-      <div class="dash-lbl">💵 کل سیلز</div>
+      <div class="dash-lbl">💵 Sales</div>
       <div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div>
     </div>
   </div>
 
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates (🔒)</div>
-    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors (🔒)</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors</div>
   </div>
 
   <!-- SECTION 1: LIVE ORDERS -->
@@ -149,13 +149,13 @@
   <!-- SECTION 2: PRODUCTS & CATEGORIES CONTROL -->
   <div id="secProducts" style="display:none;">
     <div class="card" id="setupCard" style="display:none;">
-      <h3>🔑 گیٹ ہب (GitHub) سیٹ اپ</h3>
-      <p>Enter GitHub details once to control rates & categories:</p>
-      <label>GitHub یوزر نیم</label>
+      <h3>🔑 Admin connection</h3>
+      <p>Connect once to save product rates (admin only):</p>
+      <label>Username</label>
       <input type="text" id="cfgOwner" value="sjfoodsonline">
-      <label>ریپازٹری کا نام</label>
+      <label>Repository</label>
       <input type="text" id="cfgRepo" value="sj-foods">
-      <label>Personal Access Token</label>
+      <label>Access token</label>
       <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
       <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">Save & Connect</button>
     </div>
@@ -169,7 +169,7 @@
         </div>
       </div>
 
-      <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
+      <div id="productsArea"><div class="loading">⏳ Loading…</div></div>
       <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add product</button>
     </div>
   </div>
@@ -246,7 +246,7 @@
 
 <div class="savebar" id="saveBar" style="display:none;">
   <div class="status" id="saveStatus">⚠️ Changes not saved</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save to GitHub</button>
+  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save</button>
 </div>
 
 <div id="printableReceipt"></div>
@@ -559,7 +559,7 @@
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [Cancel شدہ سب سے نیچے]
+    // فائنل لسٹ: [Pending اوپر] -> [مکمل بیچ میں] -> [Cancel شدہ سب سے نیچے]
     latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
@@ -870,11 +870,11 @@ function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsMod
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ Unsaved changes — press Save to GitHub below";
+  document.getElementById("saveStatus").textContent = "⚠️ Unsaved changes — press Save below";
 }
 function markClean(){
   dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ All saved";
+  document.getElementById("saveStatus").textContent = "✅ Saved";
 }
 
 function utf8ToBase64(str){
@@ -971,7 +971,7 @@ async function loadCategory(file){
   }
   currentCategoryFile = file;
   const area = document.getElementById("productsArea");
-  area.innerHTML = `<div class="loading">⏳ لوڈ ہو رہا ہے...</div>`;
+  area.innerHTML = `<div class="loading">⏳ Loading…</div>`;
   document.getElementById("addProductBtn").style.display = "none";
   try{
     const { json, sha } = await ghGetJson(file);
@@ -1189,10 +1189,14 @@ window.removeProductItem = function(idx){
 
 window.saveProductsToGitHub = async function(){
   const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item);
+  currentItems = rows.map(r => r._item).filter(Boolean);
 
-  document.getElementById("saveStatus").textContent = "⏳ Saving to GitHub…";
+  const st = document.getElementById("saveStatus");
+  if(st) st.textContent = "⏳ Saving…";
   try{
+    if(!CFG || !CFG.token){
+      throw new Error("Open Admin connection and Save & Connect first");
+    }
     const fresh = await ghRequest(currentCategoryFile);
     const payload = currentItems.map(it => {
       const obj = {
@@ -1204,14 +1208,17 @@ window.saveProductsToGitHub = async function(){
         manualOverride: it.manualOverride
       };
       if(it.name_roman) obj.name_roman = it.name_roman;
+      if(it.premium) obj.premium = true;
       return obj;
     });
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, `Update prices`);
-    markClean();
-    showToast("✅ کامیابی سے محفوظ ہو گیا!");
+    await ghPutJson(currentCategoryFile, payload, fresh.sha, "Update prices");
+    if(typeof markClean === "function") markClean();
+    if(st) st.textContent = "✅ Saved";
+    showToast("✅ Saved successfully");
   }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ Could not save";
-    showToast("❌ خرابی: " + e.message, true);
+    console.error(e);
+    if(st) st.textContent = "❌ Could not save";
+    showToast("❌ " + (e.message || "Save failed"), true);
   }
 }
 </script>

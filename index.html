@@ -109,7 +109,6 @@
   .modal-box p { font-size: 14px; color: var(--ink); line-height: 1.8; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 14px; cursor: pointer; font-size: 14px; }
 
-  /* پاپ اپ ونڈو کے لیے نیا ڈیزائن */
   .confirm-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100005; display: none; align-items: center; justify-content: center; padding: 20px; }
   .confirm-popup-overlay.active { display: flex; }
   .confirm-popup-box { background: #fff; border-radius: 20px; padding: 22px; max-width: 380px; width: 100%; box-shadow: 0 15px 40px rgba(0,0,0,0.3); font-family: "Jameel Noori Nastaleeq", serif; text-align: right; }
@@ -137,10 +136,7 @@
   .cover-banner{
     overflow:hidden; border-radius:16px; display:none; background: var(--leaf);
     box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1.5px solid var(--line);
-  
-    aspect-ratio: 16/9;
-    height: auto;
-    overflow: hidden;
+    aspect-ratio: 16/9; height: auto;
   }
   .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
@@ -238,20 +234,11 @@
     padding:5px 10px; line-height:1.4; display:inline-block;
   }
   .unit-select{
-    width:100%;
-    border:2.5px solid var(--mid);
-    border-radius:12px;
-    padding:12px 14px 12px 48px;
-    font-size:14.5px;
-    font-weight:bold;
+    width:100%; border:2.5px solid var(--mid); border-radius:12px; padding:12px 14px 12px 48px;
+    font-size:14.5px; font-weight:bold;
     background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%23153A20' d='M6 9l6 7 6-7z'/%3E%3C/svg%3E") no-repeat left 8px center;
-    background-size:28px 28px;
-    color:var(--dark);
-    font-family: Arial, sans-serif;
-    appearance:none;
-    -webkit-appearance:none;
-    cursor:pointer;
-    box-shadow:0 1px 4px rgba(21,58,32,.08);
+    background-size:28px 28px; color:var(--dark); font-family: Arial, sans-serif;
+    appearance:none; -webkit-appearance:none; cursor:pointer; box-shadow:0 1px 4px rgba(21,58,32,.08);
   }
   .unit-select:focus{ outline:3px solid var(--mid); outline-offset:1px; }
   .qty-box-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
@@ -359,7 +346,6 @@
   .shop-card.host-shop .stag{ background:var(--dark); color:#fff; }
   .shop-card.tenant-shop{ opacity:0.98; }
   .shop-grid.market{ grid-template-columns: 1fr 1fr; }
-  .shop-grid.market .shop-card.host-shop{ /* full width via grid-column parent */ }
 </style>
 </head>
 <body translate="no">
@@ -385,6 +371,7 @@
     <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
     <li><a href="vendor-register.html" onclick="toggleDrawer(false)">🏪 اپنی دکان رجسٹر کریں (Become a Vendor)</a></li>
     <li><a href="vendor.html" onclick="toggleDrawer(false)">🔐 Vendor Login (دکاندار لاگ ان)</a></li>
+    <li><a href="admin.html" onclick="toggleDrawer(false)">⚙️ Admin Panel (ایڈمن لاگ ان)</a></li>
     <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (About Us)</a></li>
     <li><a href="#" onclick="openModal('modalCareers')">💼 کیریئرز و جابز (Careers)</a></li>
     <li><a href="#" onclick="openModal('modalFeedback')">💬 عام پبلک کا فیڈ بیک (Feedback)</a></li>
@@ -395,26 +382,19 @@
 <div class="modal-overlay" id="modalAbout">
   <div class="modal-box">
     <h3>👨‍💼 ہمارے بارے میں اور بانی کا پیغام</h3>
-    
     <div class="owner-card">
       <img src="images/owner.jpg" alt="Sulaiman Jan" class="owner-img" id="aboutOwnerImg" onerror="this.src='https://via.placeholder.com/95?text=Sulaiman+Jan'">
       <div class="owner-name" id="aboutOwnerName">سلیمان جان (ولد قاسم جان)</div>
       <div class="owner-tag">Founder & CEO — SJ Foods Mingora</div>
     </div>
-
     <div style="border-bottom: 1.5px dashed var(--line); padding-bottom: 12px; margin-bottom: 12px;">
       <h4 style="color: var(--dark); margin: 0 0 6px; font-size: 15px;">🇵🇰 اردو پیغام:</h4>
       <p style="text-align: justify; line-height: 1.9; font-size: 14px; margin: 0 0 8px;" id="aboutUrduMsg">
         <b>سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</b><br>
         مینگورہ سوات میں مسلسل <b>20 سال تک میڈیا انڈسٹری</b> میں خدمات سرانجام دینے کے بعد، میں نے جدید ٹیکنالوجی کا استعمال کرتے ہوئے <b>SJ Foods</b> کا آغاز کیا ہے۔<br>
-        ہم جانتے ہیں کہ روزمرہ کی مصروفیات، ٹریفک کے مسائل، ہجوم یا بیماری کی وجہ سے بازار جانا ہر کسی کے لیے آسان نہیں ہوتا۔ ہمارا مقصد یہ ہے کہ آپ اپنے گھر پر سکون سے بیٹھیں اور صرف <b>ایک کلک</b> پر آپ کی ضرورت کی ہر چیز (تازہ سبزیاں، پھل، کریانہ اور زندگی کی تمام ضروریات) سیدھی آپ کی دہلیز پر پہنچ جائے۔
-      </p>
-      <p style="text-align: justify; line-height: 1.9; font-size: 14px; background: var(--leaf); padding: 10px; border-radius: 10px; border-right: 4px solid var(--mid); margin: 0;">
-        🤝 <b>امانت اور دیانت داری کی ضمانت:</b><br>
-        مینگورہ کا بچہ بچہ جانتا ہے کہ ہم نے 20 سال میڈیا کے ذریعے ہمیشہ سچائی اور دیانت داری سے آپ کی خدمت کی ہے اور کبھی کسی کے ساتھ بے ایمانی نہیں کی۔ آپ کی رقم ہمارے پاس <b>اللہ کی امانت</b> ہے۔ اگر آپ کی بھیجی گئی رقم کے بدلے سامان دستیاب نہ ہوا، تو <b>100% رقم فوری واپس</b> کی جائے گی۔ خیانت ہمارے ایمان اور اصول کے خلاف ہے۔ آپ آنکھیں بند کر کے ہم پر بھروسہ کر سکتے ہیں!
+        ہم جانتے ہیں کہ روزمرہ کی مصروفیات، ٹریفک کے مسائل، ہجوم یا بیماری کی وجہ سے بازار جانا ہر کسی کے لیے آسان نہیں ہوتا۔ ہمارا مقصد یہ ہے کہ آپ اپنے گھر پر سکون سے بیٹھیں اور صرف <b>ایک کلک</b> پر آپ کی ضرورت کی ہر چیز سیدھی آپ کی دہلیز پر پہنچ جائے۔
       </p>
     </div>
-
     <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
   </div>
 </div>
@@ -451,7 +431,6 @@
   </div>
 </div>
 
-<!-- یہاں آرڈر کنفرمیشن کے لیے چھوٹی ونڈو (پاپ اپ) بنا دی گئی ہے -->
 <div class="confirm-popup-overlay" id="confirmPopupOverlay">
   <div class="confirm-popup-box">
     <h3>🛒 آرڈر کی تصدیق (Order Confirmation)</h3>
@@ -459,20 +438,17 @@
       <b>اردو:</b> براہ کرم تصدیق کریں کہ آپ کو اس آرڈر کی ضرورت ہے اور آپ نمائندے سے کال یا واٹس ایپ پر بات چیت کرنے کے لیے تیار ہیں۔<br><br>
       <b>Roman Urdu:</b> Baraye karam tasdeeq karein ke aap ko is order ki zaroorat hai aur aap numainday se call ya WhatsApp par baat karne ke liye tayar hain.
     </p>
-    
     <div style="background:var(--leaf); padding:10px; border-radius:10px; margin:12px 0; border:1px solid #cfe8d1;">
       <input type="checkbox" id="popupTermsCheck" style="width:18px; height:18px; vertical-align: middle; margin-left: 6px;">
       <label for="popupTermsCheck" style="display:inline; font-size:13px; font-weight:bold; color:var(--dark); cursor:pointer;">
         جی ہاں، مجھے آرڈر کی ضرورت ہے اور میں تصدیق کے لیے تیار ہوں۔ (Yes, I confirm)
       </label>
     </div>
-
     <button class="wa-btn" style="margin-top:4px;" onclick="proceedWithOrder()">آرڈر واٹس ایپ پر بھیجیں ➔</button>
     <button style="background:#666; color:#fff; width:100%; padding:10px; border-radius:10px; margin-top:8px; font-size:13px; font-weight:bold;" onclick="closeConfirmPopup()">واپس جائیں</button>
   </div>
 </div>
 
-<!-- Always-visible Install Banner for first-time visitors -->
 <div class="install-banner" id="installBanner" style="display:none; margin:10px 12px 0;">
   <span>📱 SJ Online ایپ انسٹال کریں — تیز آرڈر، آسان رسائی</span>
   <button id="installAppBtn" onclick="triggerInstall()">انسٹال</button>
@@ -505,13 +481,11 @@
   </div>
 </div>
 
-
 <div id="shopPicker" class="shop-picker">
   <h2 id="pickerTitle">🛒 SJ Online</h2>
   <div class="hint" id="pickerHint" style="line-height:1.75; background:#E8F5E9; border:1.5px solid #A5D6A7; border-radius:12px; padding:10px 12px;">
     🛒 براہِ کرم <b>ایک وقت میں ایک ہی دکان</b> سے آرڈر کریں۔<br>
-    ہر دکاندار اپنی ڈیلیوری خود کرتا ہے — الگ دکان = الگ ڈیلیوری۔<br>
-    <span style="font-size:12px;color:var(--muted);">SJ Online پلیٹ فارم ہے: ہم دکاندار کے نمبر/شہر کی تصدیق کرتے ہیں۔ قیمت اور سودا گاہک و دکاندار کی ذمہ داری ہے۔</span>
+    ہر دکاندار اپنی ڈیلیوری خود کرتا ہے — الگ دکان = الگ ڈیلیوری۔
   </div>
   <div id="activeCartBanner" style="display:none; margin:10px 0; padding:10px 12px; background:#E8F5E9; border:1.5px solid var(--mid); border-radius:12px; font-size:13px; line-height:1.6;"></div>
   <div class="shop-grid" id="shopGrid"><div style="text-align:center; color:var(--muted); font-size:13px;">Loading...</div></div>
@@ -520,33 +494,32 @@
 <button type="button" class="back-shops hidden" id="btnBackShops" onclick="backToShops()">← All Shops</button>
 
 <div id="shopWorkspace" class="hidden">
-<div id="shopInnerHero">
-  <img id="shopInnerCover" class="shop-inner-cover" alt="" style="display:none;">
-  <div class="shop-inner-bar">
-    <button type="button" onclick="backToShops()">← All Shops</button>
-    <div style="flex:1;">
-      <div id="shopInnerName" style="font-size:15px; font-weight:bold;">Shop</div>
-      <div id="shopInnerNote" style="font-size:11px; opacity:.9;">Only this shop · cart separate</div>
+  <div id="shopInnerHero">
+    <img id="shopInnerCover" class="shop-inner-cover" alt="" style="display:none;">
+    <div class="shop-inner-bar">
+      <button type="button" onclick="backToShops()">← All Shops</button>
+      <div style="flex:1;">
+        <div id="shopInnerName" style="font-size:15px; font-weight:bold;">Shop</div>
+        <div id="shopInnerNote" style="font-size:11px; opacity:.9;">Only this shop · cart separate</div>
+      </div>
     </div>
   </div>
-</div>
-<div class="sticky-top-container">
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
-  </div>
-  <div class="cat-section">
-    <div class="cat-marquee-wrap" id="catSliderWrap">
-      <div class="cat-marquee-track" id="chips"></div>
+  <div class="sticky-top-container">
+    <div class="search-wrap">
+      <input id="search" type="text" placeholder="🔍 Search item (e.g. Tomato / ٹماٹر)">
+    </div>
+    <div class="cat-section">
+      <div class="cat-marquee-wrap" id="catSliderWrap">
+        <div class="cat-marquee-track" id="chips"></div>
+      </div>
     </div>
   </div>
+
+  <main id="list"></main>
+
+  <div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
+  <div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
 </div>
-
-<main id="list"></main>
-
-<div class="empty-msg" id="noResult" style="display:none; text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">کوئی آئٹم نہیں ملا</div>
-<div class="empty-msg" id="loadingMsg" style="text-align:center; padding:30px; color:var(--muted); font-family:'Jameel Noori Nastaleeq',serif;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
-
-</div><!-- /shopWorkspace -->
 
 <div id="billbar" class="collapsed" style="display:none;">
   <div class="bill-summary" id="summary">
@@ -587,10 +560,6 @@
         </div>
         <div class="pay-acc-name" style="font-size:11.5px; opacity:0.9;">اکاؤنٹ نام: سلیمان جان</div>
       </div>
-
-      <div class="pay-hint" style="background: rgba(0, 0, 0, 0.25); padding: 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); margin-top: 10px;">
-        📲 <b>ایزی پیسہ یا بینک ٹرانسفر کے بعد واٹس ایپ پر پیمنٹ کا سکرین شاٹ (Screenshot) شیئر کریں۔ ہماری ٹیم کی تصدیق کے بعد آرڈر فوری روانہ کر دیا جائے گا۔</b>
-      </div>
     </div>
 
     <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
@@ -599,9 +568,8 @@
 
 <footer>
   SJ Online — سوات مینگورہ کا پہلا آن لائن مارکیٹ 🌿<br>
-  📞 <span id="footerContact">0334-9353799</span>   📧 <span id="footerEmail">sjfoodonline@gmail.com</span><br>
+  📞 <span id="footerContact">0334-9353799</span>    📧 <span id="footerEmail">sjfoodonline@gmail.com</span><br>
   📍 Al Basit Plaza, Haji Baba Road, Mingora Swat
-  
   <div class="social-links" id="socialLinksBox">
     <a href="https://www.facebook.com/sjfoodonline/" target="_blank" class="social-btn fb" id="linkFb">📘 Facebook</a>
     <a href="https://www.tiktok.com/@sjfood.online" target="_blank" class="social-btn tk" id="linkTk">🎵 TikTok</a>
@@ -641,25 +609,38 @@ window.safeStorage = (function(){
     removeItem: function(k){ try{ if(ok) localStorage.removeItem(k); else delete mem[k]; }catch(e){ delete mem[k]; } }
   };
 })();
+
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
 let ITEMS = [];
-
 let SHOP_WHATSAPP = "923349353799";
-let ACTIVE_VENDOR = {
-  id: null,
-  shop_name: "",
-  whatsapp: "923349353799",
-  phone: ""
-};
-let SHOP_ENTERED = false; // true when user selected a shop
+let ACTIVE_VENDOR = { id: null, shop_name: "", whatsapp: "923349353799", phone: "" };
+let SHOP_ENTERED = false;
 let ALL_VENDORS = {};
+
+// فائر بیس سے کیٹیگری کا لائیو ڈیٹا لانے کا فنکشن
+async function fetchCategoryWithFirebase(catFile) {
+  const cleanKey = catFile.replace('.json', '');
+  try {
+    const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
+    if (fbRes.ok) {
+      const data = await fbRes.json();
+      if (data && Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    }
+  } catch (e) {
+    console.warn("Firebase fetch fallback:", e);
+  }
+  const bust = "?v=" + Date.now();
+  const localRes = await fetch(catFile + bust, { cache: "no-store" });
+  return await localRes.json();
+}
 
 async function loadActiveVendor(vendorId){
   vendorId = vendorId || "v001";
   function applyFrom(v, id){
     if(!v || v.blocked === true) return false;
-    // approved یا host (v001) — Firebase بند ہو تو بھی SJ Foods چلے
     if(v.status && v.status !== "approved" && id !== "v001") return false;
     ACTIVE_VENDOR = {
       id: id,
@@ -676,17 +657,14 @@ async function loadActiveVendor(vendorId){
     applyVendorPaymentUI();
     return true;
   }
-  // 1) پہلے میموری / لسٹ سے
   if(ALL_VENDORS && ALL_VENDORS[vendorId] && applyFrom(ALL_VENDORS[vendorId], vendorId)){
     return true;
   }
-  // 2) Firebase
   try{
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + ".json", { cache: "no-store" });
     const v = await res.json();
     if(v && !v.error && applyFrom(v, vendorId)) return true;
   }catch(e){ console.warn("vendor load failed", e); }
-  // 3) SJ Foods ہمیشہ (GitHub JSON سے چلتا ہے)
   if(vendorId === "v001"){
     return applyFrom({
       shop_name: "SJ Foods",
@@ -699,22 +677,12 @@ async function loadActiveVendor(vendorId){
   return false;
 }
 
-/** ادائیگی کارڈ — وینڈر کا نمبر، نہ کہ ہمیشہ SJ Foods */
 function applyVendorPaymentUI(){
   const isOwn = !ACTIVE_VENDOR.id || ACTIVE_VENDOR.id === "v001";
-  let payNum = "";
-  let payName = "";
-  let bankLine = "";
-  if(isOwn){
-    payNum = SHOP_PAY_NUMBER || "0334-9353799";
-    payName = "سلیمان جان";
-    bankLine = "PK53KHYB5012003008539951";
-  } else {
-    payNum = ACTIVE_VENDOR.pay_number || ACTIVE_VENDOR.phone || "";
-    payName = ACTIVE_VENDOR.owner_name || ACTIVE_VENDOR.shop_name || "Vendor";
-    bankLine = ACTIVE_VENDOR.bank_detail || "";
-  }
-  // format display 03xx-xxxxxxx if 11 digits starting 0
+  let payNum = isOwn ? (SHOP_PAY_NUMBER || "0334-9353799") : (ACTIVE_VENDOR.pay_number || ACTIVE_VENDOR.phone || "");
+  let payName = isOwn ? "سلیمان جان" : (ACTIVE_VENDOR.owner_name || ACTIVE_VENDOR.shop_name || "Vendor");
+  let bankLine = isOwn ? "PK53KHYB5012003008539951" : (ACTIVE_VENDOR.bank_detail || "");
+
   let displayPay = String(payNum || "").replace(/[^0-9]/g, "");
   if(displayPay.startsWith("92") && displayPay.length >= 12) displayPay = "0" + displayPay.slice(2);
   if(displayPay.length === 11 && displayPay.startsWith("0")){
@@ -724,14 +692,8 @@ function applyVendorPaymentUI(){
   if(elNum) elNum.textContent = displayPay || "—";
   window._activePayDigits = String(payNum || "").replace(/[^0-9]/g, "");
 
-  // account name lines under pay / bank
-  const payCard = document.getElementById("payCard");
-  if(payCard){
-    const nameEls = payCard.querySelectorAll("div");
-    // update known static name lines by rewriting HTML blocks carefully
-  }
   const nameNodes = document.querySelectorAll("#payCard .pay-acc-name");
-  nameNodes.forEach(function(n){ n.textContent = "اکاؤنٹ نام: " + payName; });
+  nameNodes.forEach(n => n.textContent = "اکاؤنٹ نام: " + payName);
   const bankEl = document.getElementById("payBankLine");
   if(bankEl) bankEl.textContent = bankLine || (isOwn ? "PK53KHYB5012003008539951" : "—");
   const bankBlock = document.getElementById("payBankBlock");
@@ -740,21 +702,6 @@ function applyVendorPaymentUI(){
   }
 }
 
-/* سوات علاقے — ترتیب: مینگورہ پہلے، پھر باقی */
-const SWAT_AREA_ORDER = [
-  "Mingora", "مینگوڑہ",
-  "Saidu Sharif", "سیدو شریف",
-  "Qambar", "قمبر",
-  "Odigram", "وڈیگرام",
-  "Kabal", "کبل",
-  "Matta", "مٹہ",
-  "Khawaza Khela", "خوازہ خیلہ",
-  "Bahrain", "بحرین",
-  "Kalam", "کالم",
-  "Charbagh", "چارباغ",
-  "Barikot", "بریکوٹ",
-  "Fatehpur", "فتح پور"
-];
 function normalizeArea(city){
   var c = String(city || "Mingora").trim();
   if(!c) return "Mingora";
@@ -764,9 +711,9 @@ function normalizeArea(city){
     "qambar":"Qambar", "kanbar":"Qambar", "قمبر":"Qambar",
     "odigram":"Odigram", "udigram":"Odigram", "وڈیگرام":"Odigram",
     "kabal":"Kabal", "کبل":"Kabal",
-    "matta":"Matta", "مٹہ":"Matta", "مٹہ":"Matta",
+    "matta":"Matta", "مٹہ":"Matta",
     "khawaza khela":"Khawaza Khela", "khwaza khela":"Khawaza Khela", "خوازہ خیلہ":"Khawaza Khela",
-    "bahrain":"Bahrain", "behraın":"Bahrain", "بحرین":"Bahrain",
+    "bahrain":"Bahrain", "بحرین":"Bahrain",
     "kalam":"Kalam", "کالم":"Kalam",
     "charbagh":"Charbagh", "چارباغ":"Charbagh",
     "barikot":"Barikot", "بریکوٹ":"Barikot",
@@ -774,10 +721,10 @@ function normalizeArea(city){
   };
   var key = c.toLowerCase();
   if(map[key]) return map[key];
-  // partial match
   for(var k in map){ if(key.indexOf(k) >= 0 || k.indexOf(key) >= 0) return map[k]; }
   return c;
 }
+
 function areaSortIndex(area){
   var order = ["Mingora","Saidu Sharif","Qambar","Odigram","Kabal","Matta","Khawaza Khela","Charbagh","Barikot","Fatehpur","Bahrain","Kalam"];
   var i = order.indexOf(area);
@@ -790,26 +737,19 @@ async function loadShopsList(){
   grid.className = "shop-grid market";
   const pt = document.getElementById("pickerTitle"); if(pt) pt.textContent = "🏪 Shops — Swat";
   const ph = document.getElementById("pickerHint");
-  if(ph) ph.innerHTML = "🛒 براہِ کرم <b>ایک وقت میں ایک ہی دکان</b> سے آرڈر کریں۔<br>ہر دکاندار اپنی ڈیلیوری خود کرتا ہے — الگ دکان = الگ ڈیلیوری۔<br><span style=\"font-size:12px;color:var(--muted);\">پلیٹ فارم نمبر/شہر تصدیق کرتا ہے؛ سودا گاہک و دکاندار کی ذمہ داری ہے۔</span>";
+  if(ph) ph.innerHTML = "🛒 براہِ کرم <b>ایک وقت میں ایک ہی دکان</b> سے آرڈر کریں۔<br>ہر دکاندار اپنی ڈیلیوری خود کرتا ہے — الگ دکان = الگ ڈیلیوری۔";
   updateActiveCartBanner();
-  // اگر Firebase بند/غلط ہو تو کم از کم SJ Foods ہمیشہ دکھے
+  
   const HOST_FALLBACK = {
     v001: {
-      shop_name: "SJ Foods",
-      status: "approved",
-      city: "Mingora",
-      tagline: "سبزی · پھل · کرانہ",
-      cover_image: "",
-      whatsapp: "923349353799",
-      blocked: false
+      shop_name: "SJ Foods", status: "approved", city: "Mingora",
+      tagline: "سبزی · پھل · کرانہ", cover_image: "", whatsapp: "923349353799", blocked: false
     }
   };
   try{
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json", { cache: "no-store" });
     let data = await res.json();
-    // Permission denied یا غلط جواب
     if(!data || data.error || typeof data !== "object"){
-      console.warn("vendors.json failed", data && data.error);
       data = HOST_FALLBACK;
     }
     ALL_VENDORS = data;
@@ -820,24 +760,16 @@ async function loadShopsList(){
       return v && typeof v === "object" && v.status === "approved" && v.blocked !== true;
     });
 
-    // Firebase خالی/بند ہو تو host شاپ
     if(ids.length === 0){
       ALL_VENDORS = Object.assign({}, HOST_FALLBACK, data);
       ids = ["v001"];
     }
-    // v001 ہمیشہ لسٹ میں (اگر approved data میں نہ ہو)
     if(ids.indexOf("v001") < 0 && (!data.v001 || data.v001.blocked !== true)){
       if(!data.v001) data.v001 = HOST_FALLBACK.v001;
       ALL_VENDORS = data;
       ids.unshift("v001");
     }
 
-    if(ids.length === 0){
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);">ابھی کوئی شاپ نہیں<br><small style="color:#c62828">Firebase rules چیک کریں</small></div>';
-      return;
-    }
-
-    // group by area
     const groups = {};
     ids.forEach(function(id){
       const v = data[id];
@@ -845,7 +777,7 @@ async function loadShopsList(){
       if(!groups[area]) groups[area] = [];
       groups[area].push(id);
     });
-    // sort shops inside area: v001 first, then name
+
     Object.keys(groups).forEach(function(area){
       groups[area].sort(function(a,b){
         if(a === "v001") return -1;
@@ -853,18 +785,15 @@ async function loadShopsList(){
         return (data[a].shop_name||a).localeCompare(data[b].shop_name||b);
       });
     });
-    const areas = Object.keys(groups).sort(function(a,b){
-      return areaSortIndex(a) - areaSortIndex(b) || a.localeCompare(b);
-    });
+
+    const areas = Object.keys(groups).sort((a,b) => areaSortIndex(a) - areaSortIndex(b) || a.localeCompare(b));
 
     grid.innerHTML = areas.map(function(area){
       const cards = groups[area].map(function(id){
         const v = data[id];
         const isOwn = (id === "v001");
-        // شہر صرف ایک بار — tagline ہو تو وہ، ورنہ city؛ tag الگ لیبل
         var sub = (v.tagline && String(v.tagline).trim()) ? String(v.tagline).trim() : area;
         var tagLab = isOwn ? "SJ Foods" : "شاپ";
-        // اگر tagline خود شہر جیسا ہو تو دوبارہ city نہ دکھائیں
         if(sub === area && !isOwn) tagLab = "";
         return shopCardHTML({
           title: v.shop_name || id,
@@ -876,64 +805,37 @@ async function loadShopsList(){
           phClass: isOwn ? "host-shop" : ""
         });
       }).join("");
-      return '<div class="area-block">'+
-        '<div class="area-title">📍 '+area+' <span>('+groups[area].length+' شاپس)</span></div>'+
-        '<div class="area-shops">'+cards+'</div></div>';
+      return '<div class="area-block"><div class="area-title">📍 '+area+' <span>('+groups[area].length+' شاپس)</span></div><div class="area-shops">'+cards+'</div></div>';
     }).join("");
   }catch(e){
     grid.innerHTML = '<div style="text-align:center;color:var(--price);">شاپس لوڈ نہیں ہوئیں</div>';
   }
 }
 
-
-
 function shopCardHTML(o){
-  let cover;
-  if(o.cover){
-    cover = '<img class="shop-cover" src="' + o.cover + '" alt="" loading="lazy">';
-  } else {
-    cover = '<div class="shop-cover ph">' + o.emoji + '</div>';
-  }
+  let cover = o.cover ? '<img class="shop-cover" src="' + o.cover + '" alt="" loading="lazy">' : '<div class="shop-cover ph">' + o.emoji + '</div>';
   return '<div class="shop-card ' + (o.phClass||'') + '" onclick="' + o.onclick + '">' +
-    cover +
-    '<div class="shop-body">' +
-      '<div class="sname">' + o.title + '</div>' +
-      (o.subtitle ? '<div class="scity">' + o.subtitle + '</div>' : '') +
-      (o.tag ? '<div class="stag">' + o.tag + '</div>' : '') +
+    cover + '<div class="shop-body"><div class="sname">' + o.title + '</div>' +
+    (o.subtitle ? '<div class="scity">' + o.subtitle + '</div>' : '') +
+    (o.tag ? '<div class="stag">' + o.tag + '</div>' : '') +
     '</div></div>';
 }
 
-// Per-shop carts (never mix)
 window.CARTS_BY_SHOP = window.CARTS_BY_SHOP || {};
-window.LOCKED_SHOP_ID = window.LOCKED_SHOP_ID || null; // جب کارٹ بھرا ہو تو دوسری شاپ بند
+window.LOCKED_SHOP_ID = window.LOCKED_SHOP_ID || null;
 
-function cartHasItems(shopId){
-  if(shopId && SHOP_ENTERED && ACTIVE_VENDOR.id === shopId){
-    return (ITEMS || []).some(function(i){ return i.qty > 0; });
-  }
-  if(shopId && window.CARTS_BY_SHOP[shopId]){
-    var m = window.CARTS_BY_SHOP[shopId];
-    return Object.keys(m).some(function(k){ return m[k] > 0; });
-  }
-  // any shop
-  if((ITEMS || []).some(function(i){ return i.qty > 0; })) return true;
-  var carts = window.CARTS_BY_SHOP || {};
-  return Object.keys(carts).some(function(sid){
-    var m = carts[sid] || {};
-    return Object.keys(m).some(function(k){ return m[k] > 0; });
-  });
-}
 function getLockedShopId(){
-  if(SHOP_ENTERED && ACTIVE_VENDOR.id && (ITEMS||[]).some(function(i){ return i.qty > 0; })){
+  if(SHOP_ENTERED && ACTIVE_VENDOR.id && (ITEMS||[]).some(i => i.qty > 0)){
     return ACTIVE_VENDOR.id;
   }
   var carts = window.CARTS_BY_SHOP || {};
   for(var sid in carts){
     var m = carts[sid] || {};
-    if(Object.keys(m).some(function(k){ return m[k] > 0; })) return sid;
+    if(Object.keys(m).some(k => m[k] > 0)) return sid;
   }
   return null;
 }
+
 function updateActiveCartBanner(){
   var el = document.getElementById("activeCartBanner");
   if(!el) return;
@@ -943,8 +845,6 @@ function updateActiveCartBanner(){
   var name = (ALL_VENDORS[lid] && ALL_VENDORS[lid].shop_name) || lid;
   el.style.display = "block";
   el.innerHTML = "🛒 آپ فی الحال <b>"+name+"</b> سے خریداری کر رہے ہیں۔<br>"+
-    "دوسری دکان اس لیے ابھی دستیاب نہیں کہ آرڈر مکس نہ ہوں اور ہر دکان الگ ڈیلیوری کرے۔<br>"+
-    "پہلے یہ آرڈر بھیجیں، یا کارٹ خالی کریں — پھر دوسری دکان کھول سکتے ہیں۔<br>"+
     "<div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;'>"+
     "<button type='button' onclick=\"enterShop('"+lid+"')\" style='background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:bold;cursor:pointer;'>اس دکان پر واپس</button>"+
     "<button type='button' onclick=\"clearShopCart('"+lid+"')\" style='background:#fff;color:var(--price);border:1.5px solid var(--price);border-radius:8px;padding:6px 12px;font-weight:bold;cursor:pointer;'>کارٹ خالی کریں</button>"+
@@ -954,29 +854,22 @@ function updateActiveCartBanner(){
 function saveShopCart(){
   if(!ACTIVE_VENDOR.id) return;
   const map = {};
-  ITEMS.forEach(function(i){ if(i.qty > 0) map[i.id] = i.qty; });
+  ITEMS.forEach(i => { if(i.qty > 0) map[i.id] = i.qty; });
   window.CARTS_BY_SHOP[ACTIVE_VENDOR.id] = map;
 }
 
 function restoreShopCart(){
   const map = window.CARTS_BY_SHOP[ACTIVE_VENDOR.id] || {};
-  ITEMS.forEach(function(i){ i.qty = map[i.id] || 0; });
+  ITEMS.forEach(i => { i.qty = map[i.id] || 0; });
 }
 
 window.enterShop = async function(vendorId){
-  // اگر کسی اور شاپ کا کارٹ بھرا ہو تو دوسری شاپ نہ کھولیں
   var locked = getLockedShopId();
   if(locked && locked !== vendorId){
     var lname = (ALL_VENDORS[locked] && ALL_VENDORS[locked].shop_name) || locked;
-    var msg = "آپ ابھی «"+lname+"» سے خریداری کر رہے ہیں۔\n\n"+
-      "ایک وقت میں ایک دکان رکھنے سے آرڈر صاف رہتا ہے اور ہر دکاندار خود ڈیلیوری کر سکتا ہے۔\n\n"+
-      "دوسری دکان کھولنے کے لیے:\n• پہلے «"+lname+"» کا آرڈر بھیجیں، یا\n• کارٹ خالی کریں";
-    if(typeof showToast === "function") showToast("پہلے «"+lname+"» کا آرڈر مکمل یا کارٹ خالی کریں");
-    alert(msg);
+    alert("آپ ابھی «"+lname+"» سے خریداری کر رہے ہیں۔\nپہلے اس کا آرڈر مکمل کریں یا کارٹ خالی کریں۔");
     return;
   }
-
-  // Save previous shop cart
   if(SHOP_ENTERED && ACTIVE_VENDOR.id) saveShopCart();
 
   const ok = await loadActiveVendor(vendorId);
@@ -989,47 +882,25 @@ window.enterShop = async function(vendorId){
     }
   }catch(e){}
 
-  // Hide entire home wall (shops list) + home chrome — ONLY this shop
-  var sp = document.getElementById("shopPicker");
-  if(sp){ sp.classList.add("hidden"); sp.style.display = "none"; }
-  var sw = document.getElementById("shopWorkspace");
-  if(sw){ sw.classList.remove("hidden"); sw.style.display = "block"; }
-  var bb = document.getElementById("btnBackShops");
-  if(bb){ bb.classList.add("hidden"); bb.style.display = "none"; } // bar inside shop has back
+  document.getElementById("shopPicker").style.display = "none";
+  document.getElementById("shopWorkspace").classList.remove("hidden");
+  document.getElementById("shopWorkspace").style.display = "block";
+  document.getElementById("btnBackShops").style.display = "none";
+  document.getElementById("coverBanner").style.display = "none";
+  document.getElementById("featuredSection").style.display = "none";
+  document.querySelector(".features-scroll-wrap").style.display = "none";
 
-  var cb = document.getElementById("coverBanner"); if(cb) cb.style.display = "none";
-  var feat = document.getElementById("featuredSection"); if(feat){ feat.classList.add("hidden"); feat.style.display = "none"; }
-  var fsw = document.querySelector(".features-scroll-wrap"); if(fsw) fsw.style.display = "none";
-  document.querySelectorAll(".delivery-note-home, [data-home-only]").forEach(function(el){ el.style.display = "none"; });
-
-  // Shop name + THIS shop cover inside
-  var nm = document.getElementById("shopInnerName");
-  if(nm) nm.textContent = ACTIVE_VENDOR.shop_name || "Shop";
-  var note = document.getElementById("shopInnerNote");
-  if(note) note.textContent = (ACTIVE_VENDOR.tagline ? ACTIVE_VENDOR.tagline + " · " : "") + "صرف یہ دکان · ڈیلیوری اسی دکان کی ذمہ داری · کارٹ الگ";
+  document.getElementById("shopInnerName").textContent = ACTIVE_VENDOR.shop_name || "Shop";
+  document.getElementById("shopInnerNote").textContent = (ACTIVE_VENDOR.tagline ? ACTIVE_VENDOR.tagline + " · " : "") + "صرف یہ دکان · ڈیلیوری اسی دکان کی ذمہ داری";
+  
   var cov = document.getElementById("shopInnerCover");
   if(cov){
-    var src = ACTIVE_VENDOR.cover_image || "";
-    if(src){
-      cov.src = src;
-      cov.style.display = "block";
-      cov.onerror = function(){ cov.style.display = "none"; };
+    if(ACTIVE_VENDOR.cover_image){
+      cov.src = ACTIVE_VENDOR.cover_image; cov.style.display = "block";
     } else {
-      cov.removeAttribute("src");
       cov.style.display = "none";
     }
   }
-
-  var hTitle = document.querySelector("header h1, header .brand, .header-title");
-  var hSub = document.querySelector("header .tagline, header p, .header-sub");
-  if(!window._headerBackup){
-    window._headerBackup = {
-      title: hTitle ? hTitle.textContent : "",
-      sub: hSub ? hSub.textContent : ""
-    };
-  }
-  if(hTitle) hTitle.textContent = ACTIVE_VENDOR.shop_name || "Shop";
-  if(hSub) hSub.textContent = "Mingora · Only this shop";
 
   document.getElementById("billbar").style.display = "flex";
   const loading = document.getElementById("loadingMsg");
@@ -1038,233 +909,110 @@ window.enterShop = async function(vendorId){
   if(vendorId === "v001"){
     currentSelectedCategory = null;
     await loadData();
-    currentSelectedCategory = null;
     restoreShopCart();
-    if(typeof renderChips === "function") renderChips();
-    if(typeof renderMainView === "function") renderMainView();
-    if(typeof renderBill === "function") renderBill();
+    renderChips();
+    renderMainView();
+    renderBill();
     window.scrollTo({ top: 0, behavior: "auto" });
   } else {
     await loadVendorCatalog(vendorId);
   }
 };
 
-/** Firebase سے وینڈر آئٹمز لوڈ — ہوم شاپ میں دکھائیں */
 async function loadVendorCatalog(vendorId){
   const loading = document.getElementById("loadingMsg");
-  if(loading){ loading.style.display = "block"; loading.textContent = "⏳ " + (ACTIVE_VENDOR.shop_name||"Shop") + " کی لسٹ..."; }
   try{
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + "/items.json", { cache: "no-store" });
-    const data = await res.json();
-    const itemsObj = data || {};
-    const keys = Object.keys(itemsObj);
+    const data = await res.json() || {};
+    const keys = Object.keys(data);
 
     CATEGORIES_DATA = {};
     CATEGORIES_META = [];
     ITEMS = [];
     const catMap = {};
 
-    keys.forEach(function(k){
-      const it = itemsObj[k] || {};
+    keys.forEach(k => {
+      const it = data[k] || {};
       if(it.available === false) return;
       const catName = (it.category || "سامان").trim() || "سامان";
       if(!catMap[catName]){
         catMap[catName] = true;
-        CATEGORIES_META.push({
-          name: catName,
-          name_roman: it.category_roman || catName,
-          icon: it.icon || "🛒",
-          image: ""
-        });
+        CATEGORIES_META.push({ name: catName, name_roman: it.category_roman || catName, icon: it.icon || "🛒", image: "" });
         CATEGORIES_DATA[catName] = [];
       }
-      let units;
-      if(it.units && it.units.length){
-        units = it.units.map(function(u){ return { label: u.label || "KG", rate: parseFloat(u.rate)||0 }; });
-      } else {
-        units = [{ label: it.unit || "KG", rate: parseFloat(it.rate)||0 }];
-      }
-      const row = {
-        name: it.name || "Item",
-        name_roman: it.name_roman || it.name || "",
-        image: it.image || "",
-        available: true,
-        units: units,
-        featured: it.featured === true
-      };
+      let units = (it.units && it.units.length) ? it.units.map(u => ({ label: u.label || "KG", rate: parseFloat(u.rate)||0 })) : [{ label: it.unit || "KG", rate: parseFloat(it.rate)||0 }];
+      const row = { name: it.name || "Item", name_roman: it.name_roman || it.name || "", image: it.image || "", available: true, units: units, featured: it.featured === true };
       CATEGORIES_DATA[catName].push(row);
       ITEMS.push({
-        id: "v-" + vendorId + "-" + k,
-        cat: catName,
-        icon: it.icon || "🛒",
-        name: row.name,
-        name_roman: row.name_roman,
-        units: units.map(function(u){ return { label: u.label, rate: u.rate }; }),
-        unitIndex: 0,
-        available: true,
-        image: row.image || "",
-        featured: row.featured,
-        qty: 0,
-        vendor_id: vendorId,
-        no_qty: it.no_qty === true,
-        special_order: it.special_order === true,
-        premium: it.premium === true || it.call_only === true || it.visit_required === true,
-        extra_text: it.extra_text || it.premium_note || "",
-        show_detail: it.show_detail !== false
+        id: "v-" + vendorId + "-" + k, cat: catName, icon: it.icon || "🛒", name: row.name, name_roman: row.name_roman,
+        units: units, unitIndex: 0, available: true, image: row.image || "", featured: row.featured, qty: 0,
+        vendor_id: vendorId, premium: it.premium === true
       });
-    });
-
-    if(CATEGORIES_META.length === 0){
-      CATEGORIES_META = [{ name: "سامان", name_roman: "Products", icon: "🛒", image: "" }];
-      CATEGORIES_DATA["سامان"] = [];
-    }
-
-    // first cat image from first item
-    CATEGORIES_META.forEach(function(c){
-      const list = CATEGORIES_DATA[c.name] || [];
-      const withImg = list.find(function(x){ return x.image; });
-      if(withImg) c.image = withImg.image;
     });
 
     currentSelectedCategory = null;
     if(loading) loading.style.display = "none";
-    var nr = document.getElementById("noResult"); if(nr) nr.style.display = "none";
     restoreShopCart();
-    if(typeof renderChips === "function") renderChips();
-    if(typeof renderMainView === "function") renderMainView();
-    if(typeof renderBill === "function") renderBill();
-
-    if(keys.length === 0 || ITEMS.length === 0){
-      document.getElementById("list").innerHTML =
-        '<div style="margin:16px; padding:20px; text-align:center; background:#fff; border-radius:14px; border:1px solid var(--line);">' +
-        '<div style="font-size:28px; margin-bottom:8px;">📦</div>' +
-        '<div style="font-weight:bold; color:var(--dark);">' + (ACTIVE_VENDOR.shop_name||"Shop") + '</div>' +
-        '<p style="font-size:13px; color:var(--muted); margin-top:10px; line-height:1.6;">ابھی اس شاپ نے کوئی آئٹم نہیں لگایا۔<br>دکاندار Vendor Panel سے سامان سیو کرے۔</p>' +
-        '<button type="button" class="back-shops" style="margin-top:12px;" onclick="backToShops()">← All Shops</button></div>';
-    }
+    renderChips();
+    renderMainView();
+    renderBill();
     window.scrollTo({ top: 0, behavior: "auto" });
   }catch(e){
     if(loading) loading.style.display = "none";
-    document.getElementById("list").innerHTML =
-      '<div style="margin:16px;padding:20px;text-align:center;color:var(--price);">لسٹ لوڈ نہیں ہوئی</div>';
-    console.warn(e);
+    document.getElementById("list").innerHTML = '<div style="margin:16px;padding:20px;text-align:center;color:var(--price);">لسٹ لوڈ نہیں ہوئی</div>';
   }
 }
-
-
 
 window.backToShops = function(){
   if(ACTIVE_VENDOR.id) saveShopCart();
   SHOP_ENTERED = false;
-  // display qty zero (saved cart remains in CARTS_BY_SHOP for lock)
-  if(ITEMS && ITEMS.forEach) ITEMS.forEach(function(i){ i.qty = 0; });
-  if(typeof renderBill === "function") renderBill();
-  if(typeof selectCategory === "function") selectCategory(null);
-  if(typeof updateActiveCartBanner === "function") updateActiveCartBanner();
+  if(ITEMS) ITEMS.forEach(i => { i.qty = 0; });
+  renderBill();
+  selectCategory(null);
+  updateActiveCartBanner();
 
-  var sp = document.getElementById("shopPicker");
-  if(sp){ sp.classList.remove("hidden"); sp.style.display = ""; }
-  var sw = document.getElementById("shopWorkspace");
-  if(sw){ sw.classList.add("hidden"); sw.style.display = "none"; }
-  var bb = document.getElementById("btnBackShops");
-  if(bb){ bb.classList.add("hidden"); bb.style.display = "none"; }
-  var bill = document.getElementById("billbar");
-  if(bill) bill.style.display = "none";
+  document.getElementById("shopPicker").style.display = "";
+  document.getElementById("shopWorkspace").style.display = "none";
+  document.getElementById("btnBackShops").style.display = "none";
+  document.getElementById("billbar").style.display = "none";
+  document.getElementById("homePageWrapper").style.display = "block";
+  document.getElementById("coverBanner").style.display = "block";
+  document.querySelector(".features-scroll-wrap").style.display = "";
+  document.getElementById("featuredSection").style.display = "";
 
-  var homeWrapper = document.getElementById("homePageWrapper");
-  if(homeWrapper) homeWrapper.style.display = "block";
-
-  var cb = document.getElementById("coverBanner"); if(cb) cb.style.display = "block";
-  var fsw = document.querySelector(".features-scroll-wrap"); if(fsw) fsw.style.display = "";
-  var feat = document.getElementById("featuredSection"); if(feat){ feat.classList.remove("hidden"); feat.style.display = ""; }
-
-  // Restore header
-  if(window._headerBackup){
-    var hTitle = document.querySelector("header h1, header .brand, .header-title");
-    var hSub = document.querySelector("header .tagline, header p, .header-sub");
-    if(hTitle) hTitle.textContent = window._headerBackup.title || "SJ ONLINE";
-    if(hSub) hSub.textContent = window._headerBackup.sub || "";
-  }
-  ACTIVE_VENDOR = { id: null, shop_name: "", whatsapp: "923349353799", phone: "", pay_number: "", bank_detail: "", owner_name: "" };
+  ACTIVE_VENDOR = { id: null, shop_name: "", whatsapp: "923349353799", phone: "" };
   SHOP_WHATSAPP = "923349353799";
-  if(typeof applyVendorPaymentUI === "function") applyVendorPaymentUI();
-  try{
-    if(location.hash && location.hash.indexOf("shop-") === 1){
-      history.replaceState({}, "", location.pathname + location.search);
-    }
-  }catch(e){}
-
-  // ہوم ریفریش: شاپس + ٹاپ ڈیلز دوبارہ
+  applyVendorPaymentUI();
   loadShopsList();
-  // reload home deals catalog so featured works again
-  (async function refreshHomeDeals(){
-    try{
-      if(typeof bootHomeDealsRefresh === "function") await bootHomeDealsRefresh();
-      else if(typeof renderFeatured === "function") renderFeatured();
-    }catch(e){}
-  })();
+  bootHomeDealsRefresh();
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// Boot: shops wall + load SJ Foods catalog for mixed cover/top deals on home
-loadShopsList();
 window.bootHomeDealsRefresh = async function(){
   try{
     const bust = "?v=" + Date.now();
     const idxRes = await fetch("categories_index.json" + bust, {cache:"no-store"});
     const index = await idxRes.json();
-    const catResults = await Promise.all(index.map(function(e){ return fetch(e.file + bust, {cache:"no-store"}).then(function(r){ return r.json(); }); }));
+    
+    // فائر بیس کی لائیو سپورٹ کے ساتھ لوڈنگ
+    const catResults = await Promise.all(index.map(e => fetchCategoryWithFirebase(e.file)));
 
     coverImagesList = [];
-    index.forEach(function(entry, i){
+    index.forEach((entry, i) => {
       const itemsList = catResults[i] || [];
-      if(entry.image && coverImagesList.indexOf(entry.image) < 0) coverImagesList.push(entry.image);
-      itemsList.forEach(function(it){
-        if(it.image && coverImagesList.indexOf(it.image) < 0) coverImagesList.push(it.image);
+      if(entry.image && !coverImagesList.includes(entry.image)) coverImagesList.push(entry.image);
+      itemsList.forEach(it => {
+        if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
       });
     });
-
-    let vendorFeatured = [];
-    try{
-      const vr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json", {cache:"no-store"});
-      const vdata = await vr.json() || {};
-      Object.keys(vdata).forEach(function(vid){
-        if(vid === "v001" || vid === "_market") return;
-        const v = vdata[vid];
-        if(!v || v.status !== "approved" || v.blocked === true) return;
-        const items = v.items || {};
-        Object.keys(items).forEach(function(ik){
-          const it = items[ik] || {};
-          if(it.available === false) return;
-          if(it.image && coverImagesList.indexOf(it.image) < 0) coverImagesList.push(it.image);
-          if(it.featured === true || it.featured === "true"){
-            vendorFeatured.push({
-              id: "vf-"+vid+"-"+ik,
-              cat: it.category || "سامان",
-              icon: "🛒",
-              name: it.name || "Item",
-              name_roman: it.name_roman || it.name || "",
-              units: (it.units && it.units.length) ? it.units : [{label: it.unit||"KG", rate: parseFloat(it.rate)||0}],
-              unitIndex: 0,
-              available: true,
-              image: it.image || "",
-              featured: true,
-              qty: 0,
-              vendor_id: vid,
-              _tenantShop: v.shop_name || vid
-            });
-          }
-        });
-      });
-    }catch(e){}
 
     if(SHOP_ENTERED) return;
 
     ITEMS = [];
-    CATEGORIES_META = index.map(function(e){ return {name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: e.image||""}; });
-    index.forEach(function(entry, i){
-      (catResults[i]||[]).forEach(function(it, ii){
-        var cleanUnits = (it.units && it.units.length) ? it.units.map(function(u){ return {label:u.label, rate:u.rate}; }) : [{label: it.unit||"KG", rate: it.rate}];
+    CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: e.image||""}));
+    index.forEach((entry, i) => {
+      (catResults[i]||[]).forEach((it, ii) => {
+        var cleanUnits = (it.units && it.units.length) ? it.units.map(u => ({label:u.label, rate:u.rate})) : [{label: it.unit||"KG", rate: it.rate}];
         ITEMS.push({
           id: "h-"+i+"-"+ii, cat: entry.category, icon: entry.icon,
           name: it.name, name_roman: it.name_roman||"", units: cleanUnits, unitIndex: 0,
@@ -1273,22 +1021,14 @@ window.bootHomeDealsRefresh = async function(){
         });
       });
     });
-    vendorFeatured.forEach(function(x){ ITEMS.push(x); });
 
     coverImagesList = shuffleArray(coverImagesList).slice(0, 24);
-    if(typeof setupCoverSlider === "function") setupCoverSlider();
-    if(typeof renderFeatured === "function") renderFeatured();
-    var sw = document.getElementById("shopWorkspace"); if(sw) sw.classList.add("hidden");
-    var bill = document.getElementById("billbar"); if(bill) bill.style.display = "none";
-    var lm = document.getElementById("loadingMsg"); if(lm) lm.style.display = "none";
+    setupCoverSlider();
+    renderFeatured();
   }catch(e){ console.warn("boot deals", e); }
 };
-bootHomeDealsRefresh();
-
-
 
 let SHOP_PAY_NUMBER = "0334-9353799";
-
 let currentSelectedCategory = null;
 let coverImagesList = [];
 let deferredPrompt = null;
@@ -1297,29 +1037,16 @@ function toggleDrawer(show){
   document.getElementById('drawerOverlay').classList.toggle('active', show);
   document.getElementById('drawer').classList.toggle('active', show);
 }
-
-function openModal(id){
-  toggleDrawer(false);
-  document.getElementById(id).classList.add('active');
-}
-
-function closeModal(id){
-  document.getElementById(id).classList.remove('active');
-}
+function openModal(id){ toggleDrawer(false); document.getElementById(id).classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
 
 function isAppInstalled(){
   return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || safeStorage.getItem('sj_app_installed') === '1';
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // صرف تب دکھائیں جب ایپ پہلے سے انسٹال نہ ہو
-  if(!isAppInstalled()){
-    document.getElementById('installBanner').style.display = 'flex';
-    const tip = document.getElementById('manualInstallTip');
-    if(tip) tip.style.display = 'none';
-  }
+  e.preventDefault(); deferredPrompt = e;
+  if(!isAppInstalled()) document.getElementById('installBanner').style.display = 'flex';
 });
 
 window.triggerInstall = async function(){
@@ -1329,49 +1056,18 @@ window.triggerInstall = async function(){
     if (outcome === 'accepted') {
       safeStorage.setItem('sj_app_installed', '1');
       document.getElementById('installBanner').style.display = 'none';
-      const tip = document.getElementById('manualInstallTip');
-      if(tip) tip.style.display = 'none';
     }
     deferredPrompt = null;
-  } else {
-    // دستی ہدایات صرف غیر انسٹال صارفین کو
-    if(!isAppInstalled()){
-      const tip = document.getElementById('manualInstallTip');
-      if(tip) tip.style.display = 'block';
-      showToast("نیچے انسٹال کا طریقہ دیکھیں");
-    }
   }
 };
 
 document.getElementById('installAppBtn').addEventListener('click', () => triggerInstall());
 
-// پہلے سے انسٹال ہے تو بینر کبھی نہ دکھے
-if (isAppInstalled()) {
-  const b = document.getElementById('installBanner');
-  if(b) b.style.display = 'none';
-  const tip = document.getElementById('manualInstallTip');
-  if(tip) tip.style.display = 'none';
-}
-
-window.addEventListener('appinstalled', () => {
-  safeStorage.setItem('sj_app_installed', '1');
-  const b = document.getElementById('installBanner');
-  if(b) b.style.display = 'none';
-});
-
 window.addEventListener('popstate', (event) => {
-  // Phone back / browser back: leave shop → shops wall
-  if (typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED) {
-    if (!event.state || !event.state.shop) {
-      backToShops();
-      return;
-    }
+  if (SHOP_ENTERED && (!event.state || !event.state.shop)) {
+    backToShops(); return;
   }
-  if (event.state && event.state.cat) {
-    currentSelectedCategory = event.state.cat;
-  } else {
-    currentSelectedCategory = null;
-  }
+  currentSelectedCategory = (event.state && event.state.cat) ? event.state.cat : null;
   renderChips();
   renderMainView();
 });
@@ -1382,32 +1078,14 @@ slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - 
 slider.addEventListener('mouseleave', () => { isDown = false; });
 slider.addEventListener('mouseup', () => { isDown = false; });
 slider.addEventListener('mousemove', (e) => {
-  if(!isDown) return;
-  e.preventDefault();
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 2;
-  slider.scrollLeft = scrollLeft - walk;
+  if(!isDown) return; e.preventDefault();
+  slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft) - startX) * 2;
 });
-slider.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-slider.addEventListener('touchend', () => { isDown = false; });
-slider.addEventListener('touchmove', (e) => {
-  if(!isDown) return;
-  const x = e.touches[0].pageX - slider.offsetLeft;
-  const walk = (x - startX) * 2;
-  slider.scrollLeft = scrollLeft - walk;
-}, {passive: true});
 
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
 function urduUnit(label) {
-  const map = {
-    "KG": "کلو", "Kg": "کلو", "kg": "کلو",
-    "G": "گرام", "g": "گرام",
-    "Ltr": "لیٹر", "Litre": "لیٹر", "L": "لیٹر",
-    "Pkt": "پیکٹ", "Packet": "پیکٹ",
-    "Pcs": "عدد", "Piece": "عدد",
-    "Dozen": "درجن"
-  };
+  const map = { "KG": "کلو", "Kg": "کلو", "kg": "کلو", "G": "گرام", "Ltr": "لیٹر", "Pkt": "پیکٹ", "Pcs": "عدد", "Dozen": "درجن" };
   return map[label] || label;
 }
 
@@ -1425,7 +1103,9 @@ async function loadData(){
     const bust = "?v=" + Date.now();
     const idxRes = await fetch("categories_index.json" + bust, {cache:"no-store"});
     const index = await idxRes.json();
-    const catResults = await Promise.all(index.map(e => fetch(e.file + bust, {cache:"no-store"}).then(r=>r.json())));
+    
+    // کیٹیگری کا ڈیٹا فائر بیس سے حاصل کریں
+    const catResults = await Promise.all(index.map(e => fetchCategoryWithFirebase(e.file)));
     
     CATEGORIES_META = index.map(e => ({name: e.category, name_roman: e.category_roman || "", icon: e.icon, image: e.image || ""}));
     ITEMS = [];
@@ -1433,66 +1113,31 @@ async function loadData(){
 
     index.forEach((entry, i) => {
       let catName = entry.category;
-      let itemsList = catResults[i];
+      let itemsList = catResults[i] || [];
       CATEGORIES_DATA[catName] = itemsList;
 
       if(entry.image) coverImagesList.push(entry.image);
       itemsList.forEach((it, ii) => {
         if(it.image && !coverImagesList.includes(it.image)) coverImagesList.push(it.image);
-        let cleanUnits = (it.units && it.units.length)
-          ? it.units.map(u => ({label: u.label, rate: u.rate}))
-          : [{label: it.unit || "KG", rate: it.rate}];
+        let cleanUnits = (it.units && it.units.length) ? it.units.map(u => ({label: u.label, rate: u.rate})) : [{label: it.unit || "KG", rate: it.rate}];
 
-        var catKey = (catName + " " + (entry.category_roman||"") + " " + (entry.file||"")).toLowerCase();
-        var isSpecialCat = /jewel|jeweller|qaisar|قیصر|جیولر|زیور|سون|gold|صرافہ/.test(catKey);
         ITEMS.push({
           id: i+"-"+ii, cat: catName, icon: entry.icon,
           name: it.name, name_roman: it.name_roman || "",
           units: cleanUnits, unitIndex: 0,
           available: it.available !== false, image: it.image || "", featured: it.featured === true, qty: 0,
-          vendor_id: ACTIVE_VENDOR.id || "v001",
-          no_qty: it.no_qty === true || isSpecialCat,
-          special_order: it.special_order === true || isSpecialCat,
-          premium: it.premium === true || isSpecialCat,
-          extra_text: it.extra_text || it.note || "",
-          show_detail: it.show_detail !== false
+          vendor_id: ACTIVE_VENDOR.id || "v001"
         });
       });
     });
 
     coverImagesList = shuffleArray(coverImagesList);
     setupCoverSlider();
-    
-    let initialHash = decodeURIComponent(window.location.hash.replace("#", ""));
-    if(typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED){
-      // Inside shop: open on ALL category covers (unless hash explicitly set mid-session)
-      if(initialHash && CATEGORIES_META.some(c => c.name === initialHash) && history.state && history.state.cat){
-        currentSelectedCategory = initialHash;
-      } else {
-        currentSelectedCategory = null;
-      }
-    } else if(initialHash && CATEGORIES_META.some(c => c.name === initialHash)){
-      currentSelectedCategory = initialHash;
-    } else {
-      currentSelectedCategory = null;
-    }
-
     renderChips();
     renderMainView();
     renderFeatured();
     loadSavedCustomerDetails();
     document.getElementById("loadingMsg").style.display = "none";
-    if(SHOP_ENTERED){
-      document.getElementById("billbar").style.display = "flex";
-      var banner = document.getElementById("coverBanner");
-      if(banner) banner.style.display = "none";
-      var feat = document.getElementById("featuredSection");
-      if(feat){ feat.classList.add("hidden"); feat.style.display = "none"; }
-      var fsw = document.querySelector(".features-scroll-wrap");
-      if(fsw) fsw.style.display = "none";
-    } else {
-      document.getElementById("billbar").style.display = "none";
-    }
   }catch(e){
     document.getElementById("loadingMsg").textContent = "⚠️ ریٹ لسٹ لوڈ نہیں ہوسکی";
   }
@@ -1502,51 +1147,19 @@ async function loadSettings(){
   try{
     const res = await fetch("settings.json", {cache:"no-store"});
     const s = await res.json();
-    SHOP_WHATSAPP = "923349353799";
-    SHOP_PAY_NUMBER = "0334-9353799";
-    document.getElementById("payNumber").textContent = SHOP_PAY_NUMBER;
-
-    if(s.cover_image && !coverImagesList.includes(s.cover_image)){
-      coverImagesList.unshift(s.cover_image);
-      setupCoverSlider();
-    }
     if(s.facebook_url) document.getElementById("linkFb").href = s.facebook_url;
     if(s.tiktok_url) document.getElementById("linkTk").href = s.tiktok_url;
     if(s.youtube_url) document.getElementById("linkYt").href = s.youtube_url;
     if(s.instagram_url) document.getElementById("linkIg").href = s.instagram_url;
-  }catch(e){
-    SHOP_WHATSAPP = "923349353799";
-    SHOP_PAY_NUMBER = "0334-9353799";
-  }
+  }catch(e){}
 }
 
 function setupCoverSlider(){
   const track = document.getElementById("coverSliderTrack");
   const banner = document.getElementById("coverBanner");
-  if(!track || !banner) return;
-  // Inside a shop: NEVER show home multi-image slider
-  if(typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED){
-    banner.style.display = "none";
-    return;
-  }
-  if(coverImagesList.length === 0) return;
+  if(!track || !banner || SHOP_ENTERED || coverImagesList.length === 0) return;
   banner.style.display = "block";
   track.innerHTML = coverImagesList.map(img => `<div class="cover-slide"><img src="${img}" alt="Cover Slide"></div>`).join("");
-
-  if(window._coverTimer){ clearInterval(window._coverTimer); window._coverTimer = null; }
-  let currentSlide = 0;
-  track.style.transform = "translateX(0)";
-  if(coverImagesList.length > 1){
-    window._coverTimer = setInterval(() => {
-      if(typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED){
-        clearInterval(window._coverTimer);
-        banner.style.display = "none";
-        return;
-      }
-      currentSlide = (currentSlide + 1) % coverImagesList.length;
-      track.style.transform = `translateX(${currentSlide * 100}%)`;
-    }, 4000);
-  }
 }
 
 function loadSavedCustomerDetails(){
@@ -1570,28 +1183,15 @@ function renderChips(){
 }
 
 function selectCategory(catName){
-  if(catName){
-    history.pushState({cat: catName}, "", "#" + encodeURIComponent(catName));
-    currentSelectedCategory = catName;
-  } else {
-    history.pushState({cat: null}, "", window.location.pathname);
-    currentSelectedCategory = null;
-  }
+  currentSelectedCategory = catName;
   renderChips();
   renderMainView();
   window.scrollTo({top: 0, behavior: 'auto'});
 }
 
 function resetToHome(){
-  // کسی بھی پینل سے → مکمل ہوم (شاپس وال) + ریفریش
-  if (typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED) {
-    backToShops();
-  }
-  if (typeof selectCategory === "function") selectCategory(null);
-  try{
-    if(typeof loadShopsList === "function") loadShopsList();
-    if(typeof renderFeatured === "function") renderFeatured();
-  }catch(e){}
+  if (SHOP_ENTERED) backToShops();
+  selectCategory(null);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -1600,68 +1200,38 @@ function renderMainView(filter=""){
   if(!main) return;
   main.innerHTML = "";
   const homeWrapper = document.getElementById("homePageWrapper");
-  // Shop mode: never show site-level home (deals/shops wall chrome)
-  if(homeWrapper){
-    if(typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED) homeWrapper.style.display = "none";
-  }
+  if(homeWrapper && SHOP_ENTERED) homeWrapper.style.display = "none";
 
   if(filter){
-    if(homeWrapper && !(typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED)) homeWrapper.style.display = "none";
     let filteredItems = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
     let container = document.createElement("div");
     container.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
-    if(filteredItems.length > 0){
-      filteredItems.forEach(it => container.appendChild(createItemRow(it)));
-    } else {
-      container.innerHTML += `<div style="text-align:center; padding:20px; color:var(--muted);">کوئی آئٹم نہیں ملا</div>`;
-    }
+    filteredItems.forEach(it => container.appendChild(createItemRow(it)));
     main.appendChild(container);
   }
   else if(currentSelectedCategory){
-    if(homeWrapper) homeWrapper.style.display = "none";
     let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory) || {icon:"📦", name: currentSelectedCategory, name_roman: currentSelectedCategory};
     let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
     let titleDiv = document.createElement("div");
     titleDiv.className = "cat-title";
-    titleDiv.innerHTML = `<span>${catObj.icon||"📦"} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" type="button" onclick="resetToHome()">⬅ Back to Categories</button>`;
+    titleDiv.innerHTML = `<span>${catObj.icon||"📦"} ${catObj.name_roman || catObj.name}</span> <button class="back-cat-btn" type="button" onclick="resetToHome()">⬅ Back</button>`;
     main.appendChild(titleDiv);
-    if(items.length > 0){
-      items.forEach(it => main.appendChild(createItemRow(it)));
-    } else {
-      main.innerHTML += `<div style="text-align:center;padding:20px;color:var(--muted);">اس کیٹگری میں آئٹم نہیں</div>`;
-    }
+    items.forEach(it => main.appendChild(createItemRow(it)));
   }
   else {
-    // === ALL CATEGORY COVERS (like old site) ===
-    if(homeWrapper){
-      homeWrapper.style.display = (typeof SHOP_ENTERED !== "undefined" && SHOP_ENTERED) ? "none" : "block";
-    }
     let grid = document.createElement("div");
     grid.className = "home-cats-grid";
-    if(!CATEGORIES_META || CATEGORIES_META.length === 0){
-      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);">کیٹگریز لوڈ نہیں ہوئیں</div>`;
-    } else {
-      CATEGORIES_META.forEach(cat => {
-        let card = document.createElement("div");
-        card.className = "home-cat-card";
-        card.onclick = () => selectCategory(cat.name);
-        let catItems = (typeof CATEGORIES_DATA !== "undefined" && CATEGORIES_DATA[cat.name]) ? CATEGORIES_DATA[cat.name] : [];
-        let imagesList = catItems.filter(it => it.image).map(it => it.image);
-        let defaultImg = cat.image || (imagesList.length > 0 ? imagesList[0] : "");
-        card.innerHTML =
-          `<div class="home-cat-img-wrap">` +
-            (defaultImg
-              ? `<img src="${defaultImg}" alt="${cat.name}" loading="lazy">`
-              : `<div style="font-size:38px;">${cat.icon||"📦"}</div>`) +
-          `</div>` +
-          `<div class="home-cat-name">${cat.name_roman || cat.name}</div>` +
-          `<div class="home-cat-urdu">${cat.name}</div>`;
-        grid.appendChild(card);
-      });
-    }
+    CATEGORIES_META.forEach(cat => {
+      let card = document.createElement("div");
+      card.className = "home-cat-card";
+      card.onclick = () => selectCategory(cat.name);
+      let catItems = CATEGORIES_DATA[cat.name] || [];
+      let defaultImg = cat.image || (catItems.find(it => it.image)?.image || "");
+      card.innerHTML = `<div class="home-cat-img-wrap">${defaultImg ? `<img src="${defaultImg}" alt="${cat.name}" loading="lazy">` : `<div style="font-size:38px;">${cat.icon||"📦"}</div>`}</div><div class="home-cat-name">${cat.name_roman || cat.name}</div><div class="home-cat-urdu">${cat.name}</div>`;
+      grid.appendChild(card);
+    });
     main.appendChild(grid);
   }
-  document.getElementById("noResult").style.display = "none";
 }
 
 function createItemRow(it){
@@ -1669,95 +1239,34 @@ function createItemRow(it){
   const row = document.createElement("div");
   row.className = "item" + (it.qty>0 ? " active":"");
   row.id = "row-"+it.id;
-  const isPremium = !!(it.premium || it.call_only || it.visit_required);
-  
   let primaryName = it.name_roman ? it.name_roman : it.name;
   let secondaryName = it.name_roman ? `(${it.name})` : '';
-  const safeId = String(it.id).replace(/'/g, "");
 
-  // یونٹ لیبل صاف — Carat / Gram / Tola دکھائیں
-  const unitOpts = (it.units||[]).map((x,idx)=>{
-    const lab = String(x.label||"").replace(/^\(+|\)+$/g,"").trim();
-    return `<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${lab} — ${fmt(x.rate)}</option>`;
-  }).join("");
+  const unitOpts = (it.units||[]).map((x,idx)=> `<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} — ${fmt(x.rate)}</option>`).join("");
 
   row.innerHTML = `
     <div class="item-row-top">
-      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${primaryName.replace(/'/g,"")}')">
+      <div class="item-thumb" onclick="openLightbox('${it.image||''}', '${primaryName}')">
         ${it.image ? `<img src="${it.image}" loading="lazy">` : it.icon}
       </div>
       <div class="info">
-        <div class="name">${primaryName} ${secondaryName ? '<span style="font-size:13px; color:var(--muted); font-weight:normal; font-family:\'Jameel Noori Nastaleeq\',serif;">'+secondaryName+'</span>' : ''}</div>
-        <div class="meta" dir="ltr" style="text-align:right;">
-          <b>${fmt(u.rate)}</b> / ${String(u.label||"").replace(/^\(+|\)+$/g,"").trim()}
-          ${isPremium?' <span style="background:#FFF3E0;color:#E65100;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:bold;">💎 خاص — کال/وزٹ</span>':''}
-        </div>
-        ${(it.show_detail !== false && it.extra_text) ? `<details open style="margin-top:6px;font-size:13px;color:var(--ink);"><summary style="cursor:pointer;color:#1B5E20;font-weight:900;font-size:13.5px;">📋 تفصیل (وزن / کیریٹ) ▼</summary><div style="padding:8px 0;line-height:1.6;background:#F9F8F3;border-radius:8px;padding:8px;margin-top:4px;">${it.extra_text}</div></details>` : ''}
-        ${isPremium ? `<div style="margin-top:6px;font-size:12px;line-height:1.55;color:#856404;background:#FFF8E1;padding:8px 10px;border-radius:8px;font-weight:bold;">
-          عام ڈیلیوری بوائے نہیں — دکان کال/وزٹ، یا ایڈوانس پیمنٹ کے بعد OTP سے وصولی۔
-        </div>` : ''}
+        <div class="name">${primaryName} ${secondaryName ? '<span style="font-size:13px; color:var(--muted); font-weight:normal;">'+secondaryName+'</span>' : ''}</div>
+        <div class="meta" dir="ltr" style="text-align:right;"><b>${fmt(u.rate)}</b> / ${u.label}</div>
       </div>
     </div>
     <div class="item-row-bottom">
-      ${it.units.length > 1 ? `<div class="unit-wrap">
-        <div class="unit-hint">${isPremium ? "▼ یونٹ چنیں: کیریٹ / گرام / پیس" : "▼ سائز یا یونٹ بدلنے کے لیے یہاں دبائیں"}</div>
-        <select class="unit-select" onchange="changeUnit('${safeId}', this.value)" aria-label="یونٹ">
-          ${unitOpts}
-        </select>
-      </div>` : '<span></span>'}
+      ${it.units.length > 1 ? `<div class="unit-wrap"><select class="unit-select" onchange="changeUnit('${it.id}', this.value)">${unitOpts}</select></div>` : '<span></span>'}
       <div class="qty-box-wrapper">
-        <span class="status-label ${it.available ? 'available' : 'out-of-stock'}">${it.available ? 'Available' : 'Not Available'}</span>
-        ${isPremium ? `
-          <div style="display:flex;flex-direction:column;gap:6px;align-items:stretch;">
-            ${it.qty>0
-              ? `<button type="button" onclick="changeQty('${safeId}', -1)" style="background:#FFEBEE;color:#B71C1C;border:none;border-radius:10px;padding:8px 12px;font-weight:bold;font-size:12px;cursor:pointer;">ہٹائیں</button>`
-              : `<button type="button" onclick="requestPremiumItem('${safeId}')" style="background:var(--dark);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-weight:bold;font-size:12px;cursor:pointer;">📩 دلچسپی / پوچھیں</button>`
-            }
-          </div>
-        ` : `
         <div class="qty-box">
-          <button onclick="changeQty('${safeId}', -1)">−</button>
+          <button onclick="changeQty('${it.id}', -1)">−</button>
           <input type="number" value="${it.qty}" readonly>
-          <button class="plus" onclick="changeQty('${safeId}', 1)">+</button>
-        </div>`}
+          <button class="plus" onclick="changeQty('${it.id}', 1)">+</button>
+        </div>
       </div>
     </div>
   `;
   return row;
 }
-
-/** خاص/مہنگا آئٹم — ٹماٹر والا +/− نہیں؛ ایک انکوائری */
-window.requestPremiumItem = function(id){
-  const it = findItem(id);
-  if(!it || !it.available) return;
-  if(!SHOP_ENTERED || !ACTIVE_VENDOR.id){
-    alert("Pehle dukan select karein.");
-    return;
-  }
-  var locked = getLockedShopId();
-  if(locked && locked !== ACTIVE_VENDOR.id){
-    alert("Pehle dosri dukan ka cart khali / complete karein.");
-    return;
-  }
-  var u = it.units[it.unitIndex] || {};
-  var nm = it.name_roman || it.name || "Item";
-  var ok = confirm(
-    "Yeh qeemti / khaas item hai: " + nm + "\n" +
-    "Unit: " + (u.label||"") + " — " + fmt(u.rate||0) + "\n\n" +
-    "Aam delivery boy nahi.\n" +
-    "• Dukaan call / visit\n" +
-    "• Ya advance payment ke baad OTP se wasooli / delivery\n\n" +
-    "Interest list mein shamil karein? Dukandar ko order message jayega."
-  );
-  if(!ok) return;
-  it.qty = 1; // صرف ایک انکوائری لائن — 5 کلو وغیرہ نہیں
-  window.LOCKED_SHOP_ID = ACTIVE_VENDOR.id;
-  saveShopCart();
-  renderMainView(document.getElementById("search") ? document.getElementById("search").value : "");
-  renderBill();
-  updateActiveCartBanner();
-  if(typeof showToast === "function") showToast("Khaas item list mein — order par dukandar se rabta hoga");
-};
 
 function changeUnit(id, idx){
   const it = ITEMS.find(x => x.id === id);
@@ -1771,80 +1280,23 @@ function changeUnit(id, idx){
 function changeQty(id, delta){
   const it = findItem(id);
   if(!it || !it.available) return;
-  if(!SHOP_ENTERED || !ACTIVE_VENDOR.id){
-    alert("پہلے کوئی دکان منتخب کریں۔\nہر دکان الگ کارٹ اور خود ڈیلیوری رکھتی ہے۔");
-    return;
-  }
-  var locked = getLockedShopId();
-  if(locked && locked !== ACTIVE_VENDOR.id){
-    var ln = (ALL_VENDORS[locked] && ALL_VENDORS[locked].shop_name) || locked;
-    alert("آپ فی الحال «"+ln+"» سے خرید رہے ہیں۔\nپہلے وہاں آرڈر بھیجیں یا کارٹ خالی کریں — پھر دوسری دکان سے منتخب کر سکتے ہیں۔");
-    return;
-  }
-  // مہنگا آئٹم: +/− bulk نہیں — requestPremiumItem استعمال کریں
-  if(it.premium || it.call_only || it.visit_required){
-    if(delta > 0){ requestPremiumItem(id); return; }
-    it.qty = 0;
-    if(!(ITEMS||[]).some(function(i){ return i.qty > 0; })) window.LOCKED_SHOP_ID = null;
-    saveShopCart();
-    renderMainView(document.getElementById("search") ? document.getElementById("search").value : "");
-    renderBill();
-    updateActiveCartBanner();
-    return;
-  }
   it.qty = Math.max(0, it.qty + delta);
-  if(it.qty > 0) window.LOCKED_SHOP_ID = ACTIVE_VENDOR.id;
-  else if(!(ITEMS||[]).some(function(i){ return i.qty > 0; })) window.LOCKED_SHOP_ID = null;
   saveShopCart();
   renderMainView(document.getElementById("search").value);
   renderBill();
-  updateActiveCartBanner();
 }
-
-/** کارٹ سے ایک آئٹم مکمل ہٹائیں */
-window.removeFromCart = function(id){
-  const it = findItem(id);
-  if(!it) return;
-  it.qty = 0;
-  saveShopCart();
-  if(!(ITEMS||[]).some(function(i){ return i.qty > 0; })) window.LOCKED_SHOP_ID = null;
-  renderMainView(document.getElementById("search") ? document.getElementById("search").value : "");
-  renderBill();
-  updateActiveCartBanner();
-  if(typeof showToast === "function") showToast("آئٹم کارٹ سے ہٹا دیا");
-};
-
-/** پورا کارٹ خالی */
-window.clearShopCart = function(shopId){
-  shopId = shopId || (ACTIVE_VENDOR && ACTIVE_VENDOR.id);
-  if(SHOP_ENTERED && ACTIVE_VENDOR.id === shopId){
-    (ITEMS||[]).forEach(function(i){ i.qty = 0; });
-  }
-  if(shopId && window.CARTS_BY_SHOP) delete window.CARTS_BY_SHOP[shopId];
-  window.LOCKED_SHOP_ID = null;
-  if(typeof renderMainView === "function") renderMainView(document.getElementById("search") ? document.getElementById("search").value : "");
-  if(typeof renderBill === "function") renderBill();
-  updateActiveCartBanner();
-  if(typeof showToast === "function") showToast("کارٹ خالی ہو گیا — اب دوسری دکان کھول سکتے ہیں");
-};
 
 function findItem(id){ return ITEMS.find(i=>i.id===id); }
 
 function renderBill(){
   const chosen = ITEMS.filter(i => i.qty > 0);
   let subtotal = 0;
-  
   document.getElementById("billLines").innerHTML = chosen.map(it => {
     const u = it.units[it.unitIndex];
     const total = it.qty * u.rate;
     subtotal += total;
-    let displayName = it.name_roman ? `${it.name_roman} (${it.name})` : it.name;
-    return `<div class="cart-item-line" style="margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:6px; display:flex; align-items:center; gap:8px; justify-content:space-between;">
-      <div style="flex:1; min-width:0;">• [${it.cat}] ${displayName} — ${it.qty} ${urduUnit(u.label)} = <b>${fmt(total)}</b></div>
-      <button type="button" onclick="removeFromCart('${it.id}')" title="کارٹ سے ہٹائیں"
-        style="flex-shrink:0; width:28px; height:28px; border-radius:50%; border:none; background:#FFEBEE; color:#B71C1C; font-weight:bold; font-size:14px; cursor:pointer; line-height:1;">✕</button>
-    </div>`;
-  }).join("") + (chosen.length ? `<button type="button" onclick="clearShopCart()" style="margin-top:8px;width:100%;padding:8px;border-radius:10px;border:1.5px solid #EF9A9A;background:#FFF5F5;color:#B71C1C;font-weight:bold;font-size:12.5px;cursor:pointer;">🗑️ سارا کارٹ خالی کریں</button>` : "");
+    return `<div class="cart-item-line">• ${it.name} — ${it.qty} ${urduUnit(u.label)} = <b>${fmt(total)}</b></div>`;
+  }).join("");
 
   document.getElementById("itemCount").textContent = chosen.length;
   document.getElementById("summaryTotal").textContent = fmt(subtotal);
@@ -1852,343 +1304,64 @@ function renderBill(){
   if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
-const billbarEl = document.getElementById("billbar");
-const summaryEl = document.getElementById("summary");
-let touchStartY = 0;
-let touchStartOnSummary = false;
-// صرف summary بار پر سوائپ — کارٹ لسٹ اسکرول سے بند نہ ہو
-if(summaryEl){
-  summaryEl.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-    touchStartOnSummary = true;
-  }, {passive: true});
-  summaryEl.addEventListener('touchend', (e) => {
-    if(!touchStartOnSummary) return;
-    touchStartOnSummary = false;
-    const touchEndY = e.changedTouches[0].clientY;
-    const dy = touchEndY - touchStartY;
-    // summary پر نیچے سوائپ = minimize، اوپر = کھول
-    if(dy > 40) billbarEl.classList.add("collapsed");
-    else if(dy < -40) billbarEl.classList.remove("collapsed");
-  }, {passive: true});
-  summaryEl.onclick = (e) => {
-    // بٹن/لنک پر کلک ہو تو ٹوگل نہ کریں
-    if(e.target.closest && e.target.closest("button, a, input")) return;
-    billbarEl.classList.toggle("collapsed");
-  };
-}
-// کارٹ تفصیل کے اندر ٹچ سے بند نہ ہو
-const cartDetailsEl = billbarEl.querySelector(".cart-details");
-if(cartDetailsEl){
-  cartDetailsEl.addEventListener("touchstart", (e) => { e.stopPropagation(); }, {passive: true});
-}
-
+document.getElementById("summary").onclick = () => document.getElementById("billbar").classList.toggle("collapsed");
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
-document.getElementById("copyNumBtn").onclick = async ()=>{
-  try{
-    const d = (window._activePayDigits || (document.getElementById("payNumber") && document.getElementById("payNumber").textContent) || "").replace(/[^0-9]/g,"");
-    await navigator.clipboard.writeText(d);
-    showToast("✅ نمبر کاپی ہوگیا");
-  }catch(e){ showToast("کاپی نہیں ہوا"); }
-};
-
-document.getElementById("copyIbanBtn").onclick = async ()=>{
-  try{
-    const d = ((document.getElementById("payBankLine") && document.getElementById("payBankLine").textContent) || "").trim();
-    await navigator.clipboard.writeText(d);
-    showToast("✅ کاپی ہوگیا");
-  }catch(e){ showToast("کاپی نہ ہو سکا"); }
-};
-
-const payCod = document.getElementById("payCod");
-const payEasy = document.getElementById("payEasy");
-const lblCod = document.getElementById("lblCod");
-const lblEasy = document.getElementById("lblEasy");
-
-function updatePayMethodUI(){
-  lblCod.classList.toggle("checked", payCod.checked);
-  lblEasy.classList.toggle("checked", payEasy.checked);
-}
-payCod.addEventListener("change", updatePayMethodUI);
-payEasy.addEventListener("change", updatePayMethodUI);
-
-function showToast(text){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.className = "toast show";
-  setTimeout(()=> t.className = "toast", 2200);
-}
-
-function sendFeedbackWhatsApp(){
-  let name = document.getElementById("fbName").value.trim() || "گمنام صارف";
-  let text = document.getElementById("fbText").value.trim();
-  if(!text){ alert("براہ کرم اپنا فیڈ بیک یا رائے درج کریں!"); return; }
-  let fbMsg = `SJ Foods — Customer Feedback\n\nName: ${name}\nFeedback: ${text}`;
-  window.open(`https://wa.me/923349353799?text=${encodeURIComponent(fbMsg)}`, "_blank");
-}
-
-document.getElementById("shareBtn").onclick = async () => {
-  if(navigator.share){ await navigator.share({title: "SJ Foods", url: window.location.href}).catch(()=>{}); }
-  else { await navigator.clipboard.writeText(window.location.href); showToast("✅ Link Copied!"); }
-};
-
-// جب کسٹمر واٹس ایپ آرڈر کے بٹن پر کلک کرے گا تو پہلے چھوٹی ونڈو (پاپ اپ) کھلے گی
 document.getElementById("waBtn").onclick = () => {
   const chosen = ITEMS.filter(i => i.qty > 0);
-  if(chosen.length === 0){ alert("Cart is empty"); return; }
+  if(chosen.length === 0){ alert("کارٹ خالی ہے"); return; }
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  
-  if(!name || !phone || !addr){ alert("Please fill in Name, Phone, and Address"); return; }
-
-  // پاپ اپ ونڈو کو ظاہر کریں
+  if(!name || !phone || !addr){ alert("براہ کرم تمام معلومات درج کریں"); return; }
   document.getElementById("confirmPopupOverlay").classList.add("active");
 };
 
-function closeConfirmPopup(){
-  document.getElementById("confirmPopupOverlay").classList.remove("active");
-}
+function closeConfirmPopup(){ document.getElementById("confirmPopupOverlay").classList.remove("active"); }
 
-// جب کسٹمر پاپ اپ میں ٹک لگا کر آگے بڑھنے کا بٹن دبائے گا
 function proceedWithOrder(){
-  const popupCheck = document.getElementById("popupTermsCheck");
-  if(!popupCheck.checked){
-    alert("❌ براہ کرم تصدیق کے لیے خانے پر ٹک (Check) لگائیں۔");
-    return;
-  }
-  document.getElementById("confirmPopupOverlay").classList.remove("active");
-
+  closeConfirmPopup();
   const chosen = ITEMS.filter(i => i.qty > 0);
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  
-  let payMethodClean = "Cash on Delivery (COD)";
-  if(payEasy.checked){
-    payMethodClean = "EasyPaisa / Bank Transfer";
-  }
-
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
 
-  // وینڈر — آرڈر صرف اُسی شاپ کے نمبر پر
-  const vendorId = ACTIVE_VENDOR.id || "v001";
-  const vendorShop = ACTIVE_VENDOR.shop_name || "SJ Foods";
-  const isOwnShop = (vendorId === "v001");
-  let vendorWA = String(ACTIVE_VENDOR.whatsapp || ACTIVE_VENDOR.phone || "").replace(/[^0-9]/g, "");
-  if(isOwnShop){
-    vendorWA = String(ACTIVE_VENDOR.whatsapp || SHOP_WHATSAPP || "923349353799").replace(/[^0-9]/g, "");
-  }
-  if(vendorWA.startsWith("0") && vendorWA.length === 11) vendorWA = "92" + vendorWA.slice(1);
-  if(vendorWA.length < 11){
-    alert("اس دکان کا WhatsApp نمبر درست محفوظ نہیں۔\nآرڈر اس پلیٹ فارم سے فارورڈ نہیں کیا جا سکتا۔\nبراہِ کرم دوسری دکان منتخب کریں یا دکاندار سے رابطہ کریں۔");
-    return;
-  }
-
-  /* SJ ONLINE branded order message (Roman — no RTL flip) */
-  let msg = "";
-  msg += "*SJ ONLINE*\n";
-  msg += "Shop: " + vendorShop + "\n";
-  msg += "Code / OTP: " + orderCode + "\n";
-  msg += "(Yahi code delivery par OTP hai)\n\n";
-
-  msg += "*Customer*\n";
-  msg += "Name: " + name + "\n";
-  msg += "Phone: " + phone + "\n";
-  msg += "Address: " + addr + "\n\n";
-
-  if(payEasy.checked){
-    msg += "*Payment: Advance — EasyPaisa / Bank*\n";
-    msg += "Pehle payment + screenshot is chat par share karein.\n";
-    msg += "Confirm ke baad order process hoga.\n\n";
-  } else {
-    msg += "*Payment: Cash on Delivery (COD)*\n";
-    msg += "Raqam delivery par di jayegi.\n\n";
-  }
-
-  msg += "*Rabta (order se pehle)*\n";
-  msg += "Dukandar / numainda aap se rabta kar sakta hai:\n";
-  msg += "• order confirm\n";
-  msg += "• address / location\n";
-  msg += "• koi item na ho to batane ke liye\n";
-  msg += "• ya koi aur zaruri baat\n\n";
-
-  if(!payEasy.checked){
-    msg += "*OTP*\n";
-    msg += "Delivery par yahi Code/OTP batayein: " + orderCode + "\n";
-    msg += "Phir saman lein aur sign karein.\n\n";
-  }
-
-  msg += "*Items*\n";
-
-  let receiptItems = "";
-  const grouped = {};
+  let msg = `*SJ ONLINE*\nShop: ${ACTIVE_VENDOR.shop_name || "SJ Foods"}\nCode: ${orderCode}\n\n*Customer*\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n*Items:*\n`;
   chosen.forEach(it => {
     const u = it.units[it.unitIndex];
     const t = it.qty * u.rate;
     subtotal += t;
-    if (!grouped[it.cat]) grouped[it.cat] = [];
-    grouped[it.cat].push({ it, u, t });
+    msg += `- ${it.name} x ${it.qty} ${u.label} = ${fmt(t)}\n`;
   });
-
-  Object.keys(grouped).forEach(cat => {
-    msg += "\n" + cat + ":\n";
-    receiptItems += "<br><b>" + cat + ":</b><br>";
-    grouped[cat].forEach(({ it, u, t }) => {
-      let displayName = (it.name_roman && String(it.name_roman).trim()) ? String(it.name_roman).trim() : it.name;
-      let unitLab = String(u.label || "kg");
-      unitLab = unitLab
-        .replace(/آدھا\s*کلو/g, "adha kg")
-        .replace(/کلو/g, "kg")
-        .replace(/پاؤ/g, "pau")
-        .replace(/دڑی.*/g, "dari 5kg")
-        .replace(/عدد/g, "pcs");
-      msg += "- " + displayName + " x " + it.qty + " " + unitLab + " = " + fmt(t) + "\n";
-      receiptItems += "&nbsp;&nbsp;• " + displayName + " — " + it.qty + " " + unitLab + " = " + fmt(t) + "<br>";
-    });
-  });
-
-  const payLabel = payEasy.checked ? "Advance EasyPaisa/Bank" : "COD";
-  receiptItems += "<br><b>Payment:</b> " + payLabel;
-  msg += "\n*Total: " + fmt(subtotal) + "*\n\n";
-  const hasPremium = chosen.some(function(it){ return it.premium || it.call_only || it.visit_required; });
-  if(hasPremium){
-    msg += "*PREMIUM / QEEMTI ITEM*\n";
-    msg += "Aam delivery boy nahi.\n";
-    msg += "Call / shop visit, ya advance payment ke baad OTP se wasooli / delivery.\n\n";
-  }
-  msg += "— SJ Online · Swat";
-
-  let formattedCleanReceipt = "Payment: " + payLabel + "<br>Items:<br>" + receiptItems;
-
-  let nowFormatted = "'" + new Intl.DateTimeFormat('en-GB', { 
-    timeZone: 'Asia/Karachi', 
-    weekday: 'short', 
-    day: 'numeric', 
-    month: 'short', 
-    year: 'numeric',
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: true 
-  }).format(new Date());
-
+  msg += `\n*Total: ${fmt(subtotal)}*`;
 
   try {
     if(window.dbRef) {
       const orderRef = window.dbRef.ref(window.dbRef.db, 'orders/' + orderCode);
       window.dbRef.set(orderRef, {
         code: orderCode, name: name, phone: phone, address: addr,
-        items: formattedCleanReceipt, total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
-        timestamp: nowFormatted, status: "pending",
-        vendor_id: vendorId,
-        shop_name: vendorShop,
-        vendor_whatsapp: vendorWA
+        items: msg.replace(/\n/g, '<br>'), total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""),
+        timestamp: new Date().toLocaleString(), status: "pending", vendor_id: ACTIVE_VENDOR.id || "v001"
       });
     }
   } catch(e){}
 
-  // WhatsApp پہلے — بند/ناکام ہو تو موبائل پر SMS بھی بھیج سکتے ہیں
-  window.open(`https://wa.me/${vendorWA}?text=${encodeURIComponent(msg)}`, "_blank");
-  var smsBody = msg.slice(0, 300);
-  var smsNum = vendorWA.startsWith("92") ? ("0" + vendorWA.slice(2)) : vendorWA;
-  setTimeout(function(){
-    var useSms = confirm(
-      "آرڈر «"+vendorShop+"» کے WhatsApp پر کھلا ہے۔\n\n"+
-      "اگر WhatsApp نہیں کھلا / نمبر بند ہے تو OK دبائیں — SMS ایپ کھل جائے گی (ویسا ہی آرڈر متن)۔\n\n"+
-      "Cancel = بس WhatsApp ہی کافی ہے۔"
-    );
-    if(useSms){
-      window.location.href = "sms:" + smsNum + "?body=" + encodeURIComponent(smsBody);
-    }
-  }, 600);
-  showToast("✅ آرڈر «" + vendorShop + "» کو بھیجا جا رہا ہے");
-  if(ITEMS && ITEMS.forEach) ITEMS.forEach(function(i){ i.qty = 0; });
-  if(vendorId && window.CARTS_BY_SHOP) delete window.CARTS_BY_SHOP[vendorId];
-  window.LOCKED_SHOP_ID = null;
-  if(typeof renderBill === "function") renderBill();
-  if(typeof updateActiveCartBanner === "function") updateActiveCartBanner();
+  window.open(`https://wa.me/${ACTIVE_VENDOR.whatsapp || SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
 function renderFeatured(){
   const feat = ITEMS.filter(i => i.featured && i.available);
   const box = document.getElementById("dealBox");
-  const sec = document.getElementById("featuredSection");
   if(feat.length === 0) return;
-  sec.classList.remove("hidden");
-  let currentIndex = 0;
-
-  const updateFeaturedGrid = () => {
-    if(feat.length === 0) return;
-    let first = feat[currentIndex % feat.length];
-    let second = feat[(currentIndex + 1) % feat.length];
-    
-    let fName = first.name_roman ? `${first.name_roman} <span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:'Jameel Noori Nastaleeq',serif;">(${first.name})</span>` : first.name;
-    let sName = second.name_roman ? `${second.name_roman} <span style="font-size:11.5px; color:var(--muted); font-weight:normal; font-family:'Jameel Noori Nastaleeq',serif;">(${second.name})</span>` : second.name;
-
-    box.innerHTML = `
-      <div class="deal-card" onclick="jumpToItem('${(first.cat||'').replace(/'/g,"\\'")}','${first.id}','${first.vendor_id||'v001'}','${(first.name||'').replace(/'/g,"\\'")}')" style="position:relative;cursor:pointer;">
-        <div style="position:absolute; top:6px; left:6px; background:#D32F2F; color:#fff; font-size:10px; font-weight:bold; padding:2px 7px; border-radius:6px; z-index:2; font-family:Arial,sans-serif;">🔥 SPECIAL</div>
-        ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon||'🛒'}</div>`}
-        <div class="d-name">${fName}</div>
-        <div class="d-rate">${fmt((first.units&&first.units[0])?first.units[0].rate:0)}</div>
-      </div>
-      <div class="deal-card" onclick="jumpToItem('${(second.cat||'').replace(/'/g,"\\'")}','${second.id}','${second.vendor_id||'v001'}','${(second.name||'').replace(/'/g,"\\'")}')" style="position:relative;cursor:pointer;">
-        <div style="position:absolute; top:6px; left:6px; background:#FF6F00; color:#fff; font-size:10px; font-weight:bold; padding:2px 7px; border-radius:6px; z-index:2; font-family:Arial,sans-serif;">💥 OFFER</div>
-        ${second.image ? `<img src="${second.image}" loading="lazy">` : `<div class="deal-icon-box">${second.icon||'🛒'}</div>`}
-        <div class="d-name">${sName}</div>
-        <div class="d-rate">${fmt((second.units&&second.units[0])?second.units[0].rate:0)}</div>
-      </div>
-    `;
-    currentIndex += 2;
-  };
-  updateFeaturedGrid();
-  if(feat.length > 2) setInterval(updateFeaturedGrid, 4000);
-}
-
-/** Top Deals click → صحیح شاپ کھولو، پھر آئٹم/کیٹگری کھولیں */
-async function jumpToItem(catName, itemId, vendorId, itemName){
-  const hit = (ITEMS || []).find(function(i){ return i.id === itemId; });
-  const vid = vendorId || (hit && hit.vendor_id) || "v001";
-  const targetCat = (hit && hit.cat) || catName || "";
-  const targetName = itemName || (hit && hit.name) || "";
-
-  try{
-    await enterShop(vid);
-  }catch(e){ console.warn(e); }
-
-  setTimeout(function(){
-    if(typeof selectCategory === "function" && targetCat){
-      // try exact category, else first matching by name
-      const catExists = (CATEGORIES_META || []).some(function(c){ return c.name === targetCat; });
-      if(catExists) selectCategory(targetCat);
-      else if(CATEGORIES_META && CATEGORIES_META[0]) selectCategory(CATEGORIES_META[0].name);
-    }
-    setTimeout(function(){ scrollToMainItem(itemId, targetName); }, 250);
-  }, 400);
-}
-
-function scrollToMainItem(id, nameHint){
-  let el = document.getElementById("row-"+id);
-  if(!el && id){
-    el = document.getElementById("row-"+id.replace(/^vf-/, "v-"));
-  }
-  if(!el && nameHint){
-    const found = (ITEMS || []).find(function(i){
-      return i.name === nameHint || i.name_roman === nameHint;
-    });
-    if(found) el = document.getElementById("row-"+found.id);
-  }
-  if(el){
-    el.scrollIntoView({behavior:"smooth", block:"center"});
-    el.style.transition = "background 0.4s";
-    el.style.backgroundColor = "#FFF3CD";
-    setTimeout(function(){ el.style.backgroundColor = ""; }, 1500);
-  } else {
-    const list = document.getElementById("list");
-    if(list) list.scrollIntoView({behavior:"smooth", block:"start"});
-  }
+  box.innerHTML = feat.slice(0, 2).map(first => `
+    <div class="deal-card" onclick="selectCategory('${first.cat}')">
+      ${first.image ? `<img src="${first.image}" loading="lazy">` : `<div class="deal-icon-box">${first.icon||'🛒'}</div>`}
+      <div class="d-name">${first.name}</div>
+      <div class="d-rate">${fmt(first.units[0].rate)}</div>
+    </div>
+  `).join("");
 }
 
 function openLightbox(src, name){
@@ -2196,21 +1369,11 @@ function openLightbox(src, name){
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightbox").classList.remove("hidden");
 }
-document.getElementById("closeLightbox").onclick = () => { document.getElementById("lightbox").classList.add("hidden"); };
+document.getElementById("closeLightbox").onclick = () => document.getElementById("lightbox").classList.add("hidden");
 
-/* boot: shops first, catalog after enterShop */
-// loadData();
-
+loadShopsList();
+bootHomeDealsRefresh();
 loadSettings();
-
-/* PWA Service Worker — offline shell + catalog cache */
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("./sw.js").then(function (reg) {
-      try { reg.update(); } catch (e) {}
-    }).catch(function () {});
-  });
-}
 </script>
 </body>
 </html>

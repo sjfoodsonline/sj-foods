@@ -1010,38 +1010,61 @@ async function ghRequest(path, options){
   if(res.status === 204) return {};
   return res.json();
 }
+function ghBranch(){ return (CFG && CFG.branch) || "vendors_ledger"; }
 async function ghGetJson(path){
-  const data = await ghRequest(path);
+  const branch = ghBranch();
+  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+  const res = await fetch(url, {
+    headers: {
+      "Authorization": "token " + String(CFG.token||"").trim(),
+      "Accept": "application/vnd.github+json",
+      "User-Agent": "SJ-Foods-Admin"
+    }
+  });
+  if(!res.ok){
+    // fallback main once
+    if(branch !== "main"){
+      const res2 = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=main`, {
+        headers: {
+          "Authorization": "token " + String(CFG.token||"").trim(),
+          "Accept": "application/vnd.github+json",
+          "User-Agent": "SJ-Foods-Admin"
+        }
+      });
+      if(res2.ok){
+        const data2 = await res2.json();
+        CFG.branch = "main";
+        try{ saveConfig(CFG); }catch(e){}
+        return { json: JSON.parse(base64ToUtf8(data2.content)), sha: data2.sha };
+      }
+    }
+    throw new Error("File not found: " + path + " (branch " + branch + ")");
+  }
+  const data = await res.json();
   return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
 }
 async function ghPutJson(path, obj, sha, message){
   const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  const branches = [];
-  if(CFG && CFG.branch) branches.push(CFG.branch);
-  branches.push("vendors_ledger", "main");
-  const tried = [];
-  let lastErr = null;
-  for(const branch of branches){
-    if(tried.indexOf(branch) >= 0) continue;
-    tried.push(branch);
-    try{
-      // refresh sha for this branch if possible
-      let useSha = sha;
-      try{
-        const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
-        const res = await fetch(url, { headers: { "Authorization": "Bearer " + CFG.token, "Accept": "application/vnd.github+json" } });
-        if(res.ok){ const d = await res.json(); useSha = d.sha; }
-      }catch(e){}
-      const body = { message: message || "Update", content, branch };
-      if(useSha) body.sha = useSha;
-      const result = await ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
-      CFG.branch = branch;
-      try{ saveConfig(CFG); }catch(e){}
-      return result;
-    }catch(e){ lastErr = e; }
-  }
-  throw lastErr || new Error("Save failed");
+  const branch = ghBranch();
+  // always fresh sha from same branch
+  let useSha = sha;
+  try{
+    const meta = await fetch(
+      `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`,
+      { headers: {
+          "Authorization": "token " + String(CFG.token||"").trim(),
+          "Accept": "application/vnd.github+json",
+          "User-Agent": "SJ-Foods-Admin"
+      }}
+    );
+    if(meta.ok){ const d = await meta.json(); useSha = d.sha; }
+    else useSha = null;
+  }catch(e){ useSha = null; }
+  const body = { message: message || "Update", content, branch };
+  if(useSha) body.sha = useSha;
+  return ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
 }
+
 async function ghPutBinary(path, base64Content, message){
   let sha;
   try{ const existing = await ghRequest(path); sha = existing.sha; }catch(e){}
@@ -1059,7 +1082,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
   const repo = document.getElementById("cfgRepo").value.trim();
   const token = document.getElementById("cfgToken").value.trim();
   if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
-  CFG = { owner, repo, token };
+  CFG = { owner, repo, token, branch: "vendors_ledger" };
   try{
     await ghRequest(CATEGORIES_INDEX_FILE);
     saveConfig(CFG);

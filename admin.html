@@ -1042,26 +1042,47 @@ function buildRow(it, idx){
     ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
     
     const rateInput = ur.querySelector(".u-rate-field");
+    // موبائل: number کی بجائے text + inputmode تاکہ کی بورڈ مستحکم رہے
+    rateInput.setAttribute("type", "text");
+    rateInput.setAttribute("inputmode", "decimal");
+    rateInput.setAttribute("pattern", "[0-9]*\\.?[0-9]*");
+    rateInput.setAttribute("autocomplete", "off");
     rateInput.oninput = (e)=>{
-      const val = parseFloat(e.target.value) || 0;
+      // صرف ہندسے اور ڈاٹ
+      let raw = e.target.value.replace(/[^0-9.]/g, "");
+      if(raw !== e.target.value) e.target.value = raw;
+      const val = parseFloat(raw) || 0;
       u.rate = val;
       markDirty();
 
+      // خودکار یونٹ قیمتیں — بغیر پورا صفحہ ری رینڈر (کی بورڈ بند نہ ہو)
       if(ui === 0 && !it.manualOverride && it.units.length > 1){
+        const allRateInputs = unitsBox.querySelectorAll(".u-rate-field");
         it.units.forEach((otherU, oIdx) => {
           if(oIdx > 0){
-            let lbl = otherU.label.toLowerCase();
+            let lbl = (otherU.label || "").toLowerCase();
+            let nr = otherU.rate;
             if(lbl.includes("پاؤ") || lbl.includes("250")) {
-              otherU.rate = Math.round(val / 4);
+              nr = Math.round(val / 4);
             } else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) {
-              otherU.rate = Math.round(val / 2);
+              nr = Math.round(val / 2);
             } else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) {
-              otherU.rate = Math.round(val * 5);
+              nr = Math.round(val * 5);
+            }
+            otherU.rate = nr;
+            if(allRateInputs[oIdx] && document.activeElement !== allRateInputs[oIdx]){
+              allRateInputs[oIdx].value = nr;
             }
           }
         });
-        renderProducts();
+        // renderProducts() یہاں نہیں — فوکس برقرار
       }
+    };
+    // بلا ر پر حتمی سیو (اضافی محفوظ)
+    rateInput.onblur = ()=>{
+      const val = parseFloat(rateInput.value) || 0;
+      u.rate = val;
+      markDirty();
     };
     unitsBox.appendChild(ur);
   });

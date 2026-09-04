@@ -348,6 +348,7 @@
         fetch(VDB + "/orders.json")
       ]);
       const data = await vres.json() || {};
+      window._lastVendorsMap = data;
       const orders = await ores.json() || {};
       const stats = {};
       Object.keys(orders).forEach(function(code){
@@ -398,6 +399,7 @@
           (st!=='approved'&&!v.blocked?'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ منظور</button>':'')+
           (!v.blocked?'<button class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 بلاک</button>':'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 ان بلاک</button>')+
           '<button class="btn-secondary" style="background:#1565C0;color:#fff;" onclick="viewVendorCatalog(\''+id+'\')">📋 کیٹلاگ دیکھیں / چیک</button>'+
+          (id!=='v001'?'<button class="btn-secondary" style="background:#B71C1C;color:#fff;" onclick="deleteVendor(\''+id+'\')">🗑 مستقل ڈیلیٹ</button>':'')+
           '</div>'+
           '<div id="vcatalog-'+id+'" style="display:none;margin-top:10px;max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#FAFAFA;font-size:12px;"></div>'+
           '</div>';
@@ -418,6 +420,26 @@
       showToast("اپڈیٹ ✓");
       loadVendorsAdmin();
     }catch(e){ showToast("فیل", true); }
+  };
+
+  /** بے وجہ / غیر فعال وینڈر مستقل حذف — v001 محفوظ */
+  window.deleteVendor = async function(id){
+    if(!id || id === "v001"){
+      showToast("SJ Foods (v001) ڈیلیٹ نہیں ہو سکتا", true);
+      return;
+    }
+    const name = (window._lastVendorsMap && window._lastVendorsMap[id] && window._lastVendorsMap[id].shop_name) || id;
+    if(!confirm("⚠️ مستقل ڈیلیٹ؟\n\nدکان: "+name+"\nID: "+id+"\n\nیہ واپس نہیں آئے گی۔ بلاک صرف چھپاتا ہے؛ ڈیلیٹ سب مٹا دیتا ہے۔")) return;
+    if(!confirm("آخری تصدیق: واقعی حذف کریں؟")) return;
+    try{
+      const res = await fetch(VDB+"/vendors/"+id+".json", { method: "DELETE" });
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      showToast("ڈیلیٹ ہو گیا ✓");
+      loadVendorsAdmin();
+    }catch(e){
+      console.error(e);
+      showToast("ڈیلیٹ فیل — Rules/نیٹ ورک چیک کریں", true);
+    }
   };
 
   /** کارکردگی % — ڈیلیورڈ بمقابلہ کل؛ pending زیادہ ہو تو کم */

@@ -440,7 +440,7 @@ function renderItems(){
     const unitsHtml = it.units.map((u, ui) =>
       `<div class="unit-line">
         <button type="button" class="rm" onclick="removeUnit('${k}',${ui})" title="ہٹائیں">✕</button>
-        <input class="u-rate" type="number" min="0" step="any" value="${u.rate||0}" onchange="setUnitField('${k}',${ui},'rate',this.value); if(!VENDOR.items['${k}'].manualOverride) autoCalcFromBase('${k}'); markDirty();">
+        <input class="u-rate" type="text" inputmode="decimal" pattern="[0-9]*\\.?[0-9]*" autocomplete="off" value="${u.rate||0}" oninput="setUnitField('${k}',${ui},'rate',this.value); if(!VENDOR.items['${k}'].manualOverride){ autoCalcFromBase('${k}'); syncSiblingRates('${k}'); } markDirty();">
         <input class="u-label" type="text" value="${u.label||""}" onchange="setUnitField('${k}',${ui},'label',this.value); markDirty();">
       </div>`
     ).join("");
@@ -559,6 +559,17 @@ function removeUnit(k, ui){
   it.units.splice(ui,1);
   markDirty();
   renderItems();
+}
+function syncSiblingRates(k){
+  const row = document.getElementById("item-"+k);
+  if(!row) return;
+  const it = VENDOR.items[k]; if(!it || !it.units) return;
+  const inputs = row.querySelectorAll(".u-rate");
+  it.units.forEach(function(u, i){
+    if(inputs[i] && document.activeElement !== inputs[i]){
+      inputs[i].value = u.rate;
+    }
+  });
 }
 function autoCalcFromBase(k){
   const it = VENDOR.items[k]; if(!it || it.manualOverride) return;

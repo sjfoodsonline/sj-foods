@@ -657,26 +657,45 @@ let ALL_VENDORS = {};
 
 async function loadActiveVendor(vendorId){
   vendorId = vendorId || "v001";
+  function applyFrom(v, id){
+    if(!v || v.blocked === true) return false;
+    // approved یا host (v001) — Firebase بند ہو تو بھی SJ Foods چلے
+    if(v.status && v.status !== "approved" && id !== "v001") return false;
+    ACTIVE_VENDOR = {
+      id: id,
+      shop_name: v.shop_name || (id === "v001" ? "SJ Foods" : "Shop"),
+      whatsapp: String(v.whatsapp || "923349353799").replace(/[^0-9]/g, ""),
+      phone: v.phone || "",
+      cover_image: v.cover_image || "",
+      tagline: v.tagline || "",
+      pay_number: v.pay_number || "",
+      bank_detail: v.bank_detail || "",
+      owner_name: v.owner_name || ""
+    };
+    SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
+    applyVendorPaymentUI();
+    return true;
+  }
+  // 1) پہلے میموری / لسٹ سے
+  if(ALL_VENDORS && ALL_VENDORS[vendorId] && applyFrom(ALL_VENDORS[vendorId], vendorId)){
+    return true;
+  }
+  // 2) Firebase
   try{
-    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + ".json");
+    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + ".json", { cache: "no-store" });
     const v = await res.json();
-    if(v && v.blocked !== true && v.status === "approved"){
-      ACTIVE_VENDOR = {
-        id: vendorId,
-        shop_name: v.shop_name || "Shop",
-        whatsapp: String(v.whatsapp || "923349353799").replace(/[^0-9]/g, ""),
-        phone: v.phone || "",
-        cover_image: v.cover_image || "",
-        tagline: v.tagline || "",
-        pay_number: v.pay_number || "",
-        bank_detail: v.bank_detail || "",
-        owner_name: v.owner_name || ""
-      };
-      SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
-      applyVendorPaymentUI();
-      return true;
-    }
+    if(v && !v.error && applyFrom(v, vendorId)) return true;
   }catch(e){ console.warn("vendor load failed", e); }
+  // 3) SJ Foods ہمیشہ (GitHub JSON سے چلتا ہے)
+  if(vendorId === "v001"){
+    return applyFrom({
+      shop_name: "SJ Foods",
+      status: "approved",
+      whatsapp: "923349353799",
+      tagline: "سبزی · پھل · کرانہ",
+      blocked: false
+    }, "v001");
+  }
   return false;
 }
 

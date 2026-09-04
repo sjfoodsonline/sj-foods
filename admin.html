@@ -65,6 +65,7 @@
   .row-top{display:flex; align-items:center; gap:8px;}
   .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;}
   .thumb-box img{width:100%; height:100%; object-fit:cover;}
+  .thumb-box input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
   .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
 
   .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
@@ -202,6 +203,37 @@
   }
   window.showToast = showToast;
 
+  function playLoudBeep(){
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      let time = ctx.currentTime;
+      for(let loop = 0; loop < 2; loop++){
+        for(let i = 0; i < 4; i++){
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(1000 + (i * 200), time);
+          gain.gain.setValueAtTime(3.0, time);
+          gain.gain.exponentialRampToValueAtTime(0.01, time + 0.25);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(time); osc.stop(time + 0.25);
+          time += 0.28;
+        }
+        time += 0.2;
+      }
+    }catch(e){}
+  }
+  window.playTestSound = playLoudBeep;
+
+  window.requestNotificationPermission = function() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') showToast("🟢 نوٹیفکیشن آن ہو گئے ہیں!");
+        else showToast("⚠️ نوٹیفکیشن بلاک ہیں", true);
+      });
+    }
+  }
+
   const ADMIN_PASSWORD = "3799";
   let isAdminAuthenticated = false;
 
@@ -235,21 +267,204 @@
     if(tabName === 'vendors') loadVendorsAdmin();
   }
 
-  // Orders Watcher
+  let activeAccordionId = null;
+  window.toggleAccordion = function(id){
+    activeAccordionId = (activeAccordionId === id) ? null : id;
+    renderOrdersDOM();
+  };
+
+  let latestOrdersCache = [];
+  let cachedOrdersCount = 0;
+
+  // Live Orders Watcher
   const ordersRef = ref(db, 'orders');
   onValue(ordersRef, (snapshot) => {
     const data = snapshot.val() || {};
-    let list = Object.values(data);
-    let totalSales = 0, pendingCount = 0;
-    list.forEach(o => {
-      let st = String(o.status || 'pending').toLowerCase();
-      if(st === 'completed') totalSales += parseFloat(o.total || 0);
-      else if(st !== 'cancelled') pendingCount++;
+    let dataList = Object.values(data);
+    let pendingOrders = [];
+    let completedOrders = [];
+    let cancelledOrders = [];
+
+    dataList.forEach((row, index) => {
+      let codeVal = row.code;
+      if(codeVal){
+        let st = String(row.status || 'pending').toLowerCase().trim();
+        let rawItems = (row.items || "")
+          .replace(/Payment Method:\s*([^\n<]+)/gi, "")
+          .replace(/Payment:\s*([^\n<]+)/gi, "")
+          .replace(/Cash on Delivery\s*\(COD\)/gi, "")
+          .replace(/EasyPaisa[^\n<]*/gi, "");
+          
+        let cleanItemsSummary = rawItems.replace(/<br\s*[\/]?>\s*<br\s*[\/]?>/gi, '<br>').replace(/(<br\s*[\/]?>)+$/, '').trim();
+
+        let itemObj = {
+          id: "fb_" + index,
+          code: codeVal,
+          name: row.name || "Unknown",
+          phone: row.phone || "03000000000",
+          address: row.address || "Mingora Swat",
+          itemsSummary: cleanItemsSummary,
+          total: parseFloat(row.total || 0) || 0,
+          otpCode: row.otp || String(codeVal).replace("SJ-", ""),
+          displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
+          rawTime: row.timestamp ? new Date(row.timestamp.replace(/^'/, '')).getTime() : index,
+          isUpdated: row.isUpdated || false,
+          status: st
+        };
+
+        if(st === 'cancelled') cancelledOrders.push(itemObj);
+        else if(st === 'completed') completedOrders.push(itemObj);
+        else pendingOrders.push(itemObj);
+      }
     });
-    document.getElementById("statTotalOrders").textContent = list.length;
+
+    pendingOrders.sort((a, b) => b.rawTime - a.rawTime);
+    completedOrders.sort((a, b) => b.rawTime - a.rawTime);
+    cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
+    
+    latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
+
+    let totalSales = 0;
+    let pendingCount = 0;
+    latestOrdersCache.forEach(o => {
+      if(o.status === 'completed') totalSales += o.total;
+      else if(o.status !== 'cancelled') pendingCount++;
+    });
+
+    document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
     document.getElementById("statPendingOrders").textContent = pendingCount;
     document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
+
+    if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
+      playLoudBeep();
+      showToast("🔔 نیا آرڈر موصول ہوا ہے!");
+    }
+    cachedOrdersCount = latestOrdersCache.length;
+    renderOrdersDOM();
   });
+
+  window.renderOrdersDOM = function(){
+    const area = document.getElementById("ordersArea");
+    const orders = latestOrdersCache;
+
+    if(orders.length === 0){
+      area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+      return;
+    }
+
+    area.innerHTML = orders.map((o) => {
+      let isOpen = (activeAccordionId === o.id);
+      let isCompleted = (o.status === 'completed');
+      let isCancelled = (o.status === 'cancelled');
+      let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
+      if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
+
+      let plainItems = o.itemsSummary.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
+
+      const orderDataObj = {
+        code: o.code, name: o.name, phone: o.phone, address: o.address, otp: o.otpCode,
+        items: plainItems, total: o.total, isUpdated: o.isUpdated
+      };
+      const orderDataStr = encodeURIComponent(JSON.stringify(orderDataObj));
+
+      let cardClass = "chat-item pending";
+      if(isCompleted) cardClass = "chat-item completed";
+      if(isCancelled) cardClass = "chat-item cancelled";
+
+      return `
+        <div class="${cardClass} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+          <div class="chat-header" onclick="toggleAccordion('${o.id}')">
+            <span style="font-size:14px; font-weight:bold; direction:auto;">
+              📌 ${o.code} — <b>${o.name}</b> ${o.isUpdated ? '<span style="color:#B71C1C; font-size:11px;">(اپ ڈیٹ شدہ بل)</span>' : ''}
+              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">منسوخ شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
+            </span>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="time-badge">
+                ${isCancelled ? '❌ منسوخ' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
+              </span>
+            </div>
+          </div>
+          <div class="chat-body" dir="auto">
+            <div style="font-size:13.5px; line-height:2.0; font-family:Arial, sans-serif;">
+              <b>نام:</b> ${o.name}<br>
+              <b>فون:</b> <span dir="ltr"><b>${o.phone}</b></span> 
+              <a href="tel:${o.phone}" style="text-decoration:none; margin-right:8px; font-weight:bold; color:var(--mid);">📞 Call</a>
+              <a href="https://wa.me/${cleanPhoneForWA}" target="_blank" style="text-decoration:none; margin-right:8px; font-weight:bold; color:#25D366;">💬 WhatsApp</a><br>
+              <b>پتہ:</b> ${o.address}<br>
+              <b>OTP Code:</b> <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
+              <b>آرڈر وقت:</b> <b style="color:var(--dark);">${o.displayTime}</b><br>
+              <div style="margin-top:6px; margin-bottom:6px;"><b>سامان کی تفصیل:</b></div>
+              <div style="background:#F9F8F3; padding:10px; border-radius:8px; font-size:13px; line-height:1.8;" dir="auto">${o.itemsSummary}</div>
+              <div style="margin-top:4px;"><b>کل رقم:</b> <b style="font-size:15px; color:var(--price);">Rs. ${o.total}</b></div>
+            </div>
+            
+            <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ</button>
+              ${!isCancelled && !isCompleted ? `
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
+                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ آرڈر منسوخ کریں</button>
+              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ آرڈر منسوخ کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  window.printThermalReceipt = function(encodedData){
+    const d = JSON.parse(decodeURIComponent(encodedData));
+    const printDiv = document.getElementById("printableReceipt");
+    let cleanItems = d.items.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?[^>]+(>|$)/g, "").trim();
+
+    printDiv.className = "receipt-box";
+    printDiv.innerHTML = `
+      <div style="text-align:center; font-weight:bold; font-size:13px; margin-bottom:2px;">SJ FOODS MINGORA</div>
+      <div style="text-align:center; font-size:9.5px; margin-bottom:4px;">Picking Slip (پکنگ پرچی)</div>
+      <div style="border-top:1px dashed #000; border-bottom:1px dashed #000; padding:4px 0; margin-bottom:4px; font-size:10.5px; line-height:1.2;">
+        <b>Order:</b> ${d.code} | <b>OTP:</b> ${d.otp}<br>
+        <b>Customer:</b> ${d.name}<br>
+        <b>Phone:</b> ${d.phone}<br>
+        <b>Address:</b> ${d.address}
+      </div>
+      <div style="font-size:10.5px; line-height:1.4; margin-bottom:6px; white-space: pre-line;">
+        <b>[ ] مارک کر کے چیزیں اٹھائیں:</b><br>${cleanItems}
+      </div>
+      <div style="border-top:1px dashed #000; padding-top:4px; font-size:11px; text-align:left; font-weight:bold;">
+        Payment: Cash on Delivery (COD)<br>
+        Total: Rs. ${d.total}
+      </div>
+      <div style="text-align:center; font-size:8.5px; margin-top:6px;">
+        SJ Foods Mingora Swat
+      </div>
+    `;
+    window.print();
+  };
+
+  window.cancelOrder = async function(code, phone, name){
+    if(!confirm(`کیا آپ واقعی آرڈر [${code}] منسوخ کرنا چاہتے ہیں؟`)) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "cancelled" });
+      showToast("❌ آرڈر منسوخ کر دیا گیا ہے!");
+      const msg = `SJ Foods — آرڈر منسوخی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] منسوخ کر دیا گیا ہے۔\n\nSJ Foods Mingora Swat`;
+      let cleanPhone = phone.replace(/[^0-9]/g, "");
+      if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
+      window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+    } catch(e) {
+      showToast("❌ خرابی پیش آئی", true);
+    }
+  };
+
+  window.completeOrderAndThank = async function(code, phone){
+    if(!confirm("کیا آپ ڈلیوری مکمل کرنا چاہتے ہیں؟")) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "completed" });
+      showToast("✅ مکمل ہو گیا!");
+    } catch(e){}
+    const msg = `SJ Foods — آرڈر کی تکمیل اور شکریہ\n\nمحترم صارف!\nآپ کا آرڈر [${code}] کامیابی سے ڈلیور ہو چکا ہے۔ شکریہ!`;
+    let cleanPhone = phone.replace(/[^0-9]/g, "");
+    if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
+  };
 </script>
 
 <script>
@@ -297,7 +512,6 @@ async function loadCategory(catKey){
   document.getElementById("addProductBtn").style.display = "none";
 
   try{
-    // سب سے پہلے Firebase چیک کریں، اگر نہ ملے تو بیک اپ JSON سے منگوائیں
     let res = await fetch(`${RTDB}/site_products/${catKey}.json`);
     let data = await res.json();
 
@@ -327,7 +541,7 @@ function renderProducts(){
 
     row.innerHTML = `
       <div class="row-top">
-        <div class="thumb-box">${thumbHtml}</div>
+        <div class="thumb-box" title="تصویر اپلوڈ کریں">${thumbHtml}</div>
         <div class="row-fields">
           <input type="text" value="${it.name || ''}" placeholder="پروڈکٹ نام" oninput="currentItems[${idx}].name=this.value; markDirty();">
           <input type="text" value="${it.name_roman || ''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="currentItems[${idx}].name_roman=this.value; markDirty();">
@@ -338,8 +552,12 @@ function renderProducts(){
           <div class="unit-row">
             <input type="text" class="u-label" value="${u.label}" oninput="currentItems[${idx}].units[${ui}].label=this.value; markDirty();">
             <input type="number" class="u-rate" value="${u.rate}" oninput="updateItemRate(${idx}, ${ui}, this.value)">
+            ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnit(${idx}, ${ui})">✕</button>` : ''}
           </div>
         `).join('')}
+      </div>
+      <div style="display:flex; gap:6px; margin-top:4px;">
+        <button class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addUnit(${idx})">➕ نیا یونٹ</button>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
         <label><input type="checkbox" ${it.available !== false ? 'checked' : ''} onchange="currentItems[${idx}].available=this.checked; markDirty();"> دستیاب</label>
@@ -367,6 +585,18 @@ window.updateItemRate = function(idx, ui, val){
   markDirty();
 };
 
+window.addUnit = function(idx){
+  currentItems[idx].units.push({label: "", rate: 0});
+  renderProducts();
+  markDirty();
+};
+
+window.removeUnit = function(idx, ui){
+  currentItems[idx].units.splice(ui, 1);
+  renderProducts();
+  markDirty();
+};
+
 window.addNewProductItem = function(){
   currentItems.push({ name: "", name_roman: "", units: [{label: "KG", rate: 0}], available: true });
   renderProducts();
@@ -380,7 +610,6 @@ window.deleteItem = function(idx){
   markDirty();
 };
 
-// 100% فول پروف سیو — بغیر ٹوکن سیدھا Firebase میں محفوظ
 window.saveProductsToFirebase = async function(){
   const st = document.getElementById("saveStatus");
   st.textContent = "⏳ فائر بیس پر لائیو محفوظ ہو رہا ہے...";

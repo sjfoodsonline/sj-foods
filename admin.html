@@ -97,14 +97,14 @@
 
 <header>
   <h1>⚙️ SJ Foods — ایڈمن و سائیڈ کیٹگری کنٹرول سینٹر</h1>
-  <p>لائیو فائر بیس آرڈرز، پروڈکٹس اور سائیڈ مینو مینیجر</p>
+  <p>Live orders · Products · Vendors control</p>
 </header>
 
 <div class="wrap">
 
   <div class="dash-grid">
     <div class="dash-card">
-      <div class="dash-lbl">📦 کل آرڈرز</div>
+      <div class="dash-lbl">📦 Orders</div>
       <div class="dash-num" id="statTotalOrders">0</div>
     </div>
     <div class="dash-card">
@@ -118,59 +118,59 @@
   </div>
 
   <div class="tabs">
-    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 لائیو آرڈرز</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ پروڈکٹس و ریٹس (🔒)</div>
-    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 وینڈرز (🔒)</div>
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates (🔒)</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors (🔒)</div>
   </div>
 
   <!-- SECTION 1: LIVE ORDERS -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 کسٹمرز کے لائیو آرڈرز</h3>
+      <h3>🔔 Customer live orders</h3>
       <div style="display:flex; gap:6px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 نوٹیفکیشن آن کریں</button>
-        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 ٹیسٹ بیل</button>
+        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 Enable notifications</button>
+        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 Test sound</button>
       </div>
-      <button class="btn-primary" style="margin-top:10px; background:var(--mid);" onclick="openManualOrderModal()">➕ نیا مینول (آف لائن) آرڈر درج کریں</button>
+      <button class="btn-primary" style="margin-top:10px; background:var(--mid);" onclick="openManualOrderModal()">➕ Add manual (offline) order</button>
     </div>
-    <div id="ordersArea"><div class="loading">⏳ فائر بیس سے آرڈرز لوڈ ہو رہے ہیں...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ Loading orders…</div></div>
   </div>
 
   <!-- SECTION 3: VENDORS CONTROL -->
   <div id="secVendors" style="display:none;">
     <div class="card">
-      <h3>🏪 وینڈرز لسٹ کنٹرول</h3>
-      <p style="font-size:12px; color:var(--muted); margin:0 0 10px;">منظور · بلاک · ڈیلیٹ — صرف ماسٹر ایڈمن</p>
-      <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 ریفریش</button>
+      <h3>🏪 Vendors control</h3>
+      <p style="font-size:12px; color:var(--muted); margin:0 0 10px;">Approve · Block · Delete — master admin only</p>
+      <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
     </div>
-    <div id="vendorsAdminList"><div class="loading">⏳ وینڈرز لوڈ…</div></div>
+    <div id="vendorsAdminList"><div class="loading">⏳ Loading vendors…</div></div>
   </div>
 
   <!-- SECTION 2: PRODUCTS & CATEGORIES CONTROL -->
   <div id="secProducts" style="display:none;">
     <div class="card" id="setupCard" style="display:none;">
       <h3>🔑 گیٹ ہب (GitHub) سیٹ اپ</h3>
-      <p>ریٹس اور کیٹگریز کنٹرول کرنے کے لیے ایک بار گٹ ہب کی معلومات درج کریں:</p>
+      <p>Enter GitHub details once to control rates & categories:</p>
       <label>GitHub یوزر نیم</label>
       <input type="text" id="cfgOwner" value="sjfoodsonline">
       <label>ریپازٹری کا نام</label>
       <input type="text" id="cfgRepo" value="sj-foods">
       <label>Personal Access Token</label>
       <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">محفوظ کریں اور جڑیں</button>
+      <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">Save & Connect</button>
     </div>
 
     <div id="mainProductsPanel" style="display:none;">
       <div class="card">
         <div class="cat-select">
           <select id="categoryPicker" onchange="loadCategory(this.value)"></select>
-          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 سائڈ کیٹگریز ایڈٹر</button>
-          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 ری سیٹ</button>
+          <button class="btn-secondary" style="background:var(--accent); color:#fff; font-size:12px;" onclick="openSiteSettingsModal()">📋 Category editor</button>
+          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 Reset</button>
         </div>
       </div>
 
       <div id="productsArea"><div class="loading">⏳ لوڈ ہو رہا ہے...</div></div>
-      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ نیا پروڈکٹ شامل کریں</button>
+      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add product</button>
     </div>
   </div>
 
@@ -193,15 +193,15 @@
     
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
       <label style="margin-bottom:0;">🛒 سامان کی تفصیلات اور قیمتیں</label>
-      <button type="button" class="btn-secondary" style="padding:2px 8px; font-size:10.5px; background:var(--dark); color:#fff;" onclick="smartParseText()">⚡ آٹو ریڈ (Smart Parse)</button>
+      <button type="button" class="btn-secondary" style="padding:2px 8px; font-size:10.5px; background:var(--dark); color:#fff;" onclick="smartParseText()">⚡ Smart Parse</button>
     </div>
     <textarea id="mItems" rows="4" placeholder="یہاں پورا میسج پیسٹ کریں..."></textarea>
     
     <label>💵 کل رقم (Rs)</label>
     <input type="number" id="mTotal" placeholder="کل قیمت">
     
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 آرڈر محفوظ کریں</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">واپس جائیں</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveManualOrder()">💾 Save order</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeManualOrderModal()">Back</button>
   </div>
 </div>
 
@@ -209,7 +209,7 @@
 <div class="modal-overlay" id="editOrderModal" style="display:none;">
   <div class="modal-box" style="background:#fff; border-radius:18px; padding:16px; max-width:440px; margin:20px auto; max-height:85vh; overflow-y:auto; position:relative;">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--leaf); padding-bottom:6px; margin-bottom:12px;">
-      <h3 style="margin:0; color:var(--dark);">✏️ آرڈر میں ترمیم کریں (Edit)</h3>
+      <h3 style="margin:0; color:var(--dark);">✏️ آرڈر میں Edit کریں (Edit)</h3>
       <button onclick="closeEditModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--price);">✕</button>
     </div>
     <input type="hidden" id="editOrderCode">
@@ -219,12 +219,12 @@
     <input type="text" id="ePhone">
     <label>📍 پتہ</label>
     <input type="text" id="eAddr">
-    <label>🛒 سامان کی تفصیلات (ترمیم کریں)</label>
+    <label>🛒 سامان کی تفصیلات (Edit کریں)</label>
     <textarea id="eItems" rows="5"></textarea>
     <label>💵 کل رقم (Rs)</label>
     <input type="number" id="eTotal">
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 تبدیلیاں محفوظ کریں</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">واپس جائیں</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveEditedOrder()">💾 Save changes</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeEditModal()">Back</button>
   </div>
 </div>
 
@@ -239,14 +239,14 @@
     <input type="text" id="adminOwnerName" value="سلیمان جان (ولد قاسم جان)">
     <label>🇵🇰 اردو اباؤٹ پیغام</label>
     <textarea id="adminUrduMsg" rows="4">سلام مسنون! میں سلیمان جان (ولد قاسم جان) ہوں۔</textarea>
-    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 محفوظ کریں</button>
-    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">واپس جائیں</button>
+    <button class="btn-primary" style="background:var(--mid); margin-top:8px;" onclick="saveSiteSettingsToGitHub()">💾 Save</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px; background:#666; color:#fff;" onclick="closeSiteSettingsModal()">Back</button>
   </div>
 </div>
 
 <div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">⚠️ تبدیلیاں محفوظ نہیں ہوئیں</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 گٹ ہب پر محفوظ کریں</button>
+  <div class="status" id="saveStatus">⚠️ Changes not saved</div>
+  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save to GitHub</button>
 </div>
 
 <div id="printableReceipt"></div>
@@ -298,8 +298,8 @@
   window.requestNotificationPermission = function() {
     if ('Notification' in window) {
       Notification.requestPermission().then(permission => {
-        if (permission === 'granted') showToast("🟢 نوٹیفکیشن آن ہو گئے ہیں!");
-        else showToast("⚠️ نوٹیفکیشن بلاک ہیں", true);
+        if (permission === 'granted') showToast("🟢 Notifications enabled");
+        else showToast("⚠️ Notifications blocked", true);
       });
     }
   }
@@ -309,13 +309,13 @@
 
   window.checkAdminPasswordAndSwitch = function(tabName){
     if(isAdminAuthenticated){ switchTab(tabName); return; }
-    let pass = prompt("🔒 ایڈمن پاسورڈ درج کریں:");
+    let pass = prompt("🔒 Enter admin password:");
     if(pass === ADMIN_PASSWORD){
       isAdminAuthenticated = true;
-      showToast("🟢 پاسورڈ درست ہے!");
+      showToast("🟢 Password OK");
       switchTab(tabName);
     } else {
-      showToast("❌ غلط پاسورڈ!", true);
+      showToast("❌ Wrong password", true);
     }
   }
 
@@ -341,7 +341,7 @@
   window.loadVendorsAdmin = async function(){
     const box = document.getElementById("vendorsAdminList");
     if(!box) return;
-    box.innerHTML = '<div class="loading">⏳ لوڈ…</div>';
+    box.innerHTML = '<div class="loading">⏳ Loading…</div>';
     try{
       const [vres, ores] = await Promise.all([
         fetch(VDB + "/vendors.json"),
@@ -388,24 +388,24 @@
           '<div style="font-size:12px;">📞 '+(v.phone||'—')+' · 💬 '+(v.whatsapp||'—')+'</div>'+
           '<div style="font-size:12px;">آئٹمز: <b>'+itemsN+'</b></div>'+
           '<div style="margin-top:8px;padding:8px;background:#E8F5E9;border-radius:10px;font-size:12px;line-height:1.7;">'+
-          '📊 آرڈرز: <b>'+s.total+'</b> · ⏳ ان کمپلیٹ: <b style="color:#B71C1C">'+s.pending+'</b><br>'+
-          '✅ ڈیلیورڈ: <b>'+s.delivered+'</b> · ✕ کینسل: <b>'+s.cancelled+'</b><br>'+
-          '💵 سیلز: <b>Rs. '+Math.round(s.sales).toLocaleString()+'</b></div>'+
+          '📊 Orders: <b>'+s.total+'</b> · ⏳ Incomplete: <b style="color:#B71C1C">'+s.pending+'</b><br>'+
+          '✅ Delivered: <b>'+s.delivered+'</b> · ✕ Cancelled: <b>'+s.cancelled+'</b><br>'+
+          '💵 Sales: <b>Rs. '+Math.round(s.sales).toLocaleString()+'</b></div>'+
           (cnic?'<div style="margin-top:6px;">CNIC: <img src="'+cnic+'" style="width:48px;height:32px;object-fit:cover;border-radius:4px;vertical-align:middle;"></div>':'')+
           '</div></div>'+
           '<div style="margin-top:8px;padding:8px;background:#E3F2FD;border-radius:10px;font-size:12px;">'+
-          '⭐ کارکردگی: <b>'+vendorPerfScore(s)+'%</b> · 24h سے زیادہ pending پر اثر</div>'+
+          '⭐ Performance: <b>'+vendorPerfScore(s)+'%</b> · 24h سے زیادہ pending پر اثر</div>'+
           '<div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">'+
-          (st!=='approved'&&!v.blocked?'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ منظور</button>':'')+
-          (!v.blocked?'<button class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 بلاک</button>':'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 ان بلاک</button>')+
-          '<button class="btn-secondary" style="background:#1565C0;color:#fff;" onclick="viewVendorCatalog(\''+id+'\')">📋 کیٹلاگ دیکھیں / چیک</button>'+
-          (id!=='v001'?'<button class="btn-secondary" style="background:#B71C1C;color:#fff;" onclick="deleteVendor(\''+id+'\')">🗑 مستقل ڈیلیٹ</button>':'')+
+          (st!=='approved'&&!v.blocked?'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ Approve</button>':'')+
+          (!v.blocked?'<button class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 Block</button>':'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 Unblock</button>')+
+          '<button class="btn-secondary" style="background:#1565C0;color:#fff;" onclick="viewVendorCatalog(\''+id+'\')">📋 View catalog</button>'+
+          (id!=='v001'?'<button class="btn-secondary" style="background:#B71C1C;color:#fff;" onclick="deleteVendor(\''+id+'\')">🗑 Delete permanently</button>':'')+
           '</div>'+
           '<div id="vcatalog-'+id+'" style="display:none;margin-top:10px;max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#FAFAFA;font-size:12px;"></div>'+
           '</div>';
       }).join("");
     }catch(e){
-      box.innerHTML = '<div class="loading" style="color:var(--price);">لوڈ فیل</div>';
+      box.innerHTML = '<div class="loading" style="color:var(--price);">لوڈ Failed</div>';
     }
   };
   window.setVendorStatus = async function(id, status){
@@ -417,28 +417,28 @@
         await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"false"});
         await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(status)});
       }
-      showToast("اپڈیٹ ✓");
+      showToast("Updated ✓");
       loadVendorsAdmin();
-    }catch(e){ showToast("فیل", true); }
+    }catch(e){ showToast("Failed", true); }
   };
 
-  /** بے وجہ / غیر فعال وینڈر مستقل حذف — v001 محفوظ */
+  /** بے وجہ / غیر فعال وینڈر مستقل Delete — v001 محفوظ */
   window.deleteVendor = async function(id){
     if(!id || id === "v001"){
-      showToast("SJ Foods (v001) ڈیلیٹ نہیں ہو سکتا", true);
+      showToast("SJ Foods (v001) cannot be deleted", true);
       return;
     }
     const name = (window._lastVendorsMap && window._lastVendorsMap[id] && window._lastVendorsMap[id].shop_name) || id;
-    if(!confirm("⚠️ مستقل ڈیلیٹ؟\n\nدکان: "+name+"\nID: "+id+"\n\nیہ واپس نہیں آئے گی۔ بلاک صرف چھپاتا ہے؛ ڈیلیٹ سب مٹا دیتا ہے۔")) return;
-    if(!confirm("آخری تصدیق: واقعی حذف کریں؟")) return;
+    if(!confirm("⚠️ Delete permanently?\n\nShop: "+name+"\nID: "+id+"\n\nThis cannot be undone. Block only hides; Delete removes all data.")) return;
+    if(!confirm("آخری تصدیق: واقعی Delete؟")) return;
     try{
       const res = await fetch(VDB+"/vendors/"+id+".json", { method: "DELETE" });
       if(!res.ok) throw new Error("HTTP "+res.status);
-      showToast("ڈیلیٹ ہو گیا ✓");
+      showToast("Deleted ✓");
       loadVendorsAdmin();
     }catch(e){
       console.error(e);
-      showToast("ڈیلیٹ فیل — Rules/نیٹ ورک چیک کریں", true);
+      showToast("ڈیلیٹ Failed — Rules/نیٹ ورک چیک کریں", true);
     }
   };
 
@@ -463,13 +463,13 @@
       return;
     }
     box.style.display = "block";
-    box.innerHTML = "لوڈ...";
+    box.innerHTML = "Loading…";
     try{
       const res = await fetch(VDB+"/vendors/"+id+"/items.json");
       const items = await res.json() || {};
       const keys = Object.keys(items);
       if(!keys.length){
-        box.innerHTML = "<i>ابھی کوئی آئٹم نہیں</i>";
+        box.innerHTML = "<i>No items yet</i>";
         box.setAttribute("data-loaded","1");
         return;
       }
@@ -559,7 +559,7 @@
     completedOrders.sort((a, b) => b.rawTime - a.rawTime);
     cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
     
-    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [منسوخ شدہ سب سے نیچے]
+    // فائنل لسٹ: [پینڈنگ اوپر] -> [مکمل بیچ میں] -> [Cancel شدہ سب سے نیچے]
     latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
 
     let totalSales = 0;
@@ -629,11 +629,11 @@
           <div class="chat-header" onclick="toggleAccordion('${o.id}')">
             <span style="font-size:14px; font-weight:bold; direction:auto;">
               📌 ${o.code} — <b>${o.name}</b> ${o.isUpdated ? '<span style="color:#B71C1C; font-size:11px;">(اپ ڈیٹ شدہ بل)</span>' : ''}
-              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">منسوخ شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
+              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">Cancel شدہ</span>` : (!isCompleted ? `<span class="challenge-tag">ڈلیوری باقی</span>` : '')}
             </span>
             <div style="display:flex; align-items:center; gap:4px;">
               <span class="time-badge">
-                ${isCancelled ? '❌ منسوخ' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
+                ${isCancelled ? '❌ Cancel' : (isCompleted ? '✅ مکمل' : '🕒 ' + o.displayTime)}
               </span>
             </div>
           </div>
@@ -653,13 +653,13 @@
             </div>
             
             <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ تھرمل پرنٹ</button>
+              <button class="btn-secondary" style="background:#FFF3CD; color:#856404;" onclick="printThermalReceipt('${orderDataStr}')">🖨️ Thermal print</button>
               ${!isCancelled && !isCompleted ? `
-                <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ آرڈر ایڈٹ کریں</button>
+                <button class="btn-secondary" style="background:#E0F2F1; color:#00695C;" onclick="openEditModal('${safeCode}', '${safeName}', '${safePhone}', '${safeAddr}', '${safeItems}', ${safeTotal})">✏️ Edit order</button>
                 ${o.isUpdated ? `<a href="${waUpdateLink}" target="_blank" class="btn-secondary" style="background:#25D366; color:#fff; text-decoration:none; padding:8px 12px; border-radius:9px; font-size:12.5px;">💬 واٹس ایپ اپ ڈیٹ بھیجیں</a>` : ''}
-                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ ڈلیوری مکمل اور شکریہ</button>
-                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ آرڈر منسوخ کریں</button>
-              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ آرڈر منسوخ کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrderAndThank('${o.code}', '${o.phone}')">✅ Delivered + thanks</button>
+                <button class="btn-danger" onclick="cancelOrder('${o.code}', '${o.phone}', '${o.name}')">❌ Cancel order</button>
+              ` : (isCancelled ? `<div style="width:100%; text-align:center; font-size:12px; color:#B71C1C; font-weight:bold; margin-top:4px;">🔒 یہ Cancel order کر دیا گیا ہے</div>` : `<div style="width:100%; text-align:center; font-size:12px; color:var(--mid); font-weight:bold; margin-top:4px;">🔒 آرڈر مکمل ہو چکا ہے</div>`)}
             </div>
           </div>
         </div>
@@ -698,14 +698,14 @@
     window.print();
   }
 
-  // آرڈر منسوخ کرنے کا فنکشن
+  // Cancel order کرنے کا فنکشن
   window.cancelOrder = async function(code, phone, name){
-    if(!confirm(`کیا آپ واقعی آرڈر [${code}] منسوخ کرنا چاہتے ہیں؟`)) return;
+    if(!confirm(`کیا آپ واقعی آرڈر [${code}] Cancel کرنا چاہتے ہیں؟`)) return;
     try {
       await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "cancelled" });
-      showToast("❌ آرڈر منسوخ کر دیا گیا ہے!");
+      showToast("❌ Cancel order کر دیا گیا ہے!");
 
-      const msg = `SJ Foods — آرڈر منسوخی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] آپ کی ہدایت کے مطابق منسوخ کر دیا گیا ہے۔\n\nمستقبل میں خدمت کا موقع ضرور دیں!\nSJ Foods Mingora Swat`;
+      const msg = `SJ Foods — Cancel orderی\n\nمحترم ${name}!\nآپ کا آرڈر [${code}] آپ کی ہدایت کے مطابق Cancel کر دیا گیا ہے۔\n\nمستقبل میں خدمت کا موقع ضرور دیں!\nSJ Foods Mingora Swat`;
       let cleanPhone = phone.replace(/[^0-9]/g, "");
       if(cleanPhone.startsWith("0")) cleanPhone = '92' + cleanPhone.slice(1);
       window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -870,11 +870,11 @@ function closeSiteSettingsModal(){ document.getElementById("adminSiteSettingsMod
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
-  document.getElementById("saveStatus").textContent = "⚠️ تبدیلیاں محفوظ نہیں ہیں — نیچے گٹ ہب والا بٹن دبائیں";
+  document.getElementById("saveStatus").textContent = "⚠️ Unsaved changes — press Save to GitHub below";
 }
 function markClean(){
   dirty = false;
-  document.getElementById("saveStatus").textContent = "✅ سب کچھ محفوظ ہے";
+  document.getElementById("saveStatus").textContent = "✅ All saved";
 }
 
 function utf8ToBase64(str){
@@ -920,7 +920,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
   const owner = document.getElementById("cfgOwner").value.trim();
   const repo = document.getElementById("cfgRepo").value.trim();
   const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){ showToast("تمام خانے پُر کریں", true); return; }
+  if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
   CFG = { owner, repo, token };
   try{
     await ghRequest(CATEGORIES_INDEX_FILE);
@@ -965,7 +965,7 @@ async function startMainGitHubPanel(){
 }
 
 async function loadCategory(file){
-  if(dirty && !confirm("غیر محفوظ تبدیلیاں ضائع ہو جائیں گی۔ آگے بڑھیں؟")) {
+  if(dirty && !confirm("Unsaved changes will be lost. Continue?")) {
     document.getElementById("categoryPicker").value = currentCategoryFile;
     return;
   }
@@ -1018,36 +1018,36 @@ function buildRow(it, idx){
         <input type="file" accept="image/*" class="img-input">
       </div>
       <div class="row-fields">
-        <input type="text" class="f-name" placeholder="پروڈکٹ نام (اردو)" value="${it.name}">
+        <input type="text" class="f-name" placeholder="Product name (Urdu)" value="${it.name}">
         <input type="text" class="f-name-en" placeholder="Roman Urdu name" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
       </div>
     </div>
     
     <div style="background:#F4ECE1; padding:6px 10px; border-radius:8px; font-size:11.5px; display:flex; align-items:center; gap:6px;">
       <input type="checkbox" class="f-override" ${it.manualOverride ? "checked" : ""}> 
-      <span>🔓 آٹو ریٹ کیلکولیشن بند کریں (خود ہاتھ سے ریٹ لکھیں)</span>
+      <span>🔓 Lock rates (manual entry)</span>
     </div>
 
     <div class="units-box"></div>
-    <button class="btn-secondary" style="width:100%; margin-top:6px;" onclick="addUnitToItem(${idx})">➕ نیا یونٹ شامل کریں</button>
+    <button class="btn-secondary" style="width:100%; margin-top:6px;" onclick="addUnitToItem(${idx})">➕ Add unit</button>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'weight')">⚖️ وزن</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'liquid')">🧴 لیٹر</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'pcs')">📦 عدد</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'dozen')">🥚 درجن</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'bottle')">🍾 بوتل</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gold')">🥇 سونا</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gem')">💎 کیریٹ</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'meter')">📏 میٹر</button>
-      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'service')">🛠️ سروس</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'weight')">⚖️ Weight</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'liquid')">🧴 Litre</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'pcs')">📦 Pcs</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'dozen')">🥚 Dozen</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'bottle')">🍾 Bottle</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gold')">🥇 Gold</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'gem')">💎 Carat</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'meter')">📏 Meter</button>
+      <button type="button" class="btn-secondary" style="width:auto;font-size:11px;padding:5px 8px;" onclick="applyAdminUnitPreset(${idx},'service')">🛠️ Service</button>
     </div>
     <div class="row-bottom" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
       <div class="row-flags" style="display:flex; gap:10px; flex-wrap:wrap;">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> دستیاب</label>
+        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> Available</label>
         <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ نمایاں</label>
-        <label><input type="checkbox" class="f-premium" ${it.premium ? "checked" : ""}> 💎 مہنگا/کال</label>
+        <label><input type="checkbox" class="f-premium" ${it.premium ? "checked" : ""}> 💎 Premium / Call</label>
       </div>
-      <button class="btn-danger" onclick="removeProductItem(${idx})">🗑️ حذف کریں</button>
+      <button class="btn-danger" onclick="removeProductItem(${idx})">🗑️ Delete</button>
     </div>
   `;
 
@@ -1181,7 +1181,7 @@ window.addNewProductItem = function(){
 }
 
 window.removeProductItem = function(idx){
-  if(!confirm("حذف کریں؟")) return;
+  if(!confirm("Delete؟")) return;
   currentItems.splice(idx, 1);
   renderProducts();
   markDirty();
@@ -1191,7 +1191,7 @@ window.saveProductsToGitHub = async function(){
   const rows = [...document.getElementById("productsArea").children];
   currentItems = rows.map(r => r._item);
 
-  document.getElementById("saveStatus").textContent = "⏳ گٹ ہب پر محفوظ ہو رہا ہے...";
+  document.getElementById("saveStatus").textContent = "⏳ Saving to GitHub…";
   try{
     const fresh = await ghRequest(currentCategoryFile);
     const payload = currentItems.map(it => {
@@ -1210,7 +1210,7 @@ window.saveProductsToGitHub = async function(){
     markClean();
     showToast("✅ کامیابی سے محفوظ ہو گیا!");
   }catch(e){
-    document.getElementById("saveStatus").textContent = "❌ محفوظ نہیں ہو سکا";
+    document.getElementById("saveStatus").textContent = "❌ Could not save";
     showToast("❌ خرابی: " + e.message, true);
   }
 }

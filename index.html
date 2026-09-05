@@ -518,48 +518,44 @@ async function loadActiveVendor(vendorId){
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
+  grid.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12px; grid-column:1/-1;">Loading shops…</div>';
   try{
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
-    let data = await res.json() || { v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora" } };
+    let data = await res.json() || {};
     ALL_VENDORS = data;
-
-    let ids = Object.keys(data).filter(id => id !== "_market" && data[id]?.status === "approved" && data[id]?.blocked !== true);
+    let ids = Object.keys(data).filter(id => id !== "_market" && data[id] && data[id].status === "approved" && data[id].blocked !== true);
     if(!ids.includes("v001")) ids.unshift("v001");
+    // ensure v001 display meta
+    if(!data.v001) data.v001 = { shop_name: "SJ Foods", status: "approved", city: "Mingora" };
 
-    grid.innerHTML = await Promise.all(ids.map(async id => {
-      const v = data[id];
+    grid.innerHTML = ids.map(id => {
+      const v = data[id] || {};
       const isOwn = (id === "v001");
-      
+      const name = v.shop_name || (isOwn ? "SJ Foods" : id);
+      const city = v.city || "Mingora";
+      // fast count: vendor items keys only — NO full category download
       let itemCount = 0;
-      if(isOwn){
-        try{
-          const idxRes = await fetch("categories_index.json?t=" + Date.now());
-          const idxData = await idxRes.json();
-          let total = 0;
-          for(const cat of idxData){
-            const cData = await fetchCategoryWithFirebase(cat.file);
-            if(Array.isArray(cData)) total += cData.length;
-          }
-          itemCount = total;
-        }catch(e){ itemCount = 10; }
-      } else {
-        const itemsObj = v.items || {};
-        let count = 0;
-        Object.keys(itemsObj).forEach(cat => {
-          count += Object.keys(itemsObj[cat] || {}).length;
+      if(!isOwn && v.items){
+        Object.keys(v.items).forEach(cat => {
+          itemCount += Object.keys(v.items[cat] || {}).length;
         });
-        itemCount = count;
       }
-
-      const isComingSoon = itemCount < 5;
-
+      const isComingSoon = !isOwn && itemCount < 5;
+      const cover = v.cover_image || "";
+      const isDataImg = cover.indexOf("data:image") === 0;
+      // skip huge data-uri covers on home list (use placeholder) for speed
+      const coverHtml = (cover && !isDataImg)
+        ? `<img class="shop-cover" src="${cover}" loading="lazy" alt="">`
+        : `<div class="shop-cover ph">${isOwn?"🥬":"🏪"}</div>`;
       return `<div class="shop-card" onclick="tryEnterShop('${id}')">
         ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
-        ${v.cover_image ? `<img class="shop-cover" src="${v.cover_image}">` : `<div class="shop-cover ph">${isOwn?'🥬':'🏪'}</div>`}
-        <div class="shop-body"><div class="sname">${v.shop_name||id}</div><div class="scity">${v.city||'Mingora'}</div><div class="stag">${isOwn?'SJ Foods':'شاپ'} (${itemCount} آئٹمز)</div></div>
+        ${coverHtml}
+        <div class="shop-body"><div class="sname">${name}</div><div class="scity">${city}</div><div class="stag">${isOwn?"SJ Foods":"شاپ"}${!isOwn && itemCount?(" · "+itemCount):""}</div></div>
       </div>`;
-    })).then(arr => arr.join(""));
-  }catch(e){ grid.innerHTML = '<div style="text-align:center;color:var(--price);grid-column:1/-1;">شاپس لوڈ نہیں ہوئیں</div>'; }
+    }).join("");
+  }catch(e){
+    grid.innerHTML = '<div style="text-align:center;color:var(--price);grid-column:1/-1;">شاپس لوڈ نہیں ہوئیں</div>';
+  }
 }
 
 window.tryEnterShop = function(vendorId){
@@ -914,7 +910,7 @@ function closeLightbox(e){
 }
 
 loadShopsList();
-loadData();
+loadFeaturedLite();
 </script>
 </body>
 </html>

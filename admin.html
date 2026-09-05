@@ -67,6 +67,10 @@
   .unit-row input.u-label{flex:1 1 120px;}
   .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
 
+  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
+  .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
+  .preset-pill:hover{background:var(--dark); color:#fff;}
+  
   .savebar{
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
     padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto;
@@ -524,7 +528,7 @@ function renderProducts(){
   const area = document.getElementById("productsArea");
   area.innerHTML = "";
   const presets = [
-    { label: "⚖️ Weight (KG/پاؤ)", type: "weight" },
+    { label: "⚖️ Weight", type: "weight" },
     { label: "🧴 Litre", type: "liquid" },
     { label: "📦 Pcs", type: "pcs" },
     { label: "🥚 Dozen", type: "dozen" },
@@ -550,11 +554,11 @@ function renderProducts(){
           <input type="text" value="${it.name_roman || ''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="currentItems[${idx}].name_roman=this.value; markDirty();">
         </div>
       </div>
-      <div class="units-box">
+      <div class="units-box" id="units-box-${idx}">
         ${it.units.map((u, ui) => `
           <div class="unit-row">
             <input type="text" class="u-label" value="${u.label}" placeholder="Unit" oninput="currentItems[${idx}].units[${ui}].label=this.value; markDirty();">
-            <input type="number" class="u-rate" value="${u.rate}" placeholder="Rate" oninput="updateItemRate(${idx}, ${ui}, this.value)">
+            <input type="text" inputmode="decimal" class="u-rate" value="${u.rate}" placeholder="Rate" oninput="handleRateInput(${idx}, ${ui}, this)">
             ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnit(${idx}, ${ui})">✕</button>` : ''}
           </div>
         `).join('')}
@@ -574,21 +578,29 @@ function renderProducts(){
   });
 }
 
-window.updateItemRate = function(idx, ui, val){
-  val = parseFloat(val) || 0;
+window.handleRateInput = function(idx, ui, el){
+  const val = parseFloat(el.value) || 0;
   const it = currentItems[idx];
   it.units[ui].rate = val;
-  if(ui === 0 && it.units.length > 1){
-    it.units.forEach((u, i) => {
-      if(i === 0) return;
-      let lbl = u.label.toLowerCase();
-      if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
-      else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) u.rate = Math.round(val / 2);
-      else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) u.rate = Math.round(val * 5);
-    });
-    renderProducts();
-  }
   markDirty();
+
+  if(ui === 0 && it.units.length > 1){
+    const box = document.getElementById(`units-box-${idx}`);
+    if(box){
+      const rateInputs = box.querySelectorAll(".u-rate");
+      it.units.forEach((u, i) => {
+        if(i === 0) return;
+        let lbl = u.label.toLowerCase();
+        if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
+        else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) u.rate = Math.round(val / 2);
+        else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) u.rate = Math.round(val * 5);
+
+        if(rateInputs[i] && document.activeElement !== rateInputs[i]){
+          rateInputs[i].value = u.rate;
+        }
+      });
+    }
+  }
 };
 
 window.applyPreset = function(idx, type){

@@ -58,7 +58,7 @@
 
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 16px; }
   .modal-overlay.active { display: flex; }
-  .modal-box { background: #fff; border-radius: 18px; padding: 18px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: Arial, sans-serif; }
+  .modal-box { background: #fff; border-radius: 18px; padding: 18px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: Arial, sans-serif; text-align: right; }
   .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 17px; }
   .modal-box p { font-size: 13.5px; color: var(--ink); line-height: 1.7; }
   .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px; font-weight: bold; width: 100%; margin-top: 12px; cursor: pointer; font-size: 13.5px; }
@@ -236,10 +236,10 @@
   </div>
   <ul class="drawer-menu">
     <li><a onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
-    <li><a href="vendor-register.html" onclick="toggleDrawer(false)">🏪 اپنی دکان رجسٹر کریں</a></li>
-    <li><a href="vendor.html" onclick="toggleDrawer(false)">🔐 Vendor Login</a></li>
-    <li><a href="admin.html" onclick="toggleDrawer(false)">⚙️ Admin Panel</a></li>
-    <li><a onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں</a></li>
+    <li><a href="vendor-register.html">🏪 اپنی دکان رجسٹر کریں</a></li>
+    <li><a href="vendor.html">🔐 Vendor Login</a></li>
+    <li><a href="admin.html">⚙️ Admin Panel</a></li>
+    <li><a onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (بانی کا پیغام)</a></li>
     <li><a onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز</a></li>
   </ul>
 </div>
@@ -401,7 +401,6 @@ window.addEventListener('popstate', (e) => {
 });
 history.replaceState({ page: 'home' }, "", "#home");
 
-// مینو ڈراور کنٹرول
 function toggleDrawer(open){
   const drawer = document.getElementById("drawer");
   const overlay = document.getElementById("drawerOverlay");

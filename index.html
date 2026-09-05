@@ -30,7 +30,7 @@
     color:#fff; padding:16px; border-radius:0 0 22px 22px; position:relative; 
     box-shadow: 0 4px 16px rgba(21,58,32,0.25); display:flex; justify-content:space-between; align-items:center;
   }
-  .header-title-box{ flex:1; text-align: right; }
+  .header-title-box{ flex:1; text-align: right; cursor:pointer; }
   header h1{ margin:0 0 2px; font-size:21px; font-weight:bold; font-family: Arial, sans-serif; letter-spacing: 0.5px; color:#FFFFFF; text-transform: uppercase; }
   header p{ margin:0; font-size:11px; opacity:.95; font-family: Arial, sans-serif; color:#E8F5E9; font-weight: bold; }
   
@@ -52,7 +52,7 @@
   .drawer-menu li { margin-bottom: 8px; }
   .drawer-menu a {
     display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--paper); border: 1px solid var(--line);
-    border-radius: 10px; color: var(--dark); text-decoration: none; font-size: 14px; font-weight: bold;
+    border-radius: 10px; color: var(--dark); text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer;
   }
   .drawer-menu a:hover { background: var(--leaf); }
 
@@ -218,7 +218,7 @@
 <body translate="no">
 
 <header>
-  <div class="header-title-box">
+  <div class="header-title-box" onclick="resetToHome()">
     <h1>SJ ONLINE</h1>
     <p>سوات مینگورہ کا آن لائن مارکیٹ · دکاندار اور شہریوں کے لیے</p>
   </div>
@@ -235,12 +235,12 @@
     <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
   </div>
   <ul class="drawer-menu">
-    <li><a href="#" onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
+    <li><a onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
     <li><a href="vendor-register.html" onclick="toggleDrawer(false)">🏪 اپنی دکان رجسٹر کریں</a></li>
     <li><a href="vendor.html" onclick="toggleDrawer(false)">🔐 Vendor Login</a></li>
     <li><a href="admin.html" onclick="toggleDrawer(false)">⚙️ Admin Panel</a></li>
-    <li><a href="#" onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں</a></li>
-    <li><a href="#" onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز</a></li>
+    <li><a onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں</a></li>
+    <li><a onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز</a></li>
   </ul>
 </div>
 
@@ -664,7 +664,11 @@ function selectCategory(catName){
   window.scrollTo({top:0, behavior:'auto'});
 }
 
-function resetToHome(){ if(SHOP_ENTERED) backToShops(); selectCategory(null); }
+function resetToHome(){ 
+  if(SHOP_ENTERED) backToShops(); 
+  selectCategory(null); 
+}
+window.resetToHome = resetToHome;
 
 function renderMainView(filter=""){
   const main = document.getElementById("list");
@@ -801,7 +805,7 @@ function proceedWithOrder(){
         timestamp: new Date().toLocaleString(), status: "pending", vendor_id: ACTIVE_VENDOR.id || "v001", shop_name: ACTIVE_VENDOR.shop_name || "SJ Foods"
       });
     }
-  }catch(e){}
+  } catch(e){}
 
   window.open(`https://wa.me/${ACTIVE_VENDOR.whatsapp || SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
 }

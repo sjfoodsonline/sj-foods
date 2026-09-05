@@ -67,10 +67,6 @@
   .unit-row input.u-label{flex:1 1 120px;}
   .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
 
-  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
-  .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
-  .preset-pill:hover{background:var(--dark); color:#fff;}
-  
   .savebar{
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
     padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto;
@@ -527,7 +523,17 @@ async function loadCategory(catKey){
 function renderProducts(){
   const area = document.getElementById("productsArea");
   area.innerHTML = "";
-  const presets = ["KG", "آدھا کلو", "پاؤ", "دڑی (5 KG)", "Litre", "Bottle", "Pcs", "Dozen", "Weight", "Service", "Meter", "Carat", "Gold"];
+  const presets = [
+    { label: "⚖️ Weight (KG/پاؤ)", type: "weight" },
+    { label: "🧴 Litre", type: "liquid" },
+    { label: "📦 Pcs", type: "pcs" },
+    { label: "🥚 Dozen", type: "dozen" },
+    { label: "🍾 Bottle", type: "bottle" },
+    { label: "🥇 Gold", type: "gold" },
+    { label: "💎 Carat", type: "gem" },
+    { label: "📏 Meter", type: "meter" },
+    { label: "🛠️ Service", type: "service" }
+  ];
 
   currentItems.forEach((it, idx) => {
     if(!it.units) it.units = [{label: it.unit || "KG", rate: it.rate || 0}];
@@ -554,7 +560,7 @@ function renderProducts(){
         `).join('')}
       </div>
       <div class="preset-pills">
-        ${presets.map(p => `<button type="button" class="preset-pill" onclick="addPresetUnit(${idx}, '${p}')">+ ${p}</button>`).join('')}
+        ${presets.map(p => `<button type="button" class="preset-pill" onclick="applyPreset(${idx}, '${p.type}')">${p.label}</button>`).join('')}
       </div>
       <div style="display:flex; gap:6px; margin-top:4px;">
         <button class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addUnit(${idx})">➕ Add Unit</button>
@@ -585,10 +591,33 @@ window.updateItemRate = function(idx, ui, val){
   markDirty();
 };
 
-window.addPresetUnit = function(idx, label){
-  currentItems[idx].units.push({label: label, rate: 0});
+window.applyPreset = function(idx, type){
+  const it = currentItems[idx];
+  const base = (it.units && it.units[0]) ? (parseFloat(it.units[0].rate)||0) : 0;
+  const presets = {
+    weight: [
+      {label:"KG", rate: base},
+      {label:"آدھا کلو", rate: Math.round(base/2)},
+      {label:"پاؤ", rate: Math.round(base/4)},
+      {label:"دڑی (5 KG)", rate: Math.round(base*5)}
+    ],
+    liquid: [
+      {label:"Ltr", rate: base},
+      {label:"½ Ltr", rate: Math.round(base/2)},
+      {label:"250 ml", rate: Math.round(base/4)}
+    ],
+    pcs: [{label:"Pcs", rate: base}, {label:"Pkt", rate: base}],
+    dozen: [{label:"عدد", rate: base}, {label:"درجن", rate: Math.round(base*12)}],
+    bottle: [{label:"Bottle", rate: base}, {label:"1.5 Ltr", rate: base}],
+    gold: [{label:"Tola", rate: base}, {label:"Gram", rate: base}],
+    gem: [{label:"Carat", rate: base}, {label:"Gram", rate: base}],
+    meter: [{label:"Meter", rate: base}, {label:"Yard", rate: base}],
+    service: [{label:"Job", rate: base}, {label:"Hour", rate: base}]
+  };
+  it.units = presets[type] || [{label:"Unit", rate: base}];
   renderProducts();
   markDirty();
+  showToast("Preset applied ✓");
 };
 
 window.addUnit = function(idx){

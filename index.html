@@ -518,43 +518,63 @@ async function loadActiveVendor(vendorId){
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
-  grid.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:12px; grid-column:1/-1;">Loading shops…</div>';
-  try{
-    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
-    let data = await res.json() || {};
-    ALL_VENDORS = data;
-    let ids = Object.keys(data).filter(id => id !== "_market" && data[id] && data[id].status === "approved" && data[id].blocked !== true);
+
+  // فوری دکھائیں — نیٹ ورک کا انتظار نہیں
+  const instant = {
+    v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png" }
+  };
+  function paint(data){
+    ALL_VENDORS = data || {};
+    let ids = Object.keys(data).filter(id => id !== "_market" && data[id] && typeof data[id] === "object");
+    ids = ids.filter(id => {
+      const v = data[id];
+      if(v.blocked === true) return false;
+      if(id === "v001") return true;
+      const st = (v.status || "approved").toLowerCase();
+      return st === "approved" || st === "active";
+    });
     if(!ids.includes("v001")) ids.unshift("v001");
-    // ensure v001 display meta
-    if(!data.v001) data.v001 = { shop_name: "SJ Foods", status: "approved", city: "Mingora" };
+    if(!data.v001) data.v001 = instant.v001;
 
     grid.innerHTML = ids.map(id => {
       const v = data[id] || {};
       const isOwn = (id === "v001");
       const name = v.shop_name || (isOwn ? "SJ Foods" : id);
       const city = v.city || "Mingora";
-      // fast count: vendor items keys only — NO full category download
-      let itemCount = 0;
-      if(!isOwn && v.items){
-        Object.keys(v.items).forEach(cat => {
-          itemCount += Object.keys(v.items[cat] || {}).length;
-        });
+      let cover = v.cover_image || (isOwn ? "cover.png" : "");
+      // کور ضرور دکھائیں (base64 یا URL)
+      let coverHtml;
+      if(cover){
+        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.ph-fallback\')&&(this.parentNode.querySelector(\'.ph-fallback\').style.display=\'flex\')">'+
+          '<div class="shop-cover ph ph-fallback" style="display:none">'+(isOwn?"🥬":"🏪")+'</div>';
+      } else {
+        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
       }
-      const isComingSoon = !isOwn && itemCount < 5;
-      const cover = v.cover_image || "";
-      const isDataImg = cover.indexOf("data:image") === 0;
-      // skip huge data-uri covers on home list (use placeholder) for speed
-      const coverHtml = (cover && !isDataImg)
-        ? `<img class="shop-cover" src="${cover}" loading="lazy" alt="">`
-        : `<div class="shop-cover ph">${isOwn?"🥬":"🏪"}</div>`;
-      return `<div class="shop-card" onclick="tryEnterShop('${id}')">
-        ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
-        ${coverHtml}
-        <div class="shop-body"><div class="sname">${name}</div><div class="scity">${city}</div><div class="stag">${isOwn?"SJ Foods":"شاپ"}${!isOwn && itemCount?(" · "+itemCount):""}</div></div>
-      </div>`;
+      return '<div class="shop-card" onclick="tryEnterShop(\''+id+'\')">'+
+        coverHtml+
+        '<div class="shop-body"><div class="sname">'+name+'</div><div class="scity">'+city+'</div>'+
+        '<div class="stag">'+(isOwn?"SJ Foods":"شاپ")+'</div></div></div>';
     }).join("");
+  }
+
+  paint(instant);
+
+  try{
+    const ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 7000) : null;
+    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json", ctrl ? { signal: ctrl.signal } : undefined);
+    if(timer) clearTimeout(timer);
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    let data = await res.json();
+    if(!data || typeof data !== "object") data = {};
+    // merge instant cover if v001 has no usable cover path
+    if(!data.v001) data.v001 = instant.v001;
+    else if(!data.v001.cover_image) data.v001.cover_image = "cover.png";
+    paint(data);
   }catch(e){
-    grid.innerHTML = '<div style="text-align:center;color:var(--price);grid-column:1/-1;">شاپس لوڈ نہیں ہوئیں</div>';
+    console.warn("shops fetch", e);
+    // instant پہلے سے دکھ چکا
+    if(!grid.innerHTML || grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
   }
 }
 

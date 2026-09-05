@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ur" dir="rtl" translate="no">
 <head>
@@ -76,7 +75,7 @@
   .owner-name { font-size: 16px; font-weight: bold; color: var(--dark); }
   .owner-tag { font-size: 11.5px; color: var(--mid); font-weight: bold; }
 
-  .cover-banner{ overflow:hidden; border-radius:14px; display:none; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
+  .cover-banner{ overflow:hidden; border-radius:14px; display:block; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
   .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.5s ease; }
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -516,6 +515,43 @@ async function loadActiveVendor(vendorId){
   return false;
 }
 
+
+function initHomeCoverSlider(extraImgs){
+  const track = document.getElementById("coverSliderTrack");
+  const banner = document.getElementById("coverBanner");
+  if(!track || !banner) return;
+  let imgs = ["cover.png"];
+  (extraImgs || []).forEach(function(u){
+    if(u && String(u).indexOf("data:image") !== 0 && imgs.indexOf(u) < 0) imgs.push(u);
+  });
+  // max 6 slides
+  imgs = imgs.slice(0, 6);
+  track.innerHTML = imgs.map(function(src){
+    return '<div class="cover-slide"><img src="'+src+'" alt="" loading="eager" onerror="this.parentNode.style.display=\'none\'"></div>';
+  }).join("");
+  banner.style.display = "block";
+  let slide = 0;
+  if(window._coverTimer) clearInterval(window._coverTimer);
+  if(imgs.length > 1){
+    window._coverTimer = setInterval(function(){
+      slide = (slide + 1) % imgs.length;
+      track.style.transform = "translateX(" + (-slide * 100) + "%)";
+    }, 3500);
+  }
+}
+
+async function initHomeVisuals(){
+  initHomeCoverSlider([]);
+  // features strip always visible on home
+  var fw = document.querySelector(".features-scroll-wrap");
+  if(fw) fw.style.display = "";
+  var fs = document.getElementById("featuredSection");
+  if(fs) fs.style.display = "";
+  // load featured deals (non-blocking)
+  loadFeaturedLite();
+}
+
+
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
@@ -648,6 +684,69 @@ window.backToShops = function(){
   document.getElementById("featuredSection").style.display = "";
   loadShopsList();
 };
+
+async function loadFeaturedLite(){
+  const box = document.getElementById("dealBox");
+  const section = document.getElementById("featuredSection");
+  try{
+    const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
+    const featured = [];
+    const fallback = [];
+    const slice = (index || []).slice(0, 6);
+    const results = await Promise.all(slice.map(function(e){
+      return fetchCategoryWithFirebase(e.file).catch(function(){ return []; });
+    }));
+    const coverExtras = [];
+    slice.forEach(function(entry, i){
+      (results[i] || []).forEach(function(it, ii){
+        if(it.available === false) return;
+        let imgs = it.images || (it.image ? [it.image] : []);
+        let img0 = imgs[0] || "";
+        if(img0 && String(img0).indexOf("data:") !== 0) coverExtras.push(img0);
+        const row = {
+          id: i + "-" + ii,
+          cat: entry.category,
+          icon: entry.icon || "🛒",
+          name: it.name,
+          name_roman: it.name_roman || "",
+          units: it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }],
+          images: imgs,
+          featured: it.featured === true,
+          available: true,
+          qty: 0
+        };
+        if(it.featured === true) featured.push(row);
+        else if(fallback.length < 8 && img0) fallback.push(row);
+      });
+    });
+    // cover slider with product pics
+    initHomeCoverSlider(coverExtras.slice(0, 5));
+    const showList = featured.length ? featured : fallback;
+    if(showList.length){
+      ITEMS = showList;
+      if(typeof renderFeatured === "function") renderFeatured();
+      else if(box){
+        box.innerHTML = showList.slice(0, 2).map(function(first){
+          let fImg = (first.images && first.images[0]) ? first.images[0] : "";
+          if(fImg && String(fImg).indexOf("data:image") === 0) fImg = "";
+          return '<div class="deal-card" onclick="jumpToItem(\''+first.cat+'\',\''+first.id+'\')">'+
+            (fImg ? '<img src="'+fImg+'" loading="lazy">' : '<div class="deal-icon-box">'+(first.icon||"⭐")+'</div>')+
+            '<div class="d-name">'+(first.name_roman||first.name)+'</div>'+
+            '<div class="d-rate">Rs. '+Math.round((first.units[0]&&first.units[0].rate)||0)+'</div></div>';
+        }).join("");
+      }
+      if(section) section.style.display = "";
+    } else if(section){
+      // keep section visible with placeholder cards
+      if(box) box.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Fresh Deals</div><div class="d-rate">Open a shop</div></div>'+
+        '<div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Local Market</div><div class="d-rate">Mingora</div></div>';
+      section.style.display = "";
+    }
+  }catch(e){
+    console.warn("featured lite", e);
+    if(section) section.style.display = "";
+  }
+}
 
 async function loadData(){
   try{
@@ -878,26 +977,46 @@ function proceedWithOrder(){
 }
 
 function renderFeatured(){
-  const feat = ITEMS.filter(i => i.featured && i.available);
+  let feat = ITEMS.filter(i => i.featured && i.available !== false);
+  if(feat.length === 0) feat = ITEMS.filter(i => i.available !== false).slice(0, 2);
   const box = document.getElementById("dealBox");
-  if(feat.length === 0){ document.getElementById("featuredSection").style.display = "none"; return; }
+  const section = document.getElementById("featuredSection");
+  if(!box) return;
+  if(feat.length === 0){
+    if(section) section.style.display = "";
+    return;
+  }
+  if(section) section.style.display = "";
   box.innerHTML = feat.slice(0, 2).map(first => {
     let fImg = (first.images && first.images.length > 0) ? first.images[0] : "";
-    return `
-      <div class="deal-card" onclick="jumpToItem('${first.cat}','${first.id}')">
-        ${fImg ? `<img src="${fImg}" loading="lazy">` : `<div class="deal-icon-box">${first.icon}</div>`}
-        <div class="d-name">${first.name}</div>
-        <div class="d-rate">${fmt(first.units[0].rate)}</div>
-      </div>
-    `;
+    if(fImg && String(fImg).indexOf("data:image") === 0) fImg = "";
+    const nm = first.name_roman || first.name || "";
+    const rate = (first.units && first.units[0]) ? first.units[0].rate : 0;
+    return '<div class="deal-card" onclick="jumpToItem(\''+first.cat+'\',\''+first.id+'\')">'+
+      (fImg ? '<img src="'+fImg+'" loading="lazy" alt="">' : '<div class="deal-icon-box">'+(first.icon||"⭐")+'</div>')+
+      '<div class="d-name">'+nm+'</div>'+
+      '<div class="d-rate">'+fmt(rate)+'</div></div>';
   }).join("");
 }
 
 function jumpToItem(catName, itemId){
+  // from home deals — enter SJ Foods then open category
+  if(!SHOP_ENTERED){
+    enterShop("v001").then(function(){
+      setTimeout(function(){
+        selectCategory(catName);
+        setTimeout(function(){
+          var el = document.getElementById("row-" + itemId);
+          if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); el.style.backgroundColor = "#FFF3CD"; setTimeout(function(){ el.style.backgroundColor = ""; }, 1200); }
+        }, 200);
+      }, 100);
+    });
+    return;
+  }
   selectCategory(catName);
-  setTimeout(() => {
-    let el = document.getElementById("row-" + itemId);
-    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); el.style.backgroundColor = "#FFF3CD"; setTimeout(() => el.style.backgroundColor = "", 1200); }
+  setTimeout(function(){
+    var el = document.getElementById("row-" + itemId);
+    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); el.style.backgroundColor = "#FFF3CD"; setTimeout(function(){ el.style.backgroundColor = ""; }, 1200); }
   }, 100);
 }
 
@@ -930,8 +1049,8 @@ function closeLightbox(e){
   document.getElementById("lightbox").classList.add("hidden");
 }
 
+initHomeVisuals();
 loadShopsList();
-loadFeaturedLite();
 </script>
 </body>
 </html>

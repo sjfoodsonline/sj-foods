@@ -76,6 +76,13 @@
   .owner-tag { font-size: 11.5px; color: var(--mid); font-weight: bold; }
 
   .cover-banner{ overflow:hidden; border-radius:14px; display:block; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
+  .cover-banner.static-cover .cover-slider-track{ transform:none !important; }
+  .cover-banner.static-cover .cover-slide{ min-width:100%; }
+  .product-strip-wrap{ margin:10px 14px 0; overflow:hidden; border-radius:14px; border:1px solid var(--line); background:#fff; }
+  .product-strip-label{ font-size:11px; text-align:center; color:var(--muted); padding:6px 8px 0; font-weight:bold; }
+  .product-strip-track{ display:flex; transition: transform 0.45s ease; }
+  .product-strip-slide{ min-width:100%; aspect-ratio: 2.2/1; }
+  .product-strip-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
   .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.5s ease; }
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -96,7 +103,10 @@
     border-radius:18px; border:2px solid var(--brown); box-shadow:0 6px 20px rgba(93,64,55,0.1);
   }
   .shout-title { font-size: 16px; font-weight: bold; color: var(--brown); text-transform: uppercase; text-align: center; margin-bottom: 10px; }
-  .deal-grid { display: flex; gap: 10px; justify-content: center; }
+  .deal-grid { display: flex; gap: 10px; justify-content: center; min-height: 140px; }
+  .deal-card{ transition: opacity 0.35s ease, transform 0.35s ease; }
+  .deal-card.shuffle-out{ opacity:0; transform: scale(0.92); }
+  .deal-card.shuffle-in{ opacity:1; transform: scale(1); }
   .deal-card{
     flex: 1; background:#fff; border:1px solid #D7CCC8; border-radius:12px; padding:8px; text-align:center; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
@@ -279,8 +289,14 @@
 </div>
 
 <div id="homePageWrapper">
-  <div class="cover-banner" id="coverBanner">
-    <div class="cover-slider-track" id="coverSliderTrack"></div>
+  <div class="cover-banner static-cover" id="coverBanner">
+    <div class="cover-slider-track" id="coverSliderTrack">
+      <div class="cover-slide"><img src="cover.png" alt="SJ Online Cover" id="mainCoverImg" onerror="this.src='icon-512.png'"></div>
+    </div>
+  </div>
+  <div class="product-strip-wrap" id="productStripWrap">
+    <div class="product-strip-label">✨ Market Gallery — تمام اشیاء</div>
+    <div class="product-strip-track" id="productStripTrack"></div>
   </div>
 
   <div class="features-scroll-wrap">
@@ -516,39 +532,196 @@ async function loadActiveVendor(vendorId){
 }
 
 
-function initHomeCoverSlider(extraImgs){
+
+
+
+
+
+
+/** ہوم: فکسڈ کور (اوپر) · پروڈکٹ گیلری سلائیڈ · ٹاپ ڈیلز ڈبل شفل */
+let HOME_GALLERY = [];
+let HOME_DEALS_POOL = [];
+let _galleryIdx = 0;
+let _dealsIdx = 0;
+
+function initHomeCoverSlider(){
+  // کور فکسڈ — حرکت نہیں
   const track = document.getElementById("coverSliderTrack");
   const banner = document.getElementById("coverBanner");
   if(!track || !banner) return;
-  let imgs = ["cover.png"];
-  (extraImgs || []).forEach(function(u){
-    if(u && String(u).indexOf("data:image") !== 0 && imgs.indexOf(u) < 0) imgs.push(u);
-  });
-  // max 6 slides
-  imgs = imgs.slice(0, 6);
-  track.innerHTML = imgs.map(function(src){
-    return '<div class="cover-slide"><img src="'+src+'" alt="" loading="eager" onerror="this.parentNode.style.display=\'none\'"></div>';
-  }).join("");
+  banner.classList.add("static-cover");
   banner.style.display = "block";
-  let slide = 0;
-  if(window._coverTimer) clearInterval(window._coverTimer);
-  if(imgs.length > 1){
-    window._coverTimer = setInterval(function(){
-      slide = (slide + 1) % imgs.length;
-      track.style.transform = "translateX(" + (-slide * 100) + "%)";
-    }, 3500);
+  track.style.transform = "none";
+  if(!track.querySelector("img")){
+    track.innerHTML = '<div class="cover-slide"><img src="cover.png" alt="Cover" onerror="this.src=\'icon-512.png\'"></div>';
+  }
+  if(window._coverTimer){ clearInterval(window._coverTimer); window._coverTimer = null; }
+}
+
+function paintProductGallery(urls){
+  const track = document.getElementById("productStripTrack");
+  const wrap = document.getElementById("productStripWrap");
+  if(!track || !wrap) return;
+  const list = (urls || []).filter(function(u){ return u && String(u).indexOf("data:image") !== 0; });
+  HOME_GALLERY = list.length ? list : ["cover.png", "icon-512.png"];
+  track.innerHTML = HOME_GALLERY.map(function(src){
+    return '<div class="product-strip-slide"><img src="'+src+'" alt="" loading="lazy" onerror="this.src=\'icon-192.png\'"></div>';
+  }).join("");
+  wrap.style.display = "block";
+  _galleryIdx = 0;
+  track.style.transform = "translateX(0)";
+  if(window._galleryTimer) clearInterval(window._galleryTimer);
+  if(HOME_GALLERY.length > 1){
+    window._galleryTimer = setInterval(function(){
+      _galleryIdx = (_galleryIdx + 1) % HOME_GALLERY.length;
+      track.style.transform = "translateX(" + (-_galleryIdx * 100) + "%)";
+    }, 3200);
   }
 }
 
-async function initHomeVisuals(){
-  initHomeCoverSlider([]);
-  // features strip always visible on home
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function paintTopDealsPair(){
+  const box = document.getElementById("dealBox");
+  const section = document.getElementById("featuredSection");
+  if(!box) return;
+  if(section) section.style.display = "";
+  let pool = HOME_DEALS_POOL.length ? HOME_DEALS_POOL : ITEMS.filter(function(i){ return i.available !== false; });
+  if(!pool.length){
+    box.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Fresh Deals</div><div class="d-rate">SJ Online</div></div>'+
+      '<div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Local Shops</div><div class="d-rate">Mingora</div></div>';
+    return;
+  }
+  // دو کارڈز — شفل انڈیکس سے
+  const a = pool[_dealsIdx % pool.length];
+  const b = pool[(_dealsIdx + 1) % pool.length];
+  _dealsIdx = (_dealsIdx + 2) % Math.max(pool.length, 2);
+  function card(it){
+    if(!it) return '<div class="deal-card"><div class="deal-icon-box">⭐</div></div>';
+    let fImg = (it.images && it.images[0]) ? it.images[0] : "";
+    if(fImg && String(fImg).indexOf("data:image") === 0) fImg = "";
+    const nm = it.name_roman || it.name || "";
+    const rate = (it.units && it.units[0]) ? it.units[0].rate : 0;
+    const cat = it.cat || "";
+    const id = it.id || "";
+    return '<div class="deal-card shuffle-in" onclick="jumpToItem(\''+cat+'\',\''+id+'\')">'+
+      (fImg ? '<img src="'+fImg+'" loading="lazy" alt="">' : '<div class="deal-icon-box">'+(it.icon||"⭐")+'</div>')+
+      '<div class="d-name">'+nm+'</div>'+
+      '<div class="d-rate">'+(typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0)))+'</div></div>';
+  }
+  box.innerHTML = card(a) + card(b);
+}
+
+function startTopDealsShuffle(){
+  paintTopDealsPair();
+  if(window._dealsTimer) clearInterval(window._dealsTimer);
+  window._dealsTimer = setInterval(function(){
+    const box = document.getElementById("dealBox");
+    if(!box) return;
+    box.querySelectorAll(".deal-card").forEach(function(el){ el.classList.add("shuffle-out"); });
+    setTimeout(function(){ paintTopDealsPair(); }, 280);
+  }, 4500);
+}
+
+function initHomeVisuals(){
+  initHomeCoverSlider();
   var fw = document.querySelector(".features-scroll-wrap");
   if(fw) fw.style.display = "";
   var fs = document.getElementById("featuredSection");
   if(fs) fs.style.display = "";
-  // load featured deals (non-blocking)
   loadFeaturedLite();
+}
+
+async function loadFeaturedLite(){
+  const section = document.getElementById("featuredSection");
+  try{
+    const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
+    const all = [];
+    const gallery = [];
+    const slice = (index || []).slice(0, 10);
+    const results = await Promise.all(slice.map(function(e){
+      return fetchCategoryWithFirebase(e.file).catch(function(){ return []; });
+    }));
+    // SJ Foods products
+    slice.forEach(function(entry, i){
+      (results[i] || []).forEach(function(it, ii){
+        if(it.available === false) return;
+        let imgs = it.images || (it.image ? [it.image] : []);
+        let img0 = imgs[0] || "";
+        if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+        all.push({
+          id: "sj-"+i+"-"+ii,
+          cat: entry.category,
+          icon: entry.icon || "🛒",
+          name: it.name,
+          name_roman: it.name_roman || "",
+          units: it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }],
+          images: imgs,
+          featured: it.featured === true,
+          available: true,
+          qty: 0,
+          shop: "SJ Foods"
+        });
+      });
+    });
+    // Vendor items (approved) — gallery + deals pool
+    try{
+      const vRes = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
+      const vendors = await vRes.json() || {};
+      Object.keys(vendors).forEach(function(vid){
+        if(vid === "_market" || vid === "v001") return;
+        const v = vendors[vid];
+        if(!v || v.blocked || (v.status && v.status !== "approved")) return;
+        const itemsRoot = v.items || {};
+        Object.keys(itemsRoot).forEach(function(cat){
+          const catItems = itemsRoot[cat] || {};
+          Object.keys(catItems).forEach(function(k){
+            const it = catItems[k] || {};
+            if(it.available === false) return;
+            let imgs = it.images || (it.image ? [it.image] : []);
+            let img0 = imgs[0] || "";
+            if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+            all.push({
+              id: "v-"+vid+"-"+k,
+              cat: cat,
+              icon: "🏪",
+              name: it.name || k,
+              name_roman: it.name_roman || it.name || k,
+              units: it.units || [{ label: it.unit || "Pcs", rate: it.rate || 0 }],
+              images: imgs,
+              featured: true,
+              available: true,
+              qty: 0,
+              shop: v.shop_name || vid,
+              vendorId: vid
+            });
+          });
+        });
+      });
+    }catch(ve){ console.warn("vendor deals", ve); }
+
+    // unique gallery urls, shuffle
+    const uniq = [];
+    gallery.forEach(function(u){ if(uniq.indexOf(u) < 0) uniq.push(u); });
+    paintProductGallery(shuffleArray(uniq).slice(0, 24));
+
+    HOME_DEALS_POOL = shuffleArray(all);
+    ITEMS = HOME_DEALS_POOL.slice(); // jumpToItem / search light
+    startTopDealsShuffle();
+    if(section) section.style.display = "";
+  }catch(e){
+    console.warn("featured lite", e);
+    paintProductGallery([]);
+    startTopDealsShuffle();
+    if(section) section.style.display = "";
+  }
 }
 
 
@@ -685,68 +858,7 @@ window.backToShops = function(){
   loadShopsList();
 };
 
-async function loadFeaturedLite(){
-  const box = document.getElementById("dealBox");
-  const section = document.getElementById("featuredSection");
-  try{
-    const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
-    const featured = [];
-    const fallback = [];
-    const slice = (index || []).slice(0, 6);
-    const results = await Promise.all(slice.map(function(e){
-      return fetchCategoryWithFirebase(e.file).catch(function(){ return []; });
-    }));
-    const coverExtras = [];
-    slice.forEach(function(entry, i){
-      (results[i] || []).forEach(function(it, ii){
-        if(it.available === false) return;
-        let imgs = it.images || (it.image ? [it.image] : []);
-        let img0 = imgs[0] || "";
-        if(img0 && String(img0).indexOf("data:") !== 0) coverExtras.push(img0);
-        const row = {
-          id: i + "-" + ii,
-          cat: entry.category,
-          icon: entry.icon || "🛒",
-          name: it.name,
-          name_roman: it.name_roman || "",
-          units: it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }],
-          images: imgs,
-          featured: it.featured === true,
-          available: true,
-          qty: 0
-        };
-        if(it.featured === true) featured.push(row);
-        else if(fallback.length < 8 && img0) fallback.push(row);
-      });
-    });
-    // cover slider with product pics
-    initHomeCoverSlider(coverExtras.slice(0, 5));
-    const showList = featured.length ? featured : fallback;
-    if(showList.length){
-      ITEMS = showList;
-      if(typeof renderFeatured === "function") renderFeatured();
-      else if(box){
-        box.innerHTML = showList.slice(0, 2).map(function(first){
-          let fImg = (first.images && first.images[0]) ? first.images[0] : "";
-          if(fImg && String(fImg).indexOf("data:image") === 0) fImg = "";
-          return '<div class="deal-card" onclick="jumpToItem(\''+first.cat+'\',\''+first.id+'\')">'+
-            (fImg ? '<img src="'+fImg+'" loading="lazy">' : '<div class="deal-icon-box">'+(first.icon||"⭐")+'</div>')+
-            '<div class="d-name">'+(first.name_roman||first.name)+'</div>'+
-            '<div class="d-rate">Rs. '+Math.round((first.units[0]&&first.units[0].rate)||0)+'</div></div>';
-        }).join("");
-      }
-      if(section) section.style.display = "";
-    } else if(section){
-      // keep section visible with placeholder cards
-      if(box) box.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Fresh Deals</div><div class="d-rate">Open a shop</div></div>'+
-        '<div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Local Market</div><div class="d-rate">Mingora</div></div>';
-      section.style.display = "";
-    }
-  }catch(e){
-    console.warn("featured lite", e);
-    if(section) section.style.display = "";
-  }
-}
+
 
 async function loadData(){
   try{
@@ -976,49 +1088,31 @@ function proceedWithOrder(){
   window.open(`https://wa.me/${ACTIVE_VENDOR.whatsapp || SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
-function renderFeatured(){
-  let feat = ITEMS.filter(i => i.featured && i.available !== false);
-  if(feat.length === 0) feat = ITEMS.filter(i => i.available !== false).slice(0, 2);
-  const box = document.getElementById("dealBox");
-  const section = document.getElementById("featuredSection");
-  if(!box) return;
-  if(feat.length === 0){
-    if(section) section.style.display = "";
-    return;
-  }
-  if(section) section.style.display = "";
-  box.innerHTML = feat.slice(0, 2).map(first => {
-    let fImg = (first.images && first.images.length > 0) ? first.images[0] : "";
-    if(fImg && String(fImg).indexOf("data:image") === 0) fImg = "";
-    const nm = first.name_roman || first.name || "";
-    const rate = (first.units && first.units[0]) ? first.units[0].rate : 0;
-    return '<div class="deal-card" onclick="jumpToItem(\''+first.cat+'\',\''+first.id+'\')">'+
-      (fImg ? '<img src="'+fImg+'" loading="lazy" alt="">' : '<div class="deal-icon-box">'+(first.icon||"⭐")+'</div>')+
-      '<div class="d-name">'+nm+'</div>'+
-      '<div class="d-rate">'+fmt(rate)+'</div></div>';
-  }).join("");
-}
+function renderFeatured(){ if(typeof startTopDealsShuffle==='function') startTopDealsShuffle(); else if(typeof paintTopDealsPair==='function') paintTopDealsPair(); }
+
 
 function jumpToItem(catName, itemId){
-  // from home deals — enter SJ Foods then open category
-  if(!SHOP_ENTERED){
-    enterShop("v001").then(function(){
+  const it = (ITEMS || []).find(function(x){ return x.id === itemId; });
+  const targetVendor = (it && it.vendorId) ? it.vendorId : "v001";
+  if(!SHOP_ENTERED || (ACTIVE_VENDOR && ACTIVE_VENDOR.id !== targetVendor)){
+    enterShop(targetVendor).then(function(){
       setTimeout(function(){
-        selectCategory(catName);
+        if(typeof selectCategory === "function") selectCategory(catName);
         setTimeout(function(){
           var el = document.getElementById("row-" + itemId);
-          if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); el.style.backgroundColor = "#FFF3CD"; setTimeout(function(){ el.style.backgroundColor = ""; }, 1200); }
-        }, 200);
-      }, 100);
+          if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        }, 250);
+      }, 150);
     });
     return;
   }
-  selectCategory(catName);
+  if(typeof selectCategory === "function") selectCategory(catName);
   setTimeout(function(){
     var el = document.getElementById("row-" + itemId);
-    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); el.style.backgroundColor = "#FFF3CD"; setTimeout(function(){ el.style.backgroundColor = ""; }, 1200); }
+    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
   }, 100);
 }
+
 
 function openLightboxItem(itemId){
   let it = ITEMS.find(x => x.id === itemId);

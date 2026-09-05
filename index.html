@@ -419,13 +419,13 @@ function getActiveCartShopId(){
 async function fetchCategoryWithFirebase(catFile) {
   const cleanKey = catFile.replace('.json', '');
   try {
-    const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json`);
+    const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
     if (fbRes.ok) {
       const data = await fbRes.json();
       if (data && Array.isArray(data)) return data;
     }
   } catch (e) {}
-  const res = await fetch(catFile);
+  const res = await fetch(catFile + "?t=" + Date.now());
   return await res.json();
 }
 
@@ -467,7 +467,7 @@ async function loadShopsList(){
       let itemCount = 0;
       if(isOwn){
         try{
-          const idxRes = await fetch("categories_index.json");
+          const idxRes = await fetch("categories_index.json?t=" + Date.now());
           const idxData = await idxRes.json();
           let total = 0;
           for(const cat of idxData){
@@ -538,7 +538,7 @@ async function loadVendorCatalog(vendorId){
     const data = await res.json() || {};
     CATEGORIES_META = []; ITEMS = []; CATEGORIES_DATA = {};
     Object.keys(data).forEach(cat => {
-      CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒" });
+      CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒", image: "" });
       CATEGORIES_DATA[cat] = [];
       Object.keys(data[cat]||{}).forEach(k => {
         const it = data[cat][k];
@@ -568,9 +568,21 @@ window.backToShops = function(){
 
 async function loadData(){
   try{
-    const index = await fetch("categories_index.json").then(r => r.json());
+    const index = await fetch("categories_index.json?t=" + Date.now()).then(r => r.json());
     const catResults = await Promise.all(index.map(e => fetchCategoryWithFirebase(e.file)));
-    CATEGORIES_META = index.map(e => ({ name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: e.image||"" }));
+    
+    CATEGORIES_META = index.map((e, i) => {
+      let itemsList = catResults[i] || [];
+      let defaultImg = e.image || "";
+      if(!defaultImg && itemsList.length > 0){
+        let firstWithImg = itemsList.find(it => (it.images && it.images.length > 0) || it.image);
+        if(firstWithImg){
+          defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
+        }
+      }
+      return { name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: defaultImg };
+    });
+
     ITEMS = []; CATEGORIES_DATA = {};
     index.forEach((entry, i) => {
       let itemsList = catResults[i] || [];
@@ -648,7 +660,7 @@ function renderMainView(filter=""){
     let grid = document.createElement("div"); grid.className = "home-cats-grid";
     CATEGORIES_META.forEach(cat => {
       grid.innerHTML += `<div class="home-cat-card" onclick="selectCategory('${cat.name}')">
-        <div class="home-cat-img-wrap">${cat.image ? `<img src="${cat.image}" loading="lazy">` : cat.icon}</div>
+        <div class="home-cat-img-wrap">${cat.image ? `<img src="${cat.image}" loading="lazy">` : `<div style="font-size:32px;">${cat.icon}</div>`}</div>
         <div class="home-cat-name">${cat.name_roman||cat.name}</div>
       </div>`;
     });
@@ -712,7 +724,6 @@ function toggleCartDrawer(){ document.getElementById("billbar").classList.toggle
 document.getElementById("summary").onclick = toggleCartDrawer;
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
-// فون نمبر کی سختی سے تصدیق (Validation)
 document.getElementById("waBtn").onclick = () => {
   if(ITEMS.filter(i => i.qty > 0).length === 0){ alert("کارٹ خالی ہے"); return; }
   const name = document.getElementById("custName").value.trim();
@@ -721,7 +732,6 @@ document.getElementById("waBtn").onclick = () => {
   
   if(!name || !phone || !addr){ alert("براہ کرم نام، فون اور مکمل پتہ درج کریں"); return; }
 
-  // تصدیق: نمبر درست 11 ہندسوں کا ہو یا +92 / 0092 سے شروع ہو کر صحیح لمबाई کا ہو
   let cleanPhoneDigits = phone.replace(/[^0-9]/g, "");
   let isValidNumber = false;
   

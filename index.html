@@ -401,6 +401,31 @@ window.addEventListener('popstate', (e) => {
 });
 history.replaceState({ page: 'home' }, "", "#home");
 
+// مینو ڈراور کنٹرول
+function toggleDrawer(open){
+  const drawer = document.getElementById("drawer");
+  const overlay = document.getElementById("drawerOverlay");
+  if(open){
+    drawer.classList.add("active");
+    overlay.classList.add("active");
+  } else {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  }
+}
+window.toggleDrawer = toggleDrawer;
+
+function openModal(modalId){
+  toggleDrawer(false);
+  document.getElementById(modalId).classList.add("active");
+}
+window.openModal = openModal;
+
+function closeModal(modalId){
+  document.getElementById(modalId).classList.remove("active");
+}
+window.closeModal = closeModal;
+
 function getCartStore(){
   try{ return JSON.parse(window.safeStorage.getItem("sj_cart_store") || "{}"); }catch(e){ return {}; }
 }
@@ -776,7 +801,7 @@ function proceedWithOrder(){
         timestamp: new Date().toLocaleString(), status: "pending", vendor_id: ACTIVE_VENDOR.id || "v001", shop_name: ACTIVE_VENDOR.shop_name || "SJ Foods"
       });
     }
-  } catch(e){}
+  }catch(e){}
 
   window.open(`https://wa.me/${ACTIVE_VENDOR.whatsapp || SHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
 }

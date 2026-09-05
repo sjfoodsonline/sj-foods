@@ -901,6 +901,7 @@ window.safeStorage = (function(){
   };
 })();
 const CATEGORIES_INDEX_FILE = "categories_index.json";
+const LIVE_BRANCH = "vendors_ledger"; // NEVER change — GitHub Pages deploys from this
 let CFG = null;
 let CATEGORIES_INDEX = [];
 let currentCategoryFile = null;
@@ -1010,9 +1011,9 @@ async function ghRequest(path, options){
   if(res.status === 204) return {};
   return res.json();
 }
-function ghBranch(){ return (CFG && CFG.branch) || "vendors_ledger"; }
+function ghBranch(){ return LIVE_BRANCH; }
 async function ghGetJson(path){
-  const branch = ghBranch();
+  const branch = LIVE_BRANCH;
   const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
   const res = await fetch(url, {
     headers: {
@@ -1022,31 +1023,16 @@ async function ghGetJson(path){
     }
   });
   if(!res.ok){
-    // fallback main once
-    if(branch !== "main"){
-      const res2 = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${path}?ref=main`, {
-        headers: {
-          "Authorization": "token " + String(CFG.token||"").trim(),
-          "Accept": "application/vnd.github+json",
-          "User-Agent": "SJ-Foods-Admin"
-        }
-      });
-      if(res2.ok){
-        const data2 = await res2.json();
-        CFG.branch = "main";
-        try{ saveConfig(CFG); }catch(e){}
-        return { json: JSON.parse(base64ToUtf8(data2.content)), sha: data2.sha };
-      }
-    }
-    throw new Error("File not found: " + path + " (branch " + branch + ")");
+    let detail = "";
+    try{ const j = await res.json(); detail = j.message || ""; }catch(e){}
+    throw new Error("File not found: " + path + " on " + branch + (detail ? " — " + detail : ""));
   }
   const data = await res.json();
   return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
 }
 async function ghPutJson(path, obj, sha, message){
   const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  const branch = ghBranch();
-  // always fresh sha from same branch
+  const branch = LIVE_BRANCH;
   let useSha = sha;
   try{
     const meta = await fetch(
@@ -1064,16 +1050,20 @@ async function ghPutJson(path, obj, sha, message){
   if(useSha) body.sha = useSha;
   return ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
 }
-
 async function ghPutBinary(path, base64Content, message){
   let sha;
   try{ const existing = await ghRequest(path); sha = existing.sha; }catch(e){}
-  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content: base64Content, sha, branch: "main" }) });
+  return ghRequest(path, { method: "PUT", body: JSON.stringify({ message, content: base64Content, sha, branch: LIVE_BRANCH }) });
 }
 
 function loadConfig(){
   const raw = safeStorage.getItem("sjfoods-admin-config");
-  return raw ? JSON.parse(raw) : null;
+  if(!raw) return null;
+  try{
+    const c = JSON.parse(raw);
+    c.branch = LIVE_BRANCH; // force live branch always
+    return c;
+  }catch(e){ return null; }
 }
 function saveConfig(cfg){ safeStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
 
@@ -1082,7 +1072,7 @@ document.getElementById("saveConfigBtn").onclick = async ()=>{
   const repo = document.getElementById("cfgRepo").value.trim();
   const token = document.getElementById("cfgToken").value.trim();
   if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
-  CFG = { owner, repo, token, branch: "vendors_ledger" };
+  CFG = { owner, repo, token, branch: LIVE_BRANCH };
   try{
     await ghRequest(CATEGORIES_INDEX_FILE);
     saveConfig(CFG);

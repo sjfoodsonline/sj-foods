@@ -189,7 +189,6 @@
   .social-btn{ display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:bold; text-decoration:none; color:#fff; }
   .social-btn.fb{background:#1877F2;} .social-btn.tk{background:#000000;} .social-btn.yt{background:#FF0000;} .social-btn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
 
-  /* Lightbox Zoom Overlay (کلک کرنے پر کسی بھی خالی سپیس سے بند ہونے والا زوم ویو) */
   .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:130000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; cursor:pointer; }
   .lightbox.hidden{display:none;}
   .lightbox img{max-width:100%; max-height:75vh; border-radius:12px; object-fit:contain; cursor:default;}
@@ -339,7 +338,7 @@
     <button class="clear-cart-btn" onclick="clearActiveCart()">🗑️ کارٹ خالی کریں (Clear Cart)</button>
     <div class="checkout-box" style="margin-top:8px;">
       <input id="custName" type="text" placeholder="Name (نام)">
-      <input id="custPhone" type="tel" placeholder="Phone (فون نمبر)">
+      <input id="custPhone" type="tel" placeholder="Phone (فون نمبر — 03XXXXXXXXX)">
       <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
     </div>
     <div class="pay-card">
@@ -357,7 +356,7 @@
 <footer>
   SJ Online — سوات مینگورہ کا آن لائن مارکیٹ 🌿<br>
   📞 0334-9353799 | Al Basit Plaza, Haji Baba Road, Mingora Swat
-  <div class="social-links" style="justify-content:center; display:flex; gap:8px; margin-top:10px;">
+  <div class="social-links">
     <a href="https://www.facebook.com/sjfoodonline/" target="_blank" class="social-btn fb">📘 Facebook</a>
     <a href="https://www.tiktok.com/@sjfood.online" target="_blank" class="social-btn tk">🎵 TikTok</a>
     <a href="https://www.youtube.com/@SJFOODONLINE" target="_blank" class="social-btn yt">▶️ YouTube</a>
@@ -365,7 +364,6 @@
   </div>
 </footer>
 
-<!-- Lightbox Modal (زوم اور خالی جگہ پر کلک کرنے سے بند ہونے کی سہولت) -->
 <div class="lightbox hidden" id="lightbox" onclick="closeLightbox(event)">
   <img id="lightboxImg" src="" alt="Zoom" onclick="event.stopPropagation()">
   <div class="lightbox-thumbs" id="lightboxThumbs" onclick="event.stopPropagation()"></div>
@@ -714,10 +712,34 @@ function toggleCartDrawer(){ document.getElementById("billbar").classList.toggle
 document.getElementById("summary").onclick = toggleCartDrawer;
 document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
 
+// فون نمبر کی سختی سے تصدیق (Validation)
 document.getElementById("waBtn").onclick = () => {
   if(ITEMS.filter(i => i.qty > 0).length === 0){ alert("کارٹ خالی ہے"); return; }
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  
+  if(!name || !phone || !addr){ alert("براہ کرم نام، فون اور مکمل پتہ درج کریں"); return; }
+
+  // تصدیق: نمبر درست 11 ہندسوں کا ہو یا +92 / 0092 سے شروع ہو کر صحیح لمबाई کا ہو
+  let cleanPhoneDigits = phone.replace(/[^0-9]/g, "");
+  let isValidNumber = false;
+  
+  if(phone.startsWith("+92") || phone.startsWith("0092")){
+    if(cleanPhoneDigits.length === 12) isValidNumber = true;
+  } else {
+    if(cleanPhoneDigits.length === 11 && cleanPhoneDigits.startsWith("0")) isValidNumber = true;
+  }
+
+  if(!isValidNumber){
+    alert("❌ غلط نمبر! براہ کرم درست 11 ہندسوں کا موبائل نمبر درج کریں (مثلاً 03349353799) تاکہ آپ کا آرڈر منظور ہو سکے۔");
+    document.getElementById("custPhone").focus();
+    return;
+  }
+
   document.getElementById("confirmPopupOverlay").classList.add("active");
 };
+
 function closeConfirmPopup(){ document.getElementById("confirmPopupOverlay").classList.remove("active"); }
 
 function proceedWithOrder(){
@@ -726,7 +748,6 @@ function proceedWithOrder(){
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
-  if(!name || !phone || !addr){ alert("نام، فون اور پتہ درج کریں"); return; }
 
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
@@ -774,7 +795,6 @@ function jumpToItem(catName, itemId){
   }, 100);
 }
 
-// Lightbox Zoom Logic (تصویر زوم اور کسی بھی جگہ کلک کرنے سے بند ہونا)
 function openLightboxItem(itemId){
   let it = ITEMS.find(x => x.id === itemId);
   if(!it || !it.images || it.images.length === 0) return;

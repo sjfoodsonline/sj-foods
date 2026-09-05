@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Foods — Admin Control Center</title>
+<title>SJ Foods — Master Admin Control Center</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
@@ -39,11 +39,27 @@
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
 
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
+  .chat-item.pending{animation: blinkRedBorder 1.2s infinite; background:#FFFDE7;}
+  .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important;}
+  .chat-item.cancelled{background:#FFEBEE !important; border-color:#D32F2F !important; opacity: 0.85;}
+  @keyframes blinkRedBorder {
+    0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
+    50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
+    100% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
+  }
+
+  .chat-header{padding:12px 14px; font-weight:bold; font-size:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.03);}
+  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px;}
+  .chat-item.open .chat-body{display:block;}
+
+  .time-badge{font-size:11.5px; padding:4px 8px; border-radius:6px; background:#E8F5E9; color:#2E7D32;}
+  .challenge-tag{color:#FFF; font-size:10.5px; padding:3px 6px; border-radius:4px; margin-left:4px; background:#D32F2F;}
+
   .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;}
   .row-top{display:flex; align-items:center; gap:8px;}
-  .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; cursor:pointer;}
+  .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .thumb-box img{width:100%; height:100%; object-fit:cover;}
-  .thumb-box input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
   .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
 
   .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
@@ -51,6 +67,10 @@
   .unit-row input.u-label{flex:1 1 120px;}
   .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
 
+  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
+  .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
+  .preset-pill:hover{background:var(--dark); color:#fff;}
+  
   .savebar{
     position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
     padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto;
@@ -64,14 +84,19 @@
 <body>
 
 <header>
-  <h1>⚙️ SJ Foods — Admin Control Center</h1>
-  <p>Live orders · Products · GitHub Direct Saving</p>
+  <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+    <div>
+      <h1>⚙️ SJ Foods — Master Admin Center (Firebase Live)</h1>
+      <p>Live Orders · Vendors · Rates Manager</p>
+    </div>
+    <button class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff; font-size:12px; padding:6px 12px;" onclick="window.location.href='index.html'">← Home Site</button>
+  </div>
 </header>
 
 <div class="wrap">
   <div class="dash-grid">
     <div class="dash-card">
-      <div class="dash-lbl">📦 Orders</div>
+      <div class="dash-lbl">📦 Total Orders</div>
       <div class="dash-num" id="statTotalOrders">0</div>
     </div>
     <div class="dash-card">
@@ -79,69 +104,57 @@
       <div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div>
     </div>
     <div class="dash-card">
-      <div class="dash-lbl">💵 Sales</div>
+      <div class="dash-lbl">💵 Total Sales</div>
       <div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div>
     </div>
   </div>
 
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates</div>
-    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products & Rates (🔒)</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors & Performance (🔒)</div>
   </div>
 
   <!-- SECTION 1: LIVE ORDERS -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 Customer live orders</h3>
+      <h3>🔔 Live Customer Orders (Blinking Active)</h3>
       <div style="display:flex; gap:6px; margin-top:8px;">
-        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 Enable notifications</button>
-        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 Test sound</button>
+        <button class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 Enable Notifications</button>
+        <button class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 Test Sound</button>
       </div>
     </div>
     <div id="ordersArea"><div class="loading">⏳ Loading orders…</div></div>
   </div>
 
-  <!-- SECTION 3: VENDORS CONTROL -->
+  <!-- SECTION 3: VENDORS PERFORMANCE -->
   <div id="secVendors" style="display:none;">
     <div class="card">
-      <h3>🏪 Vendors control</h3>
-      <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">🏪 Vendors Management & Performance</h3>
+        <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
+      </div>
     </div>
     <div id="vendorsAdminList"><div class="loading">⏳ Loading vendors…</div></div>
   </div>
 
-  <!-- SECTION 2: PRODUCTS CONTROL -->
+  <!-- SECTION 2: PRODUCTS CONTROL (Firebase Live) -->
   <div id="secProducts" style="display:none;">
-    <div class="card" id="setupCard" style="display:none;">
-      <h3>🔑 GitHub Connection Setup</h3>
-      <p>Connect your GitHub repository to save rates directly:</p>
-      <label>Username</label>
-      <input type="text" id="cfgOwner" value="sjfoodsonline">
-      <label>Repository</label>
-      <input type="text" id="cfgRepo" value="sj-foods">
-      <label>Personal Access Token</label>
-      <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      <button class="btn-primary" id="saveConfigBtn" style="margin-top:8px;">Save & Connect</button>
-    </div>
-
-    <div id="mainProductsPanel" style="display:none;">
-      <div class="card">
-        <div class="cat-select" style="display:flex; gap:8px; align-items:center;">
-          <select id="categoryPicker" onchange="loadCategory(this.value)" style="flex:1; margin-bottom:0;"></select>
-          <button class="btn-secondary" id="changeAccountBtn" style="font-size:11px;">🔒 Reset Token</button>
-        </div>
+    <div class="card">
+      <div style="display:flex; gap:8px;">
+        <select id="categoryPicker" onchange="loadCategory(this.value)" style="flex:1; margin-bottom:0;"></select>
+        <button class="btn-secondary" onclick="loadCategory(document.getElementById('categoryPicker').value)">🔄 Refresh</button>
       </div>
-
-      <div id="productsArea"><div class="loading">⏳ Loading products…</div></div>
-      <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add product</button>
     </div>
+
+    <div id="productsArea"><div class="loading">⏳ Loading products…</div></div>
+    <button class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add New Product</button>
   </div>
 </div>
 
 <div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus">⚠️ Unsaved</div>
-  <button class="btn-primary" id="saveBtn" style="width:auto;" onclick="saveProductsToGitHub()">💾 Save</button>
+  <div class="status" id="saveStatus" style="flex:1; font-size:12px; color:var(--price);">⚠️ Unsaved changes</div>
+  <button class="btn-primary" style="width:auto; min-width:110px;" onclick="saveProductsToFirebase()">💾 Save to Firebase</button>
 </div>
 
 <div id="printableReceipt"></div>
@@ -193,8 +206,8 @@
   window.requestNotificationPermission = function() {
     if ('Notification' in window) {
       Notification.requestPermission().then(permission => {
-        if (permission === 'granted') showToast("🟢 Notifications enabled");
-        else showToast("⚠️ Notifications blocked", true);
+        if (permission === 'granted') showToast("🟢 Notifications Enabled");
+        else showToast("⚠️ Notifications Blocked", true);
       });
     }
   }
@@ -204,13 +217,13 @@
 
   window.checkAdminPasswordAndSwitch = function(tabName){
     if(isAdminAuthenticated){ switchTab(tabName); return; }
-    let pass = prompt("🔒 Enter admin password:");
+    let pass = prompt("🔒 Enter Master Admin Password:");
     if(pass === ADMIN_PASSWORD){
       isAdminAuthenticated = true;
-      showToast("🟢 Password OK");
+      showToast("🟢 Password Correct");
       switchTab(tabName);
     } else {
-      showToast("❌ Wrong password", true);
+      showToast("❌ Incorrect Password", true);
     }
   }
 
@@ -223,11 +236,11 @@
     document.getElementById('secProducts').style.display = tabName === 'products' ? 'block' : 'none';
     var sv = document.getElementById('secVendors');
     if(sv) sv.style.display = tabName === 'vendors' ? 'block' : 'none';
-    document.getElementById('saveBar').style.display = (tabName === 'products' && window.mainPanelActive) ? 'flex' : 'none';
+    document.getElementById('saveBar').style.display = (tabName === 'products') ? 'flex' : 'none';
 
     if(tabName === 'products' && !window.productsInitialized){
       window.productsInitialized = true;
-      initGitHubAdmin();
+      initFirebaseProducts();
     }
     if(tabName === 'vendors') loadVendorsAdmin();
   }
@@ -236,7 +249,7 @@
   window.loadVendorsAdmin = async function(){
     const box = document.getElementById("vendorsAdminList");
     if(!box) return;
-    box.innerHTML = '<div class="loading">⏳ Loading…</div>';
+    box.innerHTML = '<div class="loading">⏳ Loading performance data…</div>';
     try{
       const [vres, ores] = await Promise.all([
         fetch(VDB + "/vendors.json"),
@@ -247,41 +260,62 @@
       const stats = {};
       Object.keys(orders).forEach(function(code){
         const o = orders[code] || {};
-        const vid = o.vendor_id || "";
-        if(!vid) return;
-        if(!stats[vid]) stats[vid] = { total:0, pending:0, delivered:0, cancelled:0, sales:0 };
+        const vid = o.vendor_id || "v001";
+        if(!stats[vid]) stats[vid] = { total:0, pending:0, delivered:0, cancelled:0, sales:0, byCustomer:0, byVendor:0, byAdmin:0 };
         stats[vid].total++;
         const st = (o.status || "pending").toLowerCase();
-        if(st === "cancelled") stats[vid].cancelled++;
-        else if(st === "delivered" || st === "completed"){ stats[vid].delivered++; stats[vid].sales += parseFloat(o.total)||0; }
-        else stats[vid].pending++;
+        if(st === "cancelled"){
+          stats[vid].cancelled++;
+          let cBy = (o.cancelled_by || "customer").toLowerCase();
+          if(cBy.includes("vendor")) stats[vid].byVendor++;
+          else if(cBy.includes("admin")) stats[vid].byAdmin++;
+          else stats[vid].byCustomer++;
+        } else if(st === "delivered" || st === "completed"){
+          stats[vid].delivered++;
+          stats[vid].sales += parseFloat(o.total)||0;
+        } else {
+          stats[vid].pending++;
+        }
       });
       const ids = Object.keys(data).filter(function(id){ return id !== "_market"; });
-      if(ids.length === 0){ box.innerHTML = '<div class="loading">کوئی وینڈر نہیں</div>'; return; }
-      ids.sort(function(a,b){ return a==="v001"?-1:b==="v001"?1:0; });
+      if(ids.indexOf("v001") < 0) ids.unshift("v001");
+      
       box.innerHTML = ids.map(function(id){
-        const v = data[id] || {};
-        const st = v.blocked ? "blocked" : (v.status || "pending");
+        const v = data[id] || (id === "v001" ? { shop_name: "SJ Foods (Master)", status: "approved" } : {});
+        const st = v.blocked ? "blocked" : (v.status || "approved");
         const stColor = st==="approved" ? "#2E7D32" : st==="blocked" ? "#B71C1C" : "#856404";
         const stBg = st==="approved" ? "#E8F5E9" : st==="blocked" ? "#FFCDD2" : "#FFF3CD";
-        const itemsN = v.items ? Object.keys(v.items).length : 0;
-        const cover = v.cover_image || "";
-        const s = stats[id] || { total:0, pending:0, delivered:0, cancelled:0, sales:0 };
+        const s = stats[id] || { total:0, pending:0, delivered:0, cancelled:0, sales:0, byCustomer:0, byVendor:0, byAdmin:0 };
+        
         return '<div class="card" style="margin-bottom:10px;">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;">'+
           '<div style="font-size:16px;font-weight:bold;color:var(--dark);">'+(v.shop_name||id)+'</div>'+
-          '<div style="font-size:12px;">Items: <b>'+itemsN+'</b> · Orders: <b>'+s.total+'</b></div>'+
-          '<div style="display:flex;gap:6px;margin-top:8px;">'+
+          '<span style="font-size:11px;padding:3px 10px;border-radius:20px;background:'+stBg+';color:'+stColor+';font-weight:bold;">'+st+'</span></div>'+
+          '<div style="font-size:11px;color:var(--muted);direction:ltr;text-align:right;">ID: <b>'+id+'</b></div>'+
+          '<div style="font-size:12px;margin-top:6px;">👤 Owner: '+(v.owner_name||'SJ Foods Master')+' | Phone: '+(v.phone||'03349353799')+'</div>'+
+          '<div style="margin-top:8px;padding:10px;background:#E8F5E9;border-radius:10px;font-size:12.5px;line-height:1.8;">'+
+          '📊 Total Orders: <b>'+s.total+'</b> · ⏳ Pending: <b style="color:#B71C1C">'+s.pending+'</b><br>'+
+          '✅ Delivered: <b>'+s.delivered+'</b> · 💵 Total Sales: <b style="color:var(--mid)">Rs. '+Math.round(s.sales).toLocaleString()+'</b><br>'+
+          '❌ Cancelled: <b>'+s.cancelled+'</b> (Customer: <i>'+s.byCustomer+'</i> | Vendor: <i>'+s.byVendor+'</i> | Admin: <i>'+s.byAdmin+'</i>)</div>'+
+          (id !== "v001" ? '<div style="display:flex;gap:6px;margin-top:10px;">'+
           (st!=='approved'&&!v.blocked?'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ Approve</button>':'')+
           (!v.blocked?'<button class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 Block</button>':'<button class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 Unblock</button>')+
-          '</div></div>';
+          '</div>' : '')+
+          '</div>';
       }).join("");
-    }catch(e){ box.innerHTML = '<div class="loading">Failed</div>'; }
+    }catch(e){
+      box.innerHTML = '<div class="loading" style="color:var(--price);">Failed to load performance data</div>';
+    }
   };
 
   window.setVendorStatus = async function(id, status){
     try{
-      await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:status==="blocked"?"true":"false"});
-      await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(status)});
+      if(status === "blocked"){
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"true"});
+      } else {
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"false"});
+        await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify("approved")});
+      }
       showToast("Updated ✓");
       loadVendorsAdmin();
     }catch(e){ showToast("Failed", true); }
@@ -291,405 +325,316 @@
   window.toggleAccordion = function(id){
     activeAccordionId = (activeAccordionId === id) ? null : id;
     renderOrdersDOM();
-  }
+  };
 
   let latestOrdersCache = [];
+  let cachedOrdersCount = 0;
+
   const ordersRef = ref(db, 'orders');
   onValue(ordersRef, (snapshot) => {
     const data = snapshot.val() || {};
     let dataList = Object.values(data);
-    let pending = [], completed = [], cancelled = [];
+    let pendingOrders = [], completedOrders = [], cancelledOrders = [];
+
     dataList.forEach((row, index) => {
-      if(row.code){
+      let codeVal = row.code;
+      if(codeVal){
         let st = String(row.status || 'pending').toLowerCase().trim();
         let itemObj = {
-          id: "fb_" + index, code: row.code, name: row.name || "Unknown",
-          phone: row.phone || "03000000000", address: row.address || "Mingora Swat",
-          itemsSummary: row.items || "", total: parseFloat(row.total || 0) || 0,
-          otpCode: row.otp || row.code.replace("SJ-", ""),
+          id: "fb_" + index,
+          code: codeVal,
+          shopName: row.shop_name || "SJ Foods",
+          name: row.name || "Unknown",
+          phone: row.phone || "03000000000",
+          address: row.address || "Mingora Swat",
+          itemsSummary: row.items || "",
+          total: parseFloat(row.total || 0) || 0,
+          otpCode: row.otp || String(codeVal).replace("SJ-", ""),
           displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "N/A",
           rawTime: row.timestamp ? new Date(row.timestamp.replace(/^'/, '')).getTime() : index,
+          cancelledBy: row.cancelled_by || "",
+          cancelReason: row.cancel_reason || "",
           status: st
         };
-        if(st === 'cancelled') cancelled.push(itemObj);
-        else if(st === 'completed') completed.push(itemObj);
-        else pending.push(itemObj);
+
+        if(st === 'cancelled') cancelledOrders.push(itemObj);
+        else if(st === 'completed' || st === 'delivered') completedOrders.push(itemObj);
+        else pendingOrders.push(itemObj);
       }
     });
-    pending.sort((a,b)=>b.rawTime - a.rawTime);
-    latestOrdersCache = [...pending, ...completed, ...cancelled];
+
+    pendingOrders.sort((a, b) => b.rawTime - a.rawTime);
+    completedOrders.sort((a, b) => b.rawTime - a.rawTime);
+    cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
+    
+    latestOrdersCache = [...pendingOrders, ...completedOrders, ...cancelledOrders];
+
+    let totalSales = 0, pendingCount = 0;
+    latestOrdersCache.forEach(o => {
+      if(o.status === 'completed' || o.status === 'delivered') totalSales += o.total;
+      else if(o.status !== 'cancelled') pendingCount++;
+    });
+
+    document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
+    document.getElementById("statPendingOrders").textContent = pendingCount;
+    document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
+
+    if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
+      playLoudBeep();
+      showToast("🔔 New Order Received!");
+    }
+    cachedOrdersCount = latestOrdersCache.length;
     renderOrdersDOM();
   });
 
   window.renderOrdersDOM = function(){
     const area = document.getElementById("ordersArea");
-    if(!latestOrdersCache.length){ area.innerHTML = `<div style="text-align:center;padding:20px;">کوئی آرڈر نہیں</div>`; return; }
-    area.innerHTML = latestOrdersCache.map(o => `
-      <div class="card" style="margin-bottom:10px;">
-        <div><b>${o.code}</b> — ${o.name} (${o.phone}) — <b>Rs. ${o.total}</b></div>
-      </div>
-    `).join("");
-  }
+    const orders = latestOrdersCache;
+
+    if(orders.length === 0){
+      area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">No orders found</div>`;
+      return;
+    }
+
+    area.innerHTML = orders.map((o) => {
+      let isOpen = (activeAccordionId === o.id);
+      let isCompleted = (o.status === 'completed' || o.status === 'delivered');
+      let isCancelled = (o.status === 'cancelled');
+      let cleanPhoneForWA = o.phone.replace(/[^0-9]/g, '');
+      if(cleanPhoneForWA.startsWith('0')) cleanPhoneForWA = '92' + cleanPhoneForWA.slice(1);
+
+      let cardClass = "chat-item pending";
+      if(isCompleted) cardClass = "chat-item completed";
+      if(isCancelled) cardClass = "chat-item cancelled";
+
+      return `
+        <div class="${cardClass} ${isOpen ? 'open' : ''}" id="card-${o.id}">
+          <div class="chat-header" onclick="toggleAccordion('${o.id}')">
+            <span style="font-size:14px; font-weight:bold;">
+              📌 ${o.code} (${o.shopName}) — <b>${o.name}</b>
+              ${isCancelled ? `<span class="challenge-tag" style="background:#B71C1C;">Cancelled (${o.cancelledBy || 'Admin'})</span>` : (!isCompleted ? `<span class="challenge-tag">Pending</span>` : '')}
+            </span>
+            <span class="time-badge">${isCancelled ? '❌ Cancelled' : (isCompleted ? '✅ Delivered' : '🕒 ' + o.displayTime)}</span>
+          </div>
+          <div class="chat-body" dir="auto">
+            <div style="font-size:13.5px; line-height:2.0;">
+              <b>Shop:</b> ${o.shopName}<br>
+              <b>Customer:</b> ${o.name} (<span dir="ltr">${o.phone}</span>)<br>
+              <b>Address:</b> ${o.address}<br>
+              <b>OTP Code:</b> <b style="color:var(--price); font-size:15px;" dir="ltr">${o.otpCode}</b><br>
+              ${isCancelled ? `<div style="color:#B71C1C; background:#FFEBEE; padding:6px; border-radius:6px; margin-top:4px;"><b>Cancel Reason:</b> ${o.cancelReason || 'Not specified'} (By: ${o.cancelledBy})</div>` : ''}
+              <div style="margin-top:6px; margin-bottom:6px;"><b>Items:</b></div>
+              <div style="background:#F9F8F3; padding:10px; border-radius:8px; font-size:13px; line-height:1.8;">${o.itemsSummary}</div>
+              <div style="margin-top:4px;"><b>Total:</b> <b style="font-size:15px; color:var(--price);">Rs. ${o.total}</b></div>
+            </div>
+            
+            <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
+              ${!isCancelled && !isCompleted ? `
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; font-weight:bold;" onclick="completeOrder('${o.code}')">✅ Mark Delivered</button>
+                <button class="btn-danger" onclick="masterCancelOrder('${o.code}', '${o.phone}')">❌ Cancel Order</button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  window.completeOrder = async function(code){
+    if(!confirm("Mark this order as delivered?")) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "completed" });
+      showToast("✅ Order Completed!");
+    } catch(e){}
+  };
+
+  window.masterCancelOrder = async function(code, phone){
+    let reason = prompt("Enter cancellation reason (e.g. Out of stock / Customer canceled):");
+    if(reason === null) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), {
+        status: "cancelled",
+        cancelled_by: "Master Admin",
+        cancel_reason: reason || "Canceled by master admin"
+      });
+      showToast("❌ Order Canceled!");
+    } catch(e) {
+      showToast("❌ Failed", true);
+    }
+  };
 </script>
 
-<!-- GitHub Script -->
 <script>
-window.safeStorage = (function(){
-  var mem = {};
-  function can(){ try{ var k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } }
-  var ok = can();
-  return {
-    getItem: function(k){ return ok ? localStorage.getItem(k) : (mem[k]||null); },
-    setItem: function(k,v){ if(ok) localStorage.setItem(k,v); else mem[k]=String(v); },
-    removeItem: function(k){ if(ok) localStorage.removeItem(k); else delete mem[k]; }
-  };
-})();
+const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+const CATEGORIES = [
+  { file: "sabzi", name: "🥦 سبزی / Sabziyan" },
+  { file: "phal", name: "🍎 پھل / Fruits" },
+  { file: "bakery", name: "🍞 بیکری / Bakery" },
+  { file: "dairy", name: "🥛 ڈیری / Dairy" },
+  { file: "poultry", name: "🍗 پولٹری / Poultry & Meat" },
+  { file: "fish", name: "🐟 مچھلی / Fish" },
+  { file: "rice", name: "🍚 چاول / Rice" },
+  { file: "pulses", name: "🫘 دالیں / Pulses" },
+  { file: "oil_ghee", name: "🛢️ گھی اور آئل / Oil & Ghee" },
+  { file: "spices", name: "🌶️ مصالحہ جات / Spices" },
+  { file: "biryani", name: "🍛 بریانی / Biryani" }
+];
 
-const CATEGORIES_INDEX_FILE = "categories_index.json";
-const LIVE_BRANCH = "vendors_ledger";
-let CFG = null;
-let CATEGORIES_INDEX = [];
-let currentCategoryFile = null;
+let currentCat = "sabzi";
 let currentItems = [];
 let dirty = false;
 
 function markDirty(){
   dirty = true;
   document.getElementById("saveBar").style.display = "flex";
-  var _ss = document.getElementById("saveStatus");
-  if(_ss){ _ss.textContent = "⚠️ Unsaved — Click Save"; _ss.classList.remove("ok"); }
+  document.getElementById("saveStatus").textContent = "⚠️ Unsaved changes — Click Save";
+  document.getElementById("saveStatus").classList.remove("ok");
 }
 function markClean(){
   dirty = false;
-  var _ss = document.getElementById("saveStatus");
-  if(_ss){ _ss.textContent = "✅ Saved"; _ss.classList.add("ok"); }
+  document.getElementById("saveStatus").textContent = "✅ Saved Successfully";
+  document.getElementById("saveStatus").classList.add("ok");
 }
 
-function utf8ToBase64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = ""; bytes.forEach(b => bin += String.fromCharCode(b));
-  return btoa(bin);
-}
-function base64ToUtf8(b64){
-  const bin = atob(b64.replace(/\s/g, ""));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
-}
-
-async function ghRequest(path, options){
-  const cleanToken = String((CFG && CFG.token) || "").trim();
-  let finalPath = path;
-  if (!finalPath.includes("?ref=") && !finalPath.includes("&ref=")) {
-    finalPath += (finalPath.includes("?") ? "&" : "?") + "ref=" + encodeURIComponent(LIVE_BRANCH);
-  }
-  const url = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${finalPath}`;
-  const headers = {
-    "Authorization": "token " + cleanToken,
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-    "User-Agent": "SJ-Foods-Admin"
-  };
-  const opts = Object.assign({}, options || {});
-  if(opts.body && typeof opts.body === "string") headers["Content-Type"] = "application/json";
-  opts.headers = Object.assign({}, headers, opts.headers || {});
-  
-  const res = await fetch(url, opts);
-  if(!res.ok){
-    let detail = "";
-    try{ const j = await res.json(); detail = j.message || ""; }catch(e){}
-    if(res.status === 401) throw new Error("Token invalid");
-    if(res.status === 403) throw new Error("403 Forbidden");
-    if(res.status === 404) throw new Error("File not found on branch " + LIVE_BRANCH + ": " + path);
-    throw new Error((detail || "Request failed") + " (" + res.status + ")");
-  }
-  if(res.status === 204) return {};
-  return res.json();
-}
-
-async function ghGetJson(path){
-  const data = await ghRequest(path);
-  return { json: JSON.parse(base64ToUtf8(data.content)), sha: data.sha };
-}
-
-async function ghPutJson(path, obj, sha, message){
-  const content = utf8ToBase64(JSON.stringify(obj, null, 2));
-  let useSha = sha;
-  try{
-    const fresh = await ghRequest(path);
-    useSha = fresh.sha;
-  }catch(e){}
-  const body = { message: message || "Update from Admin", content, branch: LIVE_BRANCH };
-  if(useSha) body.sha = useSha;
-  return await ghRequest(path, { method: "PUT", body: JSON.stringify(body) });
-}
-
-function loadConfig(){
-  const raw = safeStorage.getItem("sjfoods-admin-config");
-  return raw ? JSON.parse(raw) : null;
-}
-function saveConfig(cfg){ safeStorage.setItem("sjfoods-admin-config", JSON.stringify(cfg)); }
-
-document.getElementById("saveConfigBtn").onclick = async ()=>{
-  const owner = document.getElementById("cfgOwner").value.trim();
-  const repo = document.getElementById("cfgRepo").value.trim();
-  const token = document.getElementById("cfgToken").value.trim();
-  if(!owner || !repo || !token){ showToast("Fill all fields", true); return; }
-  CFG = { owner, repo, token };
-  try{
-    await ghRequest(CATEGORIES_INDEX_FILE);
-    saveConfig(CFG);
-    showToast("✅ Connected successfully!");
-    startMainGitHubPanel();
-  }catch(e){ showToast("❌ " + e.message, true); }
-};
-
-document.getElementById("changeAccountBtn").onclick = ()=>{
-  if(!confirm("Reset configuration?")) return;
-  safeStorage.removeItem("sjfoods-admin-config");
-  location.reload();
-};
-
-async function initGitHubAdmin(){
-  CFG = loadConfig();
-  if(!CFG){
-    document.getElementById("setupCard").style.display = "block";
-    document.getElementById("mainProductsPanel").style.display = "none";
-    return;
-  }
-  try{ await startMainGitHubPanel(); }catch(e){
-    document.getElementById("setupCard").style.display = "block";
-    document.getElementById("mainProductsPanel").style.display = "none";
-    safeStorage.removeItem("sjfoods-admin-config");
-  }
-}
-
-async function startMainGitHubPanel(){
-  document.getElementById("setupCard").style.display = "none";
-  document.getElementById("mainProductsPanel").style.display = "block";
-  window.mainPanelActive = true;
-  document.getElementById("saveBar").style.display = "flex";
-
-  const { json } = await ghGetJson(CATEGORIES_INDEX_FILE);
-  CATEGORIES_INDEX = json;
-
+async function initFirebaseProducts(){
   const picker = document.getElementById("categoryPicker");
-  picker.innerHTML = CATEGORIES_INDEX.map(c => `<option value="${c.file}">${c.icon || '📦'} ${c.category}</option>`).join("");
-  if(CATEGORIES_INDEX.length > 0) await loadCategory(CATEGORIES_INDEX[0].file);
+  picker.innerHTML = CATEGORIES.map(c => `<option value="${c.file}">${c.name}</option>`).join("");
+  await loadCategory(CATEGORIES[0].file);
 }
 
-async function loadCategory(file){
-  if(dirty && !confirm("Unsaved changes will be lost. Continue?")) {
-    document.getElementById("categoryPicker").value = currentCategoryFile;
-    return;
-  }
-  currentCategoryFile = file;
+async function loadCategory(catKey){
+  currentCat = catKey;
   const area = document.getElementById("productsArea");
-  area.innerHTML = `<div class="loading">⏳ Loading…</div>`;
+  area.innerHTML = `<div class="loading">⏳ Loading data…</div>`;
   document.getElementById("addProductBtn").style.display = "none";
+
   try{
-    const { json, sha } = await ghGetJson(file);
-    currentItems = json.map(normalizeItem);
-    currentSha = sha;
+    let res = await fetch(`${RTDB}/site_products/${catKey}.json`);
+    let data = await res.json();
+    if(!data || !Array.isArray(data) || data.length === 0){
+      let fbRes = await fetch(`${catKey}.json`);
+      data = await fbRes.json();
+    }
+    currentItems = data || [];
     renderProducts();
     markClean();
     document.getElementById("addProductBtn").style.display = "block";
   }catch(e){
-    area.innerHTML = `<div class="loading">❌ Failed to load (${file})</div>`;
+    area.innerHTML = `<div class="loading">❌ Load failed: ${e.message}</div>`;
   }
-}
-
-function normalizeItem(it){
-  const units = (it.units && it.units.length) ? it.units.map(u=>({label:u.label, rate:u.rate})) : [{label: it.unit || "KG", rate: it.rate || 0}];
-  return {
-    name: it.name || "",
-    name_roman: it.name_roman || undefined,
-    available: it.available !== false,
-    image: it.image || "",
-    featured: it.featured === true,
-    manualOverride: it.manualOverride === true,
-    units
-  };
 }
 
 function renderProducts(){
   const area = document.getElementById("productsArea");
   area.innerHTML = "";
-  currentItems.forEach((it, idx) => area.appendChild(buildRow(it, idx)));
-}
+  const presets = ["KG", "آدھا کلو", "پاؤ", "دڑی (5 KG)", "Litre", "Bottle", "Pcs", "Dozen", "Weight", "Service", "Meter", "Carat", "Gold"];
 
-function buildRow(it, idx){
-  const row = document.createElement("div");
-  row.className = "product-row";
-  row.dataset.idx = idx;
+  currentItems.forEach((it, idx) => {
+    if(!it.units) it.units = [{label: it.unit || "KG", rate: it.rate || 0}];
 
-  const thumbHtml = it.image ? `<img src="${it.image}">` : `<span class="ic">🛒</span>`;
+    const row = document.createElement("div");
+    row.className = "product-row";
+    const thumbHtml = it.image ? `<img src="${it.image}">` : `<span>🛒</span>`;
 
-  row.innerHTML = `
-    <div class="row-top">
-      <div class="thumb-box" title="Image">
-        ${thumbHtml}
+    row.innerHTML = `
+      <div class="row-top">
+        <div class="thumb-box" title="Product Image">${thumbHtml}</div>
+        <div class="row-fields">
+          <input type="text" value="${it.name || ''}" placeholder="Product Name (Urdu)" oninput="currentItems[${idx}].name=this.value; markDirty();">
+          <input type="text" value="${it.name_roman || ''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="currentItems[${idx}].name_roman=this.value; markDirty();">
+        </div>
       </div>
-      <div class="row-fields">
-        <input type="text" class="f-name" placeholder="Product name (Urdu)" value="${it.name}">
-        <input type="text" class="f-name-en" placeholder="Roman Urdu name" value="${it.name_roman || ''}" style="direction:ltr; text-align:left; margin-top:4px;">
+      <div class="units-box">
+        ${it.units.map((u, ui) => `
+          <div class="unit-row">
+            <input type="text" class="u-label" value="${u.label}" placeholder="Unit" oninput="currentItems[${idx}].units[${ui}].label=this.value; markDirty();">
+            <input type="number" class="u-rate" value="${u.rate}" placeholder="Rate" oninput="updateItemRate(${idx}, ${ui}, this.value)">
+            ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnit(${idx}, ${ui})">✕</button>` : ''}
+          </div>
+        `).join('')}
       </div>
-    </div>
-    
-    <div style="background:#F4ECE1; padding:6px 10px; border-radius:8px; font-size:11.5px; display:flex; align-items:center; gap:6px;">
-      <input type="checkbox" class="f-override" ${it.manualOverride ? "checked" : ""}> 
-      <span>🔓 Lock rates (manual entry)</span>
-    </div>
-
-    <div class="units-box"></div>
-    <button class="btn-secondary" style="width:100%; margin-top:6px;" onclick="addUnitToItem(${idx})">➕ Add unit</button>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'weight')">⚖️ Weight</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'liquid')">🧴 Litre</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'pcs')">📦 Pcs</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'dozen')">🥚 Dozen</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'bottle')">🍾 Bottle</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'gold')">🥇 Gold</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'gem')">💎 Carat</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'meter')">📏 Meter</button>
-      <button type="button" class="btn-secondary" style="font-size:11px;padding:5px 8px;" onclick="applyPreset(${idx},'service')">🛠️ Service</button>
-    </div>
-    <div class="row-bottom" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-      <div class="row-flags" style="display:flex; gap:10px; flex-wrap:wrap;">
-        <label><input type="checkbox" class="f-available" ${it.available ? "checked" : ""}> Available</label>
-        <label><input type="checkbox" class="f-featured" ${it.featured ? "checked" : ""}> ⭐ Featured</label>
+      <div class="preset-pills">
+        ${presets.map(p => `<button type="button" class="preset-pill" onclick="addPresetUnit(${idx}, '${p}')">+ ${p}</button>`).join('')}
       </div>
-      <button class="btn-danger" onclick="removeProductItem(${idx})">🗑️ Delete</button>
-    </div>
-  `;
-
-  const unitsBox = row.querySelector(".units-box");
-  it.units.forEach((u, ui) => {
-    const ur = document.createElement("div");
-    ur.className = "unit-row";
-    ur.innerHTML = `
-      <input type="text" class="u-label" placeholder="Unit" value="${u.label}">
-      <input type="text" inputmode="decimal" pattern="[0-9]*\\.?[0-9]*" class="u-rate u-rate-field" placeholder="Rate" value="${u.rate}">
-      ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnitFromItem(${idx}, ${ui})">✕</button>` : ""}
+      <div style="display:flex; gap:6px; margin-top:4px;">
+        <button class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addUnit(${idx})">➕ Add Unit</button>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+        <label><input type="checkbox" ${it.available !== false ? 'checked' : ''} onchange="currentItems[${idx}].available=this.checked; markDirty();"> Available</label>
+        <button class="btn-danger" onclick="deleteItem(${idx})">🗑️ Delete</button>
+      </div>
     `;
-    
-    ur.querySelector(".u-label").oninput = (e)=>{ u.label = e.target.value; markDirty(); };
-    
-    const rateInput = ur.querySelector(".u-rate-field");
-    rateInput.oninput = (e)=>{
-      let raw = e.target.value.replace(/[^0-9.]/g, "");
-      if(raw !== e.target.value) e.target.value = raw;
-      const val = parseFloat(raw) || 0;
-      u.rate = val;
-      markDirty();
-
-      if(ui === 0 && !it.manualOverride && it.units.length > 1){
-        const allRateInputs = unitsBox.querySelectorAll(".u-rate-field");
-        it.units.forEach((otherU, oIdx) => {
-          if(oIdx > 0){
-            let lbl = otherU.label.toLowerCase();
-            let nr = otherU.rate;
-            if(lbl.includes("پاؤ") || lbl.includes("250")) nr = Math.round(val / 4);
-            else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) nr = Math.round(val / 2);
-            else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) nr = Math.round(val * 5);
-            otherU.rate = nr;
-            if(allRateInputs[oIdx] && document.activeElement !== allRateInputs[oIdx]){
-              allRateInputs[oIdx].value = nr;
-            }
-          }
-        });
-      }
-    };
-    unitsBox.appendChild(ur);
+    area.appendChild(row);
   });
-
-  row.querySelector(".f-name").oninput = (e)=>{ it.name = e.target.value; markDirty(); };
-  row.querySelector(".f-name-en").oninput = (e)=>{ it.name_roman = e.target.value.trim() || undefined; markDirty(); };
-  row.querySelector(".f-available").onchange = (e)=>{ it.available = e.target.checked; markDirty(); };
-  row.querySelector(".f-featured").onchange = (e)=>{ it.featured = e.target.checked; markDirty(); };
-  row.querySelector(".f-override").onchange = (e)=>{ it.manualOverride = e.target.checked; markDirty(); };
-
-  row._item = it;
-  return row;
 }
 
-window.addUnitToItem = function(idx){
-  currentItems[idx].units.push({label:"", rate:0});
-  renderProducts();
-  markDirty();
-}
-
-window.applyPreset = function(idx, type){
+window.updateItemRate = function(idx, ui, val){
+  val = parseFloat(val) || 0;
   const it = currentItems[idx];
-  const base = (it.units && it.units[0]) ? (parseFloat(it.units[0].rate)||0) : 0;
-  const presets = {
-    weight: [{label:"KG",rate:base},{label:"آدھا کلو",rate:Math.round(base/2)},{label:"پاؤ",rate:Math.round(base/4)},{label:"دڑی (5 KG)",rate:Math.round(base*5)}],
-    liquid: [{label:"Ltr",rate:base},{label:"½ Ltr",rate:Math.round(base/2)},{label:"250 ml",rate:Math.round(base/4)}],
-    pcs: [{label:"Pcs",rate:base},{label:"Pkt",rate:base},{label:"Box",rate:base}],
-    dozen: [{label:"عدد",rate:base},{label:"درجن",rate:Math.round(base*12)}],
-    bottle: [{label:"Bottle",rate:base},{label:"Can",rate:base},{label:"1.5 Ltr",rate:base}],
-    gold: [{label:"Tola",rate:base},{label:"Gram",rate:base}],
-    gem: [{label:"Carat",rate:base},{label:"Gram",rate:base}],
-    meter: [{label:"Meter",rate:base},{label:"Yard",rate:base}],
-    service: [{label:"Job",rate:base},{label:"Hour",rate:base}]
-  };
-  it.units = presets[type] || [{label:"Unit",rate:base}];
+  it.units[ui].rate = val;
+  if(ui === 0 && it.units.length > 1){
+    it.units.forEach((u, i) => {
+      if(i === 0) return;
+      let lbl = u.label.toLowerCase();
+      if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
+      else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) u.rate = Math.round(val / 2);
+      else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) u.rate = Math.round(val * 5);
+    });
+    renderProducts();
+  }
+  markDirty();
+};
+
+window.addPresetUnit = function(idx, label){
+  currentItems[idx].units.push({label: label, rate: 0});
   renderProducts();
   markDirty();
-  showToast("Preset applied ✓");
-}
+};
 
-window.removeUnitFromItem = function(idx, ui){
+window.addUnit = function(idx){
+  currentItems[idx].units.push({label: "", rate: 0});
+  renderProducts();
+  markDirty();
+};
+
+window.removeUnit = function(idx, ui){
   currentItems[idx].units.splice(ui, 1);
   renderProducts();
   markDirty();
-}
+};
 
 window.addNewProductItem = function(){
-  currentItems.push({ name:"", available:true, image:"", featured:false, manualOverride:false, units:[{label:"KG", rate:0}] });
+  currentItems.push({ name: "", name_roman: "", units: [{label: "KG", rate: 0}], available: true });
   renderProducts();
   markDirty();
-}
+};
 
-window.removeProductItem = function(idx){
-  if(!confirm("Delete item?")) return;
+window.deleteItem = function(idx){
+  if(!confirm("Delete?")) return;
   currentItems.splice(idx, 1);
   renderProducts();
   markDirty();
-}
+};
 
-window.saveProductsToGitHub = async function(){
-  const rows = [...document.getElementById("productsArea").children];
-  currentItems = rows.map(r => r._item).filter(Boolean);
-
+window.saveProductsToFirebase = async function(){
   const st = document.getElementById("saveStatus");
-  if(st) st.textContent = "⏳ Saving to GitHub…";
+  st.textContent = "⏳ Saving…";
+  
   try{
-    if(!CFG || !CFG.token){
-      throw new Error("Connect admin first");
-    }
-    const fresh = await ghRequest(currentCategoryFile);
-    const payload = currentItems.map(it => {
-      const obj = {
-        name: it.name,
-        units: it.units,
-        available: it.available,
-        image: it.image,
-        featured: it.featured,
-        manualOverride: it.manualOverride
-      };
-      if(it.name_roman) obj.name_roman = it.name_roman;
-      return obj;
+    const res = await fetch(`${RTDB}/site_products/${currentCat}.json`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(currentItems)
     });
 
-    await ghPutJson(currentCategoryFile, payload, fresh.sha, "Update prices: " + currentCategoryFile);
+    if(!res.ok) throw new Error("HTTP " + res.status);
     markClean();
-    showToast("✅ Saved to GitHub successfully!");
+    window.showToast("✅ Rates Saved Successfully to Firebase!");
   }catch(e){
-    console.error(e);
-    if(st) st.textContent = "❌ Could not save";
-    showToast("❌ " + (e.message || "Save failed"), true);
+    st.textContent = "❌ Save Failed";
+    window.showToast("❌ Failed: " + e.message, true);
   }
-}
+};
 </script>
 </body>
 </html>

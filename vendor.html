@@ -124,6 +124,75 @@ window.dbUpdate = update;
 </script>
 <script>
 const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+
+/** Firebase items: flat {id:{category,name,...}} یا nested {cat:{id:{...}}} */
+function normalizeCatalog(raw){
+  const out = {};
+  if(!raw || typeof raw !== "object") return out;
+  const keys = Object.keys(raw);
+  if(!keys.length) return out;
+  // detect nested: first value is object of products (has name/units) vs product itself
+  let nested = 0, flat = 0;
+  keys.forEach(function(k){
+    const v = raw[k];
+    if(!v || typeof v !== "object") return;
+    if(v.name || v.name_roman || v.units || v.rate != null || v.image) flat++;
+    else {
+      const sub = Object.keys(v);
+      if(sub.length && v[sub[0]] && typeof v[sub[0]] === "object") nested++;
+    }
+  });
+  if(flat >= nested){
+    keys.forEach(function(id){
+      const it = raw[id];
+      if(!it || typeof it !== "object") return;
+      if(!(it.name || it.units || it.rate != null)) return;
+      let cat = it.category || it.cat || "General";
+      if(!out[cat]) out[cat] = {};
+      const copy = Object.assign({}, it);
+      if(!copy.units){
+        copy.units = [{ label: copy.unit || "Pcs", rate: copy.rate || 0 }];
+      }
+      if(!copy.images) copy.images = copy.image ? [copy.image] : [];
+      out[cat][id] = copy;
+    });
+  } else {
+    keys.forEach(function(cat){
+      const group = raw[cat];
+      if(!group || typeof group !== "object") return;
+      out[cat] = {};
+      Object.keys(group).forEach(function(id){
+        const it = group[id];
+        if(!it || typeof it !== "object") return;
+        const copy = Object.assign({}, it);
+        if(!copy.units) copy.units = [{ label: copy.unit || "Pcs", rate: copy.rate || 0 }];
+        if(!copy.images) copy.images = copy.image ? [copy.image] : [];
+        out[cat][id] = copy;
+      });
+    });
+  }
+  return out;
+}
+function denormalizeCatalogFlat(catalog){
+  // save flat with category field (compatible with old data + home)
+  const flat = {};
+  Object.keys(catalog || {}).forEach(function(cat){
+    const group = catalog[cat] || {};
+    Object.keys(group).forEach(function(id){
+      const it = Object.assign({}, group[id]);
+      it.category = cat;
+      if(it.units && it.units[0]){
+        it.rate = it.units[0].rate;
+        it.unit = it.units[0].label;
+      }
+      if(it.images && it.images[0]) it.image = it.images[0];
+      flat[id] = it;
+    });
+  });
+  return flat;
+}
+
+
 let currentVendorId = "";
 let currentVendor = null;
 let currentCatalog = {};
@@ -222,7 +291,7 @@ function initVendorDashboard(v){
   document.getElementById("shopTitleDisplay").textContent = v.shop_name || currentVendorId;
   document.getElementById("shopStatusDisplay").textContent = "Status: " + (v.status || "approved");
   document.getElementById("shopIdDisplay").textContent = "ID: " + currentVendorId;
-  currentCatalog = v.items || {};
+  currentCatalog = normalizeCatalog(v.items || {});
   initVendorCategories();
   watchVendorOrders();
 }
@@ -415,7 +484,7 @@ window.saveVendorCatalog = async function(){
     const res = await fetch(RTDB + "/vendors/" + currentVendorId + "/items.json", {
       method: "PUT",
       headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(currentCatalog)
+      body: JSON.stringify(denormalizeCatalogFlat(currentCatalog))
     });
     if(!res.ok) throw new Error("HTTP " + res.status);
     catalogDirty = false;

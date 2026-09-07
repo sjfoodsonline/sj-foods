@@ -852,19 +852,48 @@ async function loadVendorCatalog(vendorId){
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + "/items.json");
     const data = await res.json() || {};
     CATEGORIES_META = []; ITEMS = []; CATEGORIES_DATA = {};
-    Object.keys(data).forEach(cat => {
+
+    // Support flat {id:{category,name,units}} and nested {cat:{id:{...}}}
+    const byCat = {};
+    Object.keys(data).forEach(function(key){
+      const val = data[key];
+      if(!val || typeof val !== "object") return;
+      if(val.name || val.units || val.rate != null || val.image){
+        const cat = val.category || val.cat || "General";
+        if(!byCat[cat]) byCat[cat] = {};
+        byCat[cat][key] = val;
+      } else {
+        byCat[key] = val;
+      }
+    });
+
+    Object.keys(byCat).forEach(function(cat){
       CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒", image: "" });
       CATEGORIES_DATA[cat] = [];
-      Object.keys(data[cat]||{}).forEach(k => {
-        const it = data[cat][k];
-        let units = it.units || [{label: it.unit||"KG", rate: it.rate||0}];
+      Object.keys(byCat[cat] || {}).forEach(function(k){
+        const it = byCat[cat][k] || {};
+        let units = it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }];
         let imgs = it.images || (it.image ? [it.image] : []);
-        ITEMS.push({ id: k, cat: cat, name: it.name, name_roman: it.name_roman, units, unitIndex: 0, available: it.available!==false, images: imgs, qty: 0 });
+        const row = {
+          id: k, cat: cat, name: it.name, name_roman: it.name_roman,
+          units: units, unitIndex: 0, available: it.available !== false,
+          images: imgs, qty: 0, premium: it.premium === true,
+          extra_text: it.extra_text || ""
+        };
+        ITEMS.push(row);
+        CATEGORIES_DATA[cat].push(it);
+        // category cover from first image
+        if(!CATEGORIES_META[CATEGORIES_META.length-1].image && imgs[0] && String(imgs[0]).indexOf("data:")!==0){
+          CATEGORIES_META[CATEGORIES_META.length-1].image = imgs[0];
+        }
       });
     });
     renderChips(); renderMainView();
     document.getElementById("loadingMsg").style.display = "none";
-  }catch(e){}
+  }catch(e){
+    console.warn(e);
+    document.getElementById("loadingMsg").textContent = "Catalog load failed";
+  }
 }
 
 window.backToShops = function(){

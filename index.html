@@ -78,10 +78,10 @@
   .cover-banner{ overflow:hidden; border-radius:14px; display:block; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
   .cover-banner.static-cover .cover-slider-track{ transform:none !important; }
   .cover-banner.static-cover .cover-slide{ min-width:100%; }
-  .product-strip-wrap{ margin:10px 14px 0; overflow:hidden; border-radius:14px; border:1px solid var(--line); background:#fff; }
+  .product-strip-wrap{ margin:10px 14px 0; overflow:hidden; border-radius:14px; border:1px solid var(--line); background:#fff; direction:ltr; }
   .product-strip-label{ font-size:11px; text-align:center; color:var(--muted); padding:6px 8px 0; font-weight:bold; }
-  .product-strip-track{ display:flex; transition: transform 0.45s ease; }
-  .product-strip-slide{ min-width:100%; aspect-ratio: 2.2/1; }
+  .product-strip-track{ display:flex; transition: transform 0.45s ease; direction:ltr; width:100%; }
+  .product-strip-slide{ min-width:100%; width:100%; flex:0 0 100%; aspect-ratio: 2.2/1; background:#E8F5E9; }
   .product-strip-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
   .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.5s ease; }
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
@@ -562,21 +562,32 @@ function paintProductGallery(urls){
   const track = document.getElementById("productStripTrack");
   const wrap = document.getElementById("productStripWrap");
   if(!track || !wrap) return;
-  const list = (urls || []).filter(function(u){ return u && String(u).indexOf("data:image") !== 0; });
-  HOME_GALLERY = list.length ? list : ["cover.png", "icon-512.png"];
+  let list = (urls || []).filter(function(u){
+    u = String(u||"").trim();
+    if(!u) return false;
+    if(u.indexOf("data:image") === 0) return false;
+    return true;
+  });
+  // unique
+  const uniq = [];
+  list.forEach(function(u){ if(uniq.indexOf(u)<0) uniq.push(u); });
+  list = uniq;
+  if(list.length === 0) list = ["cover.png"];
+  if(list.length === 1) list = list.concat(["icon-512.png"]);
+  HOME_GALLERY = list.slice(0, 30);
+  track.style.direction = "ltr";
   track.innerHTML = HOME_GALLERY.map(function(src){
-    return '<div class="product-strip-slide"><img src="'+src+'" alt="" loading="lazy" onerror="this.src=\'icon-192.png\'"></div>';
+    return '<div class="product-strip-slide"><img src="'+src+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'icon-192.png\'"></div>';
   }).join("");
   wrap.style.display = "block";
   _galleryIdx = 0;
-  track.style.transform = "translateX(0)";
+  track.style.transform = "translate3d(0,0,0)";
   if(window._galleryTimer) clearInterval(window._galleryTimer);
-  if(HOME_GALLERY.length > 1){
-    window._galleryTimer = setInterval(function(){
-      _galleryIdx = (_galleryIdx + 1) % HOME_GALLERY.length;
-      track.style.transform = "translateX(" + (-_galleryIdx * 100) + "%)";
-    }, 3200);
-  }
+  window._galleryTimer = setInterval(function(){
+    if(!HOME_GALLERY.length) return;
+    _galleryIdx = (_galleryIdx + 1) % HOME_GALLERY.length;
+    track.style.transform = "translate3d(" + (-_galleryIdx * 100) + "%,0,0)";
+  }, 3200);
 }
 
 function shuffleArray(arr){
@@ -728,63 +739,75 @@ async function loadFeaturedLite(){
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
-
-  // فوری دکھائیں — نیٹ ورک کا انتظار نہیں
   const instant = {
     v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png" }
   };
+  function countItems(v, isOwn){
+    if(isOwn) return -1; // SJ Foods: show without coming-soon; count optional
+    let n = 0;
+    const items = (v && v.items) || {};
+    if(typeof items !== "object") return 0;
+    Object.keys(items).forEach(function(cat){
+      const obj = items[cat];
+      if(!obj) return;
+      if(Array.isArray(obj)) n += obj.length;
+      else if(typeof obj === "object") n += Object.keys(obj).length;
+    });
+    return n;
+  }
   function paint(data){
     ALL_VENDORS = data || {};
-    let ids = Object.keys(data).filter(id => id !== "_market" && data[id] && typeof data[id] === "object");
-    ids = ids.filter(id => {
+    let ids = Object.keys(data).filter(function(id){
+      if(id === "_market") return false;
       const v = data[id];
+      if(!v || typeof v !== "object") return false;
       if(v.blocked === true) return false;
       if(id === "v001") return true;
-      const st = (v.status || "approved").toLowerCase();
+      const st = String(v.status || "approved").toLowerCase();
       return st === "approved" || st === "active";
     });
-    if(!ids.includes("v001")) ids.unshift("v001");
+    if(ids.indexOf("v001") < 0) ids.unshift("v001");
     if(!data.v001) data.v001 = instant.v001;
 
-    grid.innerHTML = ids.map(id => {
+    grid.innerHTML = ids.map(function(id){
       const v = data[id] || {};
       const isOwn = (id === "v001");
       const name = v.shop_name || (isOwn ? "SJ Foods" : id);
       const city = v.city || "Mingora";
+      const n = countItems(v, isOwn);
+      const isComingSoon = !isOwn && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
-      // کور ضرور دکھائیں (base64 یا URL)
+      // base64 covers OK but heavy; still show
       let coverHtml;
       if(cover){
-        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.ph-fallback\')&&(this.parentNode.querySelector(\'.ph-fallback\').style.display=\'flex\')">'+
+        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.style.display=\'none\'; var p=this.nextElementSibling; if(p) p.style.display=\'flex\';">'+
           '<div class="shop-cover ph ph-fallback" style="display:none">'+(isOwn?"🥬":"🏪")+'</div>';
       } else {
         coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
       }
+      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + n);
       return '<div class="shop-card" onclick="tryEnterShop(\''+id+'\')">'+
+        (isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : '')+
         coverHtml+
         '<div class="shop-body"><div class="sname">'+name+'</div><div class="scity">'+city+'</div>'+
-        '<div class="stag">'+(isOwn?"SJ Foods":"شاپ")+'</div></div></div>';
+        '<div class="stag">'+countLabel+'</div></div></div>';
     }).join("");
   }
-
   paint(instant);
-
   try{
     const ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    const timer = ctrl ? setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 7000) : null;
+    const timer = ctrl ? setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 10000) : null;
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json", ctrl ? { signal: ctrl.signal } : undefined);
     if(timer) clearTimeout(timer);
     if(!res.ok) throw new Error("HTTP "+res.status);
     let data = await res.json();
     if(!data || typeof data !== "object") data = {};
-    // merge instant cover if v001 has no usable cover path
     if(!data.v001) data.v001 = instant.v001;
     else if(!data.v001.cover_image) data.v001.cover_image = "cover.png";
     paint(data);
   }catch(e){
     console.warn("shops fetch", e);
-    // instant پہلے سے دکھ چکا
-    if(!grid.innerHTML || grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
+    if(grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
   }
 }
 

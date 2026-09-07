@@ -3,408 +3,529 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Online — Vendor Control Panel</title>
+<title>SJ Online — Vendor Panel</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
-  :root{
-    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
-  }
+  :root{ --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00; --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA; }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding-bottom:110px; font-weight:bold;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial,sans-serif; direction:rtl; padding-bottom:110px; font-weight:bold;}
   header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
-  header h1{margin:0; font-size:18px;}
+  header h1{margin:0; font-size:17px;}
   header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
-
   .wrap{padding:14px; max-width:720px; margin:0 auto; width:100%;}
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
-  
   input[type=text], input[type=password], input[type=number], select, textarea{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
-    font-size:13px; font-family:Arial, sans-serif; font-weight:bold; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:10px; font-size:13px; font-weight:bold;
+    direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink); font-family:Arial,sans-serif;
   }
-  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:3px;}
-  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; width:100%;}
+  label{font-size:11.5px; color:var(--muted); display:block; margin-bottom:4px;}
+  button{font-family:Arial,sans-serif; font-weight:bold; cursor:pointer; border:none;}
+  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:12px 16px; font-size:14px; width:100%;}
   .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px;}
   .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px;}
-
   .tabs{display:flex; gap:6px; margin-bottom:14px;}
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-
-  .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;}
-  .row-top{display:flex; align-items:center; gap:8px;}
-  .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden;}
-  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
-
-  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
-  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
-  .unit-row input.u-label{flex:1 1 120px;}
-  .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left;}
-
-  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
+  .chat-item.pending{animation: blink 1.2s infinite; background:#FFFDE7;}
+  .chat-item.completed{background:#F1F8E9; border-color:#81C784;}
+  .chat-item.cancelled{background:#FFEBEE; border-color:#D32F2F; opacity:.85;}
+  @keyframes blink{0%{border-color:#D32F2F;}50%{border-color:#FF8A80;}100%{border-color:#D32F2F;}}
+  .chat-header{padding:12px; cursor:pointer; display:flex; justify-content:space-between; gap:8px; font-size:13px;}
+  .chat-body{display:none; padding:0 12px 12px; border-top:1px dashed var(--line);}
+  .chat-item.open .chat-body{display:block;}
+  .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px;}
+  .row-top{display:flex; gap:8px; align-items:center;}
+  .thumb-box{flex:0 0 56px; width:56px; height:56px; border-radius:10px; background:var(--leaf); position:relative; overflow:hidden; border:1px dashed var(--mid); display:flex; align-items:center; justify-content:center;}
+  .row-fields{flex:1;}
+  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:8px;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; flex-wrap:wrap; align-items:center;}
+  .unit-row input.u-label{flex:1 1 110px; margin-bottom:0;}
+  .unit-row input.u-rate{flex:0 0 100px; margin-bottom:0; direction:ltr; text-align:left;}
+  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px;}
   .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
-  .preset-pill:hover{background:var(--dark); color:#fff;}
-  
-  .savebar{
-    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
-    padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto;
-  }
-  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:200;}
-  .toast.show{opacity:1;}
-  .toast.err{background:#B71C1C;}
-  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+  .savebar{position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1.5px solid var(--line); padding:10px 12px; display:none; gap:10px; align-items:center; max-width:720px; margin:0 auto; z-index:90;}
+  .toast{position:fixed; top:14px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 16px; border-radius:30px; font-size:12.5px; opacity:0; transition:opacity .25s; z-index:200; pointer-events:none;}
+  .toast.show{opacity:1;} .toast.err{background:#B71C1C;}
+  .hint{font-size:11px; color:var(--muted); line-height:1.5; margin:8px 0 0;}
+  .loading{text-align:center; color:var(--muted); padding:20px; font-size:13px;}
+  .img-url{direction:ltr; text-align:left; font-size:12px;}
 </style>
 </head>
 <body>
-
 <header>
-  <h1>🏪 Vendor Control Panel</h1>
-  <p>Manage your products, rates & live orders</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+    <div>
+      <h1>🏪 Vendor Panel</h1>
+      <p>Orders · Products · Rates — same style as Admin</p>
+    </div>
+    <a href="index.html" style="color:#fff;font-size:12px;text-decoration:none;background:rgba(255,255,255,.2);padding:6px 10px;border-radius:8px;">← Home</a>
+  </div>
 </header>
-
 <div class="wrap">
-  <!-- LOGIN SECTION -->
   <div id="loginCard" class="card">
     <h3>🔐 Vendor Login</h3>
-    <label>Enter your Shop ID or Phone Number</label>
-    <input type="text" id="vendorInputId" placeholder="e.g. v002 or 03000000000">
-    <button class="btn-primary" onclick="loginVendor()">Login to Panel</button>
-    <div style="margin-top:10px; text-align:center;">
-      <a href="vendor-register.html" style="color:var(--mid); font-size:13px;">Don't have a shop? Register here</a>
+    <label>Shop ID یا فون نمبر</label>
+    <input type="text" id="vendorInputId" placeholder="v19146945 یا 03XXXXXXXXX" dir="ltr" style="text-align:left" autocomplete="username">
+    <label>Login PIN (4–6 digits)</label>
+    <input type="password" id="vendorPin" placeholder="آپ کا PIN" dir="ltr" style="text-align:left" maxlength="8" inputmode="numeric" autocomplete="current-password">
+    <button type="button" class="btn-primary" id="loginBtn">Login to Panel</button>
+    <p class="hint">رجسٹریشن کے وقت والا PIN ضروری ہے۔ ID مثال: <b dir="ltr">v19146945</b></p>
+    <div style="text-align:center;margin-top:10px;">
+      <a href="vendor-register.html" style="color:var(--mid);font-size:13px;">نیا اکاؤنٹ؟ Register</a>
     </div>
   </div>
 
-  <!-- DASHBOARD SECTION -->
   <div id="dashboardSec" style="display:none;">
-    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
       <div>
-        <h3 id="shopTitleDisplay" style="margin:0;">Shop Name</h3>
-        <p id="shopStatusDisplay" style="margin:2px 0 0; font-size:11px; color:var(--mid);">Status: Approved</p>
+        <h3 id="shopTitleDisplay" style="margin:0;">Shop</h3>
+        <p id="shopStatusDisplay" style="margin:4px 0 0;font-size:11px;color:var(--mid);"></p>
+        <p id="shopIdDisplay" style="margin:2px 0 0;font-size:11px;color:var(--muted);direction:ltr;text-align:right;"></p>
       </div>
-      <button class="btn-danger" style="padding:6px 10px;" onclick="logoutVendor()">Logout</button>
+      <button type="button" class="btn-danger" onclick="logoutVendor()">Logout</button>
     </div>
-
     <div class="tabs">
-      <div class="tab active" id="tabOrders" onclick="switchVendorTab('orders')">📥 Live Orders</div>
+      <div class="tab active" id="tabOrders" onclick="switchVendorTab('orders')">📥 Orders</div>
       <div class="tab" id="tabCatalog" onclick="switchVendorTab('catalog')">🏷️ Products & Rates</div>
     </div>
-
-    <!-- TAB 1: ORDERS -->
     <div id="secVendorOrders">
-      <div id="vendorOrdersArea"><div class="loading">⏳ Loading orders...</div></div>
+      <div id="vendorOrdersArea" class="loading">⏳ Loading orders…</div>
     </div>
-
-    <!-- TAB 2: CATALOG -->
     <div id="secVendorCatalog" style="display:none;">
       <div class="card">
-        <label>Select Category</label>
-        <div style="display:flex; gap:8px;">
-          <input type="text" id="newCatName" placeholder="New Category Name (e.g. سبزی, Beverages)">
-          <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="addNewCategory()">➕ Add</button>
+        <label>Category</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="newCatName" placeholder="نئی کیٹگری نام" style="margin-bottom:0;">
+          <button type="button" class="btn-secondary" style="background:var(--dark);color:#fff;white-space:nowrap;" onclick="addNewCategory()">➕ Add</button>
         </div>
         <select id="vendorCategoryPicker" onchange="loadVendorCategory(this.value)" style="margin-top:8px;"></select>
       </div>
-
-      <div id="vendorProductsArea"><div class="loading">⏳ Loading products...</div></div>
-      <button class="btn-secondary" style="width:100%; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addVendorProduct()">➕ Add New Product</button>
+      <div id="vendorProductsArea" class="loading">کیٹگری چنیں</div>
+      <button type="button" class="btn-secondary" style="width:100%;background:var(--dark);color:#fff;padding:12px;margin-top:10px;" onclick="addVendorProduct()">➕ Add Product</button>
     </div>
   </div>
 </div>
-
-<div class="savebar" id="saveBar" style="display:none;">
-  <div class="status" id="saveStatus" style="flex:1; font-size:12px; color:var(--price);">⚠️ Unsaved changes</div>
-  <button class="btn-primary" style="width:auto; min-width:110px;" onclick="saveVendorCatalog()">💾 Save Changes</button>
+<div class="savebar" id="saveBar">
+  <div id="saveStatus" style="flex:1;font-size:12px;color:var(--price);">Unsaved</div>
+  <button type="button" class="btn-primary" style="width:auto;min-width:120px;" onclick="saveVendorCatalog()">💾 Save</button>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+const db = getDatabase(app);
+window.dbInstance = db;
+window.dbRef = ref;
+window.dbUpdate = update;
+</script>
+<script>
+const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+let currentVendorId = "";
+let currentVendor = null;
+let currentCatalog = {};
+let activeCategory = "";
+let catalogDirty = false;
+let ordersUnsub = null;
+let activeOrderId = null;
 
-  const firebaseConfig = { databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" };
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  window.dbInstance = db;
-  window.dbRef = ref;
-  window.dbUpdate = update;
-  window.dbSet = set;
+function showToast(msg, isErr){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  setTimeout(function(){ t.className = "toast"; }, 2800);
+}
+window.showToast = showToast;
 
-  function showToast(msg, isErr){
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.className = "toast show" + (isErr ? " err" : "");
-    setTimeout(()=> t.className = "toast", 2600);
+function normalizePhoneDigits(p){
+  let d = String(p||"").replace(/[^0-9]/g,"");
+  if(d.indexOf("0092") === 0) d = "0" + d.slice(4);
+  else if(d.indexOf("92") === 0 && d.length >= 12) d = "0" + d.slice(2);
+  return d;
+}
+
+async function findVendor(idOrPhone){
+  idOrPhone = String(idOrPhone||"").trim();
+  if(!idOrPhone) return null;
+  // Direct key
+  try{
+    const res = await fetch(RTDB + "/vendors/" + encodeURIComponent(idOrPhone) + ".json");
+    const v = await res.json();
+    if(v && typeof v === "object") return { id: idOrPhone, data: v };
+  }catch(e){}
+  // Search all by phone / id
+  const allRes = await fetch(RTDB + "/vendors.json");
+  const all = await allRes.json() || {};
+  const want = normalizePhoneDigits(idOrPhone);
+  for(const key of Object.keys(all)){
+    if(key === "_market") continue;
+    const row = all[key];
+    if(!row || typeof row !== "object") continue;
+    if(key === idOrPhone) return { id: key, data: row };
+    const phones = [row.phone, row.whatsapp].map(normalizePhoneDigits);
+    if(want && phones.indexOf(want) >= 0) return { id: key, data: row };
   }
-  window.showToast = showToast;
+  return null;
+}
 
-  let currentVendorId = localStorage.getItem("sj_vendor_id") || "";
-  let currentCatalog = {};
-  let activeCategory = "";
-  let catalogDirty = false;
-
-  window.markDirty = function(){
-    catalogDirty = true;
-    document.getElementById("saveBar").style.display = "flex";
-  }
-
-  window.loginVendor = async function(){
-    let id = document.getElementById("vendorInputId").value.trim();
-    if(!id){ alert("Please enter your Shop ID or Phone"); return; }
-    showToast("Checking...");
-    try{
-      const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + id + ".json");
-      const v = await res.json();
-      if(!v){ alert("Shop not found!"); return; }
-      if(v.blocked){ alert("Your shop has been blocked by admin."); return; }
-      
-      currentVendorId = id;
-      localStorage.setItem("sj_vendor_id", id);
-      initVendorDashboard(v);
-    }catch(e){ alert("Login failed"); }
-  }
-
-  window.logoutVendor = function(){
-    localStorage.removeItem("sj_vendor_id");
-    location.reload();
-  }
-
-  if(currentVendorId){
-    fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + currentVendorId + ".json")
-      .then(r => r.json())
-      .then(v => {
-        if(v && !v.blocked) initVendorDashboard(v);
-        else logoutVendor();
-      }).catch(() => {});
-  }
-
-  function initVendorDashboard(v){
-    document.getElementById("loginCard").style.display = "none";
-    document.getElementById("dashboardSec").style.display = "block";
-    document.getElementById("shopTitleDisplay").textContent = v.shop_name || currentVendorId;
-    document.getElementById("shopStatusDisplay").textContent = "Status: " + (v.status || "approved");
-    
-    currentCatalog = v.items || {};
-    initVendorCategories();
-    watchVendorOrders();
-  }
-
-  window.switchVendorTab = function(tab){
-    document.getElementById("tabOrders").className = "tab" + (tab==='orders'?' active':'');
-    document.getElementById("tabCatalog").className = "tab" + (tab==='catalog'?' active':'');
-    document.getElementById("secVendorOrders").style.display = (tab==='orders'?'block':'none');
-    document.getElementById("secVendorCatalog").style.display = (tab==='catalog'?'block':'none');
-    document.getElementById("saveBar").style.display = (tab==='catalog' && catalogDirty)?'flex':'none';
-  }
-
-  function initVendorCategories(){
-    const picker = document.getElementById("vendorCategoryPicker");
-    const cats = Object.keys(currentCatalog);
-    if(cats.length === 0){
-      currentCatalog = { "سبزی": {} };
-      cats.push("سبزی");
-    }
-    picker.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join("");
-    activeCategory = cats[0];
-    renderVendorProducts();
-  }
-
-  window.addNewCategory = function(){
-    let name = document.getElementById("newCatName").value.trim();
-    if(!name) return;
-    if(currentCatalog[name]){ alert("Category already exists"); return; }
-    currentCatalog[name] = {};
-    document.getElementById("newCatName").value = "";
-    initVendorCategories();
-    document.getElementById("vendorCategoryPicker").value = name;
-    loadVendorCategory(name);
-    markDirty();
-  }
-
-  window.loadVendorCategory = function(cat){
-    activeCategory = cat;
-    renderVendorProducts();
-  }
-
-  function renderVendorProducts(){
-    const area = document.getElementById("vendorProductsArea");
-    const itemsObj = currentCatalog[activeCategory] || {};
-    const keys = Object.keys(itemsObj);
-
-    if(keys.length === 0){
-      area.innerHTML = `<div class="loading">No products in this category. Click 'Add New Product'.</div>`;
+window.loginVendor = async function(){
+  const idOrPhone = document.getElementById("vendorInputId").value.trim();
+  const pin = document.getElementById("vendorPin").value.trim();
+  if(!idOrPhone){ alert("Shop ID یا فون لکھیں"); return; }
+  if(pin.length < 4){ alert("PIN کم از کم 4 ہندسے"); return; }
+  const btn = document.getElementById("loginBtn");
+  if(btn){ btn.disabled = true; btn.textContent = "Checking…"; }
+  try{
+    const found = await findVendor(idOrPhone);
+    if(!found){ alert("Shop نہیں ملی — ID/فون چیک کریں"); return; }
+    const v = found.data;
+    if(v.blocked === true || v.status === "blocked"){ alert("شاپ بلاک ہے — ایڈمن سے رابطہ کریں"); return; }
+    if(!v.pin){
+      alert("اس اکاؤنٹ پر PIN سیٹ نہیں۔\nایڈمن Firebase میں pin فیلڈ لگائیں یا دوبارہ رجسٹر کریں۔");
       return;
     }
-
-    const presets = ["KG", "آدھا کلو", "پاؤ", "دڑی (5 KG)", "Litre", "Bottle", "Pcs", "Dozen", "Weight", "Service", "Meter", "Carat", "Gold"];
-
-    area.innerHTML = keys.map(k => {
-      let it = itemsObj[k];
-      if(!it.units) it.units = [{label: it.unit||"KG", rate: it.rate||0}];
-      return `
-        <div class="product-row">
-          <div class="row-top">
-            <div class="thumb-box">${it.image ? `<img src="${it.image}" style="width:100%;height:100%;object-fit:cover;">` : '🛒'}</div>
-            <div class="row-fields">
-              <input type="text" value="${it.name||''}" placeholder="Product Name (Urdu)" oninput="updateItemField('${k}','name',this.value)">
-              <input type="text" value="${it.name_roman||''}" placeholder="Roman Name" dir="ltr" style="text-align:left;" oninput="updateItemField('${k}','name_roman',this.value)">
-            </div>
-          </div>
-          <div class="units-box">
-            ${it.units.map((u, ui) => `
-              <div class="unit-row">
-                <input type="text" class="u-label" value="${u.label}" placeholder="Unit" oninput="updateUnitField('${k}',${ui},'label',this.value)">
-                <input type="number" class="u-rate" value="${u.rate}" placeholder="Rate" oninput="updateUnitRate('${k}',${ui},this.value)">
-                ${it.units.length > 1 ? `<button class="btn-danger" style="padding:4px 8px;" onclick="removeUnit('${k}',${ui})">✕</button>` : ''}
-              </div>
-            `).join('')}
-          </div>
-          <div class="preset-pills">
-            ${presets.map(p => `<button type="button" class="preset-pill" onclick="addPresetUnit('${k}','${p}')">+ ${p}</button>`).join('')}
-          </div>
-          <div style="display:flex; gap:6px;">
-            <button class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addCustomUnit('${k}')">➕ Add Unit</button>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-            <label><input type="checkbox" ${it.available!==false?'checked':''} onchange="updateItemField('${k}','available',this.checked)"> Available</label>
-            <button class="btn-danger" onclick="deleteVendorItem('${k}')">🗑️ Delete</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  window.updateItemField = function(k, field, val){
-    currentCatalog[activeCategory][k][field] = val;
-    markDirty();
-  }
-
-  window.updateUnitField = function(k, ui, field, val){
-    currentCatalog[activeCategory][k].units[ui][field] = val;
-    markDirty();
-  }
-
-  window.updateUnitRate = function(k, ui, val){
-    val = parseFloat(val) || 0;
-    let it = currentCatalog[activeCategory][k];
-    it.units[ui].rate = val;
-    if(ui === 0 && it.units.length > 1){
-      it.units.forEach((u, i) => {
-        if(i === 0) return;
-        let lbl = u.label.toLowerCase();
-        if(lbl.includes("پاؤ") || lbl.includes("250")) u.rate = Math.round(val / 4);
-        else if(lbl.includes("آدھا") || lbl.includes("500") || lbl.includes("half")) u.rate = Math.round(val / 2);
-        else if(lbl.includes("دڑی") || lbl.includes("5kg") || lbl.includes("5 کلو")) u.rate = Math.round(val * 5);
-      });
-      renderVendorProducts();
-    }
-    markDirty();
-  }
-
-  window.addPresetUnit = function(k, label){
-    let it = currentCatalog[activeCategory][k];
-    it.units.push({label: label, rate: 0});
-    renderVendorProducts();
-    markDirty();
-  }
-
-  window.addCustomUnit = function(k){
-    let it = currentCatalog[activeCategory][k];
-    it.units.push({label: "", rate: 0});
-    renderVendorProducts();
-    markDirty();
-  }
-
-  window.removeUnit = function(k, ui){
-    currentCatalog[activeCategory][k].units.splice(ui, 1);
-    renderVendorProducts();
-    markDirty();
-  }
-
-  window.addVendorProduct = function(){
-    let id = "item_" + Date.now();
-    if(!currentCatalog[activeCategory]) currentCatalog[activeCategory] = {};
-    currentCatalog[activeCategory][id] = { name: "", units: [{label: "KG", rate: 0}], available: true };
-    renderVendorProducts();
-    markDirty();
-  }
-
-  window.deleteVendorItem = function(k){
-    if(!confirm("Delete item?")) return;
-    delete currentCatalog[activeCategory][k];
-    renderVendorProducts();
-    markDirty();
-  }
-
-  window.saveVendorCatalog = async function(){
-    showToast("Saving...");
+    if(String(v.pin).trim() !== pin){ alert("❌ غلط PIN"); return; }
+    currentVendorId = found.id;
+    currentVendor = v;
     try{
-      await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + currentVendorId + "/items.json", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentCatalog)
-      });
-      catalogDirty = false;
-      document.getElementById("saveBar").style.display = "none";
-      showToast("✅ Saved Successfully!");
-    }catch(e){
-      showToast("❌ Save failed", true);
-    }
+      localStorage.setItem("sj_vendor_id", currentVendorId);
+      localStorage.setItem("sj_vendor_auth", "1");
+    }catch(e){}
+    initVendorDashboard(v);
+    showToast("🟢 Login OK");
+  }catch(e){
+    alert("Login failed: " + (e.message || e));
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = "Login to Panel"; }
   }
+};
 
-  function watchVendorOrders(){
-    const ordersRef = ref(db, 'orders');
-    onValue(ordersRef, (snapshot) => {
-      const data = snapshot.val() || {};
-      let list = Object.values(data).filter(o => o.vendor_id === currentVendorId);
-      const area = document.getElementById("vendorOrdersArea");
-      
-      if(list.length === 0){
-        area.innerHTML = `<div class="loading">No orders for your shop yet.</div>`;
+window.logoutVendor = function(){
+  try{
+    localStorage.removeItem("sj_vendor_id");
+    localStorage.removeItem("sj_vendor_auth");
+  }catch(e){}
+  location.reload();
+};
+
+document.getElementById("loginBtn").onclick = function(){ loginVendor(); };
+document.getElementById("vendorPin").addEventListener("keydown", function(e){
+  if(e.key === "Enter") loginVendor();
+});
+
+function initVendorDashboard(v){
+  document.getElementById("loginCard").style.display = "none";
+  document.getElementById("dashboardSec").style.display = "block";
+  document.getElementById("shopTitleDisplay").textContent = v.shop_name || currentVendorId;
+  document.getElementById("shopStatusDisplay").textContent = "Status: " + (v.status || "approved");
+  document.getElementById("shopIdDisplay").textContent = "ID: " + currentVendorId;
+  currentCatalog = v.items || {};
+  initVendorCategories();
+  watchVendorOrders();
+}
+
+window.switchVendorTab = function(tab){
+  document.getElementById("tabOrders").className = "tab" + (tab === "orders" ? " active" : "");
+  document.getElementById("tabCatalog").className = "tab" + (tab === "catalog" ? " active" : "");
+  document.getElementById("secVendorOrders").style.display = tab === "orders" ? "block" : "none";
+  document.getElementById("secVendorCatalog").style.display = tab === "catalog" ? "block" : "none";
+  document.getElementById("saveBar").style.display = (tab === "catalog" && catalogDirty) ? "flex" : "none";
+};
+
+function initVendorCategories(){
+  const picker = document.getElementById("vendorCategoryPicker");
+  const cats = Object.keys(currentCatalog);
+  if(!cats.length){
+    picker.innerHTML = '<option value="">— کوئی کیٹگری نہیں —</option>';
+    document.getElementById("vendorProductsArea").innerHTML = '<div class="loading">اوپر نئی کیٹگری بنائیں</div>';
+    return;
+  }
+  picker.innerHTML = cats.map(function(c){ return '<option value="'+c+'">'+c+'</option>'; }).join("");
+  loadVendorCategory(cats[0]);
+}
+
+window.addNewCategory = function(){
+  const name = document.getElementById("newCatName").value.trim();
+  if(!name){ alert("کیٹگری نام لکھیں"); return; }
+  if(!currentCatalog[name]) currentCatalog[name] = {};
+  document.getElementById("newCatName").value = "";
+  catalogDirty = true;
+  document.getElementById("saveBar").style.display = "flex";
+  initVendorCategories();
+  document.getElementById("vendorCategoryPicker").value = name;
+  loadVendorCategory(name);
+  showToast("Category added — Save");
+};
+
+window.loadVendorCategory = function(cat){
+  activeCategory = cat;
+  renderVendorProducts();
+};
+
+function unitFactor(label){
+  const lbl = String(label||"").toLowerCase();
+  if(/پاؤ|250|paw/.test(lbl)) return 0.25;
+  if(/آدھا|half|500|½/.test(lbl)) return 0.5;
+  if(/دڑی|5\s*kg|5kg|5\s*کلو/.test(lbl)) return 5;
+  if(/درجن|dozen/.test(lbl)) return 12;
+  if(/kg|کلو|ltr|liter|لیٹر|pcs|عدد|tola|gram|carat|meter|yard|bottle|pkt|job|hour/i.test(lbl)) return 1;
+  return null;
+}
+
+function renderVendorProducts(){
+  const area = document.getElementById("vendorProductsArea");
+  if(!activeCategory){ area.innerHTML = '<div class="loading">کیٹگری چنیں</div>'; return; }
+  const itemsObj = currentCatalog[activeCategory] || {};
+  const keys = Object.keys(itemsObj);
+  if(!keys.length){
+    area.innerHTML = '<div class="loading">اس کیٹگری میں آئٹم نہیں — Add Product</div>';
+    return;
+  }
+  const presets = [
+    {label:"⚖️ Weight", type:"weight"},{label:"🧴 Litre", type:"liquid"},{label:"📦 Pcs", type:"pcs"},
+    {label:"🥚 Dozen", type:"dozen"},{label:"🥇 Gold", type:"gold"},{label:"💎 Carat", type:"gem"},
+    {label:"📏 Meter", type:"meter"},{label:"🛠️ Service", type:"service"}
+  ];
+  area.innerHTML = "";
+  keys.forEach(function(key){
+    const it = itemsObj[key];
+    if(!it.units) it.units = [{label: it.unit || "KG", rate: it.rate || 0}];
+    if(!it.images) it.images = it.image ? [it.image] : [];
+    const row = document.createElement("div");
+    row.className = "product-row";
+    const img0 = it.images[0] || "";
+    const thumb = (img0 && img0.indexOf("data:") !== 0)
+      ? '<img src="'+img0+'" style="width:100%;height:100%;object-fit:cover;" alt="">'
+      : "🛒";
+    row.innerHTML =
+      '<div class="row-top">'+
+        '<div class="thumb-box">'+thumb+'</div>'+
+        '<div class="row-fields">'+
+          '<input type="text" value="'+(it.name||"").replace(/"/g,"&quot;")+'" placeholder="نام" oninput="currentCatalog[activeCategory][\''+key+'\'].name=this.value; markCatDirty();">'+
+          '<input type="text" class="img-url" value="'+(img0.indexOf("data:")===0?"":img0).replace(/"/g,"&quot;")+'" placeholder="Image URL (GitHub path)" onchange="setItemImage(\''+key+'\', this.value)">'+
+        '</div>'+
+      '</div>'+
+      '<div class="units-box" id="ub-'+key+'">'+
+        it.units.map(function(u, ui){
+          return '<div class="unit-row">'+
+            '<input class="u-label" type="text" value="'+(u.label||"").replace(/"/g,"&quot;")+'" oninput="currentCatalog[activeCategory][\''+key+'\'].units['+ui+'].label=this.value; markCatDirty();">'+
+            '<input class="u-rate" type="text" inputmode="decimal" value="'+(u.rate||0)+'" oninput="handleVendorRate(\''+key+'\','+ui+',this)">'+
+            (it.units.length>1?'<button type="button" class="btn-danger" style="padding:4px 8px;" onclick="removeVendorUnit(\''+key+'\','+ui+')">✕</button>':'')+
+          '</div>';
+        }).join("")+
+      '</div>'+
+      '<div class="preset-pills">'+
+        presets.map(function(p){ return '<button type="button" class="preset-pill" onclick="applyVendorPreset(\''+key+'\',\''+p.type+'\')">'+p.label+'</button>'; }).join("")+
+      '</div>'+
+      '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;">'+
+        '<button type="button" class="btn-secondary" style="font-size:11px;" onclick="addVendorUnit(\''+key+'\')">➕ Unit</button>'+
+        '<label style="display:inline-flex;align-items:center;gap:4px;margin:0;"><input type="checkbox" '+(it.available!==false?"checked":"")+' onchange="currentCatalog[activeCategory][\''+key+'\'].available=this.checked; markCatDirty();"> Available</label>'+
+        '<button type="button" class="btn-danger" onclick="deleteVendorProduct(\''+key+'\')">🗑</button>'+
+      '</div>';
+    area.appendChild(row);
+  });
+}
+
+window.markCatDirty = function(){
+  catalogDirty = true;
+  document.getElementById("saveBar").style.display = "flex";
+  document.getElementById("saveStatus").textContent = "⚠️ Unsaved — Save";
+};
+
+window.setItemImage = function(key, url){
+  url = String(url||"").trim();
+  const it = currentCatalog[activeCategory][key];
+  it.images = url ? [url] : [];
+  it.image = url;
+  markCatDirty();
+  renderVendorProducts();
+};
+
+window.handleVendorRate = function(key, ui, el){
+  const val = parseFloat(String(el.value).replace(/,/g,"")) || 0;
+  const it = currentCatalog[activeCategory][key];
+  it.units[ui].rate = val;
+  markCatDirty();
+  const f0 = unitFactor(it.units[ui].label);
+  if(f0 === 1 || ui === 0){
+    const box = document.getElementById("ub-"+key);
+    const inputs = box ? box.querySelectorAll(".u-rate") : [];
+    it.units.forEach(function(u, i){
+      if(i === ui) return;
+      const f = unitFactor(u.label);
+      if(f == null) return;
+      u.rate = Math.round(val * f);
+      if(inputs[i] && document.activeElement !== inputs[i]) inputs[i].value = u.rate;
+    });
+  }
+};
+
+window.applyVendorPreset = function(key, type){
+  const it = currentCatalog[activeCategory][key];
+  const base = (it.units && it.units[0]) ? (parseFloat(it.units[0].rate)||0) : 0;
+  const presets = {
+    weight: [{label:"KG",rate:base},{label:"آدھا کلو",rate:Math.round(base/2)},{label:"پاؤ",rate:Math.round(base/4)},{label:"دڑی (5 KG)",rate:Math.round(base*5)}],
+    liquid: [{label:"Ltr",rate:base},{label:"½ Ltr",rate:Math.round(base/2)},{label:"250 ml",rate:Math.round(base/4)}],
+    pcs: [{label:"Pcs",rate:base},{label:"Pkt",rate:base}],
+    dozen: [{label:"عدد",rate:base},{label:"درجن",rate:Math.round(base*12)}],
+    gold: [{label:"Tola",rate:base},{label:"Gram",rate:base}],
+    gem: [{label:"Carat",rate:base},{label:"Gram",rate:base}],
+    meter: [{label:"Meter",rate:base},{label:"Yard",rate:base}],
+    service: [{label:"Job",rate:base},{label:"Hour",rate:base}]
+  };
+  it.units = presets[type] || [{label:"Unit",rate:base}];
+  markCatDirty();
+  renderVendorProducts();
+  showToast("Preset applied");
+};
+
+window.addVendorUnit = function(key){
+  currentCatalog[activeCategory][key].units.push({label:"", rate:0});
+  markCatDirty();
+  renderVendorProducts();
+};
+window.removeVendorUnit = function(key, ui){
+  currentCatalog[activeCategory][key].units.splice(ui, 1);
+  markCatDirty();
+  renderVendorProducts();
+};
+window.addVendorProduct = function(){
+  if(!activeCategory){ alert("پہلے کیٹگری بنائیں/چنیں"); return; }
+  const id = "p" + Date.now();
+  currentCatalog[activeCategory][id] = {
+    name: "", name_roman: "", units: [{label:"KG", rate:0}], available: true, images: [], image: ""
+  };
+  markCatDirty();
+  renderVendorProducts();
+};
+window.deleteVendorProduct = function(key){
+  if(!confirm("Delete product?")) return;
+  delete currentCatalog[activeCategory][key];
+  markCatDirty();
+  renderVendorProducts();
+};
+
+window.saveVendorCatalog = async function(){
+  if(!currentVendorId) return;
+  document.getElementById("saveStatus").textContent = "⏳ Saving…";
+  try{
+    const res = await fetch(RTDB + "/vendors/" + currentVendorId + "/items.json", {
+      method: "PUT",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(currentCatalog)
+    });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    catalogDirty = false;
+    document.getElementById("saveStatus").textContent = "✅ Saved";
+    document.getElementById("saveBar").style.display = "flex";
+    showToast("✅ Catalog saved");
+  }catch(e){
+    document.getElementById("saveStatus").textContent = "❌ Failed";
+    showToast("Save failed: " + e.message, true);
+  }
+};
+
+function watchVendorOrders(){
+  const area = document.getElementById("vendorOrdersArea");
+  area.innerHTML = '<div class="loading">⏳ Orders…</div>';
+  // poll orders filtered by vendor_id
+  async function pull(){
+    try{
+      const res = await fetch(RTDB + "/orders.json");
+      const data = await res.json() || {};
+      const list = Object.keys(data).map(function(code){
+        const o = data[code] || {};
+        o.code = o.code || code;
+        return o;
+      }).filter(function(o){
+        return (o.vendor_id || "v001") === currentVendorId;
+      });
+      list.sort(function(a,b){
+        const ta = Date.parse(a.timestamp) || 0;
+        const tb = Date.parse(b.timestamp) || 0;
+        return tb - ta;
+      });
+      if(!list.length){
+        area.innerHTML = '<div class="loading">ابھی کوئی آرڈر نہیں</div>';
         return;
       }
-
-      area.innerHTML = list.map(o => {
-        let isDone = (o.status === 'completed' || o.status === 'delivered');
-        let isCan = (o.status === 'cancelled');
-        return `
-          <div class="card" style="border:2px solid ${isCan?'#B71C1C':(isDone?'#81C784':'var(--line))'};">
-            <div><b>Order:</b> ${o.code} | <b>Status:</b> ${o.status || 'Pending'}</div>
-            <div><b>Customer:</b> ${o.name} (${o.phone})</div>
-            <div><b>Address:</b> ${o.address}</div>
-            <div style="background:#F9F8F3; padding:8px; border-radius:6px; margin:6px 0;">${o.items}</div>
-            <div><b>Total:</b> Rs. ${o.total}</div>
-            ${!isDone && !isCan ? `
-              <div style="display:flex; gap:6px; margin-top:10px;">
-                <button class="btn-secondary" style="background:#C8E6C9;" onclick="vendorComplete('${o.code}')">✅ Mark Delivered</button>
-                <button class="btn-danger" onclick="vendorCancel('${o.code}')">❌ Cancel Order</button>
-              </div>
-            ` : ''}
-          </div>
-        `;
+      area.innerHTML = list.map(function(o){
+        const st = String(o.status||"pending").toLowerCase();
+        let cls = "pending";
+        if(st==="completed"||st==="delivered") cls = "completed";
+        if(st==="cancelled") cls = "cancelled";
+        const open = activeOrderId === o.code ? " open" : "";
+        return '<div class="chat-item '+cls+open+'" id="vo-'+o.code+'">'+
+          '<div class="chat-header" onclick="toggleVOrder(\''+o.code+'\')">'+
+            '<span>📌 '+o.code+' — '+(o.name||"")+'</span>'+
+            '<span style="font-size:11px;">'+(st==="cancelled"?"❌":(cls==="completed"?"✅":"🕒"))+'</span>'+
+          '</div>'+
+          '<div class="chat-body" style="font-size:13px;line-height:1.8;">'+
+            '<b>Phone:</b> <span dir="ltr">'+(o.phone||"")+'</span><br>'+
+            '<b>Address:</b> '+(o.address||"")+'<br>'+
+            '<div style="background:#F9F8F3;padding:8px;border-radius:8px;margin:6px 0;">'+(o.items||"")+'</div>'+
+            '<b>Total:</b> Rs. '+(o.total||0)+
+            (cls==="pending" ? '<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">'+
+              '<button type="button" class="btn-secondary" style="background:#C8E6C9;" onclick="vendorComplete(\''+o.code+'\')">✅ Delivered</button>'+
+              '<button type="button" class="btn-danger" onclick="vendorCancel(\''+o.code+'\')">❌ Cancel</button></div>' : '')+
+          '</div></div>';
       }).join("");
-    });
+    }catch(e){
+      area.innerHTML = '<div class="loading">Orders load failed</div>';
+    }
   }
+  pull();
+  setInterval(pull, 12000);
+}
 
-  window.vendorComplete = async function(code){
-    if(!confirm("Mark delivered?")) return;
-    await update(ref(db, 'orders/' + code), { status: "completed" });
-    showToast("Completed ✓");
-  }
+window.toggleVOrder = function(code){
+  activeOrderId = (activeOrderId === code) ? null : code;
+  document.querySelectorAll(".chat-item").forEach(function(el){
+    el.classList.toggle("open", el.id === "vo-"+activeOrderId);
+  });
+};
 
-  window.vendorCancel = async function(code){
-    let reason = prompt("Enter cancellation reason:");
-    if(!reason) return;
-    await update(ref(db, 'orders/' + code), {
-      status: "cancelled",
-      cancelled_by: "Vendor",
-      cancel_reason: reason
+window.vendorComplete = async function(code){
+  if(!confirm("Mark delivered?")) return;
+  try{
+    await fetch(RTDB+"/orders/"+code+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify("completed")});
+    showToast("✅ Done");
+  }catch(e){ showToast("Failed", true); }
+};
+window.vendorCancel = async function(code){
+  const reason = prompt("Cancel reason:");
+  if(reason === null) return;
+  try{
+    await fetch(RTDB+"/orders/"+code+".json",{
+      method:"PATCH",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ status:"cancelled", cancelled_by:"Vendor", cancel_reason: reason||"" })
     });
-    showToast("Cancelled ✕");
-  }
+    showToast("Cancelled");
+  }catch(e){ showToast("Failed", true); }
+};
+
+// Auto session
+(function(){
+  try{
+    const id = localStorage.getItem("sj_vendor_id");
+    const auth = localStorage.getItem("sj_vendor_auth");
+    if(id && auth === "1"){
+      fetch(RTDB+"/vendors/"+encodeURIComponent(id)+".json")
+        .then(function(r){ return r.json(); })
+        .then(function(v){
+          if(v && !v.blocked){
+            currentVendorId = id;
+            currentVendor = v;
+            initVendorDashboard(v);
+          }
+        }).catch(function(){});
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>

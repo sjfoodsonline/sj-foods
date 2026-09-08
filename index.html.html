@@ -6,186 +6,1520 @@
 <meta name="google" content="notranslate">
 <meta name="theme-color" content="#153A20">
 <title>SJ Online — سوات مینگورہ آن لائن مارکیٹ | Grocery & Local Shops Swat</title>
+<meta name="description" content="SJ Online — سوات مینگورہ کا آن لائن مارکیٹ۔ گلی محلے کے دکاندار، سبزی، پھل، کرانہ اور مقامی شاپس۔ آرڈر WhatsApp پر۔">
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
   :root{
     --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
-    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86;
+    --price:#B71C1C; --line:#E5E4DA; --card:#FFFFFF; --brown:#5D4037;
   }
   *{box-sizing:border-box;}
-  html{ background:#EDEAE0; height:100%; scroll-behavior: smooth; }
+  html{ background:#EDEAE0; height:100%; overflow-x:hidden; scroll-behavior: smooth; }
   body{
-    margin:0; padding:0 0 80px 0; background:var(--paper); color:var(--ink);
-    font-family: Arial, sans-serif; direction:rtl; text-align:right;
-    min-height:100vh; width:100%; font-weight: bold;
-  }
-  .app-container {
-    width: 100% !important; max-width: 100% !important; margin: 0; background: var(--paper); min-height: 100vh;
+    margin:0 auto; padding:0 0 130px 0; background:var(--paper); color:var(--ink);
+    font-family: Arial, "Segoe UI", sans-serif; direction:rtl; text-align:right;
+    width:100%; max-width:480px; min-height:100vh; position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.12); overflow-x:hidden; font-weight: bold;
   }
   
   header{ 
     background:linear-gradient(160deg, var(--dark), var(--mid)); 
-    color:#fff; padding:20px 40px; 
-    display:flex; justify-content:space-between; align-items:center;
-    box-shadow: 0 4px 16px rgba(21,58,32,0.25);
+    color:#fff; padding:16px; border-radius:0 0 22px 22px; position:relative; 
+    box-shadow: 0 4px 16px rgba(21,58,32,0.25); display:flex; justify-content:space-between; align-items:center;
   }
-  header h1{ margin:0 0 2px; font-size:28px; text-transform: uppercase; letter-spacing: 1px; }
-  header p{ margin:0; font-size:14px; color:#E8F5E9; }
-  .menu-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:10px; width:44px; height:44px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .header-title-box{ flex:1; text-align: right; cursor:pointer; }
+  header h1{ margin:0 0 2px; font-size:21px; font-weight:bold; font-family: Arial, sans-serif; letter-spacing: 0.5px; color:#FFFFFF; text-transform: uppercase; }
+  header p{ margin:0; font-size:11px; opacity:.95; font-family: Arial, sans-serif; color:#E8F5E9; font-weight: bold; }
   
-  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; }
+  .header-btns{display:flex; gap:8px; align-items:center;}
+  .menu-btn, .share-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:10px; width:36px; height:36px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200000; display: none; }
   .drawer-overlay.active { display: block; }
   .drawer {
-    position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100%; background: #fff; z-index: 10000;
-    transition: right 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.2); padding: 18px; overflow-y: auto;
+    position: fixed; top: 0; right: 0; width: 80%; max-width: 320px; height: 100%; background: #fff; z-index: 200001;
+    transform: translateX(105%); transition: transform 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+    padding: 18px; overflow-y: auto; font-family: Arial, sans-serif; -webkit-overflow-scrolling: touch;
   }
-  .drawer.active { right: 0; }
+  .drawer.active { transform: translateX(0); }
   .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--leaf); padding-bottom: 10px; margin-bottom: 14px; }
   .drawer-header h2 { margin: 0; font-size: 17px; color: var(--dark); }
   .drawer-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+  
   .drawer-menu { list-style: none; padding: 0; margin: 0; }
   .drawer-menu li { margin-bottom: 8px; }
   .drawer-menu a {
-    display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--paper); border: 1px solid var(--line);
-    border-radius: 10px; color: var(--dark); text-decoration: none; font-size: 15px; font-weight: bold; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 10px; color: var(--dark); text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer;
   }
   .drawer-menu a:hover { background: var(--leaf); }
 
-  .market-hero-banner {
-    width: 100%; max-height: 480px; background: var(--dark); overflow: hidden; position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: #fff; border-radius: 18px; padding: 18px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; font-family: Arial, sans-serif; text-align: right; }
+  .modal-box h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; font-size: 17px; }
+  .modal-box p { font-size: 13.5px; color: var(--ink); line-height: 1.7; }
+  .modal-close-btn { background: var(--dark); color: #fff; border: none; border-radius: 10px; padding: 10px; font-weight: bold; width: 100%; margin-top: 12px; cursor: pointer; font-size: 13.5px; }
+
+  .confirm-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100005; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .confirm-popup-overlay.active { display: flex; }
+  .confirm-popup-box { background: #fff; border-radius: 18px; padding: 20px; max-width: 360px; width: 100%; font-family: Arial, sans-serif; text-align: right; }
+  .confirm-popup-box h3 { color: var(--dark); margin-top: 0; font-size: 18px; border-bottom: 2px solid var(--leaf); padding-bottom: 6px; text-align: center; }
+  .confirm-popup-box p { font-size: 13.5px; color: var(--ink); line-height: 1.7; margin: 10px 0; }
+
+  .owner-card { text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+  .owner-img { width: 85px; height: 85px; border-radius: 50%; border: 2px solid var(--dark); object-fit: cover; margin: 0 auto 6px; display: block; }
+  .owner-name { font-size: 16px; font-weight: bold; color: var(--dark); }
+  .owner-tag { font-size: 11.5px; color: var(--mid); font-weight: bold; }
+
+  .cover-banner{ overflow:hidden; border-radius:14px; display:block; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
+  .cover-banner.static-cover .cover-slider-track{ transform:none !important; }
+  .cover-banner.static-cover .cover-slide{ min-width:100%; }
+  .product-strip-wrap{ margin:10px 14px 0; overflow:hidden; border-radius:14px; border:1px solid var(--line); background:#fff; direction:ltr; }
+  .product-strip-label{ font-size:11px; text-align:center; color:var(--muted); padding:6px 8px 0; font-weight:bold; }
+  .product-strip-track{ display:flex; transition: transform 0.45s ease; direction:ltr; width:100%; }
+  .product-strip-slide{ min-width:100%; width:100%; flex:0 0 100%; aspect-ratio: 2.2/1; background:#E8F5E9; }
+  .product-strip-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.5s ease; }
+  .cover-slide{ min-width:100%; width:100%; height: 100%; }
+  .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .features-scroll-wrap{ overflow:hidden; position:relative; padding:8px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:10px; }
+  .features-scroll{ display:flex; width:max-content; gap:10px; animation: smoothMarquee 25s linear infinite; }
+  @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+
+  .feature-card{
+    flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:6px 12px; text-align:center; display:flex; align-items:center; gap:5px;
   }
-  .market-hero-banner img { width: 100%; height: 100%; object-fit: cover; display: block; max-height: 480px; }
-  .market-hero-ph { width: 100%; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; background: linear-gradient(135deg, var(--dark), var(--mid)); font-size: 28px; text-align: center; padding: 20px; }
+  .feature-card .ic{font-size:14px;}
+  .feature-card .tx{font-size:11px; color:var(--dark); font-weight:bold; white-space:nowrap;}
 
-  .shop-picker{padding:40px;}
-  .shop-picker h2{font-size:26px; color:var(--dark); margin:10px 0 10px; text-align:center;}
-  .shop-picker .hint{font-size:15px; color:var(--muted); text-align:center; margin-bottom:30px; line-height:1.6; background:var(--leaf); padding:14px; border-radius:12px; max-width:800px; margin-left:auto; margin-right:auto;}
+  .featured-section{
+    margin:10px 14px; padding:14px; background:linear-gradient(135deg, #F4ECE1, #E8F5E9);
+    border-radius:18px; border:2px solid var(--brown); box-shadow:0 6px 20px rgba(93,64,55,0.1);
+  }
+  .shout-title { font-size: 16px; font-weight: bold; color: var(--brown); text-transform: uppercase; text-align: center; margin-bottom: 10px; }
+  .deal-grid { display: flex; gap: 10px; justify-content: center; min-height: 140px; }
+  .deal-card{ transition: opacity 0.35s ease, transform 0.35s ease; }
+  .deal-card.shuffle-out{ opacity:0; transform: scale(0.92); }
+  .deal-card.shuffle-in{ opacity:1; transform: scale(1); }
+  .deal-card{
+    flex: 1; background:#fff; border:1px solid #D7CCC8; border-radius:12px; padding:8px; text-align:center; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+  }
+  .deal-card img, .deal-card .deal-icon-box{
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; background: var(--leaf);
+    display: flex; align-items:center; justify-content:center; font-size: 32px;
+  }
+  .deal-card .d-name{ font-size: 13.5px; font-weight: bold; margin-top: 5px; color: var(--ink); line-height: 1.2; }
+  .deal-card .d-rate{ font-size: 13.5px; font-weight: bold; color: var(--price); margin-top: 2px; }
+
+  .sticky-top-container{ position: sticky; top: 0; z-index: 10; background: var(--paper); box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-bottom: 1px solid var(--line); }
+  .search-wrap{padding:10px 14px 6px; background:var(--paper);}
+  #search{ width:100%; padding:11px 12px; font-size:14px; border-radius:12px; border:1px solid var(--line); background:#fff; direction:rtl; text-align:right; outline:none; font-weight: bold; }
+
+  .cat-section{padding:4px 0 8px; background:var(--paper);}
+  .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:2px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .cat-marquee-wrap::-webkit-scrollbar { display: none; }
+  .cat-marquee-track{ display:flex; width:max-content; gap:8px; direction:rtl; padding:0 14px; }
+
+  .cat-chip{
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; background:var(--leaf); color:var(--dark);
+    border:1px solid #cfe8d1; border-radius:20px; padding:8px 14px; font-size:12.5px; font-weight:bold; white-space:nowrap; cursor:pointer;
+  }
+  .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
+
+  .home-cats-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px 14px; }
+  .home-cat-card{ background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; cursor: pointer; }
+  .home-cat-img-wrap{ width: 100%; aspect-ratio: 1 / 1; border-radius: 10px; background: var(--leaf); overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+  .home-cat-img-wrap img{ width: 100%; height: 100%; object-fit: cover; }
+  .home-cat-name { font-size: 14.5px; font-weight: bold; color: var(--dark); line-height: 1.2; }
+
+  .back-cat-btn{ background: var(--leaf); color: var(--dark); border: 1px solid var(--mid); border-radius: 10px; padding: 6px 12px; font-size: 12.5px; font-weight: bold; cursor: pointer; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; }
+
+  main{padding:6px 14px 100px;}
+  .cat-title{ font-size:16.5px; font-weight:bold; color:var(--dark); margin:8px 2px 10px; padding-right:8px; border-right:3.5px solid var(--dark); display:flex; align-items:center; justify-content:space-between; }
   
-  .shop-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:24px;}
-  .shop-card{ background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden; cursor:pointer; text-align:center; position:relative; box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.25s, box-shadow 0.25s; }
-  .shop-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-  .coming-soon-badge { position: absolute; top: 12px; right: 12px; background: var(--accent); color: #fff; font-size: 12px; font-weight: bold; padding: 5px 12px; border-radius: 8px; z-index: 2; }
-  .shop-cover{ width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--leaf); }
-  .shop-cover.ph{ display:flex; align-items:center; justify-content:center; font-size:42px; color:#fff; background:linear-gradient(135deg,#1B5E20,#2E7D32); }
-  .shop-body{padding:18px;}
-  .shop-card .sname{font-size:18px; font-weight:bold; color:var(--dark); line-height:1.3;}
-  .shop-card .scity{font-size:14px; color:var(--muted); margin-top:4px;}
-  .shop-card .stag{display:inline-block; margin-top:8px; font-size:13px; background:var(--leaf); color:var(--dark); padding:5px 12px; border-radius:8px;}
+  .item{ display:flex; flex-direction:column; gap:6px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px; text-align:right; }
+  .item.active{ border-color:var(--mid); box-shadow:0 4px 12px rgba(46,125,50,0.1); }
+  .item-row-top{display:flex; align-items:center; gap:10px;}
+  .item-thumb{ flex:0 0 65px; width:65px; height:65px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:28px; cursor:pointer; position:relative; }
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+  .thumb-badge { position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.6); color: #fff; font-size: 8.5px; padding: 1px 4px; border-radius: 4px; }
+  
+  .item .info{min-width:0; flex:1;}
+  .item .name{ font-size: 16px; font-weight: bold; color: var(--ink); line-height: 1.25; }
+  .item .meta{font-size:12px; color:var(--muted); margin-top:3px; font-weight: bold;}
+  .item .meta b{color:var(--price); font-weight:bold; font-size:13.5px;}
 
-  footer{text-align:center; font-size:14px; color:var(--muted); padding:35px; font-weight: bold; border-top:1px solid var(--line); margin-top:50px; background:#fff;}
-  .social-links{display:flex; justify-content:center; gap:14px; margin-top:16px;}
-  .social-btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px; font-size:14px; text-decoration:none; color:#fff; }
-  .social-btn.fb{background:#1877F2;} .social-btn.tk{background:#000;} .social-btn.yt{background:#FF0000;} .social-btn.ig{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);}
+  .item-row-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:2px;}
+  .unit-wrap{ flex:1; display:flex; flex-direction:column; gap:4px; min-width:0; }
+  .unit-select{
+    width:100%; border:2px solid var(--mid); border-radius:10px; padding:10px 12px 10px 40px; font-size:13.5px; font-weight:bold;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Cpath fill='%23153A20' d='M6 9l6 7 6-7z'/%3E%3C/svg%3E") no-repeat left 6px center;
+    background-size:24px 24px; color:var(--dark); appearance:none; -webkit-appearance:none; cursor:pointer;
+  }
+
+  .qty-box{display:flex; align-items:center; gap:5px;}
+  .qty-box button{ width:34px; height:34px; border-radius:8px; border:none; background:var(--leaf); color:var(--dark); font-size:16px; font-weight:bold; cursor:pointer; }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box input{ width:38px; text-align:center; border:1px solid var(--line); border-radius:6px; font-size:15px; font-weight:bold; padding:3px; }
+
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
+    border-radius:20px 20px 0 0; box-shadow:0 -8px 25px rgba(0,0,0,0.2); padding:12px 16px; z-index:99999; display:flex; flex-direction:column;
+    width:100%; max-width:480px; margin:0 auto; max-height:85vh; transition: transform 0.25s ease;
+  }
+  #billbar.collapsed .cart-details{display:none;}
+  .bill-summary{display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select: none;}
+  .bill-summary .total{font-size:22px; font-weight:bold; color:var(--dark);}
+  .cart-details{overflow-y:auto; max-height:55vh; margin-top:8px; border-top:1px dashed var(--line); padding-top:8px;}
+  
+  .swipe-handle{ width:40px; height:4px; background:#ccc; border-radius:4px; margin:0 auto 8px; cursor:pointer; }
+  .cart-item-row { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px; background: var(--paper); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); }
+  .cart-item-del { background: #FFCDD2; color: #B71C1C; border: none; border-radius: 5px; width: 22px; height: 22px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  .pay-card{ background:linear-gradient(135deg,#1B5E20,#2E7D32); border-radius:12px; padding:10px; margin-top:8px; text-align:center; color:#fff; }
+  .pay-amount{font-size:22px; font-weight:bold; margin:2px 0 4px;}
+  .pay-number-row{ display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:8px; padding:5px 8px; margin:0 auto; max-width:260px; }
+  .pay-number{font-size:14px; font-weight:bold; direction:ltr;}
+  .copyBtnCls{ background:#fff; color:var(--dark); border:none; border-radius:5px; padding:3px 6px; font-size:10.5px; font-weight:bold; cursor:pointer; }
+
+  .checkout-box{background:var(--leaf); border-radius:10px; padding:10px; margin-top:8px;}
+  .checkout-box input{ width:100%; border:1px solid #cfe8d1; border-radius:8px; padding:8px; font-size:13.5px; margin-bottom:6px; background:#fff; font-weight: bold; }
+  
+  .wa-btn{background:#25D366; color:#fff; border:none; border-radius:10px; padding:11px; font-size:15px; font-weight:bold; width:100%; cursor:pointer; margin-top:6px;}
+  .clear-cart-btn{background:#FFCDD2; color:#B71C1C; border:none; border-radius:8px; padding:6px 10px; font-size:11.5px; font-weight:bold; cursor:pointer; margin-top:6px; width:100%;}
+  
+  footer{text-align:center; font-size:11px; color:var(--muted); padding:16px 14px 18px; font-weight: bold;}
+  .social-links{display:flex; justify-content:center; gap:8px; margin:10px 0;}
+  .social-btn{ display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:bold; text-decoration:none; color:#fff; }
+  .social-btn.fb{background:#1877F2;} .social-btn.tk{background:#000000;} .social-btn.yt{background:#FF0000;} .social-btn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+
+  .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:130000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; cursor:pointer; }
+  .lightbox.hidden{display:none;}
+  .lightbox img{max-width:100%; max-height:75vh; border-radius:12px; object-fit:contain; cursor:default;}
+  .lightbox-thumbs { display: flex; gap: 8px; margin-top: 12px; max-width: 100%; overflow-x: auto; padding: 4px; }
+  .lightbox-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; opacity: 0.6; }
+  .lightbox-thumb.active { border-color: #fff; opacity: 1; }
+
+  .shop-picker{padding:10px 14px 18px;}
+  .shop-picker h2{font-size:16px; color:var(--dark); margin:0 0 6px; text-align:center;}
+  .shop-picker .hint{font-size:11.5px; color:var(--muted); text-align:center; margin-bottom:12px; line-height:1.5;}
+  .shop-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:500px; margin:0 auto;}
+  .shop-card{ background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; cursor:pointer; text-align:center; position:relative; }
+  .coming-soon-badge { position: absolute; top: 6px; right: 6px; background: #FF6F00; color: #fff; font-size: 9.5px; font-weight: bold; padding: 2px 6px; border-radius: 6px; z-index: 2; font-family: Arial, sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .shop-cover{ width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--leaf); }
+  .shop-cover.ph{ display:flex; align-items:center; justify-content:center; font-size:26px; color:#fff; background:linear-gradient(135deg,#1B5E20,#2E7D32); }
+  .shop-body{padding:6px;}
+  .shop-card .sname{font-size:12px; font-weight:bold; color:var(--dark); line-height:1.2;}
+  .shop-card .scity{font-size:10px; color:var(--muted); margin-top:2px;}
+  .shop-card .stag{display:inline-block; margin-top:3px; font-size:8.5px; background:var(--leaf); color:var(--dark); padding:1px 5px; border-radius:4px;}
+
+  .hidden{display:none !important;}
+  .shop-inner-cover{width:100%; aspect-ratio:16/9; object-fit:cover; display:block; border-radius:0 0 12px 12px;}
+  .shop-inner-bar{background:var(--dark); color:#fff; padding:8px 12px; display:flex; align-items:center; gap:8px;}
+  .shop-inner-bar button{background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:6px; padding:5px 10px; font-size:11px; font-weight:bold; cursor:pointer;}
 </style>
 </head>
 <body translate="no">
 
-<div class="app-container">
-  <header>
-    <div>
-      <h1>SJ ONLINE</h1>
-      <p>سوات مینگورہ کا آن لائن مارکیٹ · دکاندار اور شہریوں کے لیے</p>
-    </div>
-    <button class="menu-btn" onclick="toggleDrawer(true)">☰</button>
-  </header>
-
-  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
-  <div class="drawer" id="drawer">
-    <div class="drawer-header">
-      <h2>📋 مینو اور معلومات</h2>
-      <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
-    </div>
-    <ul class="drawer-menu">
-      <li><a href="index.html">🏠 ہوم پیج (Home)</a></li>
-      <li><a href="vendor-register.html">🏪 اپنی دکان رجسٹر کریں</a></li>
-      <li><a href="vendor.html">🔐 Vendor Login</a></li>
-      <li><a href="admin.html">⚙️ Admin Panel</a></li>
-    </ul>
+<header>
+  <div class="header-title-box" onclick="resetToHome()">
+    <h1>SJ ONLINE</h1>
+    <p>سوات مینگورہ کا آن لائن مارکیٹ · دکاندار اور شہریوں کے لیے</p>
   </div>
-
-  <div class="market-hero-banner" id="marketHeroBanner">
-    <div class="market-hero-ph">
-      <span style="font-size:46px;">🌿</span>
-      <span style="font-size:22px; margin-top:10px;">SJ Online — Swat Mingora Market</span>
-    </div>
+  <div class="header-btns">
+    <button type="button" class="share-btn" id="shareBtn" title="Share">➦</button>
+    <button type="button" class="menu-btn" id="menuBtn" title="Menu" aria-label="Menu">☰</button>
   </div>
+</header>
 
-  <div class="shop-picker">
-    <h2>🛒 مارکیٹ شاپس / Market Shops</h2>
-    <div class="hint">🛒 براہِ کرم ایک وقت میں ایک ہی دکان سے آرڈر کریں۔ ہر دکاندار اپنی ڈلیوری خود کرتا ہے۔</div>
-    <div class="shop-grid" id="shopGrid">
-      <div style="text-align:center; color:var(--muted); font-size:15px; grid-column:1/-1; padding:50px;">⏳ شاپس لوڈ ہو رہی ہیں...</div>
-    </div>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2>📋 مینو اور معلومات</h2>
+    <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
   </div>
-
-  <footer>
-    SJ Online — سوات مینگورہ کا آن لائن مارکیٹ 🌿<br>
-    📞 0334-9353799 | Al Basit Plaza, Haji Baba Road, Mingora Swat
-    <div class="social-links">
-      <a href="https://www.facebook.com/sjfoodonline/" target="_blank" class="social-btn fb">📘 Facebook</a>
-      <a href="https://www.tiktok.com/@sjfood.online" target="_blank" class="social-btn tk">🎵 TikTok</a>
-      <a href="https://www.youtube.com/@SJFOODONLINE" target="_blank" class="social-btn yt">▶️ YouTube</a>
-      <a href="https://www.instagram.com/sjfoodonline/" target="_blank" class="social-btn ig">📸 Instagram</a>
-    </div>
-  </footer>
+  <ul class="drawer-menu">
+    <li><a onclick="toggleDrawer(false); resetToHome();">🏠 ہوم پیج (Home)</a></li>
+    <li><a href="vendor-register.html">🏪 اپنی دکان رجسٹر کریں</a></li>
+    <li><a href="vendor.html">🔐 Vendor Login</a></li>
+    <li><a onclick="openModal('modalAbout')">👨‍💼 ہمارے بارے میں (بانی کا پیغام)</a></li>
+    <li><a onclick="openModal('modalSops')">📜 ضوابط و ایس او پیز</a></li>
+  </ul>
 </div>
 
+<div class="modal-overlay" id="modalAbout">
+  <div class="modal-box">
+    <h3>👨‍💼 ہمارے بارے میں اور بانی کا پیغام</h3>
+    <div class="owner-card">
+      <img src="images/owner.jpg" alt="Sulaiman Jan" class="owner-img" onerror="this.src='https://via.placeholder.com/85?text=Sulaiman'">
+      <div class="owner-name">سلیمان جان (ولد قاسم جان)</div>
+      <div class="owner-tag">Founder & CEO — SJ Online</div>
+    </div>
+    <p>مینگورہ سوات میں میڈیا انڈسٹری کے طویل تجربے کے بعد، آپ کی آسانی کے لیے SJ Online کا آغاز کیا گیا ہے تاکہ ہر ضرورت کی چیز آپ کی دہلیز پر مل سکے۔</p>
+    <button class="modal-close-btn" onclick="closeModal('modalAbout')">بند کریں</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSops">
+  <div class="modal-box">
+    <h3>📜 معیاری ضوابط و ایس او پیز</h3>
+    <p>• ہر پروڈکٹ معیاری اور تول میں پوری دی جاتی ہے۔<br>• ہر دکاندار اپنی ڈلیوری خود کرتا ہے، اس لیے ایک وقت میں ایک ہی دکان سے خریداری کریں۔</p>
+    <button class="modal-close-btn" onclick="closeModal('modalSops')">بند کریں</button>
+  </div>
+</div>
+
+<div class="confirm-popup-overlay" id="confirmPopupOverlay">
+  <div class="confirm-popup-box">
+    <h3>🛒 آرڈر کی تصدیق</h3>
+    <p>تصدیق کریں کہ آپ کو اس آرڈر کی ضرورت ہے اور آپ واٹس ایپ پر بات چیت کے لیے تیار ہیں۔</p>
+    <div style="background:var(--leaf); padding:8px; border-radius:8px; margin:10px 0;">
+      <input type="checkbox" id="popupTermsCheck" style="width:16px; height:16px; vertical-align: middle; margin-left: 5px;">
+      <label for="popupTermsCheck" style="font-size:12.5px; color:var(--dark); cursor:pointer;">جی ہاں، مجھے آرڈر کی ضرورت ہے۔</label>
+    </div>
+    <button class="wa-btn" onclick="proceedWithOrder()">آرڈر واٹس ایپ پر بھیجیں ➔</button>
+    <button style="background:#666; color:#fff; width:100%; padding:9px; border-radius:8px; margin-top:6px; font-weight:bold;" onclick="closeConfirmPopup()">واپس</button>
+  </div>
+</div>
+
+<div id="homePageWrapper">
+  <div class="cover-banner static-cover" id="coverBanner">
+    <div class="cover-slider-track" id="coverSliderTrack">
+      <div class="cover-slide"><img src="cover.png" alt="SJ Online Cover" id="mainCoverImg" onerror="this.src='icon-512.png'"></div>
+    </div>
+  </div>
+  <div class="product-strip-wrap" id="productStripWrap">
+    <div class="product-strip-label">✨ Market Gallery — تمام اشیاء</div>
+    <div class="product-strip-track" id="productStripTrack"></div>
+  </div>
+
+  <div class="features-scroll-wrap">
+    <div class="features-scroll">
+      <div class="feature-card"><span class="ic">🌿</span><span class="tx">Fresh & Quality</span></div>
+      <div class="feature-card"><span class="ic">🚚</span><span class="tx">Fast Delivery</span></div>
+      <div class="feature-card"><span class="ic">🔒</span><span class="tx">Secure COD</span></div>
+      <div class="feature-card"><span class="ic">💬</span><span class="tx">WhatsApp Order</span></div>
+    </div>
+  </div>
+
+  <div class="featured-section" id="featuredSection">
+    <div class="shout-title">⭐ TOP DEALS & SPECIAL OFFERS ⭐</div>
+    <div class="deal-grid" id="dealBox"></div>
+  </div>
+</div>
+
+<div id="shopPicker" class="shop-picker">
+  <h2 id="pickerTitle">🛒 مارکیٹ شاپس</h2>
+  <div class="hint">🛒 براہِ کرم ایک وقت میں ایک ہی دکان سے آرڈر کریں۔ ہر دکاندار اپنی ڈلیوری خود کرتا ہے۔</div>
+  <div class="shop-grid" id="shopGrid"><div style="text-align:center; color:var(--muted); font-size:12px; grid-column:1/-1;">Loading...</div></div>
+</div>
+
+<div id="shopWorkspace" class="hidden">
+  <div id="shopInnerHero">
+    <img id="shopInnerCover" class="shop-inner-cover" alt="" style="display:none;">
+    <div class="shop-inner-bar">
+      <button type="button" onclick="backToShops()">← All Shops</button>
+      <div style="flex:1; font-size:13px; font-weight:bold;" id="shopInnerName">Shop</div>
+    </div>
+  </div>
+  <div class="sticky-top-container">
+    <div class="search-wrap">
+      <input id="search" type="text" placeholder="🔍 Search item (ٹماٹر / Tomato)">
+    </div>
+    <div class="cat-section">
+      <div class="cat-marquee-wrap" id="catSliderWrap">
+        <div class="cat-marquee-track" id="chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <main id="list"></main>
+  <div id="loadingMsg" style="text-align:center; padding:20px; color:var(--muted); font-size:13px;">⏳ ریٹ لسٹ لوڈ ہو رہی ہے...</div>
+</div>
+
+<div id="billbar" class="collapsed" style="display:none;">
+  <div class="swipe-handle" onclick="toggleCartDrawer()"></div>
+  <div class="bill-summary" id="summary">
+    <div>🛒 کارٹ (<span id="itemCount">0</span> آئٹمز)</div>
+    <div class="total" id="summaryTotal">Rs. 0</div>
+  </div>
+  <div class="cart-details">
+    <div id="billLines" style="margin-bottom:8px;"></div>
+    <button class="clear-cart-btn" onclick="clearActiveCart()">🗑️ کارٹ خالی کریں (Clear Cart)</button>
+    <div class="checkout-box" style="margin-top:8px;">
+      <input id="custName" type="text" placeholder="Name (نام)">
+      <input id="custPhone" type="tel" placeholder="Phone (فون نمبر — 03XXXXXXXXX)">
+      <input id="custAddr" type="text" placeholder="Complete Address (مکمل پتہ)">
+    </div>
+    <div class="pay-card">
+      <div style="font-size:12px; font-weight:bold;" id="payCardTitle">EasyPaisa / JazzCash</div>
+      <div class="pay-amount" id="payAmount">Rs. 0</div>
+      <div class="pay-number-row">
+        <span class="pay-number" id="payNumberDisplay">—</span>
+        <button type="button" class="copyBtnCls" id="payCopyBtn" onclick="copyPayNumber()">کاپی</button>
+      </div>
+      <p id="payVendorHint" style="font-size:10.5px;color:#666;margin:6px 0 0;line-height:1.4;"></p>
+    </div>
+    <button class="wa-btn" id="waBtn">✅ واٹس ایپ پر آرڈر بھیجیں</button>
+  </div>
+</div>
+
+<footer>
+  SJ Online — سوات مینگورہ کا آن لائن مارکیٹ 🌿<br>
+  📞 0334-9353799 | Al Basit Plaza, Haji Baba Road, Mingora Swat
+  <div class="social-links">
+    <a href="https://www.facebook.com/sjfoodonline/" target="_blank" class="social-btn fb">📘 Facebook</a>
+    <a href="https://www.tiktok.com/@sjfood.online" target="_blank" class="social-btn tk">🎵 TikTok</a>
+    <a href="https://www.youtube.com/@SJFOODONLINE" target="_blank" class="social-btn yt">▶️ YouTube</a>
+    <a href="https://www.instagram.com/sjfoodonline/" target="_blank" class="social-btn ig">📸 Instagram</a>
+  </div>
+</footer>
+
+<div class="lightbox hidden" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="Zoom" onclick="event.stopPropagation()">
+  <div class="lightbox-thumbs" id="lightboxThumbs" onclick="event.stopPropagation()"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+  window.dbRef = { ref, set, db: getDatabase(app) };
+</script>
+
 <script>
+window.safeStorage = (function(){
+  var mem = {};
+  return {
+    getItem: function(k){ try{ return localStorage.getItem(k)||mem[k]||null; }catch(e){return mem[k]||null;} },
+    setItem: function(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=String(v); } }
+  };
+})();
+
+let CATEGORIES_DATA = {};
+let CATEGORIES_META = [];
+let ITEMS = [];
+let SHOP_WHATSAPP = "923349353799";
+let ACTIVE_VENDOR = { id: null, shop_name: "", whatsapp: "923349353799" };
+let SHOP_ENTERED = false;
+let ALL_VENDORS = {};
+
+let LIGHTBOX_OPEN = false;
+window.addEventListener('popstate', (e) => {
+  // 1) Lightbox first — back must NOT close whole site / PWA
+  if(LIGHTBOX_OPEN){
+    closeLightbox(true);
+    return;
+  }
+  // 2) Category inside shop → back to shop categories
+  if(SHOP_ENTERED && currentSelectedCategory){
+    currentSelectedCategory = null;
+    if(typeof renderChips === 'function') renderChips();
+    if(typeof renderMainView === 'function') renderMainView();
+    history.pushState({ page: 'shop', id: (ACTIVE_VENDOR && ACTIVE_VENDOR.id) || '' }, '', '#shop-' + ((ACTIVE_VENDOR && ACTIVE_VENDOR.id) || ''));
+    return;
+  }
+  // 3) Shop → home
+  if(SHOP_ENTERED){
+    backToShops();
+    return;
+  }
+  // 4) stay on home
+  history.pushState({ page: 'home' }, '', '#home');
+});
+history.replaceState({ page: 'home' }, '', '#home');
+
 function toggleDrawer(open){
-  const drawer = document.getElementById("drawer");
-  const overlay = document.getElementById("drawerOverlay");
-  if(open){ drawer.classList.add("active"); overlay.classList.add("active"); }
-  else { drawer.classList.remove("active"); overlay.classList.remove("active"); }
+  try{
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("drawerOverlay");
+    if(!drawer || !overlay) return;
+    const show = (open === true) ? true : (open === false) ? false : !drawer.classList.contains("active");
+    if(show){
+      drawer.classList.add("active");
+      overlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    } else {
+      drawer.classList.remove("active");
+      overlay.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+  }catch(e){ console.error("toggleDrawer", e); }
+}
+window.toggleDrawer = toggleDrawer;
+function openModal(modalId){
+  toggleDrawer(false);
+  const m = document.getElementById(modalId);
+  if(m) m.classList.add("active");
+}
+window.openModal = openModal;
+function closeModal(modalId){
+  const m = document.getElementById(modalId);
+  if(m) m.classList.remove("active");
+}
+window.closeModal = closeModal;
+
+/** پاکستانی موبائل — سخت ویلیڈیشن */
+function normalizePkPhone(raw){
+  let s = String(raw || "").trim();
+  s = s.replace(/[\s\-()]/g, "");
+  let digits = s.replace(/[^0-9]/g, "");
+  if(s.startsWith("+92") || digits.startsWith("0092")){
+    digits = digits.replace(/^0092/, "92");
+    if(digits.startsWith("92")) digits = "0" + digits.slice(2);
+  } else if(digits.startsWith("92") && digits.length >= 12){
+    digits = "0" + digits.slice(2);
+  }
+  // صرف موبائل 03XX
+  if(/^03\d{9}$/.test(digits)) return digits;
+  return null;
+}
+function isValidPkMobile(raw){
+  return !!normalizePkPhone(raw);
+}
+window.normalizePkPhone = normalizePkPhone;
+window.isValidPkMobile = isValidPkMobile;
+
+document.addEventListener("DOMContentLoaded", function(){
+  var mb = document.getElementById("menuBtn");
+  if(mb){
+    mb.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      toggleDrawer(true);
+    });
+  }
+  var ov = document.getElementById("drawerOverlay");
+  if(ov){
+    ov.addEventListener("click", function(){ toggleDrawer(false); });
+  }
+});
+
+function getCartStore(){
+  try{ return JSON.parse(window.safeStorage.getItem("sj_cart_store") || "{}"); }catch(e){ return {}; }
+}
+function saveCartStore(store){
+  window.safeStorage.setItem("sj_cart_store", JSON.stringify(store));
 }
 
-async function loadShopsList(){
-  const grid = document.getElementById("shopGrid");
-  const banner = document.getElementById("marketHeroBanner");
-  if(!grid) return;
+function getActiveCartShopId(){
+  let store = getCartStore();
+  for(let sid in store){
+    if(Object.values(store[sid] || {}).some(q => q > 0)) return sid;
+  }
+  return null;
+}
+
+async function fetchCategoryWithFirebase(catFile) {
+  const cleanKey = catFile.replace('.json', '');
+  try {
+    const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
+    if (fbRes.ok) {
+      const data = await fbRes.json();
+      if (data && Array.isArray(data)) return data;
+    }
+  } catch (e) {}
+  const res = await fetch(catFile + "?t=" + Date.now());
+  return await res.json();
+}
+
+async function loadActiveVendor(vendorId){
+  vendorId = vendorId || "v001";
+  function toWaDigits(raw, isMaster){
+    let d = String(raw || "").replace(/[^0-9]/g, "");
+    if(!d) return isMaster ? "923349353799" : "";
+    if(d.indexOf("00")==0) d = d.slice(2);
+    if(d[0]==="0") d = "92" + d.slice(1);
+    if(d.indexOf("92")!==0 && d.length===10) d = "92" + d;
+    return d;
+  }
+  function pickVendor(v, id){
+    const isMaster = (id === "v001");
+    const wa = toWaDigits(v.whatsapp || v.phone || "", isMaster);
+    let pay = String(v.pay_number || v.easypaisa || v.phone || "").replace(/[^0-9]/g,"");
+    if(isMaster && !pay) pay = "03349353799";
+    return {
+      id: id,
+      shop_name: v.shop_name || (isMaster ? "SJ Foods" : "Shop"),
+      owner_name: v.owner_name || (isMaster ? "سلیمان جان" : ""),
+      whatsapp: wa || (isMaster ? "923349353799" : ""),
+      phone: v.phone || "",
+      pay_number: pay,
+      cover_image: v.cover_image || "",
+      isMaster: isMaster
+    };
+  }
+  if(ALL_VENDORS[vendorId]){
+    ACTIVE_VENDOR = pickVendor(ALL_VENDORS[vendorId], vendorId);
+    SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
+    return !!ACTIVE_VENDOR.whatsapp || vendorId === "v001";
+  }
   try{
-    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json?t=" + Date.now());
-    let data = await res.json();
-    if(!data) data = { v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora" } };
-
-    if(data._market && data._market.cover_image) {
-      banner.innerHTML = `<img src="${data._market.cover_image}" alt="SJ Online Market">`;
+    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + ".json");
+    const v = await res.json();
+    if(v && !v.blocked){
+      ALL_VENDORS[vendorId] = v;
+      ACTIVE_VENDOR = pickVendor(v, vendorId);
+      SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
+      if(!ACTIVE_VENDOR.whatsapp && vendorId !== "v001"){
+        alert("اس شاپ کا WhatsApp نمبر رجسٹرڈ نہیں — آرڈر نہیں بھیجا جا سکتا۔");
+        return false;
+      }
+      return true;
     }
+  }catch(e){}
+  if(vendorId === "v001"){
+    ACTIVE_VENDOR = { id: "v001", shop_name: "SJ Foods", owner_name: "سلیمان جان", whatsapp: "923349353799", pay_number: "03349353799", cover_image: "cover.png", isMaster: true };
+    SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
+    return true;
+  }
+  return false;
+}
 
-    let ids = Object.keys(data).filter(id => id !== "_market" && data[id]?.status === "approved" && data[id]?.blocked !== true);
-    if(!ids.includes("v001")) ids.unshift("v001");
 
-    let html = "";
-    for(const id of ids){
-      const v = data[id];
-      const isOwn = (id === "v001");
-      const itemsObj = v.items || {};
-      let itemCount = 0;
-      Object.keys(itemsObj).forEach(cat => { itemCount += Object.keys(itemsObj[cat] || {}).length; });
-      if(isOwn) itemCount = 15;
 
-      const isComingSoon = itemCount < 5 && !isOwn;
-      let coverImg = v.cover_image || "";
 
-      html += `<div class="shop-card" onclick="window.location.href='shop.html?id=${id}'">
-        ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
-        ${coverImg ? `<img class="shop-cover" src="${coverImg}">` : `<div class="shop-cover ph">${isOwn?'🥬':'🏪'}</div>`}
-        <div class="shop-body">
-          <div class="sname">${v.shop_name || id}</div>
-          <div class="scity">${v.city || 'Mingora'}</div>
-          <div class="stag">${isOwn ? 'SJ Foods' : 'مقام شاپ'} (${itemCount} آئٹمز)</div>
-        </div>
-      </div>`;
-    }
-    grid.innerHTML = html;
+
+
+
+
+
+/** ہوم: فکسڈ کور (اوپر) · پروڈکٹ گیلری سلائیڈ · ٹاپ ڈیلز ڈبل شفل */
+let HOME_GALLERY = [];
+let HOME_DEALS_POOL = [];
+let _galleryIdx = 0;
+let _dealsIdx = 0;
+
+function initHomeCoverSlider(){
+  // کور فکسڈ — حرکت نہیں
+  const track = document.getElementById("coverSliderTrack");
+  const banner = document.getElementById("coverBanner");
+  if(!track || !banner) return;
+  banner.classList.add("static-cover");
+  banner.style.display = "block";
+  track.style.transform = "none";
+  if(!track.querySelector("img")){
+    track.innerHTML = '<div class="cover-slide"><img src="cover.png" alt="Cover" onerror="this.src=\'icon-512.png\'"></div>';
+  }
+  if(window._coverTimer){ clearInterval(window._coverTimer); window._coverTimer = null; }
+}
+
+function paintProductGallery(urls){
+  const track = document.getElementById("productStripTrack");
+  const wrap = document.getElementById("productStripWrap");
+  if(!track || !wrap) return;
+  let list = (urls || []).filter(function(u){
+    u = String(u||"").trim();
+    if(!u) return false;
+    if(u.indexOf("data:image") === 0) return false;
+    return true;
+  });
+  // unique
+  const uniq = [];
+  list.forEach(function(u){ if(uniq.indexOf(u)<0) uniq.push(u); });
+  list = uniq;
+  if(list.length === 0) list = ["cover.png"];
+  if(list.length === 1) list = list.concat(["icon-512.png"]);
+  HOME_GALLERY = list.slice(0, 30);
+  track.style.direction = "ltr";
+  track.innerHTML = HOME_GALLERY.map(function(src){
+    return '<div class="product-strip-slide"><img src="'+src+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'icon-192.png\'"></div>';
+  }).join("");
+  wrap.style.display = "block";
+  _galleryIdx = 0;
+  track.style.transform = "translate3d(0,0,0)";
+  if(window._galleryTimer) clearInterval(window._galleryTimer);
+  window._galleryTimer = setInterval(function(){
+    if(!HOME_GALLERY.length) return;
+    _galleryIdx = (_galleryIdx + 1) % HOME_GALLERY.length;
+    track.style.transform = "translate3d(" + (-_galleryIdx * 100) + "%,0,0)";
+  }, 3200);
+}
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function paintTopDealsPair(){
+  const homeBox = document.getElementById("dealBox");
+  const shopBox = document.getElementById("shopDealBox");
+  const box = (SHOP_ENTERED && shopBox) ? shopBox : homeBox;
+  const section = SHOP_ENTERED ? document.getElementById("shopFeaturedSection") : document.getElementById("featuredSection");
+  if(!box) return;
+  if(section) section.style.display = "";
+  let pool = HOME_DEALS_POOL.length ? HOME_DEALS_POOL : (ITEMS || []).filter(function(i){ return i.available !== false; });
+  if(!pool.length){
+    box.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Deals</div></div><div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Shop</div></div>';
+    return;
+  }
+  const a = pool[_dealsIdx % pool.length];
+  const b = pool[(_dealsIdx + 1) % pool.length];
+  _dealsIdx = (_dealsIdx + 2) % Math.max(pool.length, 2);
+  function card(it){
+    if(!it) return '<div class="deal-card"><div class="deal-icon-box">⭐</div></div>';
+    let fImg = (it.images && it.images[0]) ? it.images[0] : "";
+    // allow data images for vendor rings so deals not empty
+    const nm = it.name_roman || it.name || "";
+    const rate = (it.units && it.units[0]) ? it.units[0].rate : 0;
+    const cat = it.cat || "";
+    const id = it.id || "";
+    return '<div class="deal-card" onclick="jumpToItem(\''+String(cat).replace(/'/g,"")+'\',\''+String(id).replace(/'/g,"")+'\')">'+
+      (fImg ? '<img src="'+fImg+'" loading="lazy" alt="">' : '<div class="deal-icon-box">'+(it.icon||"⭐")+'</div>')+
+      '<div class="d-name">'+nm+'</div>'+
+      '<div class="d-rate">'+(typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0)))+'</div></div>';
+  }
+  box.innerHTML = card(a) + card(b);
+}
+
+
+function startTopDealsShuffle(){
+  paintTopDealsPair();
+  if(window._dealsTimer) clearInterval(window._dealsTimer);
+  window._dealsTimer = setInterval(function(){
+    const box = document.getElementById("dealBox");
+    if(!box) return;
+    box.querySelectorAll(".deal-card").forEach(function(el){ el.classList.add("shuffle-out"); });
+    setTimeout(function(){ paintTopDealsPair(); }, 280);
+  }, 4500);
+}
+
+function initHomeVisuals(){
+  initHomeCoverSlider();
+  var fw = document.querySelector(".features-scroll-wrap");
+  if(fw) fw.style.display = "";
+  var fs = document.getElementById("featuredSection");
+  if(fs) fs.style.display = "";
+  loadFeaturedLite();
+}
+
+async function loadFeaturedLite(){
+  const section = document.getElementById("featuredSection");
+  try{
+    const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
+    const all = [];
+    const gallery = [];
+    const slice = (index || []).slice(0, 8);
+    const results = await Promise.all(slice.map(function(e){
+      return fetchCategoryWithFirebase(String(e.file||"").replace(/\.json$/i,"")).catch(function(){ return []; });
+    }));
+    slice.forEach(function(entry, i){
+      (results[i] || []).forEach(function(it, ii){
+        if(it.available === false) return;
+        let imgs = it.images || (it.image ? [it.image] : []);
+        let img0 = imgs[0] || "";
+        if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+        all.push({
+          id: "sj-"+i+"-"+ii,
+          cat: entry.category,
+          icon: entry.icon || "🛒",
+          name: it.name,
+          name_roman: it.name_roman || "",
+          units: it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }],
+          images: imgs,
+          featured: it.featured === true,
+          available: true,
+          qty: 0,
+          shop: "SJ Foods"
+        });
+      });
+    });
+    // vendor deals: only from already-loaded ALL_VENDORS (no full dump download)
+    Object.keys(ALL_VENDORS || {}).forEach(function(vid){
+      if(vid === "v001" || vid === "_market") return;
+      const v = ALL_VENDORS[vid];
+      if(!v || v.blocked || (v.status && v.status !== "approved")) return;
+      const itemsRoot = v.items || {};
+      Object.keys(itemsRoot).forEach(function(key){
+        const it = itemsRoot[key];
+        if(!it || typeof it !== "object") return;
+        // flat product
+        if(it.name || it.units || it.rate != null){
+          if(it.available === false) return;
+          let imgs = it.images || (it.image ? [it.image] : []);
+          let img0 = imgs[0] || "";
+          if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+          all.push({
+            id: "v-"+vid+"-"+key,
+            cat: it.category || "General",
+            icon: "🏪",
+            name: it.name || key,
+            name_roman: it.name_roman || it.name || key,
+            units: it.units || [{ label: it.unit || "Pcs", rate: it.rate || 0 }],
+            images: imgs,
+            featured: true,
+            available: true,
+            qty: 0,
+            shop: v.shop_name || vid,
+            vendorId: vid,
+            premium: it.premium === true
+          });
+        } else {
+          // nested by category
+          Object.keys(it).forEach(function(pid){
+            const p = it[pid];
+            if(!p || typeof p !== "object") return;
+            if(p.available === false) return;
+            let imgs = p.images || (p.image ? [p.image] : []);
+            all.push({
+              id: "v-"+vid+"-"+pid,
+              cat: key,
+              icon: "🏪",
+              name: p.name || pid,
+              name_roman: p.name_roman || p.name || pid,
+              units: p.units || [{ label: p.unit || "Pcs", rate: p.rate || 0 }],
+              images: imgs,
+              featured: true,
+              available: true,
+              qty: 0,
+              shop: v.shop_name || vid,
+              vendorId: vid,
+              premium: p.premium === true
+            });
+          });
+        }
+      });
+    });
+
+    const uniq = [];
+    gallery.forEach(function(u){ if(uniq.indexOf(u) < 0) uniq.push(u); });
+    if(typeof paintProductGallery === "function") paintProductGallery(typeof shuffleArray==="function" ? shuffleArray(uniq).slice(0, 24) : uniq.slice(0,24));
+    HOME_DEALS_POOL = typeof shuffleArray === "function" ? shuffleArray(all) : all;
+    ITEMS = HOME_DEALS_POOL.slice();
+    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
+    if(section) section.style.display = "";
   }catch(e){
-    grid.innerHTML = `<div class="shop-card" onclick="window.location.href='shop.html?id=v001'">
-      <div class="shop-cover ph">🥬</div>
-      <div class="shop-body"><div class="sname">SJ Foods</div><div class="scity">Mingora</div><div class="stag">SJ Foods</div></div>
-    </div>`;
+    console.warn("featured lite", e);
+    if(typeof paintProductGallery === "function") paintProductGallery([]);
+    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
+    if(section) section.style.display = "";
   }
 }
 
-loadShopsList();
+
+
+async function loadShopsList(){
+  const grid = document.getElementById("shopGrid");
+  if(!grid) return;
+  const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+
+  // فوری SJ Foods — کبھی لوڈنگ پر نہ اٹکے
+  const instant = {
+    v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png", blocked: false }
+  };
+  function countItems(v){
+    let n = 0;
+    const items = (v && v.items) || {};
+    if(typeof items !== "object") return 0;
+    Object.keys(items).forEach(function(cat){
+      const obj = items[cat];
+      if(!obj) return;
+      if(Array.isArray(obj)) n += obj.length;
+      else if(typeof obj === "object"){
+        // flat product or nested
+        if(obj.name || obj.rate != null || obj.units) n += 1;
+        else n += Object.keys(obj).length;
+      }
+    });
+    return n;
+  }
+  function paint(data){
+    ALL_VENDORS = Object.assign({}, ALL_VENDORS, data || {});
+    let ids = Object.keys(data).filter(function(id){
+      if(id === "_market") return false;
+      const v = data[id];
+      if(!v || typeof v !== "object") return false;
+      if(v.blocked === true) return false;
+      if(id === "v001") return true;
+      const st = String(v.status || "approved").toLowerCase();
+      return st === "approved" || st === "active";
+    });
+    if(ids.indexOf("v001") < 0) ids.unshift("v001");
+    if(!data.v001) data.v001 = instant.v001;
+
+    grid.innerHTML = ids.map(function(id){
+      const v = data[id] || {};
+      const isOwn = (id === "v001");
+      const name = v.shop_name || (isOwn ? "SJ Foods" : id);
+      const city = v.city || "Mingora";
+      const n = isOwn ? -1 : countItems(v);
+      const isComingSoon = !isOwn && n >= 0 && n < 5;
+      let cover = v.cover_image || (isOwn ? "cover.png" : "");
+      let coverHtml;
+      if(cover && String(cover).indexOf("data:image") === 0){
+        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
+      } else if(cover){
+        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="">';
+      } else {
+        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
+      }
+      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + (n < 0 ? "—" : n));
+      return '<div class="shop-card" onclick="tryEnterShop(\''+id+'\')">'+
+        (isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : '')+
+        coverHtml+
+        '<div class="shop-body"><div class="sname">'+name+'</div><div class="scity">'+city+'</div>'+
+        '<div class="stag">'+countLabel+'</div></div></div>';
+    }).join("");
+  }
+
+  paint(instant);
+
+  // ہلکی لوڈنگ: صرف keys + چھوٹے فیلڈز — پورا vendors.json (1MB) نہیں
+  try{
+    const ctrl = new AbortController();
+    const timer = setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 8000);
+    const keysRes = await fetch(RTDB + "/vendors.json?shallow=true", { signal: ctrl.signal });
+    clearTimeout(timer);
+    const keysObj = await keysRes.json() || {};
+    const ids = Object.keys(keysObj).filter(function(k){ return k !== "_market"; });
+
+    const data = { v001: instant.v001 };
+    await Promise.all(ids.map(async function(id){
+      try{
+        const base = RTDB + "/vendors/" + id + "/";
+        const [shop_name, status, blocked, city, phone, whatsapp, pay_number, owner_name, items] = await Promise.all([
+          fetch(base + "shop_name.json").then(function(r){ return r.json(); }).catch(function(){ return null; }),
+          fetch(base + "status.json").then(function(r){ return r.json(); }).catch(function(){ return "approved"; }),
+          fetch(base + "blocked.json").then(function(r){ return r.json(); }).catch(function(){ return false; }),
+          fetch(base + "city.json").then(function(r){ return r.json(); }).catch(function(){ return "Mingora"; }),
+          fetch(base + "phone.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "whatsapp.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "pay_number.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "owner_name.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "items.json").then(function(r){ return r.json(); }).catch(function(){ return null; })
+        ]);
+        // cover الگ — صرف URL ہو تو
+        let cover_image = "";
+        try{
+          const c = await fetch(base + "cover_image.json").then(function(r){ return r.json(); });
+          if(c && String(c).indexOf("data:image") !== 0) cover_image = c;
+          else if(id === "v001") cover_image = "cover.png";
+        }catch(e){}
+        data[id] = {
+          shop_name: shop_name || id,
+          status: status || "approved",
+          blocked: blocked === true,
+          city: city || "Mingora",
+          phone: phone || "",
+          whatsapp: whatsapp || "",
+          pay_number: pay_number || "",
+          owner_name: owner_name || "",
+          cover_image: cover_image || (id === "v001" ? "cover.png" : ""),
+          items: items || {}
+        };
+      }catch(e){}
+    }));
+    paint(data);
+  }catch(e){
+    console.warn("shops light fetch", e);
+    if(grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
+  }
+}
+
+
+window.tryEnterShop = function(vendorId){
+  let activeShop = getActiveCartShopId();
+  if(activeShop && activeShop !== vendorId){
+    let shopName = (ALL_VENDORS[activeShop] && ALL_VENDORS[activeShop].shop_name) || "دوسری دکان";
+    let confirmSwitch = confirm(`⚠️ توجہ فرمائیں!\n\nآپ اس وقت "${shopName}" سے خریداری کر رہے ہیں۔ ہر دکاندار اپنی ڈلیوری خود کرتا ہے!\n\nکیا آپ پرانی دکان کا سامان ختم کر کے نئی دکان پر جانا چاہتے ہیں؟`);
+    if(!confirmSwitch) return;
+    clearActiveCart();
+  }
+  enterShop(vendorId);
+};
+
+window.enterShop = async function(vendorId){
+  const ok = await loadActiveVendor(vendorId);
+  if(!ok){ alert("شاپ دستیاب نہیں"); return; }
+  SHOP_ENTERED = true;
+  currentSelectedCategory = null;
+  try{ history.pushState({ page: 'shop', id: vendorId }, "", "#shop-" + vendorId); }catch(e){}
+
+  document.getElementById("shopPicker").style.display = "none";
+  document.getElementById("homePageWrapper").style.display = "none";
+  document.getElementById("shopWorkspace").classList.remove("hidden");
+  document.getElementById("shopWorkspace").style.display = "block";
+  document.getElementById("billbar").style.display = "flex";
+
+  // Shop cover + name (fixed under header of shop)
+  const coverEl = document.getElementById("shopInnerCover");
+  const nameEl = document.getElementById("shopInnerName");
+  let cover = ACTIVE_VENDOR.cover_image || "";
+  if(vendorId === "v001"){
+    // SJ Foods shop cover = site cover.png
+    cover = cover && String(cover).indexOf("data:") !== 0 ? cover : "cover.png";
+  }
+  if(coverEl){
+    if(cover){
+      coverEl.src = cover;
+      coverEl.style.display = "block";
+      coverEl.onerror = function(){ this.style.display = "none"; };
+    } else {
+      coverEl.style.display = "none";
+    }
+  }
+  if(nameEl){
+    nameEl.innerHTML = (ACTIVE_VENDOR.shop_name || "Shop") +
+      ' <span style="font-size:11px;opacity:.9;font-weight:bold;">· شاپ کھلی ہوئی ہے</span>';
+  }
+
+  // Top deals only this shop — keep section visible above categories inside shop area
+  // (shop workspace has its own flow; home featured hidden with homePageWrapper)
+
+  if(vendorId === "v001"){
+    await loadData();
+  } else {
+    await loadVendorCatalog(vendorId);
+  }
+  // after catalog loaded — shop-only deals shuffle
+  try{
+    HOME_DEALS_POOL = (ITEMS || []).filter(function(i){ return i.available !== false; });
+    HOME_DEALS_POOL = typeof shuffleArray === "function" ? shuffleArray(HOME_DEALS_POOL) : HOME_DEALS_POOL;
+    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
+  }catch(e){}
+
+  restoreShopCart();
+  renderBill();
+  window.scrollTo(0,0);
+};
+;
+
+async function loadVendorCatalog(vendorId){
+  try{
+    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + "/items.json");
+    const data = await res.json() || {};
+    CATEGORIES_META = []; ITEMS = []; CATEGORIES_DATA = {};
+
+    // Support flat {id:{category,name,units}} and nested {cat:{id:{...}}}
+    const byCat = {};
+    Object.keys(data).forEach(function(key){
+      const val = data[key];
+      if(!val || typeof val !== "object") return;
+      if(val.name || val.units || val.rate != null || val.image){
+        const cat = val.category || val.cat || "General";
+        if(!byCat[cat]) byCat[cat] = {};
+        byCat[cat][key] = val;
+      } else {
+        byCat[key] = val;
+      }
+    });
+
+    Object.keys(byCat).forEach(function(cat){
+      CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒", image: "" });
+      CATEGORIES_DATA[cat] = [];
+      Object.keys(byCat[cat] || {}).forEach(function(k){
+        const it = byCat[cat][k] || {};
+        let units = it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }];
+        let imgs = it.images || (it.image ? [it.image] : []);
+        const row = {
+          id: k, cat: cat, name: it.name, name_roman: it.name_roman,
+          units: units, unitIndex: 0, available: it.available !== false,
+          images: imgs, qty: 0, premium: it.premium === true || it.no_qty === true,
+          no_qty: it.no_qty === true,
+          extra_text: it.extra_text || ""
+        };
+        ITEMS.push(row);
+        CATEGORIES_DATA[cat].push(it);
+        // category cover from first image
+        if(!CATEGORIES_META[CATEGORIES_META.length-1].image && imgs[0] && String(imgs[0]).indexOf("data:")!==0){
+          CATEGORIES_META[CATEGORIES_META.length-1].image = imgs[0];
+        }
+      });
+    });
+    renderChips(); renderMainView();
+    document.getElementById("loadingMsg").style.display = "none";
+  }catch(e){
+    console.warn(e);
+    document.getElementById("loadingMsg").textContent = "Catalog load failed";
+  }
+}
+
+window.backToShops = function(){
+  saveShopCart();
+  SHOP_ENTERED = false;
+  currentSelectedCategory = null;
+  ITEMS.forEach(function(i){ i.qty = 0; });
+  document.getElementById("shopPicker").style.display = "";
+  document.getElementById("shopWorkspace").style.display = "none";
+  document.getElementById("billbar").style.display = "none";
+  document.getElementById("homePageWrapper").style.display = "block";
+  document.getElementById("coverBanner").style.display = "block";
+  var fw = document.querySelector(".features-scroll-wrap");
+  if(fw) fw.style.display = "";
+  document.getElementById("featuredSection").style.display = "";
+  try{ history.pushState({ page: 'home' }, '', '#home'); }catch(e){}
+  loadShopsList();
+  // restore mixed top deals (all shops)
+  if(typeof loadFeaturedLite === "function") loadFeaturedLite();
+  window.scrollTo(0,0);
+};
+;
+
+
+
+async function loadData(){
+  try{
+    let index = null;
+    try{
+      const fr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/site_categories.json");
+      index = await fr.json();
+    }catch(e){}
+    if(!Array.isArray(index) || !index.length){
+      index = await fetch("categories_index.json?t=" + Date.now()).then(r => r.json());
+    }
+    const catResults = await Promise.all(index.map(e => fetchCategoryWithFirebase(String(e.file||"").replace(/\.json$/i,""))));
+    
+    CATEGORIES_META = index.map((e, i) => {
+      let itemsList = catResults[i] || [];
+      let defaultImg = e.image || "";
+      if(!defaultImg && itemsList.length > 0){
+        let firstWithImg = itemsList.find(it => (it.images && it.images.length > 0) || it.image);
+        if(firstWithImg){
+          defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
+        }
+      }
+      return { name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: defaultImg };
+    });
+
+    ITEMS = []; CATEGORIES_DATA = {};
+    index.forEach((entry, i) => {
+      let itemsList = catResults[i] || [];
+      CATEGORIES_DATA[entry.category] = itemsList;
+      itemsList.forEach((it, ii) => {
+        let imgs = it.images || (it.image ? [it.image] : []);
+        ITEMS.push({
+          id: i+"-"+ii, cat: entry.category, icon: entry.icon,
+          name: it.name, name_roman: it.name_roman||"",
+          units: it.units || [{label: it.unit||"KG", rate: it.rate}], unitIndex: 0,
+          available: it.available !== false, images: imgs, featured: it.featured === true, qty: 0
+        });
+      });
+    });
+    renderChips(); renderMainView(); renderFeatured();
+    document.getElementById("loadingMsg").style.display = "none";
+  }catch(e){ document.getElementById("loadingMsg").textContent = "⚠️ لوڈنگ ناکام"; }
+}
+
+function restoreShopCart(){
+  if(!ACTIVE_VENDOR.id) return;
+  let store = getCartStore();
+  let shopCart = store[ACTIVE_VENDOR.id] || {};
+  ITEMS.forEach(i => {
+    i.qty = shopCart[i.id] || 0;
+  });
+}
+
+function saveShopCart(){
+  if(!ACTIVE_VENDOR.id) return;
+  let store = getCartStore();
+  let shopCart = {};
+  ITEMS.forEach(i => {
+    if(i.qty > 0) shopCart[i.id] = i.qty;
+  });
+  if(Object.keys(shopCart).length > 0){
+    store[ACTIVE_VENDOR.id] = shopCart;
+  } else {
+    delete store[ACTIVE_VENDOR.id];
+  }
+  saveCartStore(store);
+}
+
+function renderChips(){
+  document.getElementById("chips").innerHTML = CATEGORIES_META.map(c => 
+    `<button class="cat-chip ${currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman||c.name}</button>`
+  ).join("");
+}
+
+let currentSelectedCategory = null;
+function selectCategory(catName){
+  currentSelectedCategory = catName;
+  renderChips(); renderMainView();
+  window.scrollTo({top:0, behavior:'auto'});
+  if(SHOP_ENTERED && catName){
+    try{ history.pushState({ page:'category', cat: catName }, '', '#cat'); }catch(e){}
+  }
+}
+
+
+function resetToHome(){ 
+  if(SHOP_ENTERED) backToShops(); 
+  selectCategory(null); 
+}
+window.resetToHome = resetToHome;
+
+function renderMainView(filter=""){
+  const main = document.getElementById("list");
+  if(!main) return; main.innerHTML = "";
+  if(filter){
+    let filtered = ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    let div = document.createElement("div"); div.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+    filtered.forEach(it => div.appendChild(createItemRow(it)));
+    main.appendChild(div);
+  } else if(currentSelectedCategory){
+    let catObj = CATEGORIES_META.find(c => c.name === currentSelectedCategory) || {icon:"📦", name: currentSelectedCategory};
+    let items = ITEMS.filter(i => i.cat === currentSelectedCategory);
+    let div = document.createElement("div");
+    div.innerHTML = `<div class="cat-title"><span>${catObj.icon} ${catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back</button></div>`;
+    items.forEach(it => div.appendChild(createItemRow(it)));
+    main.appendChild(div);
+  } else {
+    let grid = document.createElement("div"); grid.className = "home-cats-grid";
+    CATEGORIES_META.forEach(cat => {
+      grid.innerHTML += `<div class="home-cat-card" onclick="selectCategory('${cat.name}')">
+        <div class="home-cat-img-wrap">${cat.image ? `<img src="${cat.image}" loading="lazy">` : `<div style="font-size:32px;">${cat.icon}</div>`}</div>
+        <div class="home-cat-name">${cat.name_roman||cat.name}</div>
+      </div>`;
+    });
+    main.appendChild(grid);
+  }
+}
+
+function createItemRow(it){
+  const u = it.units[it.unitIndex];
+  const row = document.createElement("div");
+  row.className = "item" + (it.qty>0?" active":"");
+  row.id = "row-"+it.id;
+  let mainImg = (it.images && it.images.length > 0) ? it.images[0] : "";
+  let imgCount = (it.images && it.images.length > 1) ? `<div class="thumb-badge">+${it.images.length-1}</div>` : "";
+
+  row.innerHTML = `
+    <div class="item-row-top">
+      <div class="item-thumb" onclick="openLightboxItem('${it.id}')">
+        ${mainImg ? `<img src="${mainImg}" loading="lazy">` : it.icon}
+        ${imgCount}
+      </div>
+      <div class="info"><div class="name">${it.name_roman||it.name}</div><div class="meta"><b>${fmt(u.rate)}</b> / ${u.label}</div></div>
+    </div>
+    <div class="item-row-bottom">
+      ${it.units.length>1 ? `<div class="unit-wrap"><select class="unit-select" onchange="changeUnit('${it.id}',this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} — ${fmt(x.rate)}</option>`).join("")}</select></div>` : '<span></span>'}
+      ${(it.premium || it.no_qty) ? `
+      <div style="text-align:left;font-size:11px;">
+        <div style="color:${it.available===false?'#B71C1C':'#2E7D32'};font-weight:bold;">${it.available===false?'Sold Out':'Available · شاپ/کال'}</div>
+        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;"
+          onclick="inquirePremium('${it.id}')">${it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
+      </div>` : `
+      <div class="qty-box"><button type="button" onclick="changeQty('${it.id}',-1)">−</button><input type="number" value="${it.qty}" readonly><button type="button" class="plus" onclick="changeQty('${it.id}',1)">+</button></div>`}
+    </div>
+  `;
+  return row;
+}
+
+function inquirePremium(id){
+  const it = ITEMS.find(x => x.id === id);
+  if(!it) return;
+  if(it.available === false){ alert("Sold Out"); return; }
+  it.qty = it.qty > 0 ? 0 : 1;
+  if(it.qty === 1){
+    alert("💎 مہنگا آئٹم کارٹ میں۔\nخودکار ڈیلیوری نہیں۔\nآرڈر متعلقہ شاپ کے WhatsApp پر استفسار کے طور پر جائے گا۔");
+  }
+  renderMainView(document.getElementById("search").value);
+  renderBill();
+  document.getElementById("billbar").classList.remove("collapsed");
+  saveShopCart();
+}
+function changeUnit(id, idx){ const it = ITEMS.find(x => x.id === id); if(it){ it.unitIndex = parseInt(idx); renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); } }
+function changeQty(id, delta){
+  const it = ITEMS.find(x => x.id === id);
+  if(!it) return;
+  if(delta > 0 && (it.premium === true || it.no_qty === true)){
+    alert("⚠️ یہ مہنگا / خاص آئٹم ہے۔\n\nخودکار ڈیلیوری نہیں۔\nشاپ تشریف لائیں یا کال/واٹس ایپ پر بات کر کے فیصلہ کریں۔\nآرڈر بھیجنے پر وینڈر کو استفسار جائے گا۔");
+  }
+  it.qty = Math.max(0, it.qty + delta);
+  renderMainView(document.getElementById("search").value);
+  renderBill();
+  saveShopCart();
+}
+function removeItemFromCart(id){ const it = ITEMS.find(x => x.id === id); if(it){ it.qty = 0; renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); } }
+function clearActiveCart(){ 
+  ITEMS.forEach(i => i.qty = 0); 
+  renderMainView(document.getElementById("search").value); 
+  renderBill(); 
+  saveShopCart(); 
+}
+
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function formatPayDisplay(digits){
+  const d = String(digits||"").replace(/[^0-9]/g,"");
+  if(d.length===11 && d[0]==="0") return d.slice(0,4)+"-"+d.slice(4);
+  if(d.length===12 && d.indexOf("92")===0) return "0"+d.slice(2,5)+"-"+d.slice(5);
+  return d || "—";
+}
+function getActivePayNumber(){
+  const v = ACTIVE_VENDOR || {};
+  let d = String(v.pay_number || "").replace(/[^0-9]/g,"");
+  if(!d && v.isMaster) d = "03349353799";
+  // display as local 03...
+  if(d.indexOf("92")===0 && d.length>=12) d = "0"+d.slice(2);
+  return d;
+}
+function copyPayNumber(){
+  const d = getActivePayNumber();
+  if(!d){ alert("ادائیگی نمبر دستیاب نہیں"); return; }
+  navigator.clipboard.writeText(d).then(function(){ alert("نمبر کاپی: "+d); }).catch(function(){ alert(d); });
+}
+function renderBill(){
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  let subtotal = 0;
+  let hasPremium = false;
+  document.getElementById("billLines").innerHTML = chosen.map(it => {
+    const u = it.units[it.unitIndex] || it.units[0];
+    const t = it.qty * (u.rate||0); subtotal += t;
+    if(it.premium || it.no_qty) hasPremium = true;
+    return '<div class="cart-item-row"><span>• '+it.name+(it.premium?' 💎':'')+' — '+it.qty+' '+(u.label||'')+' = <b>'+fmt(t)+'</b></span>'+
+      '<button type="button" class="cart-item-del" onclick="removeItemFromCart(\''+it.id+'\')">✕</button></div>';
+  }).join("");
+  document.getElementById("itemCount").textContent = chosen.length;
+  document.getElementById("summaryTotal").textContent = fmt(subtotal);
+  document.getElementById("payAmount").textContent = fmt(subtotal);
+  // vendor-specific payment
+  const pay = getActivePayNumber();
+  const title = document.getElementById("payCardTitle");
+  const numEl = document.getElementById("payNumberDisplay");
+  const hint = document.getElementById("payVendorHint");
+  const owner = (ACTIVE_VENDOR && ACTIVE_VENDOR.owner_name) ? ACTIVE_VENDOR.owner_name : (ACTIVE_VENDOR && ACTIVE_VENDOR.shop_name) || "";
+  if(title) title.textContent = "EasyPaisa / JazzCash" + (owner ? " ("+owner+")" : "");
+  if(numEl) numEl.textContent = formatPayDisplay(pay);
+  if(hint){
+    if(ACTIVE_VENDOR && !ACTIVE_VENDOR.isMaster){
+      hint.textContent = hasPremium
+        ? "⚠️ مہنگا آئٹم: ادائیگی/ڈیلیوری شاپ یا کال پر طے ہوگی۔ آرڈر "+(ACTIVE_VENDOR.shop_name||"وینڈر")+" کے WhatsApp پر جائے گا۔"
+        : "ادائیگی اور آرڈر اسی شاپ ("+(ACTIVE_VENDOR.shop_name||"")+") کے نمبر پر — آپ کے ماسٹر نمبر پر نہیں۔";
+    } else {
+      hint.textContent = hasPremium ? "⚠️ مہنگا آئٹم: خودکار ڈیلیوری نہیں۔" : "";
+    }
+  }
+  if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
+}
+
+function toggleCartDrawer(){ document.getElementById("billbar").classList.toggle("collapsed"); }
+document.getElementById("summary").onclick = toggleCartDrawer;
+document.getElementById("search").oninput = (e) => renderMainView(e.target.value);
+
+document.getElementById("waBtn").onclick = function(){
+  if(ITEMS.filter(i => i.qty > 0).length === 0){ alert("کارٹ خالی ہے"); return; }
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  if(!name){ alert("براہ کرم نام درج کریں"); document.getElementById("custName").focus(); return; }
+  if(!phone){ alert("براہ کرم فون نمبر درج کریں"); document.getElementById("custPhone").focus(); return; }
+  if(!addr){ alert("براہ کرم مکمل پتہ درج کریں"); document.getElementById("custAddr").focus(); return; }
+  const normalized = normalizePkPhone(phone);
+  if(!normalized){
+    alert("❌ غلط یا ادھورا فون نمبر!\n\nدرست مثال: 03349353799\n(بالکل 11 ہندسے، 03 سے شروع)\n\nآرڈر اس نمبر کے بغیر نہیں بھیجا جا سکتا۔");
+    document.getElementById("custPhone").focus();
+    return;
+  }
+  // فیلڈ میں معیاری شکل لکھ دو
+  document.getElementById("custPhone").value = normalized;
+  var chk = document.getElementById("popupTermsCheck");
+  if(chk) chk.checked = false;
+  document.getElementById("confirmPopupOverlay").classList.add("active");
+};
+
+function closeConfirmPopup(){ document.getElementById("confirmPopupOverlay").classList.remove("active"); }
+
+function proceedWithOrder(){
+  const chk = document.getElementById("popupTermsCheck");
+  if(chk && !chk.checked){
+    alert("براہ کرم تصدیقی باکس پر ٹک کریں کہ آپ کو آرڈر کی ضرورت ہے۔");
+    return;
+  }
+  const name = document.getElementById("custName").value.trim();
+  const phoneRaw = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  const phone = normalizePkPhone(phoneRaw);
+  if(!name || !addr){ alert("نام اور پتہ ضروری ہیں"); return; }
+  if(!phone){
+    alert("❌ فون نمبر درست نہیں — آرڈر نہیں بھیجا جا سکتا۔");
+    closeConfirmPopup();
+    document.getElementById("custPhone").focus();
+    return;
+  }
+  document.getElementById("custPhone").value = phone;
+  closeConfirmPopup();
+  const chosen = ITEMS.filter(i => i.qty > 0);
+  if(!chosen.length){ alert("کارٹ خالی ہے"); return; }
+
+  // Target vendor WhatsApp ONLY (not master, unless SJ Foods)
+  let targetWa = String((ACTIVE_VENDOR && ACTIVE_VENDOR.whatsapp) || "").replace(/[^0-9]/g,"");
+  if(!targetWa && ACTIVE_VENDOR && ACTIVE_VENDOR.id === "v001") targetWa = "923349353799";
+  if(!targetWa){
+    alert("اس شاپ کا WhatsApp نمبر دستیاب نہیں۔ رجسٹریشن میں نمبر چیک کریں۔");
+    return;
+  }
+
+  const hasPremium = chosen.some(function(it){ return it.premium === true || it.no_qty === true; });
+  const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let subtotal = 0;
+  let msg = "*SJ ONLINE — ORDER*\n";
+  msg += "Shop: " + (ACTIVE_VENDOR.shop_name || "Shop") + "\n";
+  msg += "Vendor ID: " + (ACTIVE_VENDOR.id || "") + "\n";
+  msg += "Code: " + orderCode + "\n";
+  msg += "Name: " + name + "\n";
+  msg += "Phone: " + phone + "\n";
+  msg += "Address: " + addr + "\n\n";
+  if(hasPremium){
+    msg += "*⚠️ PREMIUM / SPECIAL ITEM*\n";
+    msg += "Auto delivery نہیں — شاپ وزٹ یا کال کے بعد فیصلہ۔\n\n";
+  }
+  msg += "*Items:*\n";
+  chosen.forEach(function(it){
+    const u = it.units[it.unitIndex];
+    const t = it.qty * u.rate;
+    subtotal += t;
+    const tag = (it.premium || it.no_qty) ? " [PREMIUM]" : "";
+    msg += "- " + (it.name || "") + tag + " x " + it.qty + " " + u.label + " = " + fmt(t) + "\n";
+  });
+  msg += "\n*Total: " + fmt(subtotal) + "*\n";
+  msg += hasPremium ? "\n(استفسار / کال کنفرم — خودکار ڈیلیوری نہیں)" : "\nPlease confirm & dispatch.";
+
+  try{
+    if(window.dbRef){
+      window.dbRef.set(window.dbRef.ref(window.dbRef.db, "orders/" + orderCode), {
+        code: orderCode,
+        name: name,
+        phone: phone,
+        address: addr,
+        items: msg.replace(/\n/g, "<br>"),
+        total: Math.round(subtotal),
+        otp: orderCode.replace("SJ-", ""),
+        timestamp: new Date().toISOString(),
+        status: "pending",
+        vendor_id: ACTIVE_VENDOR.id || "v001",
+        shop_name: ACTIVE_VENDOR.shop_name || "Shop",
+        premium: hasPremium,
+        target_whatsapp: targetWa
+      });
+    }
+  }catch(e){ console.warn(e); }
+
+  // ALWAYS vendor's registered WhatsApp
+  window.open("https://wa.me/" + targetWa + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+
+function renderFeatured(){ if(typeof startTopDealsShuffle==='function') startTopDealsShuffle(); else if(typeof paintTopDealsPair==='function') paintTopDealsPair(); }
+
+
+function jumpToItem(catName, itemId){
+  const it = (ITEMS || []).find(function(x){ return x.id === itemId; });
+  const targetVendor = (it && it.vendorId) ? it.vendorId : "v001";
+  if(!SHOP_ENTERED || (ACTIVE_VENDOR && ACTIVE_VENDOR.id !== targetVendor)){
+    enterShop(targetVendor).then(function(){
+      setTimeout(function(){
+        if(typeof selectCategory === "function") selectCategory(catName);
+        setTimeout(function(){
+          var el = document.getElementById("row-" + itemId);
+          if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        }, 250);
+      }, 150);
+    });
+    return;
+  }
+  if(typeof selectCategory === "function") selectCategory(catName);
+  setTimeout(function(){
+    var el = document.getElementById("row-" + itemId);
+    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  }, 100);
+}
+
+
+function openLightboxItem(itemId){
+  let it = ITEMS.find(x => x.id === itemId);
+  if(!it || !it.images || it.images.length === 0) return;
+  showLightboxImages(it.images, 0);
+}
+
+function showLightboxImages(imgs, index){
+  const box = document.getElementById("lightbox");
+  const imgEl = document.getElementById("lightboxImg");
+  const thumbsEl = document.getElementById("lightboxThumbs");
+  if(!box || !imgEl) return;
+  imgEl.src = imgs[index];
+  box.classList.remove("hidden");
+  if(!LIGHTBOX_OPEN){
+    LIGHTBOX_OPEN = true;
+    try{ history.pushState({ page: 'lightbox' }, '', '#photo'); }catch(e){}
+  }
+  if(imgs.length > 1){
+    thumbsEl.innerHTML = imgs.map(function(src, i){
+      return '<img src="'+src+'" class="lightbox-thumb '+(i===index?'active':'')+'" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs,'+i+')">';
+    }).join("");
+    thumbsEl.style.display = "flex";
+    window._lbImgs = imgs;
+  } else {
+    thumbsEl.innerHTML = "";
+    thumbsEl.style.display = "none";
+  }
+}
+
+function closeLightbox(fromPop){
+  const box = document.getElementById("lightbox");
+  if(box) box.classList.add("hidden");
+  if(LIGHTBOX_OPEN){
+    LIGHTBOX_OPEN = false;
+    // if closed by tap (not browser back), remove #photo state without leaving site
+    if(!fromPop){
+      try{
+        if(location.hash === '#photo'){
+          history.replaceState(SHOP_ENTERED ? { page:'shop', id: (ACTIVE_VENDOR&&ACTIVE_VENDOR.id)||'' } : { page:'home' }, '', SHOP_ENTERED ? ('#shop-' + ((ACTIVE_VENDOR&&ACTIVE_VENDOR.id)||'')) : '#home');
+        }
+      }catch(e){}
+    }
+  }
+}
+
+
+async function openShopFromHash(){
+  try{
+    const h = (location.hash || "").replace(/^#/, "");
+    // shop-v64451686 or shop/v64451686
+    let m = h.match(/^shop-([A-Za-z0-9_]+)/) || h.match(/^shop\/([A-Za-z0-9_]+)/);
+    if(m && m[1]){
+      const id = m[1];
+      // ensure vendor meta loaded
+      if(!ALL_VENDORS[id]){
+        try{
+          const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + id + ".json");
+          const v = await res.json();
+          if(v) ALL_VENDORS[id] = v;
+        }catch(e){}
+      }
+      if(typeof tryEnterShop === "function") tryEnterShop(id);
+      else if(typeof enterShop === "function") await enterShop(id);
+      return true;
+    }
+  }catch(e){ console.warn("hash shop", e); }
+  return false;
+}
+
+async function bootApp(){
+  try{ initHomeVisuals(); }catch(e){ console.warn(e); }
+  // URL میں شاپ ہو تو فوراً کھولو — لسٹ کا انتظار نہیں
+  const hashOpen = await openShopFromHash();
+  // پس منظر میں شاپس لسٹ
+  loadShopsList().then(function(){
+    if(!hashOpen && typeof loadFeaturedLite === "function"){
+      // deals already started in initHomeVisuals; refresh after vendors meta
+      try{ loadFeaturedLite(); }catch(e){}
+    }
+  }).catch(function(e){ console.warn(e); });
+}
+bootApp();
+window.addEventListener("hashchange", function(){
+  if((location.hash||"").indexOf("shop-") >= 0) openShopFromHash();
+});
 </script>
 </body>
 </html>

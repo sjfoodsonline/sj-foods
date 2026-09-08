@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SJ Online — Vendor Registration</title>
+<style>
+  :root{
+    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding:20px; font-weight:bold;}
+  .wrap{max-width:440px; margin:0 auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+  h2{color:var(--dark); margin-top:0; text-align:center; font-size:18px; border-bottom:2px solid var(--leaf); padding-bottom:8px;}
+  label{font-size:12px; color:var(--muted); display:block; margin:8px 0 3px;}
+  input, select{width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-weight:bold; background:#fff; outline:none;}
+  .btn{background:var(--dark); color:#fff; border:none; width:100%; padding:12px; border-radius:10px; font-size:14px; font-weight:bold; cursor:pointer; margin-top:16px;}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12px; opacity:0; transition:opacity .25s; z-index:100;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h2>🏪 اپنی دکان رجسٹر کریں</h2>
+  <div style="font-size:11.5px; color:var(--muted); text-align:center; margin-bottom:12px;">SJ Online ملٹی وینڈر مارکیٹ میں اپنی شاپ لائیو کریں</div>
+  
+  <label>شاپ کا نام (Shop Name)</label>
+  <input type="text" id="regShopName" placeholder="مثلاً: المدینہ جنرل سٹور">
+
+  <label>مالک کا نام (Owner Name)</label>
+  <input type="text" id="regOwner" placeholder="آپ کا نام">
+
+  <label>فون نمبر (Phone)</label>
+  <input type="tel" id="regPhone" placeholder="03XXXXXXXXX">
+
+  <label>WhatsApp نمبر (آرڈرز کے لیے لازمی)</label>
+  <input type="tel" id="regWhatsapp" placeholder="923349353799">
+
+  <label>شہر / علاقہ (City / Area)</label>
+  <input type="text" id="regCity" value="Mingora Swat">
+
+  <label>لاگ ان پن کوڈ (4 ہندسوں کا PIN)</label>
+  <input type="password" id="regPin" maxlength="4" placeholder="••••">
+
+  <button class="btn" onclick="submitVendorRegistration()">✅ رجسٹریشن درخواست جمع کروائیں</button>
+  <button style="background:none; border:none; color:var(--dark); width:100%; margin-top:10px; cursor:pointer; font-weight:bold;" onclick="window.location.href='index.html'">← ہوم پیج پر واپس جائیں</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+  window.db = getDatabase(app);
+  window.dbRef = ref;
+  window.dbSet = set;
+</script>
+
+<script>
+function showToast(msg){
+  let t = document.getElementById("toast");
+  t.textContent = msg; t.className = "toast show";
+  setTimeout(() => t.className = "toast", 2500);
+}
+
+window.submitVendorRegistration = async function() {
+  let shop_name = document.getElementById("regShopName").value.trim();
+  let owner_name = document.getElementById("regOwner").value.trim();
+  let phone = document.getElementById("regPhone").value.trim();
+  let whatsapp = document.getElementById("regWhatsapp").value.trim();
+  let city = document.getElementById("regCity").value.trim();
+  let pin = document.getElementById("regPin").value.trim();
+
+  if(!shop_name || !owner_name || !phone || !whatsapp || !pin) {
+    alert("براہ کرم تمام لازمی خانے پر کریں!");
+    return;
+  }
+
+  let vendorId = "v_" + Math.random().toString(36.substring(2, 7));
+
+  try {
+    await window.dbSet(window.dbRef(window.db, 'vendors/' + vendorId), {
+      shop_name, owner_name, phone, whatsapp, city, pin,
+      status: "pending", blocked: false, timestamp: new Date().toLocaleString()
+    });
+    showToast("✅ رجسٹریشن کامیاب! ماسٹر ایڈمن کی منظوری کے بعد شاپ لائیو ہو جائے گی۔");
+    setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+  } catch(e) {
+    alert("❌ خرابی پیش آئی، دوبارہ کوشش کریں۔");
+  }
+}
+</script>
+</body>
+</html>

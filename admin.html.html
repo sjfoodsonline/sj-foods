@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SJ Online — Master Admin Center</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding-bottom:100px; font-weight:bold;}
+  header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
+  header h1{margin:0; font-size:17px;}
+  header p{margin:4px 0 0; font-size:11px; opacity:.9;}
+
+  .wrap{padding:14px; max-width:720px; margin:0 auto;}
+  .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
+  .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
+  .dash-num{font-size:16px; font-weight:bold; color:var(--dark); margin-top:2px;}
+  .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:bold;}
+
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
+
+  .tabs{display:flex; gap:6px; margin-bottom:14px;}
+  .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:11px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+
+  .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
+  .chat-item.pending{animation: blinkRedBorder 1.2s infinite; background:#FFFDE7;}
+  .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important;}
+  .chat-item.cancelled{background:#FFEBEE !important; border-color:#D32F2F !important;}
+  @keyframes blinkRedBorder {
+    0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
+    50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
+    100% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
+  }
+
+  .chat-header{padding:12px 14px; font-weight:bold; font-size:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.03);}
+  .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px;}
+  .chat-item.open .chat-body{display:block;}
+
+  .time-badge{font-size:11px; padding:3px 8px; border-radius:6px; background:#E8F5E9; color:#2E7D32;}
+  .challenge-tag{color:#FFF; font-size:10px; padding:2px 6px; border-radius:4px; background:#D32F2F;}
+
+  input[type=text], input[type=number], select{
+    width:100%; border:1px solid var(--line); border-radius:8px; padding:9px; font-size:13px; font-weight:bold; margin-bottom:8px; background:#fff; color:var(--ink); outline:none;
+  }
+  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
+  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px; font-size:13.5px; width:100%;}
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:8px; padding:8px 12px; font-size:12px;}
+  .btn-danger{background:#FFCDD2; color:var(--price); border-radius:8px; padding:8px 10px; font-size:12px;}
+
+  .product-row{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:6px;}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:200;}
+  .toast.show{opacity:1;}
+  .toast.err{background:#B71C1C;}
+  .loading{text-align:center; color:var(--muted); font-size:12px; padding:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1>⚙️ SJ Online — Master Admin Center</h1>
+      <p>Live Orders · Vendors Control · Rates Manager</p>
+    </div>
+    <button class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff;" onclick="window.location.href='index.html'">← Home</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-lbl">📦 Total Orders</div>
+      <div class="dash-num" id="statTotal">0</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-lbl">⏳ Pending</div>
+      <div class="dash-num" style="color:var(--price);" id="statPending">0</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-lbl">💵 Sales</div>
+      <div class="dash-num" style="color:var(--mid);" id="statSales">Rs. 0</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkPasswordAndSwitch('products')">🏷️ Products & Rates (🔒)</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkPasswordAndSwitch('vendors')">🏪 Vendors Performance (🔒)</div>
+  </div>
+
+  <!-- SECTION: ORDERS -->
+  <div id="secOrders">
+    <div class="card">
+      <h3>🔔 Live Customer Orders</h3>
+      <button class="btn-secondary" style="background:#1877F2; color:#fff; width:100%;" onclick="requestNotificationPermission()">🔔 Enable Notifications / Sound</button>
+    </div>
+    <div id="ordersArea"><div class="loading">⏳ Loading orders...</div></div>
+  </div>
+
+  <!-- SECTION: VENDORS -->
+  <div id="secVendors" style="display:none;">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">🏪 Vendors Management</h3>
+        <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
+      </div>
+    </div>
+    <div id="vendorsAdminList"><div class="loading">⏳ Loading vendors...</div></div>
+  </div>
+
+  <!-- SECTION: PRODUCTS -->
+  <div id="secProducts" style="display:none;">
+    <div class="card">
+      <select id="categoryPicker" onchange="loadCategory(this.value)">
+        <option value="sabzi">🥦 سبزی (Sabziyan)</option>
+        <option value="phal">🍎 پھل (Fruits)</option>
+        <option value="bakery">🍞 بیکری (Bakery)</option>
+        <option value="dairy">🥛 ڈیری (Dairy)</option>
+        <option value="oil_ghee">🛢️ گھی اور آئل (Oil & Ghee)</option>
+      </select>
+    </div>
+    <div id="productsArea"><div class="loading">⏳ Loading products...</div></div>
+    <button class="btn-primary" style="margin-top:10px;" onclick="saveProductsToFirebase()">💾 Save Changes to Firebase</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+  const db = getDatabase(app);
+  window.dbInstance = db;
+  window.dbRef = ref;
+  window.dbUpdate = update;
+  window.dbSet = set;
+
+  function showToast(msg, isErr){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "toast show" + (isErr ? " err" : "");
+    setTimeout(()=> t.className = "toast", 2600);
+  }
+  window.showToast = showToast;
+
+  function playBeep(){
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      let osc = ctx.createOscillator();
+      let gain = ctx.createGain();
+      osc.type = "sine"; osc.frequency.value = 800;
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    }catch(e){}
+  }
+
+  window.requestNotificationPermission = function() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') showToast("🟢 Notifications Enabled");
+      });
+    }
+  }
+
+  const ADMIN_PASSWORD = "3799";
+  let isAuthenticated = false;
+
+  window.checkPasswordAndSwitch = function(tabName){
+    if(isAuthenticated){ switchTab(tabName); return; }
+    let pass = prompt("🔒 Enter Master Admin Password:");
+    if(pass === ADMIN_PASSWORD){
+      isAuthenticated = true;
+      showToast("🟢 Password Correct");
+      switchTab(tabName);
+    } else {
+      showToast("❌ Incorrect Password", true);
+    }
+  }
+
+  window.switchTab = function(tabName) {
+    document.getElementById('tabOrdersBtn').className = 'tab' + (tabName === 'orders' ? ' active' : '');
+    document.getElementById('tabProductsBtn').className = 'tab' + (tabName === 'products' ? ' active' : '');
+    document.getElementById('tabVendorsBtn').className = 'tab' + (tabName === 'vendors' ? ' active' : '');
+    document.getElementById('secOrders').style.display = tabName === 'orders' ? 'block' : 'none';
+    document.getElementById('secProducts').style.display = tabName === 'products' ? 'block' : 'none';
+    document.getElementById('secVendors').style.display = tabName === 'vendors' ? 'block' : 'none';
+
+    if(tabName === 'products' && !window.prodLoaded) {
+      window.prodLoaded = true;
+      loadCategory('sabzi');
+    }
+    if(tabName === 'vendors') loadVendorsAdmin();
+  }
+
+  // Live Orders Listener
+  let cachedOrders = [];
+  let prevCount = 0;
+  onValue(ref(db, 'orders'), (snapshot) => {
+    const data = snapshot.val() || {};
+    let list = Object.values(data);
+    
+    let pending = [], completed = [], cancelled = [];
+    list.forEach((row, idx) => {
+      if(row.code) {
+        let st = String(row.status || 'pending').toLowerCase();
+        let item = {
+          id: "ord_" + idx,
+          code: row.code,
+          shopName: row.shop_name || "SJ Foods",
+          name: row.name || "Unknown",
+          phone: row.phone || "",
+          address: row.address || "",
+          items: row.items || "",
+          total: parseFloat(row.total || 0) || 0,
+          timestamp: row.timestamp || "",
+          status: st,
+          rawTime: new Date(row.timestamp || '').getTime() || idx
+        };
+        if(st === 'cancelled') cancelled.push(item);
+        else if(st === 'completed' || st === 'delivered') completed.push(item);
+        else pending.push(item);
+      }
+    });
+
+    pending.sort((a,b) => b.rawTime - a.rawTime);
+    completed.sort((a,b) => b.rawTime - a.rawTime);
+    cancelled.sort((a,b) => b.rawTime - a.rawTime);
+    
+    cachedOrders = [...pending, ...completed, ...cancelled];
+
+    let totalSales = 0, pCount = 0;
+    cachedOrders.forEach(o => {
+      if(o.status === 'completed' || o.status === 'delivered') totalSales += o.total;
+      else if(o.status !== 'cancelled') pCount++;
+    });
+
+    document.getElementById("statTotal").textContent = cachedOrders.length;
+    document.getElementById("statPending").textContent = pCount;
+    document.getElementById("statSales").textContent = "Rs. " + totalSales.toLocaleString();
+
+    if(cachedOrders.length > prevCount && prevCount !== 0) {
+      playBeep();
+      showToast("🔔 New Order Received!");
+    }
+    prevCount = cachedOrders.length;
+    renderOrders();
+  });
+
+  let activeAcc = null;
+  window.toggleAccordion = function(id) {
+    activeAcc = (activeAcc === id) ? null : id;
+    renderOrders();
+  }
+
+  function renderOrders() {
+    const area = document.getElementById("ordersArea");
+    if(cachedOrders.length === 0) {
+      area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+      return;
+    }
+
+    area.innerHTML = cachedOrders.map(o => {
+      let isOpen = (activeAcc === o.id);
+      let isComp = (o.status === 'completed' || o.status === 'delivered');
+      let isCanc = (o.status === 'cancelled');
+      let cardCls = isComp ? 'chat-item completed' : (isCanc ? 'chat-item cancelled' : 'chat-item pending');
+
+      return `
+        <div class="${cardCls} ${isOpen ? 'open' : ''}">
+          <div class="chat-header" onclick="toggleAccordion('${o.id}')">
+            <span>📌 ${o.code} (${o.shopName}) — <b>${o.name}</b></span>
+            <span class="time-badge">${isCanc ? '❌ منسوخ' : (isComp ? '✅ ڈلیورڈ' : '🕒 ' + o.timestamp)}</span>
+          </div>
+          <div class="chat-body">
+            <div style="font-size:13px; line-height:1.8; margin-top:8px;">
+              <b>دکان:</b> ${o.shopName}<br>
+              <b>گراہک:</b> ${o.name} (${o.phone})<br>
+              <b>پتہ:</b> ${o.address}<br>
+              <b>آئٹمز:</b><div style="background:#F9F8F3; padding:8px; border-radius:6px; margin-top:4px;">${o.items}</div>
+              <b>کل رقم:</b> <b style="color:var(--price);">Rs. ${o.total}</b>
+            </div>
+            ${!isComp && !isCanc ? `
+              <div style="margin-top:10px; display:flex; gap:6px;">
+                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; flex:1;" onclick="markDelivered('${o.code}', '${o.phone}')">✅ ڈلیورڈ کریں</button>
+                <button class="btn-danger" style="flex:1;" onclick="cancelOrder('${o.code}')">❌ منسوخ کریں</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  window.markDelivered = async function(code, phone) {
+    if(!confirm("اس آرڈر کو ڈلیور شدہ مارک کریں؟")) return;
+    await update(ref(db, 'orders/' + code), { status: "completed" });
+    showToast("✅ آرڈر مکمل ہو گیا!");
+    let cleanPh = phone.replace(/[^0-9]/string ? '' : phone).replace(/[^0-9]/g, '');
+    if(cleanPh.startsWith('0')) cleanPh = '92' + cleanPh.slice(1);
+    window.open(`https://wa.me/${cleanPh}?text=${encodeURIComponent("السلام علیکم! آپ کا SJ Online کا آرڈر (" + code + ") ڈلیور کر دیا گیا ہے۔ شکریہ! 🌿")}`, '_blank');
+  }
+
+  window.cancelOrder = async function(code) {
+    if(!confirm("آرڈر منسوخ کرنا چاہتے ہیں؟")) return;
+    await update(ref(db, 'orders/' + code), { status: "cancelled", cancelled_by: "Admin" });
+    showToast("❌ آرڈر منسوخ کر دیا گیا");
+  }
+
+  // Vendors Management
+  window.loadVendorsAdmin = async function() {
+    const box = document.getElementById("vendorsAdminList");
+    box.innerHTML = `<div class="loading">⏳ وینڈرز لوڈ ہو رہے ہیں...</div>`;
+    try {
+      const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
+      const data = await res.json() || {};
+      let ids = Object.keys(data).filter(id => id !== "_market");
+
+      box.innerHTML = ids.map(id => {
+        let v = data[id];
+        let st = v.blocked ? "بلاک شدہ" : (v.status || "approved");
+        return `
+          <div class="card">
+            <div style="font-size:15px; font-weight:bold; color:var(--dark);">${v.shop_name || id}</div>
+            <div style="font-size:11.5px; color:var(--muted);">فون: ${v.phone || ''} | واٹس ایپ: ${v.whatsapp || ''}</div>
+            <div style="margin-top:8px; font-size:12px;">اسٹیٹس: <b>${st}</b></div>
+            <div style="display:flex; gap:6px; margin-top:8px;">
+              ${v.blocked ? `<button class="btn-secondary" style="background:var(--mid); color:#fff;" onclick="setVendor('${id}', false)">🔓 ان بلاک کریں</button>` : `<button class="btn-danger" onclick="setVendor('${id}', true)">🚫 بلاک کریں</button>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+    } catch(e) {
+      box.innerHTML = `<div style="color:var(--price); text-align:center;">لوڈ کرنے میں خرابی</div>`;
+    }
+  }
+
+  window.setVendor = async function(id, blockStatus) {
+    await fetch(`https://sj-foods-default-rtdb.firebaseio.com/vendors/${id}/blocked.json`, {
+      method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(blockStatus)
+    });
+    showToast("اپڈیٹ ہو گیا ✓");
+    loadVendorsAdmin();
+  }
+</script>
+
+<script>
+// Products Manager Script
+let currentItems = [];
+let currentCatKey = "sabzi";
+
+async function loadCategory(catKey) {
+  currentCatKey = catKey;
+  const area = document.getElementById("productsArea");
+  area.innerHTML = `<div class="loading">⏳ پروڈکٹس لوڈ ہو رہی ہیں...</div>`;
+  try {
+    let res = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${catKey}.json`);
+    let data = await res.json();
+    if(!data || !Array.isArray(data)) {
+      let localRes = await fetch(`${catKey}.json`);
+      data = await localRes.json();
+    }
+    currentItems = data || [];
+    renderProductsAdmin();
+  } catch(e) {
+    area.innerHTML = `<div style="color:var(--price);">ڈیٹا لوڈ نہیں ہو سکا</div>`;
+  }
+}
+
+function renderProductsAdmin() {
+  const area = document.getElementById("productsArea");
+  area.innerHTML = currentItems.map((it, idx) => `
+    <div class="product-row">
+      <input type="text" value="${it.name || ''}" oninput="currentItems[${idx}].name=this.value">
+      <div style="display:flex; gap:6px;">
+        <input type="text" value="${it.units ? it.units[0].label : (it.unit||'KG')}" placeholder="Unit" oninput="if(currentItems[${idx}].units) currentItems[${idx}].units[0].label=this.value">
+        <input type="number" value="${it.units ? it.units[0].rate : (it.rate||0)}" placeholder="Rate" oninput="if(currentItems[${idx}].units) currentItems[${idx}].units[0].rate=parseFloat(this.value)||0">
+      </div>
+    </div>
+  `).join("") + `<button class="btn-secondary" style="width:100%; background:var(--dark); color:#fff; padding:10px; margin-top:6px;" onclick="addItemAdmin()">➕ نیا آئٹم شامل کریں</button>`;
+}
+
+function addItemAdmin() {
+  currentItems.push({ name: "", units: [{label: "KG", rate: 0}], available: true });
+  renderProductsAdmin();
+}
+
+async function saveProductsToFirebase() {
+  try {
+    let res = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${currentCatKey}.json`, {
+      method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(currentItems)
+    });
+    if(res.ok) window.showToast("✅ فائر بیس پر ریٹس کامیابی سے محفوظ ہو گئے!");
+  } catch(e) {
+    window.showToast("❌ محفوظ کرنے میں خرابی", true);
+  }
+}
+</script>
+</body>
+</html>

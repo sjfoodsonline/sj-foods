@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SJ Online — Master Admin Center</title>
+<title>SJ Foods — Master Admin Control Center</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
@@ -11,399 +11,816 @@
     --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
   }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding-bottom:100px; font-weight:bold;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Arial, sans-serif; direction:rtl; padding-bottom:110px; font-weight:bold;}
   header{background:linear-gradient(160deg,var(--dark),var(--mid)); color:#fff; padding:16px; border-radius:0 0 18px 18px;}
   header h1{margin:0; font-size:17px;}
-  header p{margin:4px 0 0; font-size:11px; opacity:.9;}
-
-  .wrap{padding:14px; max-width:720px; margin:0 auto;}
+  header p{margin:4px 0 0; font-size:11.5px; opacity:.9;}
+  .wrap{padding:14px; max-width:720px; margin:0 auto; width:100%;}
   .dash-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;}
   .dash-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 6px; text-align:center;}
   .dash-num{font-size:16px; font-weight:bold; color:var(--dark); margin-top:2px;}
   .dash-lbl{font-size:10.5px; color:var(--muted); font-weight:bold;}
-
   .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
   .card h3{margin:0 0 10px; font-size:14px; color:var(--dark);}
-
+  input[type=text], input[type=password], input[type=number], select, textarea{
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
+    font-size:13px; font-family:Arial, sans-serif; font-weight:bold; direction:rtl; margin-bottom:8px; background:#fff; color:var(--ink);
+  }
+  label{font-size:11.5px; color:var(--muted); display:inline-flex; align-items:center; gap:4px; margin-bottom:3px;}
+  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
+  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px 16px; font-size:13.5px; width:100%;}
+  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:9px; padding:8px 12px; font-size:12.5px;}
+  .btn-danger{background:#FDECEA; color:#B71C1C; border-radius:9px; padding:8px 10px; font-size:12px;}
   .tabs{display:flex; gap:6px; margin-bottom:14px;}
   .tab{flex:1; padding:10px 4px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:11px; color:var(--muted); cursor:pointer;}
   .tab.active{background:var(--dark); color:#fff; border-color:var(--dark);}
-
   .chat-item{background:#fff; border:2px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
   .chat-item.pending{animation: blinkRedBorder 1.2s infinite; background:#FFFDE7;}
   .chat-item.completed{background:#F1F8E9 !important; border-color:#81C784 !important;}
-  .chat-item.cancelled{background:#FFEBEE !important; border-color:#D32F2F !important;}
+  .chat-item.cancelled{background:#FFEBEE !important; border-color:#D32F2F !important; opacity: 0.85;}
   @keyframes blinkRedBorder {
     0% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
     50% { border-color: #FF8A80; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
     100% { border-color: #D32F2F; box-shadow: 0 0 8px rgba(211, 47, 47, 0.4); }
   }
-
-  .chat-header{padding:12px 14px; font-weight:bold; font-size:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.03);}
+  .chat-header{padding:12px 14px; font-weight:bold; font-size:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.03); gap:8px;}
   .chat-body{padding:0 14px 14px; display:none; border-top:1px dashed var(--line); margin-top:8px;}
   .chat-item.open .chat-body{display:block;}
-
-  .time-badge{font-size:11px; padding:3px 8px; border-radius:6px; background:#E8F5E9; color:#2E7D32;}
-  .challenge-tag{color:#FFF; font-size:10px; padding:2px 6px; border-radius:4px; background:#D32F2F;}
-
-  input[type=text], input[type=number], select{
-    width:100%; border:1px solid var(--line); border-radius:8px; padding:9px; font-size:13px; font-weight:bold; margin-bottom:8px; background:#fff; color:var(--ink); outline:none;
+  .time-badge{font-size:11.5px; padding:4px 8px; border-radius:6px; background:#E8F5E9; color:#2E7D32; white-space:nowrap;}
+  .challenge-tag{color:#FFF; font-size:10.5px; padding:3px 6px; border-radius:4px; margin-left:4px; background:#D32F2F;}
+  .product-row{background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;}
+  .row-top{display:flex; align-items:center; gap:8px;}
+  .thumb-box{flex:0 0 60px; width:60px; height:60px; border-radius:10px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; cursor:pointer; border:1px dashed var(--mid);}
+  .thumb-box img{width:100%; height:100%; object-fit:cover;}
+  .row-fields{flex:1; display:flex; flex-direction:column; gap:6px;}
+  .img-thumbs-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
+  .admin-thumb-preview { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1px solid var(--line); position: relative; }
+  .admin-thumb-preview img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block;}
+  .admin-thumb-del { position: absolute; top: -4px; right: -4px; background: #B71C1C; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index:2; }
+  .units-box{background:var(--paper); border-radius:10px; padding:8px; margin-top:2px;}
+  .unit-row{display:flex; gap:6px; margin-bottom:6px; align-items:center; flex-wrap:wrap;}
+  .unit-row input.u-label{flex:1 1 120px; margin-bottom:0;}
+  .unit-row input.u-rate{flex:0 0 110px; direction:ltr; text-align:left; margin-bottom:0;}
+  .preset-pills{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; margin-bottom:6px;}
+  .preset-pill{background:var(--leaf); color:var(--dark); border:1px solid #c8e6c9; border-radius:8px; padding:4px 8px; font-size:11px; cursor:pointer;}
+  .preset-pill:hover{background:var(--dark); color:#fff;}
+  .savebar{
+    position:fixed; bottom:0; right:0; left:0; background:#fff; border-top:1.5px solid var(--line);
+    padding:10px 12px; display:flex; gap:10px; align-items:center; z-index:90; max-width:800px; margin:0 auto; box-sizing:border-box;
   }
-  button{font-family:Arial, sans-serif; font-weight:bold; cursor:pointer; border:none;}
-  .btn-primary{background:var(--dark); color:#fff; border-radius:10px; padding:11px; font-size:13.5px; width:100%;}
-  .btn-secondary{background:var(--leaf); color:var(--dark); border-radius:8px; padding:8px 12px; font-size:12px;}
-  .btn-danger{background:#FFCDD2; color:var(--price); border-radius:8px; padding:8px 10px; font-size:12px;}
-
-  .product-row{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:6px;}
-  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:200;}
+  .savebar .status{flex:1; font-size:12px; color:var(--price); min-width:0;}
+  .savebar .status.ok{color:var(--mid);}
+  .toast{position:fixed; top:16px; left:50%; transform:translateX(-50%); background:var(--dark); color:#fff; padding:10px 18px; border-radius:30px; font-size:12.5px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:200;}
   .toast.show{opacity:1;}
   .toast.err{background:#B71C1C;}
-  .loading{text-align:center; color:var(--muted); font-size:12px; padding:20px;}
+  .loading{text-align:center; color:var(--muted); font-size:12.5px; padding:20px;}
+  .hint{font-size:11px;color:var(--muted);margin:0 0 8px;line-height:1.4;}
 </style>
 </head>
 <body>
-
 <header>
-  <div style="display:flex; justify-content:space-between; align-items:center;">
+  <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:8px;">
     <div>
-      <h1>⚙️ SJ Online — Master Admin Center</h1>
-      <p>Live Orders · Vendors Control · Rates Manager</p>
+      <h1>⚙️ SJ Foods — Master Admin (Firebase)</h1>
+      <p>Live Orders · Vendors · Rates</p>
     </div>
-    <button class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff;" onclick="window.location.href='index.html'">← Home</button>
+    <button type="button" class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff; font-size:12px; padding:6px 12px; flex-shrink:0;" onclick="window.location.href='index.html'">← Home</button>
   </div>
 </header>
-
 <div class="wrap">
   <div class="dash-grid">
-    <div class="dash-card">
-      <div class="dash-lbl">📦 Total Orders</div>
-      <div class="dash-num" id="statTotal">0</div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-lbl">⏳ Pending</div>
-      <div class="dash-num" style="color:var(--price);" id="statPending">0</div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-lbl">💵 Sales</div>
-      <div class="dash-num" style="color:var(--mid);" id="statSales">Rs. 0</div>
-    </div>
+    <div class="dash-card"><div class="dash-lbl">📦 Orders</div><div class="dash-num" id="statTotalOrders">0</div></div>
+    <div class="dash-card"><div class="dash-lbl">⏳ Pending</div><div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div></div>
+    <div class="dash-card"><div class="dash-lbl">💵 Sales</div><div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div></div>
   </div>
-
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
-    <div class="tab" id="tabProductsBtn" onclick="checkPasswordAndSwitch('products')">🏷️ Products & Rates (🔒)</div>
-    <div class="tab" id="tabVendorsBtn" onclick="checkPasswordAndSwitch('vendors')">🏪 Vendors Performance (🔒)</div>
+    <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products (🔒)</div>
+    <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors (🔒)</div>
   </div>
-
-  <!-- SECTION: ORDERS -->
   <div id="secOrders">
     <div class="card">
-      <h3>🔔 Live Customer Orders</h3>
-      <button class="btn-secondary" style="background:#1877F2; color:#fff; width:100%;" onclick="requestNotificationPermission()">🔔 Enable Notifications / Sound</button>
+      <h3>🔔 Live Orders</h3>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button type="button" class="btn-secondary" style="flex:1; background:#1877F2; color:#fff;" onclick="requestNotificationPermission()">🔔 Notifications</button>
+        <button type="button" class="btn-secondary" style="flex:1; background:#5D4037; color:#fff;" onclick="playTestSound()">🔊 Test</button>
+      </div>
     </div>
-    <div id="ordersArea"><div class="loading">⏳ Loading orders...</div></div>
+    <div id="ordersArea"><div class="loading">⏳ Loading orders…</div></div>
   </div>
-
-  <!-- SECTION: VENDORS -->
   <div id="secVendors" style="display:none;">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0;">🏪 Vendors Management</h3>
-        <button class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
+        <h3 style="margin:0;">🏪 Vendors & Performance</h3>
+        <button type="button" class="btn-secondary" style="background:var(--dark); color:#fff;" onclick="loadVendorsAdmin()">🔄 Refresh</button>
       </div>
     </div>
-    <div id="vendorsAdminList"><div class="loading">⏳ Loading vendors...</div></div>
+    <div id="vendorsAdminList"><div class="loading">⏳ Loading…</div></div>
   </div>
-
-  <!-- SECTION: PRODUCTS -->
   <div id="secProducts" style="display:none;">
     <div class="card">
-      <select id="categoryPicker" onchange="loadCategory(this.value)">
-        <option value="sabzi">🥦 سبزی (Sabziyan)</option>
-        <option value="phal">🍎 پھل (Fruits)</option>
-        <option value="bakery">🍞 بیکری (Bakery)</option>
-        <option value="dairy">🥛 ڈیری (Dairy)</option>
-        <option value="oil_ghee">🛢️ گھی اور آئل (Oil & Ghee)</option>
-      </select>
+      <p class="hint">Rates → Firebase <code>site_products</code>. Categories → add/delete below. Images: GitHub URL better.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+        <input type="text" id="newSiteCatName" placeholder="New category name (e.g. زیورات)" style="flex:1; min-width:140px; margin-bottom:0;">
+        <input type="text" id="newSiteCatFile" placeholder="file key e.g. jewelry" dir="ltr" style="flex:1; min-width:120px; margin-bottom:0; text-align:left;">
+        <button type="button" class="btn-secondary" style="background:var(--dark);color:#fff;" onclick="addSiteCategory()">➕ Add Category</button>
+        <button type="button" class="btn-danger" onclick="deleteSiteCategory()">🗑 Delete Category</button>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <select id="categoryPicker" onchange="loadCategory(this.value)" style="flex:1; margin-bottom:0; min-width:160px;"></select>
+        <button type="button" class="btn-secondary" onclick="loadCategory(document.getElementById('categoryPicker').value)">🔄 Refresh</button>
+      </div>
     </div>
-    <div id="productsArea"><div class="loading">⏳ Loading products...</div></div>
-    <button class="btn-primary" style="margin-top:10px;" onclick="saveProductsToFirebase()">💾 Save Changes to Firebase</button>
+    <div id="productsArea"><div class="loading">⏳ Loading…</div></div>
+    <button type="button" class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add Product</button>
   </div>
 </div>
-
+<div class="savebar" id="saveBar" style="display:none;">
+  <div class="status" id="saveStatus">⚠️ Unsaved</div>
+  <button type="button" class="btn-primary" style="width:auto; min-width:120px;" onclick="saveProductsToFirebase()">💾 Save</button>
+</div>
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDKs -->
+<script>
+/* toast available before module */
+window.showToast = function(msg, isErr){
+  const t = document.getElementById("toast");
+  if(!t) return;
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  setTimeout(function(){ t.className = "toast"; }, 2800);
+};
+</script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+  const firebaseConfig = { databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" };
+  const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   window.dbInstance = db;
   window.dbRef = ref;
   window.dbUpdate = update;
   window.dbSet = set;
 
-  function showToast(msg, isErr){
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.className = "toast show" + (isErr ? " err" : "");
-    setTimeout(()=> t.className = "toast", 2600);
-  }
-  window.showToast = showToast;
-
-  function playBeep(){
+  function playLoudBeep(){
     try{
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      let osc = ctx.createOscillator();
-      let gain = ctx.createGain();
-      osc.type = "sine"; osc.frequency.value = 800;
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(); osc.stop(ctx.currentTime + 0.3);
+      let time = ctx.currentTime;
+      for(let loop = 0; loop < 2; loop++){
+        for(let i = 0; i < 4; i++){
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(1000 + (i * 200), time);
+          gain.gain.setValueAtTime(0.8, time);
+          gain.gain.exponentialRampToValueAtTime(0.01, time + 0.25);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(time); osc.stop(time + 0.25);
+          time += 0.28;
+        }
+        time += 0.2;
+      }
     }catch(e){}
   }
-
+  window.playTestSound = playLoudBeep;
   window.requestNotificationPermission = function() {
     if ('Notification' in window) {
-      Notification.requestPermission().then(permission => {
+      Notification.requestPermission().then(function(permission) {
         if (permission === 'granted') showToast("🟢 Notifications Enabled");
+        else showToast("⚠️ Notifications Blocked", true);
       });
     }
-  }
+  };
 
   const ADMIN_PASSWORD = "3799";
-  let isAuthenticated = false;
-
-  window.checkPasswordAndSwitch = function(tabName){
-    if(isAuthenticated){ switchTab(tabName); return; }
+  let isAdminAuthenticated = false;
+  window.checkAdminPasswordAndSwitch = function(tabName){
+    if(isAdminAuthenticated){ switchTab(tabName); return; }
     let pass = prompt("🔒 Enter Master Admin Password:");
     if(pass === ADMIN_PASSWORD){
-      isAuthenticated = true;
-      showToast("🟢 Password Correct");
+      isAdminAuthenticated = true;
+      showToast("🟢 Password OK");
       switchTab(tabName);
     } else {
-      showToast("❌ Incorrect Password", true);
+      showToast("❌ Wrong password", true);
     }
-  }
-
+  };
   window.switchTab = function(tabName) {
     document.getElementById('tabOrdersBtn').className = 'tab' + (tabName === 'orders' ? ' active' : '');
     document.getElementById('tabProductsBtn').className = 'tab' + (tabName === 'products' ? ' active' : '');
-    document.getElementById('tabVendorsBtn').className = 'tab' + (tabName === 'vendors' ? ' active' : '');
+    var tv = document.getElementById('tabVendorsBtn');
+    if(tv) tv.className = 'tab' + (tabName === 'vendors' ? ' active' : '');
     document.getElementById('secOrders').style.display = tabName === 'orders' ? 'block' : 'none';
     document.getElementById('secProducts').style.display = tabName === 'products' ? 'block' : 'none';
-    document.getElementById('secVendors').style.display = tabName === 'vendors' ? 'block' : 'none';
-
-    if(tabName === 'products' && !window.prodLoaded) {
-      window.prodLoaded = true;
-      loadCategory('sabzi');
+    var sv = document.getElementById('secVendors');
+    if(sv) sv.style.display = tabName === 'vendors' ? 'block' : 'none';
+    document.getElementById('saveBar').style.display = (tabName === 'products') ? 'flex' : 'none';
+    if(tabName === 'products' && !window.productsInitialized){
+      window.productsInitialized = true;
+      initFirebaseProducts();
     }
     if(tabName === 'vendors') loadVendorsAdmin();
-  }
+  };
 
-  // Live Orders Listener
-  let cachedOrders = [];
-  let prevCount = 0;
-  onValue(ref(db, 'orders'), (snapshot) => {
-    const data = snapshot.val() || {};
-    let list = Object.values(data);
-    
-    let pending = [], completed = [], cancelled = [];
-    list.forEach((row, idx) => {
-      if(row.code) {
-        let st = String(row.status || 'pending').toLowerCase();
-        let item = {
-          id: "ord_" + idx,
-          code: row.code,
-          shopName: row.shop_name || "SJ Foods",
-          name: row.name || "Unknown",
-          phone: row.phone || "",
-          address: row.address || "",
-          items: row.items || "",
-          total: parseFloat(row.total || 0) || 0,
-          timestamp: row.timestamp || "",
-          status: st,
-          rawTime: new Date(row.timestamp || '').getTime() || idx
-        };
-        if(st === 'cancelled') cancelled.push(item);
-        else if(st === 'completed' || st === 'delivered') completed.push(item);
-        else pending.push(item);
-      }
-    });
-
-    pending.sort((a,b) => b.rawTime - a.rawTime);
-    completed.sort((a,b) => b.rawTime - a.rawTime);
-    cancelled.sort((a,b) => b.rawTime - a.rawTime);
-    
-    cachedOrders = [...pending, ...completed, ...cancelled];
-
-    let totalSales = 0, pCount = 0;
-    cachedOrders.forEach(o => {
-      if(o.status === 'completed' || o.status === 'delivered') totalSales += o.total;
-      else if(o.status !== 'cancelled') pCount++;
-    });
-
-    document.getElementById("statTotal").textContent = cachedOrders.length;
-    document.getElementById("statPending").textContent = pCount;
-    document.getElementById("statSales").textContent = "Rs. " + totalSales.toLocaleString();
-
-    if(cachedOrders.length > prevCount && prevCount !== 0) {
-      playBeep();
-      showToast("🔔 New Order Received!");
+  const VDB = "https://sj-foods-default-rtdb.firebaseio.com";
+  window.loadVendorsAdmin = async function(){
+    const box = document.getElementById("vendorsAdminList");
+    if(!box) return;
+    box.innerHTML = '<div class="loading">⏳ Loading…</div>';
+    try{
+      const [vres, ores] = await Promise.all([
+        fetch(VDB + "/vendors.json"),
+        fetch(VDB + "/orders.json")
+      ]);
+      const data = await vres.json() || {};
+      const orders = await ores.json() || {};
+      const stats = {};
+      Object.keys(orders).forEach(function(code){
+        const o = orders[code] || {};
+        const vid = o.vendor_id || "v001";
+        if(!stats[vid]) stats[vid] = { total:0, pending:0, delivered:0, cancelled:0, sales:0, byCustomer:0, byVendor:0, byAdmin:0 };
+        stats[vid].total++;
+        const st = (o.status || "pending").toLowerCase();
+        if(st === "cancelled"){
+          stats[vid].cancelled++;
+          let cBy = (o.cancelled_by || "customer").toLowerCase();
+          if(cBy.includes("vendor")) stats[vid].byVendor++;
+          else if(cBy.includes("admin")) stats[vid].byAdmin++;
+          else stats[vid].byCustomer++;
+        } else if(st === "delivered" || st === "completed"){
+          stats[vid].delivered++;
+          stats[vid].sales += parseFloat(o.total)||0;
+        } else {
+          stats[vid].pending++;
+        }
+      });
+      const ids = Object.keys(data).filter(function(id){ return id !== "_market"; });
+      if(ids.indexOf("v001") < 0) ids.unshift("v001");
+      box.innerHTML = ids.map(function(id){
+        const v = data[id] || (id === "v001" ? { shop_name: "SJ Foods", status: "approved" } : {});
+        const st = v.blocked ? "blocked" : (v.status || "approved");
+        const stColor = st==="approved" ? "#2E7D32" : st==="blocked" ? "#B71C1C" : "#856404";
+        const stBg = st==="approved" ? "#E8F5E9" : st==="blocked" ? "#FFCDD2" : "#FFF3CD";
+        const s = stats[id] || { total:0, pending:0, delivered:0, cancelled:0, sales:0, byCustomer:0, byVendor:0, byAdmin:0 };
+        return '<div class="card" style="margin-bottom:10px;">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+          '<div style="font-size:16px;font-weight:bold;color:var(--dark);">'+(v.shop_name||id)+'</div>'+
+          '<span style="font-size:11px;padding:3px 10px;border-radius:20px;background:'+stBg+';color:'+stColor+';">'+(st)+'</span></div>'+
+          '<div style="font-size:11px;color:var(--muted);direction:ltr;text-align:right;">ID: <b>'+id+'</b></div>'+
+          '<div style="font-size:12px;margin-top:6px;">Owner: '+(v.owner_name||'—')+' · Phone: '+(v.phone||'—')+'</div>'+
+          '<div style="margin-top:8px;padding:10px;background:#E8F5E9;border-radius:10px;font-size:12.5px;line-height:1.8;">'+
+          'Orders: <b>'+s.total+'</b> · Pending: <b style="color:#B71C1C">'+s.pending+'</b><br>'+
+          'Delivered: <b>'+s.delivered+'</b> · Sales: <b>Rs. '+Math.round(s.sales).toLocaleString()+'</b><br>'+
+          'Cancelled: <b>'+s.cancelled+'</b> (Cust '+s.byCustomer+' · Vend '+s.byVendor+' · Admin '+s.byAdmin+')</div>'+
+          (id !== "v001" ? '<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">'+
+          (st!=='approved'&&!v.blocked?'<button type="button" class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">✓ Approve</button>':'')+
+          (!v.blocked?'<button type="button" class="btn-secondary" style="background:#FF6F00;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'blocked\')">🚫 Block</button>':'<button type="button" class="btn-secondary" style="background:#2E7D32;color:#fff;" onclick="setVendorStatus(\''+id+'\',\'approved\')">🔓 Unblock</button>')+
+          '<button type="button" class="btn-danger" onclick="deleteVendor(\''+id+'\')">🗑 Delete</button>'+
+          '</div>' : '')+
+          '</div>';
+      }).join("");
+    }catch(e){
+      box.innerHTML = '<div class="loading" style="color:var(--price);">Load failed</div>';
     }
-    prevCount = cachedOrders.length;
-    renderOrders();
+  };
+  window.setVendorStatus = async function(id, status){
+    try{
+      if(status === "blocked"){
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"true"});
+        await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify("blocked")});
+      } else {
+        await fetch(VDB+"/vendors/"+id+"/blocked.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:"false"});
+        await fetch(VDB+"/vendors/"+id+"/status.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify("approved")});
+      }
+      showToast("Updated ✓");
+      loadVendorsAdmin();
+    }catch(e){ showToast("Failed", true); }
+  };
+  window.deleteVendor = async function(id){
+    if(!id || id === "v001") return;
+    if(!confirm("Delete vendor "+id+" permanently?")) return;
+    try{
+      await fetch(VDB+"/vendors/"+id+".json", { method: "DELETE" });
+      showToast("Deleted ✓");
+      loadVendorsAdmin();
+    }catch(e){ showToast("Delete failed", true); }
+  };
+
+  let activeAccordionId = null;
+  window.toggleAccordion = function(id){
+    activeAccordionId = (activeAccordionId === id) ? null : id;
+    renderOrdersDOM();
+  };
+  let latestOrdersCache = [];
+  let cachedOrdersCount = 0;
+  const ordersRef = ref(db, 'orders');
+  onValue(ordersRef, (snapshot) => {
+    const data = snapshot.val() || {};
+    let dataList = Object.values(data);
+    let pendingOrders = [], completedOrders = [], cancelledOrders = [];
+    dataList.forEach((row, index) => {
+      let codeVal = row.code;
+      if(!codeVal) return;
+      let st = String(row.status || 'pending').toLowerCase().trim();
+      let rawTime = index;
+      if(row.timestamp){
+        let t = Date.parse(String(row.timestamp).replace(/^'/, ''));
+        if(!isNaN(t)) rawTime = t;
+      }
+      let itemObj = {
+        id: "fb_" + String(codeVal).replace(/[^a-zA-Z0-9_-]/g,'_'),
+        code: codeVal,
+        shopName: row.shop_name || "SJ Foods",
+        name: row.name || "Unknown",
+        phone: row.phone || "",
+        address: row.address || "",
+        itemsSummary: row.items || "",
+        total: parseFloat(row.total || 0) || 0,
+        otpCode: row.otp || String(codeVal).replace("SJ-", ""),
+        displayTime: row.timestamp ? String(row.timestamp).replace(/^'/, '') : "—",
+        rawTime: rawTime,
+        cancelledBy: row.cancelled_by || "",
+        cancelReason: row.cancel_reason || "",
+        status: st
+      };
+      if(st === 'cancelled') cancelledOrders.push(itemObj);
+      else if(st === 'completed' || st === 'delivered') completedOrders.push(itemObj);
+      else pendingOrders.push(itemObj);
+    });
+    pendingOrders.sort((a, b) => b.rawTime - a.rawTime);
+    completedOrders.sort((a, b) => b.rawTime - a.rawTime);
+    cancelledOrders.sort((a, b) => b.rawTime - a.rawTime);
+    latestOrdersCache = pendingOrders.concat(completedOrders, cancelledOrders);
+    let totalSales = 0, pendingCount = 0;
+    latestOrdersCache.forEach(o => {
+      if(o.status === 'completed' || o.status === 'delivered') totalSales += o.total;
+      else if(o.status !== 'cancelled') pendingCount++;
+    });
+    document.getElementById("statTotalOrders").textContent = latestOrdersCache.length;
+    document.getElementById("statPendingOrders").textContent = pendingCount;
+    document.getElementById("statTotalSales").textContent = "Rs. " + totalSales.toLocaleString();
+    if(latestOrdersCache.length > cachedOrdersCount && cachedOrdersCount !== 0){
+      playLoudBeep();
+      showToast("🔔 New Order!");
+    }
+    cachedOrdersCount = latestOrdersCache.length;
+    renderOrdersDOM();
   });
 
-  let activeAcc = null;
-  window.toggleAccordion = function(id) {
-    activeAcc = (activeAcc === id) ? null : id;
-    renderOrders();
-  }
-
-  function renderOrders() {
+  window.renderOrdersDOM = function(){
     const area = document.getElementById("ordersArea");
-    if(cachedOrders.length === 0) {
-      area.innerHTML = `<div style="text-align:center; color:var(--muted); padding:30px;">کوئی آرڈر موجود نہیں</div>`;
+    const orders = latestOrdersCache;
+    if(orders.length === 0){
+      area.innerHTML = '<div style="text-align:center; color:var(--muted); padding:30px;">No orders</div>';
       return;
     }
-
-    area.innerHTML = cachedOrders.map(o => {
-      let isOpen = (activeAcc === o.id);
-      let isComp = (o.status === 'completed' || o.status === 'delivered');
-      let isCanc = (o.status === 'cancelled');
-      let cardCls = isComp ? 'chat-item completed' : (isCanc ? 'chat-item cancelled' : 'chat-item pending');
-
-      return `
-        <div class="${cardCls} ${isOpen ? 'open' : ''}">
-          <div class="chat-header" onclick="toggleAccordion('${o.id}')">
-            <span>📌 ${o.code} (${o.shopName}) — <b>${o.name}</b></span>
-            <span class="time-badge">${isCanc ? '❌ منسوخ' : (isComp ? '✅ ڈلیورڈ' : '🕒 ' + o.timestamp)}</span>
-          </div>
-          <div class="chat-body">
-            <div style="font-size:13px; line-height:1.8; margin-top:8px;">
-              <b>دکان:</b> ${o.shopName}<br>
-              <b>گراہک:</b> ${o.name} (${o.phone})<br>
-              <b>پتہ:</b> ${o.address}<br>
-              <b>آئٹمز:</b><div style="background:#F9F8F3; padding:8px; border-radius:6px; margin-top:4px;">${o.items}</div>
-              <b>کل رقم:</b> <b style="color:var(--price);">Rs. ${o.total}</b>
-            </div>
-            ${!isComp && !isCanc ? `
-              <div style="margin-top:10px; display:flex; gap:6px;">
-                <button class="btn-secondary" style="background:#C8E6C9; color:#1B5E20; flex:1;" onclick="markDelivered('${o.code}', '${o.phone}')">✅ ڈلیورڈ کریں</button>
-                <button class="btn-danger" style="flex:1;" onclick="cancelOrder('${o.code}')">❌ منسوخ کریں</button>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
+    area.innerHTML = orders.map((o) => {
+      let isOpen = (activeAccordionId === o.id);
+      let isCompleted = (o.status === 'completed' || o.status === 'delivered');
+      let isCancelled = (o.status === 'cancelled');
+      let cardClass = "chat-item pending";
+      if(isCompleted) cardClass = "chat-item completed";
+      if(isCancelled) cardClass = "chat-item cancelled";
+      const safeCode = String(o.code).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      const safePhone = String(o.phone).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      return (
+        '<div class="'+cardClass+(isOpen?' open':'')+'" id="card-'+o.id+'">'+
+          '<div class="chat-header" onclick="toggleAccordion(\''+o.id+'\')">'+
+            '<span style="font-size:13px;">📌 '+o.code+' ('+o.shopName+') — <b>'+o.name+'</b> '+
+            (isCancelled ? '<span class="challenge-tag">Cancelled</span>' : (!isCompleted ? '<span class="challenge-tag">Pending</span>' : ''))+
+            '</span>'+
+            '<span class="time-badge">'+(isCancelled?'❌':(isCompleted?'✅':'🕒 '+o.displayTime))+'</span>'+
+          '</div>'+
+          '<div class="chat-body" dir="auto">'+
+            '<div style="font-size:13.5px; line-height:1.9;">'+
+              '<b>Shop:</b> '+o.shopName+'<br>'+
+              '<b>Customer:</b> '+o.name+' (<span dir="ltr">'+o.phone+'</span>)<br>'+
+              '<b>Address:</b> '+o.address+'<br>'+
+              '<b>OTP:</b> <b style="color:var(--price);" dir="ltr">'+o.otpCode+'</b><br>'+
+              (isCancelled ? '<div style="color:#B71C1C;background:#FFEBEE;padding:6px;border-radius:6px;"><b>Reason:</b> '+(o.cancelReason||'—')+' (By: '+(o.cancelledBy||'—')+')</div>' : '')+
+              '<div style="margin-top:6px;"><b>Items:</b></div>'+
+              '<div style="background:#F9F8F3; padding:10px; border-radius:8px; font-size:13px;">'+o.itemsSummary+'</div>'+
+              '<div style="margin-top:4px;"><b>Total:</b> <b style="color:var(--price);">Rs. '+o.total+'</b></div>'+
+            '</div>'+
+            '<div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">'+
+              (!isCancelled && !isCompleted ? (
+                '<button type="button" class="btn-secondary" style="background:#C8E6C9;color:#1B5E20;" onclick="completeOrder(\''+safeCode+'\',\''+safePhone+'\')">✅ Delivered</button>'+
+                '<button type="button" class="btn-danger" onclick="masterCancelOrder(\''+safeCode+'\',\''+safePhone+'\')">❌ Cancel</button>'
+              ) : '')+
+              '<button type="button" class="btn-secondary" style="background:#FFF9C4;" onclick="printThermalReceipt(\''+safeCode+'\')">🖨️ Print</button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'
+      );
     }).join("");
-  }
+    window._orderPrintMap = {};
+    orders.forEach(function(o){ window._orderPrintMap[o.code] = o; });
+  };
 
-  window.markDelivered = async function(code, phone) {
-    if(!confirm("اس آرڈر کو ڈلیور شدہ مارک کریں؟")) return;
-    await update(ref(db, 'orders/' + code), { status: "completed" });
-    showToast("✅ آرڈر مکمل ہو گیا!");
-    let cleanPh = phone.replace(/[^0-9]/string ? '' : phone).replace(/[^0-9]/g, '');
-    if(cleanPh.startsWith('0')) cleanPh = '92' + cleanPh.slice(1);
-    window.open(`https://wa.me/${cleanPh}?text=${encodeURIComponent("السلام علیکم! آپ کا SJ Online کا آرڈر (" + code + ") ڈلیور کر دیا گیا ہے۔ شکریہ! 🌿")}`, '_blank');
-  }
-
-  window.cancelOrder = async function(code) {
-    if(!confirm("آرڈر منسوخ کرنا چاہتے ہیں؟")) return;
-    await update(ref(db, 'orders/' + code), { status: "cancelled", cancelled_by: "Admin" });
-    showToast("❌ آرڈر منسوخ کر دیا گیا");
-  }
-
-  // Vendors Management
-  window.loadVendorsAdmin = async function() {
-    const box = document.getElementById("vendorsAdminList");
-    box.innerHTML = `<div class="loading">⏳ وینڈرز لوڈ ہو رہے ہیں...</div>`;
+  window.completeOrder = async function(code, phone){
+    if(!confirm("Mark delivered?")) return;
     try {
-      const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
-      const data = await res.json() || {};
-      let ids = Object.keys(data).filter(id => id !== "_market");
-
-      box.innerHTML = ids.map(id => {
-        let v = data[id];
-        let st = v.blocked ? "بلاک شدہ" : (v.status || "approved");
-        return `
-          <div class="card">
-            <div style="font-size:15px; font-weight:bold; color:var(--dark);">${v.shop_name || id}</div>
-            <div style="font-size:11.5px; color:var(--muted);">فون: ${v.phone || ''} | واٹس ایپ: ${v.whatsapp || ''}</div>
-            <div style="margin-top:8px; font-size:12px;">اسٹیٹس: <b>${st}</b></div>
-            <div style="display:flex; gap:6px; margin-top:8px;">
-              ${v.blocked ? `<button class="btn-secondary" style="background:var(--mid); color:#fff;" onclick="setVendor('${id}', false)">🔓 ان بلاک کریں</button>` : `<button class="btn-danger" onclick="setVendor('${id}', true)">🚫 بلاک کریں</button>`}
-            </div>
-          </div>
-        `;
-      }).join("");
-    } catch(e) {
-      box.innerHTML = `<div style="color:var(--price); text-align:center;">لوڈ کرنے میں خرابی</div>`;
-    }
-  }
-
-  window.setVendor = async function(id, blockStatus) {
-    await fetch(`https://sj-foods-default-rtdb.firebaseio.com/vendors/${id}/blocked.json`, {
-      method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(blockStatus)
-    });
-    showToast("اپڈیٹ ہو گیا ✓");
-    loadVendorsAdmin();
-  }
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), { status: "completed" });
+      showToast("✅ Completed");
+      let cleanPhone = String(phone).replace(/[^0-9]/g, '');
+      if(cleanPhone.startsWith('0')) cleanPhone = '92' + cleanPhone.slice(1);
+      if(cleanPhone.length >= 10){
+        let msg = "السلام علیکم! آپ کا SJ Online آرڈر ("+code+") ڈلیور ہو گیا۔ شکریہ!";
+        window.open("https://wa.me/"+cleanPhone+"?text="+encodeURIComponent(msg), "_blank");
+      }
+    } catch(e){ showToast("Failed", true); }
+  };
+  window.masterCancelOrder = async function(code, phone){
+    let reason = prompt("Cancel reason:");
+    if(reason === null) return;
+    try {
+      await window.dbUpdate(window.dbRef(window.dbInstance, 'orders/' + code), {
+        status: "cancelled",
+        cancelled_by: "Master Admin",
+        cancel_reason: reason || "Canceled by admin"
+      });
+      showToast("Cancelled");
+      let cleanPhone = String(phone).replace(/[^0-9]/g, '');
+      if(cleanPhone.startsWith('0')) cleanPhone = '92' + cleanPhone.slice(1);
+      if(cleanPhone.length >= 10){
+        let msg = "معذرت — آرڈر ("+code+") منسوخ۔ وجہ: "+(reason||"—");
+        window.open("https://wa.me/"+cleanPhone+"?text="+encodeURIComponent(msg), "_blank");
+      }
+    } catch(e) { showToast("Failed", true); }
+  };
+  window.printThermalReceipt = function(code){
+    const o = (window._orderPrintMap && window._orderPrintMap[code]) || null;
+    if(!o){ alert("Order data missing"); return; }
+    const receiptHTML =
+      '<div style="font-family:monospace;width:300px;padding:10px;text-align:right;direction:rtl;background:#fff;color:#000;">'+
+      '<div style="text-align:center;font-size:16px;font-weight:bold;">SJ ONLINE</div>'+
+      '<div style="text-align:center;font-size:12px;">Swat Mingora</div><hr>'+
+      '<div><b>Order:</b> '+o.code+'</div>'+
+      '<div><b>Shop:</b> '+o.shopName+'</div>'+
+      '<div><b>Name:</b> '+o.name+'</div>'+
+      '<div><b>Phone:</b> '+o.phone+'</div>'+
+      '<div><b>Address:</b> '+o.address+'</div>'+
+      '<div><b>OTP:</b> '+o.otpCode+'</div><hr>'+
+      '<div style="font-size:12px;">'+o.itemsSummary+'</div><hr>'+
+      '<div style="font-size:14px;font-weight:bold;">Total: Rs. '+o.total+'</div>'+
+      '<div style="text-align:center;margin-top:10px;font-size:11px;">Thank you</div></div>';
+    const win = window.open("", "_blank", "width=350,height=600");
+    if(!win){ alert("Allow popups for print"); return; }
+    win.document.write("<html><head><title>Print</title></head><body>"+receiptHTML+"</body></html>");
+    win.document.close();
+    win.focus();
+    setTimeout(function(){ try{ win.print(); }catch(e){} }, 400);
+  };
 </script>
 
 <script>
-// Products Manager Script
+const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+const FALLBACK_CATEGORIES = [
+  { file: "sabzi", name: "🥦 سبزی" },
+  { file: "phal", name: "🍎 پھل" },
+  { file: "bakery", name: "🍞 بیکری" },
+  { file: "dairy", name: "🥛 ڈیری" },
+  { file: "poultry", name: "🍗 پولٹری" },
+  { file: "fish", name: "🐟 مچھلی" },
+  { file: "rice", name: "🍚 چاول" },
+  { file: "pulses", name: "🫘 دالیں" },
+  { file: "oil_ghee", name: "🛢️ گھی/آئل" },
+  { file: "spices", name: "🌶️ مصالحہ" },
+  { file: "biryani", name: "🍛 بریانی" },
+  { file: "drinks", name: "🥤 مشروبات" },
+  { file: "snacks", name: "🍪 سنیکس" },
+  { file: "cleaning", name: "🧹 صفائی" }
+];
+let CATEGORIES = FALLBACK_CATEGORIES.slice();
+let currentCat = "sabzi";
 let currentItems = [];
-let currentCatKey = "sabzi";
+let dirty = false;
 
-async function loadCategory(catKey) {
-  currentCatKey = catKey;
-  const area = document.getElementById("productsArea");
-  area.innerHTML = `<div class="loading">⏳ پروڈکٹس لوڈ ہو رہی ہیں...</div>`;
-  try {
-    let res = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${catKey}.json`);
-    let data = await res.json();
-    if(!data || !Array.isArray(data)) {
-      let localRes = await fetch(`${catKey}.json`);
-      data = await localRes.json();
+function markDirty(){
+  dirty = true;
+  var bar = document.getElementById("saveBar");
+  if(bar) bar.style.display = "flex";
+  var st = document.getElementById("saveStatus");
+  if(st){ st.textContent = "⚠️ Unsaved — tap Save"; st.classList.remove("ok"); }
+}
+function markClean(){
+  dirty = false;
+  var st = document.getElementById("saveStatus");
+  if(st){ st.textContent = "✅ Saved"; st.classList.add("ok"); }
+}
+
+async function initFirebaseProducts(){
+  try{
+    // prefer Firebase site_categories, else categories_index.json
+    let idx = null;
+    try{
+      const fr = await fetch(RTDB+"/site_categories.json");
+      idx = await fr.json();
+    }catch(e){}
+    if(!Array.isArray(idx) || !idx.length){
+      idx = await fetch("categories_index.json?t="+Date.now()).then(function(r){ return r.json(); });
     }
-    currentItems = data || [];
-    renderProductsAdmin();
-  } catch(e) {
-    area.innerHTML = `<div style="color:var(--price);">ڈیٹا لوڈ نہیں ہو سکا</div>`;
-  }
+    if(Array.isArray(idx) && idx.length){
+      CATEGORIES = idx.map(function(e){
+        return { file: String(e.file||"").replace(/\.json$/i,""), name: (e.icon||"📦")+" "+(e.category||e.category_roman||e.file) };
+      }).filter(function(c){ return c.file; });
+    }
+  }catch(e){}
+  const picker = document.getElementById("categoryPicker");
+  picker.innerHTML = CATEGORIES.map(function(c){ return '<option value="'+c.file+'">'+c.name+'</option>'; }).join("");
+  if(CATEGORIES[0]) await loadCategory(CATEGORIES[0].file);
 }
 
-function renderProductsAdmin() {
+async function loadCategory(catKey){
+  if(dirty && !confirm("Unsaved changes will be lost. Continue?")){
+    document.getElementById("categoryPicker").value = currentCat;
+    return;
+  }
+  currentCat = catKey;
   const area = document.getElementById("productsArea");
-  area.innerHTML = currentItems.map((it, idx) => `
-    <div class="product-row">
-      <input type="text" value="${it.name || ''}" oninput="currentItems[${idx}].name=this.value">
-      <div style="display:flex; gap:6px;">
-        <input type="text" value="${it.units ? it.units[0].label : (it.unit||'KG')}" placeholder="Unit" oninput="if(currentItems[${idx}].units) currentItems[${idx}].units[0].label=this.value">
-        <input type="number" value="${it.units ? it.units[0].rate : (it.rate||0)}" placeholder="Rate" oninput="if(currentItems[${idx}].units) currentItems[${idx}].units[0].rate=parseFloat(this.value)||0">
-      </div>
-    </div>
-  `).join("") + `<button class="btn-secondary" style="width:100%; background:var(--dark); color:#fff; padding:10px; margin-top:6px;" onclick="addItemAdmin()">➕ نیا آئٹم شامل کریں</button>`;
-}
-
-function addItemAdmin() {
-  currentItems.push({ name: "", units: [{label: "KG", rate: 0}], available: true });
-  renderProductsAdmin();
-}
-
-async function saveProductsToFirebase() {
-  try {
-    let res = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${currentCatKey}.json`, {
-      method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(currentItems)
-    });
-    if(res.ok) window.showToast("✅ فائر بیس پر ریٹس کامیابی سے محفوظ ہو گئے!");
-  } catch(e) {
-    window.showToast("❌ محفوظ کرنے میں خرابی", true);
+  area.innerHTML = '<div class="loading">⏳ Loading…</div>';
+  document.getElementById("addProductBtn").style.display = "none";
+  try{
+    let res = await fetch(RTDB+"/site_products/"+catKey+".json");
+    let data = await res.json();
+    if(!data || !Array.isArray(data) || data.length === 0){
+      try{
+        let fbRes = await fetch(catKey+".json?t="+Date.now());
+        if(fbRes.ok) data = await fbRes.json();
+      }catch(e2){}
+    }
+    currentItems = Array.isArray(data) ? data : [];
+    renderProducts();
+    markClean();
+    document.getElementById("addProductBtn").style.display = "block";
+  }catch(e){
+    area.innerHTML = '<div class="loading">❌ '+e.message+'</div>';
   }
 }
+
+function escapeAttr(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+}
+
+function renderProducts(){
+  const area = document.getElementById("productsArea");
+  area.innerHTML = "";
+  const presets = [
+    { label: "⚖️ Weight", type: "weight" },
+    { label: "🧴 Litre", type: "liquid" },
+    { label: "📦 Pcs", type: "pcs" },
+    { label: "🥚 Dozen", type: "dozen" },
+    { label: "🍾 Bottle", type: "bottle" },
+    { label: "🥇 Gold", type: "gold" },
+    { label: "💎 Carat", type: "gem" },
+    { label: "📏 Meter", type: "meter" },
+    { label: "🛠️ Service", type: "service" }
+  ];
+  currentItems.forEach(function(it, idx){
+    if(!it.units) it.units = [{label: it.unit || "KG", rate: it.rate || 0}];
+    if(!it.images) it.images = it.image ? [it.image] : [];
+    const row = document.createElement("div");
+    row.className = "product-row";
+    let thumbsHtml = it.images.map(function(src, imgIdx){
+      return '<div class="admin-thumb-preview"><img src="'+src+'" alt=""><div class="admin-thumb-del" onclick="removeProductImage('+idx+','+imgIdx+')">✕</div></div>';
+    }).join("");
+    row.innerHTML =
+      '<div class="row-top">'+
+        '<div class="thumb-box" title="Upload images (max 5)">🛒+'+
+          '<input type="file" accept="image/*" multiple onchange="uploadProductImages('+idx+', this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;">'+
+        '</div>'+
+        '<div class="row-fields">'+
+          '<input type="text" value="'+escapeAttr(it.name)+'" placeholder="Name (Urdu)" oninput="currentItems['+idx+'].name=this.value; markDirty();">'+
+          '<input type="text" value="'+escapeAttr(it.name_roman)+'" placeholder="Roman" dir="ltr" style="text-align:left;" oninput="currentItems['+idx+'].name_roman=this.value; markDirty();">'+
+        '</div>'+
+      '</div>'+
+      '<div class="img-thumbs-grid">'+thumbsHtml+'</div>'+
+      '<input type="text" dir="ltr" style="text-align:left;font-size:12px;" placeholder="Image URL (GitHub e.g. images/aloo.jpg)" value="'+escapeAttr((it.images&&it.images[0]&&it.images[0].indexOf("data:")!==0)?it.images[0]:(it.image&&String(it.image).indexOf("data:")!==0?it.image:""))+'" onchange="setProductImageUrl('+idx+', this.value)">'+
+      '<div class="units-box" id="units-box-'+idx+'">'+
+        it.units.map(function(u, ui){
+          return '<div class="unit-row">'+
+            '<input type="text" class="u-label" value="'+escapeAttr(u.label)+'" placeholder="Unit" oninput="currentItems['+idx+'].units['+ui+'].label=this.value; markDirty();">'+
+            '<input type="text" inputmode="decimal" class="u-rate" value="'+escapeAttr(u.rate)+'" placeholder="Rate" oninput="handleRateInput('+idx+','+ui+', this)">'+
+            (it.units.length > 1 ? '<button type="button" class="btn-danger" style="padding:4px 8px;" onclick="removeUnit('+idx+','+ui+')">✕</button>' : '')+
+          '</div>';
+        }).join("")+
+      '</div>'+
+      '<div class="preset-pills">'+
+        presets.map(function(p){ return '<button type="button" class="preset-pill" onclick="applyPreset('+idx+',\''+p.type+'\')">'+p.label+'</button>'; }).join("")+
+      '</div>'+
+      '<div style="display:flex; gap:6px; margin-top:4px;">'+
+        '<button type="button" class="btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="addUnit('+idx+')">➕ Unit</button>'+
+      '</div>'+
+      '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; flex-wrap:wrap; gap:8px;">'+
+        '<label><input type="checkbox" '+(it.available !== false ? 'checked' : '')+' onchange="currentItems['+idx+'].available=this.checked; markDirty();"> Available</label>'+
+        '<label><input type="checkbox" '+(it.featured === true ? 'checked' : '')+' onchange="currentItems['+idx+'].featured=this.checked; markDirty();"> Featured</label>'+
+        '<button type="button" class="btn-danger" onclick="deleteItem('+idx+')">🗑 Delete</button>'+
+      '</div>';
+    area.appendChild(row);
+  });
+}
+
+function compressImageFile(file, maxW, quality){
+  return new Promise(function(resolve, reject){
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = function(){
+      const img = new Image();
+      img.onload = function(){
+        let w = img.width, h = img.height;
+        if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.uploadProductImages = async function(idx, input){
+  const files = input.files;
+  if(!files || !files.length) return;
+  let it = currentItems[idx];
+  if(!it.images) it.images = [];
+  if(it.images.length + files.length > 5){
+    alert("Max 5 images per product");
+    return;
+  }
+  showToast("⏳ Compressing images…");
+  try{
+    for(let i = 0; i < files.length; i++){
+      const dataUrl = await compressImageFile(files[i], 800, 0.72);
+      it.images.push(dataUrl);
+    }
+    if(it.images.length) it.image = it.images[0];
+    renderProducts();
+    markDirty();
+    showToast("✅ Images ready — Save");
+  }catch(e){
+    showToast("Image failed", true);
+  }
+  input.value = "";
+};
+window.removeProductImage = function(idx, imgIdx){
+  currentItems[idx].images.splice(imgIdx, 1);
+  currentItems[idx].image = currentItems[idx].images[0] || "";
+  renderProducts();
+  markDirty();
+};
+
+function unitFactor(label){
+  const lbl = String(label||"").toLowerCase();
+  if(/پاؤ|250|paw/.test(lbl)) return 0.25;
+  if(/آدھا|ادھا|half|500|½/.test(lbl)) return 0.5;
+  if(/دڑی|5\s*kg|5\s*کلو|5kg/.test(lbl)) return 5;
+  if(/درجن|dozen/.test(lbl)) return 12;
+  if(/kg|کلو|ltr|لیٹر|liter|عدد|pcs|piece|tola|gram|carat|meter|yard|bottle|pkt|job|hour/i.test(lbl)) return 1;
+  return null;
+}
+
+window.handleRateInput = function(idx, ui, el){
+  const val = parseFloat(String(el.value).replace(/,/g,"")) || 0;
+  const it = currentItems[idx];
+  if(!it.units[ui]) return;
+  it.units[ui].rate = val;
+  markDirty();
+  /* proportional: when base (factor 1) unit changes, scale others */
+  const f0 = unitFactor(it.units[ui].label);
+  if(f0 === 1 || (ui === 0 && f0 == null)){
+    const basePerUnit = (f0 === 1) ? val : val;
+    const box = document.getElementById("units-box-"+idx);
+    const rateInputs = box ? box.querySelectorAll(".u-rate") : [];
+    it.units.forEach(function(u, i){
+      if(i === ui) return;
+      const f = unitFactor(u.label);
+      if(f == null) return;
+      u.rate = Math.round(basePerUnit * f);
+      if(rateInputs[i] && document.activeElement !== rateInputs[i]) rateInputs[i].value = u.rate;
+    });
+  }
+};
+
+window.applyPreset = function(idx, type){
+  const it = currentItems[idx];
+  const base = (it.units && it.units[0]) ? (parseFloat(it.units[0].rate)||0) : 0;
+  const presets = {
+    weight: [
+      {label:"KG", rate: base},
+      {label:"آدھا کلو", rate: Math.round(base/2)},
+      {label:"پاؤ", rate: Math.round(base/4)},
+      {label:"دڑی (5 KG)", rate: Math.round(base*5)}
+    ],
+    liquid: [
+      {label:"Ltr", rate: base},
+      {label:"½ Ltr", rate: Math.round(base/2)},
+      {label:"250 ml", rate: Math.round(base/4)}
+    ],
+    pcs: [{label:"Pcs", rate: base}, {label:"Pkt", rate: base}],
+    dozen: [{label:"عدد", rate: base}, {label:"درجن", rate: Math.round(base*12)}],
+    bottle: [{label:"Bottle", rate: base}, {label:"1.5 Ltr", rate: base}],
+    gold: [{label:"Tola", rate: base}, {label:"Gram", rate: base}],
+    gem: [{label:"Carat", rate: base}, {label:"Gram", rate: base}],
+    meter: [{label:"Meter", rate: base}, {label:"Yard", rate: base}],
+    service: [{label:"Job", rate: base}, {label:"Hour", rate: base}]
+  };
+  it.units = presets[type] || [{label:"Unit", rate: base}];
+  renderProducts();
+  markDirty();
+  showToast("Preset applied ✓");
+};
+window.addUnit = function(idx){
+  currentItems[idx].units.push({label: "", rate: 0});
+  renderProducts();
+  markDirty();
+};
+window.removeUnit = function(idx, ui){
+  currentItems[idx].units.splice(ui, 1);
+  renderProducts();
+  markDirty();
+};
+window.addNewProductItem = function(){
+  currentItems.push({ name: "", name_roman: "", images: [], units: [{label: "KG", rate: 0}], available: true, featured: false });
+  renderProducts();
+  markDirty();
+};
+window.deleteItem = function(idx){
+  if(!confirm("Delete this product?")) return;
+  currentItems.splice(idx, 1);
+  renderProducts();
+  markDirty();
+};
+
+window.saveProductsToFirebase = async function(){
+  const st = document.getElementById("saveStatus");
+  st.textContent = "⏳ Saving…";
+  st.classList.remove("ok");
+  try{
+    let dataUrlCount = 0;
+    const payload = currentItems.map(function(it){
+      let imgs = (it.images || []).filter(Boolean);
+      let mainImg = imgs[0] || it.image || "";
+      if(String(mainImg).indexOf("data:image") === 0) dataUrlCount++;
+      return {
+        name: it.name || "",
+        name_roman: it.name_roman || "",
+        units: (it.units || []).map(function(u){ return { label: u.label||"", rate: parseFloat(u.rate)||0 }; }),
+        available: it.available !== false,
+        image: mainImg,
+        images: imgs.length ? imgs : (mainImg ? [mainImg] : []),
+        featured: it.featured === true
+      };
+    });
+    const res = await fetch(RTDB+"/site_products/"+currentCat+".json", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    markClean();
+    showToast("✅ Saved to Firebase");
+    if(dataUrlCount > 0){
+      showToast("⚠ "+dataUrlCount+" product(s) use embedded images — prefer GitHub image URLs for speed", true);
+    }
+  }catch(e){
+    st.textContent = "❌ Save failed";
+    showToast("❌ " + e.message, true);
+  }
+};
+
+function playPendingAlert(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let t = ctx.currentTime;
+    for(let i=0;i<3;i++){
+      const o=ctx.createOscillator(); const g=ctx.createGain();
+      o.type="square"; o.frequency.value=880;
+      g.gain.setValueAtTime(0.4,t); g.gain.exponentialRampToValueAtTime(0.01,t+0.2);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.2); t+=0.25;
+    }
+  }catch(e){}
+}
+function startPendingWatchdog(){
+  if(window._pendingWd) return;
+  window._pendingWd = setInterval(function(){
+    try{
+      const n = parseInt(document.getElementById("statPendingOrders").textContent,10) || 0;
+      if(n > 0){
+        playPendingAlert();
+        if(typeof showToast==="function") showToast("⏳ "+n+" order(s) still PENDING — action needed", true);
+        if("Notification" in window && Notification.permission==="granted"){
+          new Notification("SJ Online", { body: n+" pending order(s)", tag: "sj-pending" });
+        }
+      }
+    }catch(e){}
+  }, 10*60*1000);
+}
+startPendingWatchdog();
+
 </script>
 </body>
 </html>

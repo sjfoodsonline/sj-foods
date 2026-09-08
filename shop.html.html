@@ -159,22 +159,6 @@ let itemsList = [];
 let selectedCat = null;
 let cart = {};
 
-async function fetchCategoryWithFirebase(catFile) {
-  const cleanKey = catFile.replace('.json', '');
-  try {
-    const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=` + Date.now());
-    if (fbRes.ok) {
-      const data = await fbRes.json();
-      if (data && Array.isArray(data)) return data;
-    }
-  } catch (e) {}
-  try {
-    const res = await fetch(catFile + ".json?t=" + Date.now());
-    if(res.ok) return await res.json();
-  } catch(e) {}
-  return [];
-}
-
 async function initShop() {
   try {
     const vRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/vendors/${vendorId}.json?t=` + Date.now());
@@ -193,51 +177,53 @@ async function initShop() {
       document.getElementById("shopBannerBox").style.display = "block";
     }
 
+    // Fetch products directly from Firebase site_products or vendor items
+    let allItems = [];
     if(vendorId === 'v001') {
-      const idxRes = await fetch("categories_index.json?t=" + Date.now());
-      const index = await idxRes.json();
-      categoriesData = index.map(e => ({ category: e.category, icon: e.icon || "🛒", file: e.file }));
+      const prodRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products.json?t=` + Date.now());
+      const prodData = await prodRes.json() || {};
       
-      let allItems = [];
-      for(let entry of index) {
-        let cItems = await fetchCategoryWithFirebase(entry.file);
-        if(Array.isArray(cItems)) {
-          cItems.forEach(it => {
+      Object.keys(prodData).forEach(catKey => {
+        let catArr = prodData[catKey];
+        if(Array.isArray(catArr)) {
+          catArr.forEach(it => {
+            if(it && it.name) {
+              let itemImages = it.images || (it.image ? [it.image] : []);
+              let itemUnits = it.units || [{label: it.unit || "KG", rate: it.rate || 0}];
+              allItems.push({
+                cat: catKey,
+                name: it.name,
+                units: itemUnits,
+                image: itemImages[0] || "",
+                available: it.available !== false
+              });
+            }
+          });
+        }
+      });
+    } else {
+      const itObj = vData.items || {};
+      Object.keys(itObj).forEach(cat => {
+        Object.keys(itObj[cat]).forEach(k => {
+          let it = itObj[cat][k];
+          if(it && it.name) {
             let itemImages = it.images || (it.image ? [it.image] : []);
             let itemUnits = it.units || [{label: it.unit || "KG", rate: it.rate || 0}];
             allItems.push({
-              cat: entry.category,
-              name: it.name || "آئٹم",
+              cat: cat,
+              name: it.name,
               units: itemUnits,
               image: itemImages[0] || "",
               available: it.available !== false
             });
-          });
-        }
-      }
-      itemsList = allItems;
-    } else {
-      const itObj = vData.items || {};
-      let allItems = [];
-      Object.keys(itObj).forEach(cat => {
-        Object.keys(itObj[cat]).forEach(k => {
-          let it = itObj[cat][k];
-          let itemImages = it.images || (it.image ? [it.image] : []);
-          let itemUnits = it.units || [{label: it.unit || "KG", rate: it.rate || 0}];
-          allItems.push({
-            cat: cat,
-            name: it.name || "آئٹم",
-            units: itemUnits,
-            image: itemImages[0] || "",
-            available: it.available !== false
-          });
+          }
         });
       });
-      itemsList = allItems;
-      
-      let cats = [...new Set(allItems.map(x => x.cat))];
-      categoriesData = cats.map(c => ({ category: c, icon: "🛒" }));
     }
+
+    itemsList = allItems;
+    let cats = [...new Set(allItems.map(x => x.cat))];
+    categoriesData = cats.map(c => ({ category: c, icon: "🛒" }));
 
     renderChips();
     renderItems();

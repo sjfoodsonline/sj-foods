@@ -78,6 +78,7 @@
 </style>
 </head>
 <body>
+
 <header>
   <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:8px;">
     <div>
@@ -87,17 +88,20 @@
     <button type="button" class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff; font-size:12px; padding:6px 12px; flex-shrink:0;" onclick="window.location.href='index.html'">← Home</button>
   </div>
 </header>
+
 <div class="wrap">
   <div class="dash-grid">
     <div class="dash-card"><div class="dash-lbl">📦 Orders</div><div class="dash-num" id="statTotalOrders">0</div></div>
     <div class="dash-card"><div class="dash-lbl">⏳ Pending</div><div class="dash-num" style="color:var(--price);" id="statPendingOrders">0</div></div>
     <div class="dash-card"><div class="dash-lbl">💵 Sales</div><div class="dash-num" style="color:var(--mid);" id="statTotalSales">Rs. 0</div></div>
   </div>
+
   <div class="tabs">
     <div class="tab active" id="tabOrdersBtn" onclick="switchTab('orders')">📥 Live Orders</div>
     <div class="tab" id="tabProductsBtn" onclick="checkAdminPasswordAndSwitch('products')">🏷️ Products (🔒)</div>
     <div class="tab" id="tabVendorsBtn" onclick="checkAdminPasswordAndSwitch('vendors')">🏪 Vendors (🔒)</div>
   </div>
+
   <div id="secOrders">
     <div class="card">
       <h3>🔔 Live Orders</h3>
@@ -108,6 +112,7 @@
     </div>
     <div id="ordersArea"><div class="loading">⏳ Loading orders…</div></div>
   </div>
+
   <div id="secVendors" style="display:none;">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -117,6 +122,7 @@
     </div>
     <div id="vendorsAdminList"><div class="loading">⏳ Loading…</div></div>
   </div>
+
   <div id="secProducts" style="display:none;">
     <div class="card">
       <p class="hint">Rates → Firebase <code>site_products</code>. Categories → add/delete below. Images: GitHub URL better.</p>
@@ -135,14 +141,15 @@
     <button type="button" class="btn-secondary" id="addProductBtn" style="width:100%; display:none; background:var(--dark); color:#fff; padding:12px; margin-top:10px;" onclick="addNewProductItem()">➕ Add Product</button>
   </div>
 </div>
+
 <div class="savebar" id="saveBar" style="display:none;">
   <div class="status" id="saveStatus">⚠️ Unsaved</div>
   <button type="button" class="btn-primary" style="width:auto; min-width:120px;" onclick="saveProductsToFirebase()">💾 Save</button>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-/* toast available before module */
 window.showToast = function(msg, isErr){
   const t = document.getElementById("toast");
   if(!t) return;
@@ -184,6 +191,7 @@ window.showToast = function(msg, isErr){
     }catch(e){}
   }
   window.playTestSound = playLoudBeep;
+
   window.requestNotificationPermission = function() {
     if ('Notification' in window) {
       Notification.requestPermission().then(function(permission) {
@@ -195,6 +203,7 @@ window.showToast = function(msg, isErr){
 
   const ADMIN_PASSWORD = "3799";
   let isAdminAuthenticated = false;
+
   window.checkAdminPasswordAndSwitch = function(tabName){
     if(isAdminAuthenticated){ switchTab(tabName); return; }
     let pass = prompt("🔒 Enter Master Admin Password:");
@@ -206,6 +215,7 @@ window.showToast = function(msg, isErr){
       showToast("❌ Wrong password", true);
     }
   };
+
   window.switchTab = function(tabName) {
     document.getElementById('tabOrdersBtn').className = 'tab' + (tabName === 'orders' ? ' active' : '');
     document.getElementById('tabProductsBtn').className = 'tab' + (tabName === 'products' ? ' active' : '');
@@ -224,6 +234,7 @@ window.showToast = function(msg, isErr){
   };
 
   const VDB = "https://sj-foods-default-rtdb.firebaseio.com";
+
   window.loadVendorsAdmin = async function(){
     const box = document.getElementById("vendorsAdminList");
     if(!box) return;
@@ -284,6 +295,7 @@ window.showToast = function(msg, isErr){
       box.innerHTML = '<div class="loading" style="color:var(--price);">Load failed</div>';
     }
   };
+
   window.setVendorStatus = async function(id, status){
     try{
       if(status === "blocked"){
@@ -297,6 +309,7 @@ window.showToast = function(msg, isErr){
       loadVendorsAdmin();
     }catch(e){ showToast("Failed", true); }
   };
+
   window.deleteVendor = async function(id){
     if(!id || id === "v001") return;
     if(!confirm("Delete vendor "+id+" permanently?")) return;
@@ -312,6 +325,7 @@ window.showToast = function(msg, isErr){
     activeAccordionId = (activeAccordionId === id) ? null : id;
     renderOrdersDOM();
   };
+
   let latestOrdersCache = [];
   let cachedOrdersCount = 0;
   const ordersRef = ref(db, 'orders');
@@ -431,6 +445,7 @@ window.showToast = function(msg, isErr){
       }
     } catch(e){ showToast("Failed", true); }
   };
+
   window.masterCancelOrder = async function(code, phone){
     let reason = prompt("Cancel reason:");
     if(reason === null) return;
@@ -449,6 +464,7 @@ window.showToast = function(msg, isErr){
       }
     } catch(e) { showToast("Failed", true); }
   };
+
   window.printThermalReceipt = function(code){
     const o = (window._orderPrintMap && window._orderPrintMap[code]) || null;
     if(!o){ alert("Order data missing"); return; }
@@ -504,6 +520,7 @@ function markDirty(){
   var st = document.getElementById("saveStatus");
   if(st){ st.textContent = "⚠️ Unsaved — tap Save"; st.classList.remove("ok"); }
 }
+
 function markClean(){
   dirty = false;
   var st = document.getElementById("saveStatus");
@@ -512,7 +529,6 @@ function markClean(){
 
 async function initFirebaseProducts(){
   try{
-    // prefer Firebase site_categories, else categories_index.json
     let idx = null;
     try{
       const fr = await fetch(RTDB+"/site_categories.json");
@@ -527,9 +543,86 @@ async function initFirebaseProducts(){
       }).filter(function(c){ return c.file; });
     }
   }catch(e){}
+  updateCategoryPicker();
+  if(CATEGORIES[0]) await loadCategory(CATEGORIES[0].file);
+}
+
+function updateCategoryPicker(){
   const picker = document.getElementById("categoryPicker");
   picker.innerHTML = CATEGORIES.map(function(c){ return '<option value="'+c.file+'">'+c.name+'</option>'; }).join("");
-  if(CATEGORIES[0]) await loadCategory(CATEGORIES[0].file);
+  picker.value = currentCat;
+}
+
+async function addSiteCategory(){
+  const nameInput = document.getElementById("newSiteCatName");
+  const fileInput = document.getElementById("newSiteCatFile");
+  let catName = (nameInput.value || "").trim();
+  let fileKey = (fileInput.value || "").trim().toLowerCase().replace(/[^a-z0-9_]/g, "_");
+  if(!catName || !fileKey){
+    alert("براہ کرم کیٹیگری کا نام اور فائل کی (key) دونوں درج کریں!");
+    return;
+  }
+  // Check if exists
+  if(CATEGORIES.some(function(c){ return c.file === fileKey; })){
+    alert("اس نام یا کلید کی کیٹیگری پہلے سے موجود ہے!");
+    return;
+  }
+  CATEGORIES.push({ file: fileKey, name: "📦 " + catName });
+  try{
+    const payload = CATEGORIES.map(function(c){
+      let parts = c.name.split(" ");
+      let icon = parts[0] || "📦";
+      let title = parts.slice(1).join(" ") || c.file;
+      return { category: title, category_roman: title, icon: icon, file: c.file };
+    });
+    await fetch(RTDB+"/site_categories.json", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    // initialize empty product array
+    await fetch(RTDB+"/site_products/"+fileKey+".json", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify([])
+    });
+    showToast("✅ Category added");
+    nameInput.value = "";
+    fileInput.value = "";
+    updateCategoryPicker();
+    loadCategory(fileKey);
+  }catch(e){
+    showToast("❌ Add failed", true);
+  }
+}
+
+async function deleteSiteCategory(){
+  const picker = document.getElementById("categoryPicker");
+  let fileKey = picker.value;
+  if(!fileKey){ alert("کوئی کیٹیگری منتخب نہیں!"); return; }
+  if(CATEGORIES.length <= 1){ alert("کم از کم ایک کیٹیگری کا ہونا ضروری ہے!"); return; }
+  if(!confirm("کیا آپ واقعی اس کیٹیگری کو حذف کرنا چاہتے ہیں؟")) return;
+  
+  CATEGORIES = CATEGORIES.filter(function(c){ return c.file !== fileKey; });
+  try{
+    const payload = CATEGORIES.map(function(c){
+      let parts = c.name.split(" ");
+      let icon = parts[0] || "📦";
+      let title = parts.slice(1).join(" ") || c.file;
+      return { category: title, category_roman: title, icon: icon, file: c.file };
+    });
+    await fetch(RTDB+"/site_categories.json", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    await fetch(RTDB+"/site_products/"+fileKey+".json", { method: "DELETE" });
+    showToast("🗑️ Category deleted");
+    updateCategoryPicker();
+    if(CATEGORIES[0]) loadCategory(CATEGORIES[0].file);
+  }catch(e){
+    showToast("❌ Delete failed", true);
+  }
 }
 
 async function loadCategory(catKey){
@@ -544,13 +637,10 @@ async function loadCategory(catKey){
   try{
     let res = await fetch(RTDB+"/site_products/"+catKey+".json");
     let data = await res.json();
-    if(!data || !Array.isArray(data) || data.length === 0){
-      try{
-        let fbRes = await fetch(catKey+".json?t="+Date.now());
-        if(fbRes.ok) data = await fbRes.json();
-      }catch(e2){}
+    if(!data || !Array.isArray(data)){
+      data = [];
     }
-    currentItems = Array.isArray(data) ? data : [];
+    currentItems = data;
     renderProducts();
     markClean();
     document.getElementById("addProductBtn").style.display = "block";
@@ -562,6 +652,22 @@ async function loadCategory(catKey){
 function escapeAttr(s){
   return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
 }
+
+window.setProductImageUrl = function(idx, url){
+  let it = currentItems[idx];
+  if(!it) return;
+  url = String(url||"").trim();
+  if(!it.images) it.images = [];
+  if(url){
+    it.images[0] = url;
+    it.image = url;
+  } else {
+    it.images.shift();
+    it.image = it.images[0] || "";
+  }
+  renderProducts();
+  markDirty();
+};
 
 function renderProducts(){
   const area = document.getElementById("productsArea");
@@ -666,6 +772,7 @@ window.uploadProductImages = async function(idx, input){
   }
   input.value = "";
 };
+
 window.removeProductImage = function(idx, imgIdx){
   currentItems[idx].images.splice(imgIdx, 1);
   currentItems[idx].image = currentItems[idx].images[0] || "";
@@ -689,10 +796,12 @@ window.handleRateInput = function(idx, ui, el){
   if(!it.units[ui]) return;
   it.units[ui].rate = val;
   markDirty();
-  /* proportional: when base (factor 1) unit changes, scale others */
-  const f0 = unitFactor(it.units[ui].label);
-  if(f0 === 1 || (ui === 0 && f0 == null)){
-    const basePerUnit = (f0 === 1) ? val : val;
+  
+  // Smart proportional auto-calc for any unit changed
+  const uChanged = it.units[ui];
+  const fChanged = unitFactor(uChanged.label);
+  if(fChanged && fChanged > 0){
+    const basePerUnit = val / fChanged;
     const box = document.getElementById("units-box-"+idx);
     const rateInputs = box ? box.querySelectorAll(".u-rate") : [];
     it.units.forEach(function(u, i){
@@ -700,7 +809,9 @@ window.handleRateInput = function(idx, ui, el){
       const f = unitFactor(u.label);
       if(f == null) return;
       u.rate = Math.round(basePerUnit * f);
-      if(rateInputs[i] && document.activeElement !== rateInputs[i]) rateInputs[i].value = u.rate;
+      if(rateInputs[i] && document.activeElement !== rateInputs[i]){
+        rateInputs[i].value = u.rate;
+      }
     });
   }
 };
@@ -733,21 +844,25 @@ window.applyPreset = function(idx, type){
   markDirty();
   showToast("Preset applied ✓");
 };
+
 window.addUnit = function(idx){
   currentItems[idx].units.push({label: "", rate: 0});
   renderProducts();
   markDirty();
 };
+
 window.removeUnit = function(idx, ui){
   currentItems[idx].units.splice(ui, 1);
   renderProducts();
   markDirty();
 };
+
 window.addNewProductItem = function(){
   currentItems.push({ name: "", name_roman: "", images: [], units: [{label: "KG", rate: 0}], available: true, featured: false });
   renderProducts();
   markDirty();
 };
+
 window.deleteItem = function(idx){
   if(!confirm("Delete this product?")) return;
   currentItems.splice(idx, 1);
@@ -804,6 +919,7 @@ function playPendingAlert(){
     }
   }catch(e){}
 }
+
 function startPendingWatchdog(){
   if(window._pendingWd) return;
   window._pendingWd = setInterval(function(){
@@ -820,7 +936,6 @@ function startPendingWatchdog(){
   }, 10*60*1000);
 }
 startPendingWatchdog();
-
 </script>
 </body>
 </html>

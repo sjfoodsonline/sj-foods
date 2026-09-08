@@ -16,7 +16,7 @@
   body{
     margin:0; padding:0 0 140px 0; background:var(--paper); color:var(--ink);
     font-family: Arial, sans-serif; direction:rtl; text-align:right;
-    min-height:100vh; position:relative; font-weight: bold; width: 100%;
+    min-height:100vh; width:100%; font-weight: bold;
   }
   .app-container {
     width: 100% !important; max-width: 100% !important; margin: 0; background: var(--paper); min-height: 100vh;
@@ -29,8 +29,8 @@
   }
   .back-shops-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:8px; padding:10px 20px; font-size:15px; cursor:pointer; font-weight:bold; }
   
-  .shop-banner-box { width: 100%; max-height: 450px; background: var(--leaf); display: none; overflow: hidden; position: relative; border-bottom: 2px solid var(--line); }
-  .shop-banner-box img { width: 100%; height: 100%; object-fit: cover; display: block; max-height: 450px; }
+  .shop-banner-box { width: 100%; max-height: 480px; background: var(--leaf); display: none; overflow: hidden; position: relative; border-bottom: 2px solid var(--line); }
+  .shop-banner-box img { width: 100%; height: 100%; object-fit: cover; display: block; max-height: 480px; }
 
   .sticky-top{ position:sticky; top:0; z-index:10; background:var(--paper); box-shadow:0 4px 12px rgba(0,0,0,0.06); border-bottom:1px solid var(--line); }
   .search-wrap{padding:18px 40px 10px; max-width:700px; margin:0 auto;}
@@ -43,8 +43,8 @@
   .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
 
   main{padding:35px 50px;}
-  .items-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:22px; }
-  .item{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px; box-shadow:0 3px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
+  .items-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:22px; }
+  .item{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:18px; display:flex; flex-direction:column; gap:14px; box-shadow:0 3px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
   .item:hover { transform: translateY(-3px); }
   .item.active{ border-color:var(--mid); box-shadow:0 6px 18px rgba(46,125,50,0.12); }
   .item-top{display:flex; gap:16px; align-items:center;}
@@ -139,7 +139,6 @@
 </script>
 
 <script>
-// Handle both Query Params (?id=v001) and Hash (#shop-v001) seamlessly
 function getVendorId() {
   const urlParams = new URLSearchParams(window.location.search);
   let id = urlParams.get('id');
@@ -169,8 +168,11 @@ async function fetchCategoryWithFirebase(catFile) {
       if (data && Array.isArray(data)) return data;
     }
   } catch (e) {}
-  const res = await fetch(catFile + ".json?t=" + Date.now());
-  return await res.json();
+  try {
+    const res = await fetch(catFile + ".json?t=" + Date.now());
+    if(res.ok) return await res.json();
+  } catch(e) {}
+  return [];
 }
 
 async function initShop() {

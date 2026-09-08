@@ -78,11 +78,13 @@
   .cover-banner{ overflow:hidden; border-radius:14px; display:block; background: var(--leaf); border: 1px solid var(--line); aspect-ratio: 16/9; margin: 10px 14px 0; }
   .cover-banner.static-cover .cover-slider-track{ transform:none !important; }
   .cover-banner.static-cover .cover-slide{ min-width:100%; }
+
   .product-strip-wrap{ margin:10px 14px 0; overflow:hidden; border-radius:14px; border:1px solid var(--line); background:#fff; direction:ltr; }
   .product-strip-label{ font-size:11px; text-align:center; color:var(--muted); padding:6px 8px 0; font-weight:bold; }
   .product-strip-track{ display:flex; transition: transform 0.45s ease; direction:ltr; width:100%; }
   .product-strip-slide{ min-width:100%; width:100%; flex:0 0 100%; aspect-ratio: 2.2/1; background:#E8F5E9; }
   .product-strip-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+
   .cover-slider-track{ display:flex; width:100%; height: 100%; transition: transform 0.5s ease; }
   .cover-slide{ min-width:100%; width:100%; height: 100%; }
   .cover-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -90,7 +92,6 @@
   .features-scroll-wrap{ overflow:hidden; position:relative; padding:8px 0; background:#F9F8F3; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:10px; }
   .features-scroll{ display:flex; width:max-content; gap:10px; animation: smoothMarquee 25s linear infinite; }
   @keyframes smoothMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-
   .feature-card{
     flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:10px;
     padding:6px 12px; text-align:center; display:flex; align-items:center; gap:5px;
@@ -126,7 +127,6 @@
   .cat-marquee-wrap{ overflow-x: auto; position:relative; padding:2px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .cat-marquee-wrap::-webkit-scrollbar { display: none; }
   .cat-marquee-track{ display:flex; width:max-content; gap:8px; direction:rtl; padding:0 14px; }
-
   .cat-chip{
     flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; background:var(--leaf); color:var(--dark);
     border:1px solid #cfe8d1; border-radius:20px; padding:8px 14px; font-size:12.5px; font-weight:bold; white-space:nowrap; cursor:pointer;
@@ -163,7 +163,6 @@
     background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Cpath fill='%23153A20' d='M6 9l6 7 6-7z'/%3E%3C/svg%3E") no-repeat left 6px center;
     background-size:24px 24px; color:var(--dark); appearance:none; -webkit-appearance:none; cursor:pointer;
   }
-
   .qty-box{display:flex; align-items:center; gap:5px;}
   .qty-box button{ width:34px; height:34px; border-radius:8px; border:none; background:var(--leaf); color:var(--dark); font-size:16px; font-weight:bold; cursor:pointer; }
   .qty-box button.plus{background:var(--dark); color:#fff;}
@@ -194,7 +193,7 @@
   
   .wa-btn{background:#25D366; color:#fff; border:none; border-radius:10px; padding:11px; font-size:15px; font-weight:bold; width:100%; cursor:pointer; margin-top:6px;}
   .clear-cart-btn{background:#FFCDD2; color:#B71C1C; border:none; border-radius:8px; padding:6px 10px; font-size:11.5px; font-weight:bold; cursor:pointer; margin-top:6px; width:100%;}
-  
+
   footer{text-align:center; font-size:11px; color:var(--muted); padding:16px 14px 18px; font-weight: bold;}
   .social-links{display:flex; justify-content:center; gap:8px; margin:10px 0;}
   .social-btn{ display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:bold; text-decoration:none; color:#fff; }
@@ -294,6 +293,7 @@
       <div class="cover-slide"><img src="cover.png" alt="SJ Online Cover" id="mainCoverImg" onerror="this.src='icon-512.png'"></div>
     </div>
   </div>
+
   <div class="product-strip-wrap" id="productStripWrap">
     <div class="product-strip-label">✨ Market Gallery — تمام اشیاء</div>
     <div class="product-strip-track" id="productStripTrack"></div>
@@ -328,6 +328,7 @@
       <div style="flex:1; font-size:13px; font-weight:bold;" id="shopInnerName">Shop</div>
     </div>
   </div>
+
   <div class="sticky-top-container">
     <div class="search-wrap">
       <input id="search" type="text" placeholder="🔍 Search item (ٹماٹر / Tomato)">
@@ -399,8 +400,7 @@ window.safeStorage = (function(){
   return {
     getItem: function(k){ try{ return localStorage.getItem(k)||mem[k]||null; }catch(e){return mem[k]||null;} },
     setItem: function(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=String(v); } }
-  };
-})();
+  };})();
 
 let CATEGORIES_DATA = {};
 let CATEGORIES_META = [];
@@ -409,15 +409,10 @@ let SHOP_WHATSAPP = "923349353799";
 let ACTIVE_VENDOR = { id: null, shop_name: "", whatsapp: "923349353799" };
 let SHOP_ENTERED = false;
 let ALL_VENDORS = {};
-
 let LIGHTBOX_OPEN = false;
+
 window.addEventListener('popstate', (e) => {
-  // 1) Lightbox first — back must NOT close whole site / PWA
-  if(LIGHTBOX_OPEN){
-    closeLightbox(true);
-    return;
-  }
-  // 2) Category inside shop → back to shop categories
+  if(LIGHTBOX_OPEN){ closeLightbox(true); return; }
   if(SHOP_ENTERED && currentSelectedCategory){
     currentSelectedCategory = null;
     if(typeof renderChips === 'function') renderChips();
@@ -425,13 +420,8 @@ window.addEventListener('popstate', (e) => {
     history.pushState({ page: 'shop', id: (ACTIVE_VENDOR && ACTIVE_VENDOR.id) || '' }, '', '#shop-' + ((ACTIVE_VENDOR && ACTIVE_VENDOR.id) || ''));
     return;
   }
-  // 3) Shop → home
-  if(SHOP_ENTERED){
-    backToShops();
-    return;
-  }
-  // 4) stay on home
-  history.pushState({ page: 'home' }, '', '#home');
+  if(SHOP_ENTERED){ backToShops(); return; }
+  history.replaceState({ page: 'home' }, '', '#home');
 });
 history.replaceState({ page: 'home' }, '', '#home');
 
@@ -450,25 +440,17 @@ function toggleDrawer(open){
       overlay.classList.remove("active");
       document.body.style.overflow = "";
     }
-  }catch(e){ console.error("toggleDrawer", e); }
+  }catch(e){}
 }
 window.toggleDrawer = toggleDrawer;
-function openModal(modalId){
-  toggleDrawer(false);
-  const m = document.getElementById(modalId);
-  if(m) m.classList.add("active");
-}
+
+function openModal(modalId){ toggleDrawer(false); const m = document.getElementById(modalId); if(m) m.classList.add("active"); }
 window.openModal = openModal;
-function closeModal(modalId){
-  const m = document.getElementById(modalId);
-  if(m) m.classList.remove("active");
-}
+function closeModal(modalId){ const m = document.getElementById(modalId); if(m) m.classList.remove("active"); }
 window.closeModal = closeModal;
 
-/** پاکستانی موبائل — سخت ویلیڈیشن */
 function normalizePkPhone(raw){
-  let s = String(raw || "").trim();
-  s = s.replace(/[\s\-()]/g, "");
+  let s = String(raw || "").trim().replace(/[\s\-()]/g, "");
   let digits = s.replace(/[^0-9]/g, "");
   if(s.startsWith("+92") || digits.startsWith("0092")){
     digits = digits.replace(/^0092/, "92");
@@ -476,38 +458,20 @@ function normalizePkPhone(raw){
   } else if(digits.startsWith("92") && digits.length >= 12){
     digits = "0" + digits.slice(2);
   }
-  // صرف موبائل 03XX
   if(/^03\d{9}$/.test(digits)) return digits;
   return null;
 }
-function isValidPkMobile(raw){
-  return !!normalizePkPhone(raw);
-}
-window.normalizePkPhone = normalizePkPhone;
-window.isValidPkMobile = isValidPkMobile;
+function isValidPkMobile(raw){ return !!normalizePkPhone(raw); }
 
 document.addEventListener("DOMContentLoaded", function(){
   var mb = document.getElementById("menuBtn");
-  if(mb){
-    mb.addEventListener("click", function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      toggleDrawer(true);
-    });
-  }
+  if(mb){ mb.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); toggleDrawer(true); }); }
   var ov = document.getElementById("drawerOverlay");
-  if(ov){
-    ov.addEventListener("click", function(){ toggleDrawer(false); });
-  }
+  if(ov){ ov.addEventListener("click", function(){ toggleDrawer(false); }); }
 });
 
-function getCartStore(){
-  try{ return JSON.parse(window.safeStorage.getItem("sj_cart_store") || "{}"); }catch(e){ return {}; }
-}
-function saveCartStore(store){
-  window.safeStorage.setItem("sj_cart_store", JSON.stringify(store));
-}
-
+function getCartStore(){ try{ return JSON.parse(window.safeStorage.getItem("sj_cart_store") || "{}"); }catch(e){ return {}; } }
+function saveCartStore(store){ window.safeStorage.setItem("sj_cart_store", JSON.stringify(store)); }
 function getActiveCartShopId(){
   let store = getCartStore();
   for(let sid in store){
@@ -525,8 +489,14 @@ async function fetchCategoryWithFirebase(catFile) {
       if (data && Array.isArray(data)) return data;
     }
   } catch (e) {}
-  const res = await fetch(catFile + "?t=" + Date.now());
-  return await res.json();
+  try {
+    const res = await fetch(cleanKey + ".json?t=" + Date.now());
+    if(res.ok) {
+      const localData = await res.json();
+      if(Array.isArray(localData)) return localData;
+    }
+  } catch(e) {}
+  return [];
 }
 
 async function loadActiveVendor(vendorId){
@@ -567,10 +537,6 @@ async function loadActiveVendor(vendorId){
       ALL_VENDORS[vendorId] = v;
       ACTIVE_VENDOR = pickVendor(v, vendorId);
       SHOP_WHATSAPP = ACTIVE_VENDOR.whatsapp;
-      if(!ACTIVE_VENDOR.whatsapp && vendorId !== "v001"){
-        alert("اس شاپ کا WhatsApp نمبر رجسٹرڈ نہیں — آرڈر نہیں بھیجا جا سکتا۔");
-        return false;
-      }
       return true;
     }
   }catch(e){}
@@ -582,22 +548,12 @@ async function loadActiveVendor(vendorId){
   return false;
 }
 
-
-
-
-
-
-
-
-
-/** ہوم: فکسڈ کور (اوپر) · پروڈکٹ گیلری سلائیڈ · ٹاپ ڈیلز ڈبل شفل */
 let HOME_GALLERY = [];
 let HOME_DEALS_POOL = [];
 let _galleryIdx = 0;
 let _dealsIdx = 0;
 
 function initHomeCoverSlider(){
-  // کور فکسڈ — حرکت نہیں
   const track = document.getElementById("coverSliderTrack");
   const banner = document.getElementById("coverBanner");
   if(!track || !banner) return;
@@ -607,38 +563,27 @@ function initHomeCoverSlider(){
   if(!track.querySelector("img")){
     track.innerHTML = '<div class="cover-slide"><img src="cover.png" alt="Cover" onerror="this.src=\'icon-512.png\'"></div>';
   }
-  if(window._coverTimer){ clearInterval(window._coverTimer); window._coverTimer = null; }
 }
 
 function paintProductGallery(urls){
   const track = document.getElementById("productStripTrack");
   const wrap = document.getElementById("productStripWrap");
   if(!track || !wrap) return;
-  let list = (urls || []).filter(function(u){
-    u = String(u||"").trim();
-    if(!u) return false;
-    if(u.indexOf("data:image") === 0) return false;
-    return true;
-  });
-  // unique
-  const uniq = [];
-  list.forEach(function(u){ if(uniq.indexOf(u)<0) uniq.push(u); });
+  let list = (urls || []).filter(u => u && u.indexOf("data:image") !== 0);
+  const uniq = []; list.forEach(u => { if(uniq.indexOf(u)<0) uniq.push(u); });
   list = uniq;
-  if(list.length === 0) list = ["cover.png"];
-  if(list.length === 1) list = list.concat(["icon-512.png"]);
+  if(list.length === 0) list = ["cover.png", "icon-512.png"];
   HOME_GALLERY = list.slice(0, 30);
   track.style.direction = "ltr";
-  track.innerHTML = HOME_GALLERY.map(function(src){
-    return '<div class="product-strip-slide"><img src="'+src+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'icon-192.png\'"></div>';
-  }).join("");
+  track.innerHTML = HOME_GALLERY.map(src => `<div class="product-strip-slide"><img src="${src}" loading="lazy" onerror="this.src='icon-192.png'"></div>`).join("");
   wrap.style.display = "block";
   _galleryIdx = 0;
   track.style.transform = "translate3d(0,0,0)";
   if(window._galleryTimer) clearInterval(window._galleryTimer);
-  window._galleryTimer = setInterval(function(){
+  window._galleryTimer = setInterval(() => {
     if(!HOME_GALLERY.length) return;
     _galleryIdx = (_galleryIdx + 1) % HOME_GALLERY.length;
-    track.style.transform = "translate3d(" + (-_galleryIdx * 100) + "%,0,0)";
+    track.style.transform = `translate3d(${-_galleryIdx * 100}%,0,0)`;
   }, 3200);
 }
 
@@ -653,12 +598,9 @@ function shuffleArray(arr){
 
 function paintTopDealsPair(){
   const homeBox = document.getElementById("dealBox");
-  const shopBox = document.getElementById("shopDealBox");
-  const box = (SHOP_ENTERED && shopBox) ? shopBox : homeBox;
-  const section = SHOP_ENTERED ? document.getElementById("shopFeaturedSection") : document.getElementById("featuredSection");
+  const box = homeBox;
   if(!box) return;
-  if(section) section.style.display = "";
-  let pool = HOME_DEALS_POOL.length ? HOME_DEALS_POOL : (ITEMS || []).filter(function(i){ return i.available !== false; });
+  let pool = HOME_DEALS_POOL.length ? HOME_DEALS_POOL : (ITEMS || []).filter(i => i.available !== false);
   if(!pool.length){
     box.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Deals</div></div><div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Shop</div></div>';
     return;
@@ -669,151 +611,112 @@ function paintTopDealsPair(){
   function card(it){
     if(!it) return '<div class="deal-card"><div class="deal-icon-box">⭐</div></div>';
     let fImg = (it.images && it.images[0]) ? it.images[0] : "";
-    // allow data images for vendor rings so deals not empty
     const nm = it.name_roman || it.name || "";
     const rate = (it.units && it.units[0]) ? it.units[0].rate : 0;
     const cat = it.cat || "";
     const id = it.id || "";
-    return '<div class="deal-card" onclick="jumpToItem(\''+String(cat).replace(/'/g,"")+'\',\''+String(id).replace(/'/g,"")+'\')">'+
-      (fImg ? '<img src="'+fImg+'" loading="lazy" alt="">' : '<div class="deal-icon-box">'+(it.icon||"⭐")+'</div>')+
-      '<div class="d-name">'+nm+'</div>'+
-      '<div class="d-rate">'+(typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0)))+'</div></div>';
+    return `<div class="deal-card" onclick="jumpToItem('${String(cat).replace(/'/g,"")}','${String(id).replace(/'/g,"")}')">
+      ${fImg ? `<img src="${fImg}" loading="lazy">` : `<div class="deal-icon-box">${it.icon||"⭐"}</div>`}
+      <div class="d-name">${nm}</div>
+      <div class="d-rate">${typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0))}</div></div>`;
   }
   box.innerHTML = card(a) + card(b);
 }
 
-
 function startTopDealsShuffle(){
   paintTopDealsPair();
   if(window._dealsTimer) clearInterval(window._dealsTimer);
-  window._dealsTimer = setInterval(function(){
+  window._dealsTimer = setInterval(() => {
     const box = document.getElementById("dealBox");
     if(!box) return;
-    box.querySelectorAll(".deal-card").forEach(function(el){ el.classList.add("shuffle-out"); });
-    setTimeout(function(){ paintTopDealsPair(); }, 280);
+    box.querySelectorAll(".deal-card").forEach(el => el.classList.add("shuffle-out"));
+    setTimeout(() => { paintTopDealsPair(); }, 280);
   }, 4500);
 }
 
 function initHomeVisuals(){
   initHomeCoverSlider();
-  var fw = document.querySelector(".features-scroll-wrap");
-  if(fw) fw.style.display = "";
-  var fs = document.getElementById("featuredSection");
-  if(fs) fs.style.display = "";
-  loadFeaturedLite();
+  loadData();
 }
 
-async function loadFeaturedLite(){
-  const section = document.getElementById("featuredSection");
+async function loadData(){
   try{
-    const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
-    const all = [];
-    const gallery = [];
-    const slice = (index || []).slice(0, 8);
-    const results = await Promise.all(slice.map(function(e){
-      return fetchCategoryWithFirebase(String(e.file||"").replace(/\.json$/i,"")).catch(function(){ return []; });
+    let index = null;
+    try{
+      const fr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/site_categories.json");
+      index = await fr.json();
+    }catch(e){}
+    if(!Array.isArray(index) || !index.length){
+      index = await fetch("categories_index.json?t=" + Date.now()).then(r => r.json());
+    }
+
+    const catResults = await Promise.all(index.map(async e => {
+      let cleanKey = String(e.file||"").replace(/\.json$/i,"");
+      try{
+        const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
+        if(fbRes.ok){
+          const data = await fbRes.json();
+          if(Array.isArray(data) && data.length > 0) return data;
+        }
+      }catch(err){}
+      try{
+        const localRes = await fetch(cleanKey + ".json?t=" + Date.now());
+        if(localRes.ok){
+          const localData = await localRes.json();
+          if(Array.isArray(localData)) return localData;
+        }
+      }catch(err){}
+      return [];
     }));
-    slice.forEach(function(entry, i){
-      (results[i] || []).forEach(function(it, ii){
-        if(it.available === false) return;
+
+    CATEGORIES_META = index.map((e, i) => {
+      let itemsList = catResults[i] || [];
+      let defaultImg = e.image || "";
+      if(!defaultImg && itemsList.length > 0){
+        let firstWithImg = itemsList.find(it => (it.images && it.images.length > 0) || it.image);
+        if(firstWithImg){
+          defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
+        }
+      }
+      return { name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: defaultImg };
+    });
+
+    ITEMS = []; CATEGORIES_DATA = {};
+    const gallery = [];
+    index.forEach((entry, i) => {
+      let itemsList = catResults[i] || [];
+      CATEGORIES_DATA[entry.category] = itemsList;
+      itemsList.forEach((it, ii) => {
         let imgs = it.images || (it.image ? [it.image] : []);
         let img0 = imgs[0] || "";
         if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
-        all.push({
-          id: "sj-"+i+"-"+ii,
-          cat: entry.category,
-          icon: entry.icon || "🛒",
-          name: it.name,
-          name_roman: it.name_roman || "",
-          units: it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }],
-          images: imgs,
-          featured: it.featured === true,
-          available: true,
-          qty: 0,
-          shop: "SJ Foods"
+        ITEMS.push({
+          id: i+"-"+ii, cat: entry.category, icon: entry.icon,
+          name: it.name, name_roman: it.name_roman||"",
+          units: it.units || [{label: it.unit||"KG", rate: it.rate}], unitIndex: 0,
+          available: it.available !== false, images: imgs, featured: it.featured === true, qty: 0
         });
       });
     });
-    // vendor deals: only from already-loaded ALL_VENDORS (no full dump download)
-    Object.keys(ALL_VENDORS || {}).forEach(function(vid){
-      if(vid === "v001" || vid === "_market") return;
-      const v = ALL_VENDORS[vid];
-      if(!v || v.blocked || (v.status && v.status !== "approved")) return;
-      const itemsRoot = v.items || {};
-      Object.keys(itemsRoot).forEach(function(key){
-        const it = itemsRoot[key];
-        if(!it || typeof it !== "object") return;
-        // flat product
-        if(it.name || it.units || it.rate != null){
-          if(it.available === false) return;
-          let imgs = it.images || (it.image ? [it.image] : []);
-          let img0 = imgs[0] || "";
-          if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
-          all.push({
-            id: "v-"+vid+"-"+key,
-            cat: it.category || "General",
-            icon: "🏪",
-            name: it.name || key,
-            name_roman: it.name_roman || it.name || key,
-            units: it.units || [{ label: it.unit || "Pcs", rate: it.rate || 0 }],
-            images: imgs,
-            featured: true,
-            available: true,
-            qty: 0,
-            shop: v.shop_name || vid,
-            vendorId: vid,
-            premium: it.premium === true
-          });
-        } else {
-          // nested by category
-          Object.keys(it).forEach(function(pid){
-            const p = it[pid];
-            if(!p || typeof p !== "object") return;
-            if(p.available === false) return;
-            let imgs = p.images || (p.image ? [p.image] : []);
-            all.push({
-              id: "v-"+vid+"-"+pid,
-              cat: key,
-              icon: "🏪",
-              name: p.name || pid,
-              name_roman: p.name_roman || p.name || pid,
-              units: p.units || [{ label: p.unit || "Pcs", rate: p.rate || 0 }],
-              images: imgs,
-              featured: true,
-              available: true,
-              qty: 0,
-              shop: v.shop_name || vid,
-              vendorId: vid,
-              premium: p.premium === true
-            });
-          });
-        }
-      });
-    });
 
-    const uniq = [];
-    gallery.forEach(function(u){ if(uniq.indexOf(u) < 0) uniq.push(u); });
-    if(typeof paintProductGallery === "function") paintProductGallery(typeof shuffleArray==="function" ? shuffleArray(uniq).slice(0, 24) : uniq.slice(0,24));
-    HOME_DEALS_POOL = typeof shuffleArray === "function" ? shuffleArray(all) : all;
-    ITEMS = HOME_DEALS_POOL.slice();
-    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
-    if(section) section.style.display = "";
+    paintProductGallery(shuffleArray(gallery).slice(0, 24));
+    HOME_DEALS_POOL = shuffleArray(ITEMS.slice());
+    startTopDealsShuffle();
+
+    renderChips(); renderMainView();
+    const loadingMsg = document.getElementById("loadingMsg");
+    if(loadingMsg) loadingMsg.style.display = "none";
   }catch(e){
-    console.warn("featured lite", e);
-    if(typeof paintProductGallery === "function") paintProductGallery([]);
-    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
-    if(section) section.style.display = "";
+    console.error("loadData error:", e);
+    const loadingMsg = document.getElementById("loadingMsg");
+    if(loadingMsg) loadingMsg.textContent = "⚠️ کیٹیگریز اور آئٹمز لوڈ کرنے میں خرابی";
   }
 }
-
-
 
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
   const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
-
-  // فوری SJ Foods — کبھی لوڈنگ پر نہ اٹکے
   const instant = {
     v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png", blocked: false }
   };
@@ -821,12 +724,11 @@ async function loadShopsList(){
     let n = 0;
     const items = (v && v.items) || {};
     if(typeof items !== "object") return 0;
-    Object.keys(items).forEach(function(cat){
+    Object.keys(items).forEach(cat => {
       const obj = items[cat];
       if(!obj) return;
       if(Array.isArray(obj)) n += obj.length;
       else if(typeof obj === "object"){
-        // flat product or nested
         if(obj.name || obj.rate != null || obj.units) n += 1;
         else n += Object.keys(obj).length;
       }
@@ -835,7 +737,7 @@ async function loadShopsList(){
   }
   function paint(data){
     ALL_VENDORS = Object.assign({}, ALL_VENDORS, data || {});
-    let ids = Object.keys(data).filter(function(id){
+    let ids = Object.keys(data).filter(id => {
       if(id === "_market") return false;
       const v = data[id];
       if(!v || typeof v !== "object") return false;
@@ -846,8 +748,7 @@ async function loadShopsList(){
     });
     if(ids.indexOf("v001") < 0) ids.unshift("v001");
     if(!data.v001) data.v001 = instant.v001;
-
-    grid.innerHTML = ids.map(function(id){
+    grid.innerHTML = ids.map(id => {
       const v = data[id] || {};
       const isOwn = (id === "v001");
       const name = v.shop_name || (isOwn ? "SJ Foods" : id);
@@ -855,77 +756,22 @@ async function loadShopsList(){
       const n = isOwn ? -1 : countItems(v);
       const isComingSoon = !isOwn && n >= 0 && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
-      let coverHtml;
-      if(cover && String(cover).indexOf("data:image") === 0){
-        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
-      } else if(cover){
-        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="">';
-      } else {
-        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
-      }
+      let coverHtml = cover ? `<img class="shop-cover" src="${cover}" loading="lazy">` : `<div class="shop-cover ph">${isOwn?"🥬":"🏪"}</div>`;
       const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + (n < 0 ? "—" : n));
-      return '<div class="shop-card" onclick="tryEnterShop(\''+id+'\')">'+
-        (isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : '')+
-        coverHtml+
-        '<div class="shop-body"><div class="sname">'+name+'</div><div class="scity">'+city+'</div>'+
-        '<div class="stag">'+countLabel+'</div></div></div>';
+      return `<div class="shop-card" onclick="tryEnterShop('${id}')">
+        ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
+        ${coverHtml}
+        <div class="shop-body"><div class="sname">${name}</div><div class="scity">${city}</div>
+        <div class="stag">${countLabel}</div></div></div>`;
     }).join("");
   }
-
   paint(instant);
-
-  // ہلکی لوڈنگ: صرف keys + چھوٹے فیلڈز — پورا vendors.json (1MB) نہیں
   try{
-    const ctrl = new AbortController();
-    const timer = setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 8000);
-    const keysRes = await fetch(RTDB + "/vendors.json?shallow=true", { signal: ctrl.signal });
-    clearTimeout(timer);
-    const keysObj = await keysRes.json() || {};
-    const ids = Object.keys(keysObj).filter(function(k){ return k !== "_market"; });
-
-    const data = { v001: instant.v001 };
-    await Promise.all(ids.map(async function(id){
-      try{
-        const base = RTDB + "/vendors/" + id + "/";
-        const [shop_name, status, blocked, city, phone, whatsapp, pay_number, owner_name, items] = await Promise.all([
-          fetch(base + "shop_name.json").then(function(r){ return r.json(); }).catch(function(){ return null; }),
-          fetch(base + "status.json").then(function(r){ return r.json(); }).catch(function(){ return "approved"; }),
-          fetch(base + "blocked.json").then(function(r){ return r.json(); }).catch(function(){ return false; }),
-          fetch(base + "city.json").then(function(r){ return r.json(); }).catch(function(){ return "Mingora"; }),
-          fetch(base + "phone.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
-          fetch(base + "whatsapp.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
-          fetch(base + "pay_number.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
-          fetch(base + "owner_name.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
-          fetch(base + "items.json").then(function(r){ return r.json(); }).catch(function(){ return null; })
-        ]);
-        // cover الگ — صرف URL ہو تو
-        let cover_image = "";
-        try{
-          const c = await fetch(base + "cover_image.json").then(function(r){ return r.json(); });
-          if(c && String(c).indexOf("data:image") !== 0) cover_image = c;
-          else if(id === "v001") cover_image = "cover.png";
-        }catch(e){}
-        data[id] = {
-          shop_name: shop_name || id,
-          status: status || "approved",
-          blocked: blocked === true,
-          city: city || "Mingora",
-          phone: phone || "",
-          whatsapp: whatsapp || "",
-          pay_number: pay_number || "",
-          owner_name: owner_name || "",
-          cover_image: cover_image || (id === "v001" ? "cover.png" : ""),
-          items: items || {}
-        };
-      }catch(e){}
-    }));
-    paint(data);
-  }catch(e){
-    console.warn("shops light fetch", e);
-    if(grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
-  }
+    const res = await fetch(RTDB + "/vendors.json");
+    const data = await res.json();
+    if(data) paint(data);
+  }catch(e){}
 }
-
 
 window.tryEnterShop = function(vendorId){
   let activeShop = getActiveCartShopId();
@@ -944,65 +790,42 @@ window.enterShop = async function(vendorId){
   SHOP_ENTERED = true;
   currentSelectedCategory = null;
   try{ history.pushState({ page: 'shop', id: vendorId }, "", "#shop-" + vendorId); }catch(e){}
-
+  
   document.getElementById("shopPicker").style.display = "none";
   document.getElementById("homePageWrapper").style.display = "none";
   document.getElementById("shopWorkspace").classList.remove("hidden");
   document.getElementById("shopWorkspace").style.display = "block";
   document.getElementById("billbar").style.display = "flex";
 
-  // Shop cover + name (fixed under header of shop)
   const coverEl = document.getElementById("shopInnerCover");
   const nameEl = document.getElementById("shopInnerName");
   let cover = ACTIVE_VENDOR.cover_image || "";
-  if(vendorId === "v001"){
-    // SJ Foods shop cover = site cover.png
-    cover = cover && String(cover).indexOf("data:") !== 0 ? cover : "cover.png";
-  }
+  if(vendorId === "v001") cover = "cover.png";
   if(coverEl){
-    if(cover){
-      coverEl.src = cover;
-      coverEl.style.display = "block";
-      coverEl.onerror = function(){ this.style.display = "none"; };
-    } else {
-      coverEl.style.display = "none";
-    }
+    if(cover){ coverEl.src = cover; coverEl.style.display = "block"; }
+    else { coverEl.style.display = "none"; }
   }
   if(nameEl){
-    nameEl.innerHTML = (ACTIVE_VENDOR.shop_name || "Shop") +
-      ' <span style="font-size:11px;opacity:.9;font-weight:bold;">· شاپ کھلی ہوئی ہے</span>';
+    nameEl.innerHTML = (ACTIVE_VENDOR.shop_name || "Shop") + ' <span style="font-size:11px;opacity:.9;font-weight:bold;">· شاپ کھلی ہوئی ہے</span>';
   }
-
-  // Top deals only this shop — keep section visible above categories inside shop area
-  // (shop workspace has its own flow; home featured hidden with homePageWrapper)
 
   if(vendorId === "v001"){
     await loadData();
   } else {
     await loadVendorCatalog(vendorId);
   }
-  // after catalog loaded — shop-only deals shuffle
-  try{
-    HOME_DEALS_POOL = (ITEMS || []).filter(function(i){ return i.available !== false; });
-    HOME_DEALS_POOL = typeof shuffleArray === "function" ? shuffleArray(HOME_DEALS_POOL) : HOME_DEALS_POOL;
-    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
-  }catch(e){}
-
   restoreShopCart();
   renderBill();
   window.scrollTo(0,0);
 };
-;
 
 async function loadVendorCatalog(vendorId){
   try{
     const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + "/items.json");
     const data = await res.json() || {};
     CATEGORIES_META = []; ITEMS = []; CATEGORIES_DATA = {};
-
-    // Support flat {id:{category,name,units}} and nested {cat:{id:{...}}}
     const byCat = {};
-    Object.keys(data).forEach(function(key){
+    Object.keys(data).forEach(key => {
       const val = data[key];
       if(!val || typeof val !== "object") return;
       if(val.name || val.units || val.rate != null || val.image){
@@ -1013,11 +836,10 @@ async function loadVendorCatalog(vendorId){
         byCat[key] = val;
       }
     });
-
-    Object.keys(byCat).forEach(function(cat){
+    Object.keys(byCat).forEach(cat => {
       CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒", image: "" });
       CATEGORIES_DATA[cat] = [];
-      Object.keys(byCat[cat] || {}).forEach(function(k){
+      Object.keys(byCat[cat] || {}).forEach(k => {
         const it = byCat[cat][k] || {};
         let units = it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }];
         let imgs = it.images || (it.image ? [it.image] : []);
@@ -1025,13 +847,11 @@ async function loadVendorCatalog(vendorId){
           id: k, cat: cat, name: it.name, name_roman: it.name_roman,
           units: units, unitIndex: 0, available: it.available !== false,
           images: imgs, qty: 0, premium: it.premium === true || it.no_qty === true,
-          no_qty: it.no_qty === true,
-          extra_text: it.extra_text || ""
+          no_qty: it.no_qty === true
         };
         ITEMS.push(row);
         CATEGORIES_DATA[cat].push(it);
-        // category cover from first image
-        if(!CATEGORIES_META[CATEGORIES_META.length-1].image && imgs[0] && String(imgs[0]).indexOf("data:")!==0){
+        if(!CATEGORIES_META[CATEGORIES_META.length-1].image && imgs[0]){
           CATEGORIES_META[CATEGORIES_META.length-1].image = imgs[0];
         }
       });
@@ -1039,7 +859,6 @@ async function loadVendorCatalog(vendorId){
     renderChips(); renderMainView();
     document.getElementById("loadingMsg").style.display = "none";
   }catch(e){
-    console.warn(e);
     document.getElementById("loadingMsg").textContent = "Catalog load failed";
   }
 }
@@ -1048,89 +867,30 @@ window.backToShops = function(){
   saveShopCart();
   SHOP_ENTERED = false;
   currentSelectedCategory = null;
-  ITEMS.forEach(function(i){ i.qty = 0; });
+  ITEMS.forEach(i => i.qty = 0);
   document.getElementById("shopPicker").style.display = "";
   document.getElementById("shopWorkspace").style.display = "none";
   document.getElementById("billbar").style.display = "none";
   document.getElementById("homePageWrapper").style.display = "block";
-  document.getElementById("coverBanner").style.display = "block";
-  var fw = document.querySelector(".features-scroll-wrap");
-  if(fw) fw.style.display = "";
-  document.getElementById("featuredSection").style.display = "";
   try{ history.pushState({ page: 'home' }, '', '#home'); }catch(e){}
   loadShopsList();
-  // restore mixed top deals (all shops)
-  if(typeof loadFeaturedLite === "function") loadFeaturedLite();
   window.scrollTo(0,0);
 };
-;
-
-
-
-async function loadData(){
-  try{
-    let index = null;
-    try{
-      const fr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/site_categories.json");
-      index = await fr.json();
-    }catch(e){}
-    if(!Array.isArray(index) || !index.length){
-      index = await fetch("categories_index.json?t=" + Date.now()).then(r => r.json());
-    }
-    const catResults = await Promise.all(index.map(e => fetchCategoryWithFirebase(String(e.file||"").replace(/\.json$/i,""))));
-    
-    CATEGORIES_META = index.map((e, i) => {
-      let itemsList = catResults[i] || [];
-      let defaultImg = e.image || "";
-      if(!defaultImg && itemsList.length > 0){
-        let firstWithImg = itemsList.find(it => (it.images && it.images.length > 0) || it.image);
-        if(firstWithImg){
-          defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
-        }
-      }
-      return { name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: defaultImg };
-    });
-
-    ITEMS = []; CATEGORIES_DATA = {};
-    index.forEach((entry, i) => {
-      let itemsList = catResults[i] || [];
-      CATEGORIES_DATA[entry.category] = itemsList;
-      itemsList.forEach((it, ii) => {
-        let imgs = it.images || (it.image ? [it.image] : []);
-        ITEMS.push({
-          id: i+"-"+ii, cat: entry.category, icon: entry.icon,
-          name: it.name, name_roman: it.name_roman||"",
-          units: it.units || [{label: it.unit||"KG", rate: it.rate}], unitIndex: 0,
-          available: it.available !== false, images: imgs, featured: it.featured === true, qty: 0
-        });
-      });
-    });
-    renderChips(); renderMainView(); renderFeatured();
-    document.getElementById("loadingMsg").style.display = "none";
-  }catch(e){ document.getElementById("loadingMsg").textContent = "⚠️ لوڈنگ ناکام"; }
-}
 
 function restoreShopCart(){
   if(!ACTIVE_VENDOR.id) return;
   let store = getCartStore();
   let shopCart = store[ACTIVE_VENDOR.id] || {};
-  ITEMS.forEach(i => {
-    i.qty = shopCart[i.id] || 0;
-  });
+  ITEMS.forEach(i => { i.qty = shopCart[i.id] || 0; });
 }
 
 function saveShopCart(){
   if(!ACTIVE_VENDOR.id) return;
   let store = getCartStore();
   let shopCart = {};
-  ITEMS.forEach(i => {
-    if(i.qty > 0) shopCart[i.id] = i.qty;
-  });
-  if(Object.keys(shopCart).length > 0){
-    store[ACTIVE_VENDOR.id] = shopCart;
-  } else {
-    delete store[ACTIVE_VENDOR.id];
-  }
+  ITEMS.forEach(i => { if(i.qty > 0) shopCart[i.id] = i.qty; });
+  if(Object.keys(shopCart).length > 0) store[ACTIVE_VENDOR.id] = shopCart;
+  else delete store[ACTIVE_VENDOR.id];
   saveCartStore(store);
 }
 
@@ -1150,11 +910,7 @@ function selectCategory(catName){
   }
 }
 
-
-function resetToHome(){ 
-  if(SHOP_ENTERED) backToShops(); 
-  selectCategory(null); 
-}
+function resetToHome(){ if(SHOP_ENTERED) backToShops(); selectCategory(null); }
 window.resetToHome = resetToHome;
 
 function renderMainView(filter=""){
@@ -1191,7 +947,6 @@ function createItemRow(it){
   row.id = "row-"+it.id;
   let mainImg = (it.images && it.images.length > 0) ? it.images[0] : "";
   let imgCount = (it.images && it.images.length > 1) ? `<div class="thumb-badge">+${it.images.length-1}</div>` : "";
-
   row.innerHTML = `
     <div class="item-row-top">
       <div class="item-thumb" onclick="openLightboxItem('${it.id}')">
@@ -1205,12 +960,10 @@ function createItemRow(it){
       ${(it.premium || it.no_qty) ? `
       <div style="text-align:left;font-size:11px;">
         <div style="color:${it.available===false?'#B71C1C':'#2E7D32'};font-weight:bold;">${it.available===false?'Sold Out':'Available · شاپ/کال'}</div>
-        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;"
-          onclick="inquirePremium('${it.id}')">${it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
+        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;" onclick="inquirePremium('${it.id}')">${it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
       </div>` : `
       <div class="qty-box"><button type="button" onclick="changeQty('${it.id}',-1)">−</button><input type="number" value="${it.qty}" readonly><button type="button" class="plus" onclick="changeQty('${it.id}',1)">+</button></div>`}
-    </div>
-  `;
+    </div>`;
   return row;
 }
 
@@ -1219,34 +972,25 @@ function inquirePremium(id){
   if(!it) return;
   if(it.available === false){ alert("Sold Out"); return; }
   it.qty = it.qty > 0 ? 0 : 1;
-  if(it.qty === 1){
-    alert("💎 مہنگا آئٹم کارٹ میں۔\nخودکار ڈیلیوری نہیں۔\nآرڈر متعلقہ شاپ کے WhatsApp پر استفسار کے طور پر جائے گا۔");
-  }
   renderMainView(document.getElementById("search").value);
   renderBill();
   document.getElementById("billbar").classList.remove("collapsed");
   saveShopCart();
 }
+
 function changeUnit(id, idx){ const it = ITEMS.find(x => x.id === id); if(it){ it.unitIndex = parseInt(idx); renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); } }
+
 function changeQty(id, delta){
   const it = ITEMS.find(x => x.id === id);
   if(!it) return;
-  if(delta > 0 && (it.premium === true || it.no_qty === true)){
-    alert("⚠️ یہ مہنگا / خاص آئٹم ہے۔\n\nخودکار ڈیلیوری نہیں۔\nشاپ تشریف لائیں یا کال/واٹس ایپ پر بات کر کے فیصلہ کریں۔\nآرڈر بھیجنے پر وینڈر کو استفسار جائے گا۔");
-  }
   it.qty = Math.max(0, it.qty + delta);
   renderMainView(document.getElementById("search").value);
   renderBill();
   saveShopCart();
 }
-function removeItemFromCart(id){ const it = ITEMS.find(x => x.id === id); if(it){ it.qty = 0; renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); } }
-function clearActiveCart(){ 
-  ITEMS.forEach(i => i.qty = 0); 
-  renderMainView(document.getElementById("search").value); 
-  renderBill(); 
-  saveShopCart(); 
-}
 
+function removeItemFromCart(id){ const it = ITEMS.find(x => x.id === id); if(it){ it.qty = 0; renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); } }
+function clearActiveCart(){ ITEMS.forEach(i => i.qty = 0); renderMainView(document.getElementById("search").value); renderBill(); saveShopCart(); }
 function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
 
 function formatPayDisplay(digits){
@@ -1255,50 +999,38 @@ function formatPayDisplay(digits){
   if(d.length===12 && d.indexOf("92")===0) return "0"+d.slice(2,5)+"-"+d.slice(5);
   return d || "—";
 }
+
 function getActivePayNumber(){
   const v = ACTIVE_VENDOR || {};
   let d = String(v.pay_number || "").replace(/[^0-9]/g,"");
   if(!d && v.isMaster) d = "03349353799";
-  // display as local 03...
   if(d.indexOf("92")===0 && d.length>=12) d = "0"+d.slice(2);
   return d;
 }
+
 function copyPayNumber(){
   const d = getActivePayNumber();
   if(!d){ alert("ادائیگی نمبر دستیاب نہیں"); return; }
-  navigator.clipboard.writeText(d).then(function(){ alert("نمبر کاپی: "+d); }).catch(function(){ alert(d); });
+  navigator.clipboard.writeText(d).then(() => alert("نمبر کاپی: "+d)).catch(() => alert(d));
 }
+
 function renderBill(){
   const chosen = ITEMS.filter(i => i.qty > 0);
   let subtotal = 0;
-  let hasPremium = false;
   document.getElementById("billLines").innerHTML = chosen.map(it => {
     const u = it.units[it.unitIndex] || it.units[0];
     const t = it.qty * (u.rate||0); subtotal += t;
-    if(it.premium || it.no_qty) hasPremium = true;
-    return '<div class="cart-item-row"><span>• '+it.name+(it.premium?' 💎':'')+' — '+it.qty+' '+(u.label||'')+' = <b>'+fmt(t)+'</b></span>'+
-      '<button type="button" class="cart-item-del" onclick="removeItemFromCart(\''+it.id+'\')">✕</button></div>';
+    return `<div class="cart-item-row"><span>• ${it.name} — ${it.qty} ${u.label||''} = <b>${fmt(t)}</b></span>
+      <button type="button" class="cart-item-del" onclick="removeItemFromCart('${it.id}')">✕</button></div>`;
   }).join("");
   document.getElementById("itemCount").textContent = chosen.length;
   document.getElementById("summaryTotal").textContent = fmt(subtotal);
   document.getElementById("payAmount").textContent = fmt(subtotal);
-  // vendor-specific payment
+  
   const pay = getActivePayNumber();
-  const title = document.getElementById("payCardTitle");
   const numEl = document.getElementById("payNumberDisplay");
-  const hint = document.getElementById("payVendorHint");
-  const owner = (ACTIVE_VENDOR && ACTIVE_VENDOR.owner_name) ? ACTIVE_VENDOR.owner_name : (ACTIVE_VENDOR && ACTIVE_VENDOR.shop_name) || "";
-  if(title) title.textContent = "EasyPaisa / JazzCash" + (owner ? " ("+owner+")" : "");
   if(numEl) numEl.textContent = formatPayDisplay(pay);
-  if(hint){
-    if(ACTIVE_VENDOR && !ACTIVE_VENDOR.isMaster){
-      hint.textContent = hasPremium
-        ? "⚠️ مہنگا آئٹم: ادائیگی/ڈیلیوری شاپ یا کال پر طے ہوگی۔ آرڈر "+(ACTIVE_VENDOR.shop_name||"وینڈر")+" کے WhatsApp پر جائے گا۔"
-        : "ادائیگی اور آرڈر اسی شاپ ("+(ACTIVE_VENDOR.shop_name||"")+") کے نمبر پر — آپ کے ماسٹر نمبر پر نہیں۔";
-    } else {
-      hint.textContent = hasPremium ? "⚠️ مہنگا آئٹم: خودکار ڈیلیوری نہیں۔" : "";
-    }
-  }
+
   if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
 }
 
@@ -1316,11 +1048,10 @@ document.getElementById("waBtn").onclick = function(){
   if(!addr){ alert("براہ کرم مکمل پتہ درج کریں"); document.getElementById("custAddr").focus(); return; }
   const normalized = normalizePkPhone(phone);
   if(!normalized){
-    alert("❌ غلط یا ادھورا فون نمبر!\n\nدرست مثال: 03349353799\n(بالکل 11 ہندسے، 03 سے شروع)\n\nآرڈر اس نمبر کے بغیر نہیں بھیجا جا سکتا۔");
+    alert("❌ غلط فون نمبر!\n\nدرست مثال: 03349353799");
     document.getElementById("custPhone").focus();
     return;
   }
-  // فیلڈ میں معیاری شکل لکھ دو
   document.getElementById("custPhone").value = normalized;
   var chk = document.getElementById("popupTermsCheck");
   if(chk) chk.checked = false;
@@ -1331,109 +1062,48 @@ function closeConfirmPopup(){ document.getElementById("confirmPopupOverlay").cla
 
 function proceedWithOrder(){
   const chk = document.getElementById("popupTermsCheck");
-  if(chk && !chk.checked){
-    alert("براہ کرم تصدیقی باکس پر ٹک کریں کہ آپ کو آرڈر کی ضرورت ہے۔");
-    return;
-  }
+  if(chk && !chk.checked){ alert("براہ کرم تصدیقی باکس پر ٹک کریں۔"); return; }
   const name = document.getElementById("custName").value.trim();
   const phoneRaw = document.getElementById("custPhone").value.trim();
   const addr = document.getElementById("custAddr").value.trim();
   const phone = normalizePkPhone(phoneRaw);
-  if(!name || !addr){ alert("نام اور پتہ ضروری ہیں"); return; }
-  if(!phone){
-    alert("❌ فون نمبر درست نہیں — آرڈر نہیں بھیجا جا سکتا۔");
-    closeConfirmPopup();
-    document.getElementById("custPhone").focus();
-    return;
-  }
-  document.getElementById("custPhone").value = phone;
   closeConfirmPopup();
+  
   const chosen = ITEMS.filter(i => i.qty > 0);
-  if(!chosen.length){ alert("کارٹ خالی ہے"); return; }
-
-  // Target vendor WhatsApp ONLY (not master, unless SJ Foods)
   let targetWa = String((ACTIVE_VENDOR && ACTIVE_VENDOR.whatsapp) || "").replace(/[^0-9]/g,"");
   if(!targetWa && ACTIVE_VENDOR && ACTIVE_VENDOR.id === "v001") targetWa = "923349353799";
-  if(!targetWa){
-    alert("اس شاپ کا WhatsApp نمبر دستیاب نہیں۔ رجسٹریشن میں نمبر چیک کریں۔");
-    return;
-  }
-
-  const hasPremium = chosen.some(function(it){ return it.premium === true || it.no_qty === true; });
+  
   const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
   let subtotal = 0;
-  let msg = "*SJ ONLINE — ORDER*\n";
-  msg += "Shop: " + (ACTIVE_VENDOR.shop_name || "Shop") + "\n";
-  msg += "Vendor ID: " + (ACTIVE_VENDOR.id || "") + "\n";
-  msg += "Code: " + orderCode + "\n";
-  msg += "Name: " + name + "\n";
-  msg += "Phone: " + phone + "\n";
-  msg += "Address: " + addr + "\n\n";
-  if(hasPremium){
-    msg += "*⚠️ PREMIUM / SPECIAL ITEM*\n";
-    msg += "Auto delivery نہیں — شاپ وزٹ یا کال کے بعد فیصلہ۔\n\n";
-  }
-  msg += "*Items:*\n";
-  chosen.forEach(function(it){
+  let msg = "*SJ ONLINE — ORDER*\nShop: " + (ACTIVE_VENDOR.shop_name || "Shop") + "\nCode: " + orderCode + "\nName: " + name + "\nPhone: " + phone + "\nAddress: " + addr + "\n\n*Items:*\n";
+  chosen.forEach(it => {
     const u = it.units[it.unitIndex];
     const t = it.qty * u.rate;
     subtotal += t;
-    const tag = (it.premium || it.no_qty) ? " [PREMIUM]" : "";
-    msg += "- " + (it.name || "") + tag + " x " + it.qty + " " + u.label + " = " + fmt(t) + "\n";
+    msg += "- " + it.name + " x " + it.qty + " " + u.label + " = " + fmt(t) + "\n";
   });
-  msg += "\n*Total: " + fmt(subtotal) + "*\n";
-  msg += hasPremium ? "\n(استفسار / کال کنفرم — خودکار ڈیلیوری نہیں)" : "\nPlease confirm & dispatch.";
+  msg += "\n*Total: " + fmt(subtotal) + "*";
 
   try{
     if(window.dbRef){
       window.dbRef.set(window.dbRef.ref(window.dbRef.db, "orders/" + orderCode), {
-        code: orderCode,
-        name: name,
-        phone: phone,
-        address: addr,
-        items: msg.replace(/\n/g, "<br>"),
-        total: Math.round(subtotal),
-        otp: orderCode.replace("SJ-", ""),
-        timestamp: new Date().toISOString(),
-        status: "pending",
-        vendor_id: ACTIVE_VENDOR.id || "v001",
-        shop_name: ACTIVE_VENDOR.shop_name || "Shop",
-        premium: hasPremium,
-        target_whatsapp: targetWa
+        code: orderCode, name: name, phone: phone, address: addr, items: msg.replace(/\n/g, "<br>"),
+        total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""), timestamp: new Date().toISOString(),
+        status: "pending", vendor_id: ACTIVE_VENDOR.id || "v001", shop_name: ACTIVE_VENDOR.shop_name || "Shop", target_whatsapp: targetWa
       });
     }
-  }catch(e){ console.warn(e); }
+  }catch(e){}
 
-  // ALWAYS vendor's registered WhatsApp
   window.open("https://wa.me/" + targetWa + "?text=" + encodeURIComponent(msg), "_blank");
 }
 
-
-function renderFeatured(){ if(typeof startTopDealsShuffle==='function') startTopDealsShuffle(); else if(typeof paintTopDealsPair==='function') paintTopDealsPair(); }
-
-
 function jumpToItem(catName, itemId){
-  const it = (ITEMS || []).find(function(x){ return x.id === itemId; });
-  const targetVendor = (it && it.vendorId) ? it.vendorId : "v001";
-  if(!SHOP_ENTERED || (ACTIVE_VENDOR && ACTIVE_VENDOR.id !== targetVendor)){
-    enterShop(targetVendor).then(function(){
-      setTimeout(function(){
-        if(typeof selectCategory === "function") selectCategory(catName);
-        setTimeout(function(){
-          var el = document.getElementById("row-" + itemId);
-          if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
-        }, 250);
-      }, 150);
-    });
-    return;
-  }
-  if(typeof selectCategory === "function") selectCategory(catName);
-  setTimeout(function(){
+  selectCategory(catName);
+  setTimeout(() => {
     var el = document.getElementById("row-" + itemId);
-    if(el){ el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+    if(el) el.scrollIntoView({ behavior: "smooth", block: "center" });
   }, 100);
 }
-
 
 function openLightboxItem(itemId){
   let it = ITEMS.find(x => x.id === itemId);
@@ -1448,14 +1118,9 @@ function showLightboxImages(imgs, index){
   if(!box || !imgEl) return;
   imgEl.src = imgs[index];
   box.classList.remove("hidden");
-  if(!LIGHTBOX_OPEN){
-    LIGHTBOX_OPEN = true;
-    try{ history.pushState({ page: 'lightbox' }, '', '#photo'); }catch(e){}
-  }
+  LIGHTBOX_OPEN = true;
   if(imgs.length > 1){
-    thumbsEl.innerHTML = imgs.map(function(src, i){
-      return '<img src="'+src+'" class="lightbox-thumb '+(i===index?'active':'')+'" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs,'+i+')">';
-    }).join("");
+    thumbsEl.innerHTML = imgs.map((src, i) => `<img src="${src}" class="lightbox-thumb ${i===index?'active':''}" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs,${i})">`).join("");
     thumbsEl.style.display = "flex";
     window._lbImgs = imgs;
   } else {
@@ -1467,59 +1132,14 @@ function showLightboxImages(imgs, index){
 function closeLightbox(fromPop){
   const box = document.getElementById("lightbox");
   if(box) box.classList.add("hidden");
-  if(LIGHTBOX_OPEN){
-    LIGHTBOX_OPEN = false;
-    // if closed by tap (not browser back), remove #photo state without leaving site
-    if(!fromPop){
-      try{
-        if(location.hash === '#photo'){
-          history.replaceState(SHOP_ENTERED ? { page:'shop', id: (ACTIVE_VENDOR&&ACTIVE_VENDOR.id)||'' } : { page:'home' }, '', SHOP_ENTERED ? ('#shop-' + ((ACTIVE_VENDOR&&ACTIVE_VENDOR.id)||'')) : '#home');
-        }
-      }catch(e){}
-    }
-  }
-}
-
-
-async function openShopFromHash(){
-  try{
-    const h = (location.hash || "").replace(/^#/, "");
-    // shop-v64451686 or shop/v64451686
-    let m = h.match(/^shop-([A-Za-z0-9_]+)/) || h.match(/^shop\/([A-Za-z0-9_]+)/);
-    if(m && m[1]){
-      const id = m[1];
-      // ensure vendor meta loaded
-      if(!ALL_VENDORS[id]){
-        try{
-          const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + id + ".json");
-          const v = await res.json();
-          if(v) ALL_VENDORS[id] = v;
-        }catch(e){}
-      }
-      if(typeof tryEnterShop === "function") tryEnterShop(id);
-      else if(typeof enterShop === "function") await enterShop(id);
-      return true;
-    }
-  }catch(e){ console.warn("hash shop", e); }
-  return false;
+  LIGHTBOX_OPEN = false;
 }
 
 async function bootApp(){
-  try{ initHomeVisuals(); }catch(e){ console.warn(e); }
-  // URL میں شاپ ہو تو فوراً کھولو — لسٹ کا انتظار نہیں
-  const hashOpen = await openShopFromHash();
-  // پس منظر میں شاپس لسٹ
-  loadShopsList().then(function(){
-    if(!hashOpen && typeof loadFeaturedLite === "function"){
-      // deals already started in initHomeVisuals; refresh after vendors meta
-      try{ loadFeaturedLite(); }catch(e){}
-    }
-  }).catch(function(e){ console.warn(e); });
+  initHomeVisuals();
+  loadShopsList();
 }
 bootApp();
-window.addEventListener("hashchange", function(){
-  if((location.hash||"").indexOf("shop-") >= 0) openShopFromHash();
-});
 </script>
 </body>
 </html>

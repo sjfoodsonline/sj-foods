@@ -830,9 +830,11 @@ async function loadShopsList(){
       const n = countItems(v, isOwn);
       const isComingSoon = !isOwn && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
-      // base64 covers OK but heavy; still show
+      // list: skip huge base64 (shop page still shows full cover)
       let coverHtml;
-      if(cover){
+      if(cover && String(cover).indexOf("data:image")===0 && cover.length > 40000){
+        coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
+      } else if(cover){
         coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.style.display=\'none\'; var p=this.nextElementSibling; if(p) p.style.display=\'flex\';">'+
           '<div class="shop-cover ph ph-fallback" style="display:none">'+(isOwn?"🥬":"🏪")+'</div>';
       } else {
@@ -1419,8 +1421,39 @@ function closeLightbox(fromPop){
 }
 
 
-initHomeVisuals();
-loadShopsList();
+async function openShopFromHash(){
+  try{
+    const h = (location.hash || "").replace(/^#/, "");
+    // shop-v64451686 or shop/v64451686
+    let m = h.match(/^shop-([A-Za-z0-9_]+)/) || h.match(/^shop\/([A-Za-z0-9_]+)/);
+    if(m && m[1]){
+      const id = m[1];
+      // ensure vendor meta loaded
+      if(!ALL_VENDORS[id]){
+        try{
+          const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + id + ".json");
+          const v = await res.json();
+          if(v) ALL_VENDORS[id] = v;
+        }catch(e){}
+      }
+      if(typeof tryEnterShop === "function") tryEnterShop(id);
+      else if(typeof enterShop === "function") await enterShop(id);
+      return true;
+    }
+  }catch(e){ console.warn("hash shop", e); }
+  return false;
+}
+
+async function bootApp(){
+  try{ initHomeVisuals(); }catch(e){ console.warn(e); }
+  try{ await loadShopsList(); }catch(e){ console.warn(e); }
+  // if URL has #shop-xxx open that shop (refresh / shared link)
+  await openShopFromHash();
+}
+bootApp();
+window.addEventListener("hashchange", function(){
+  if((location.hash||"").indexOf("shop-") >= 0) openShopFromHash();
+});
 </script>
 </body>
 </html>

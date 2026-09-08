@@ -709,11 +709,10 @@ async function loadFeaturedLite(){
     const index = await fetch("categories_index.json?t=" + Date.now()).then(function(r){ return r.json(); });
     const all = [];
     const gallery = [];
-    const slice = (index || []).slice(0, 10);
+    const slice = (index || []).slice(0, 8);
     const results = await Promise.all(slice.map(function(e){
-      return fetchCategoryWithFirebase(e.file).catch(function(){ return []; });
+      return fetchCategoryWithFirebase(String(e.file||"").replace(/\.json$/i,"")).catch(function(){ return []; });
     }));
-    // SJ Foods products
     slice.forEach(function(entry, i){
       (results[i] || []).forEach(function(it, ii){
         if(it.available === false) return;
@@ -735,68 +734,90 @@ async function loadFeaturedLite(){
         });
       });
     });
-    // Vendor items (approved) — gallery + deals pool
-    try{
-      const vRes = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json");
-      const vendors = await vRes.json() || {};
-      Object.keys(vendors).forEach(function(vid){
-        if(vid === "_market" || vid === "v001") return;
-        const v = vendors[vid];
-        if(!v || v.blocked || (v.status && v.status !== "approved")) return;
-        const itemsRoot = v.items || {};
-        Object.keys(itemsRoot).forEach(function(cat){
-          const catItems = itemsRoot[cat] || {};
-          Object.keys(catItems).forEach(function(k){
-            const it = catItems[k] || {};
-            if(it.available === false) return;
-            let imgs = it.images || (it.image ? [it.image] : []);
-            let img0 = imgs[0] || "";
-            if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+    // vendor deals: only from already-loaded ALL_VENDORS (no full dump download)
+    Object.keys(ALL_VENDORS || {}).forEach(function(vid){
+      if(vid === "v001" || vid === "_market") return;
+      const v = ALL_VENDORS[vid];
+      if(!v || v.blocked || (v.status && v.status !== "approved")) return;
+      const itemsRoot = v.items || {};
+      Object.keys(itemsRoot).forEach(function(key){
+        const it = itemsRoot[key];
+        if(!it || typeof it !== "object") return;
+        // flat product
+        if(it.name || it.units || it.rate != null){
+          if(it.available === false) return;
+          let imgs = it.images || (it.image ? [it.image] : []);
+          let img0 = imgs[0] || "";
+          if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+          all.push({
+            id: "v-"+vid+"-"+key,
+            cat: it.category || "General",
+            icon: "🏪",
+            name: it.name || key,
+            name_roman: it.name_roman || it.name || key,
+            units: it.units || [{ label: it.unit || "Pcs", rate: it.rate || 0 }],
+            images: imgs,
+            featured: true,
+            available: true,
+            qty: 0,
+            shop: v.shop_name || vid,
+            vendorId: vid,
+            premium: it.premium === true
+          });
+        } else {
+          // nested by category
+          Object.keys(it).forEach(function(pid){
+            const p = it[pid];
+            if(!p || typeof p !== "object") return;
+            if(p.available === false) return;
+            let imgs = p.images || (p.image ? [p.image] : []);
             all.push({
-              id: "v-"+vid+"-"+k,
-              cat: cat,
+              id: "v-"+vid+"-"+pid,
+              cat: key,
               icon: "🏪",
-              name: it.name || k,
-              name_roman: it.name_roman || it.name || k,
-              units: it.units || [{ label: it.unit || "Pcs", rate: it.rate || 0 }],
+              name: p.name || pid,
+              name_roman: p.name_roman || p.name || pid,
+              units: p.units || [{ label: p.unit || "Pcs", rate: p.rate || 0 }],
               images: imgs,
               featured: true,
               available: true,
               qty: 0,
               shop: v.shop_name || vid,
-              vendorId: vid
+              vendorId: vid,
+              premium: p.premium === true
             });
           });
-        });
+        }
       });
-    }catch(ve){ console.warn("vendor deals", ve); }
+    });
 
-    // unique gallery urls, shuffle
     const uniq = [];
     gallery.forEach(function(u){ if(uniq.indexOf(u) < 0) uniq.push(u); });
-    paintProductGallery(shuffleArray(uniq).slice(0, 24));
-
-    HOME_DEALS_POOL = shuffleArray(all);
-    ITEMS = HOME_DEALS_POOL.slice(); // jumpToItem / search light
-    startTopDealsShuffle();
+    if(typeof paintProductGallery === "function") paintProductGallery(typeof shuffleArray==="function" ? shuffleArray(uniq).slice(0, 24) : uniq.slice(0,24));
+    HOME_DEALS_POOL = typeof shuffleArray === "function" ? shuffleArray(all) : all;
+    ITEMS = HOME_DEALS_POOL.slice();
+    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
     if(section) section.style.display = "";
   }catch(e){
     console.warn("featured lite", e);
-    paintProductGallery([]);
-    startTopDealsShuffle();
+    if(typeof paintProductGallery === "function") paintProductGallery([]);
+    if(typeof startTopDealsShuffle === "function") startTopDealsShuffle();
     if(section) section.style.display = "";
   }
 }
 
 
+
 async function loadShopsList(){
   const grid = document.getElementById("shopGrid");
   if(!grid) return;
+  const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
+
+  // فوری SJ Foods — کبھی لوڈنگ پر نہ اٹکے
   const instant = {
-    v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png" }
+    v001: { shop_name: "SJ Foods", status: "approved", city: "Mingora", cover_image: "cover.png", blocked: false }
   };
-  function countItems(v, isOwn){
-    if(isOwn) return -1; // SJ Foods: show without coming-soon; count optional
+  function countItems(v){
     let n = 0;
     const items = (v && v.items) || {};
     if(typeof items !== "object") return 0;
@@ -804,12 +825,16 @@ async function loadShopsList(){
       const obj = items[cat];
       if(!obj) return;
       if(Array.isArray(obj)) n += obj.length;
-      else if(typeof obj === "object") n += Object.keys(obj).length;
+      else if(typeof obj === "object"){
+        // flat product or nested
+        if(obj.name || obj.rate != null || obj.units) n += 1;
+        else n += Object.keys(obj).length;
+      }
     });
     return n;
   }
   function paint(data){
-    ALL_VENDORS = data || {};
+    ALL_VENDORS = Object.assign({}, ALL_VENDORS, data || {});
     let ids = Object.keys(data).filter(function(id){
       if(id === "_market") return false;
       const v = data[id];
@@ -827,44 +852,80 @@ async function loadShopsList(){
       const isOwn = (id === "v001");
       const name = v.shop_name || (isOwn ? "SJ Foods" : id);
       const city = v.city || "Mingora";
-      const n = countItems(v, isOwn);
-      const isComingSoon = !isOwn && n < 5;
+      const n = isOwn ? -1 : countItems(v);
+      const isComingSoon = !isOwn && n >= 0 && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
-      // list: skip huge base64 (shop page still shows full cover)
       let coverHtml;
-      if(cover && String(cover).indexOf("data:image")===0 && cover.length > 40000){
+      if(cover && String(cover).indexOf("data:image") === 0){
         coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
       } else if(cover){
-        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.style.display=\'none\'; var p=this.nextElementSibling; if(p) p.style.display=\'flex\';">'+
-          '<div class="shop-cover ph ph-fallback" style="display:none">'+(isOwn?"🥬":"🏪")+'</div>';
+        coverHtml = '<img class="shop-cover" src="'+cover+'" loading="lazy" alt="" onerror="this.outerHTML=\\'<div class=shop-cover ph>🏪</div>\\'">';
       } else {
         coverHtml = '<div class="shop-cover ph">'+(isOwn?"🥬":"🏪")+'</div>';
       }
-      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + n);
-      return '<div class="shop-card" onclick="tryEnterShop(\''+id+'\')">'+
+      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + (n < 0 ? "—" : n));
+      return '<div class="shop-card" onclick="tryEnterShop(\\''+id+'\\')">'+
         (isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : '')+
         coverHtml+
         '<div class="shop-body"><div class="sname">'+name+'</div><div class="scity">'+city+'</div>'+
         '<div class="stag">'+countLabel+'</div></div></div>';
     }).join("");
   }
+
   paint(instant);
+
+  // ہلکی لوڈنگ: صرف keys + چھوٹے فیلڈز — پورا vendors.json (1MB) نہیں
   try{
-    const ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    const timer = ctrl ? setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 10000) : null;
-    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors.json", ctrl ? { signal: ctrl.signal } : undefined);
-    if(timer) clearTimeout(timer);
-    if(!res.ok) throw new Error("HTTP "+res.status);
-    let data = await res.json();
-    if(!data || typeof data !== "object") data = {};
-    if(!data.v001) data.v001 = instant.v001;
-    else if(!data.v001.cover_image) data.v001.cover_image = "cover.png";
+    const ctrl = new AbortController();
+    const timer = setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 8000);
+    const keysRes = await fetch(RTDB + "/vendors.json?shallow=true", { signal: ctrl.signal });
+    clearTimeout(timer);
+    const keysObj = await keysRes.json() || {};
+    const ids = Object.keys(keysObj).filter(function(k){ return k !== "_market"; });
+
+    const data = { v001: instant.v001 };
+    await Promise.all(ids.map(async function(id){
+      try{
+        const base = RTDB + "/vendors/" + id + "/";
+        const [shop_name, status, blocked, city, phone, whatsapp, pay_number, owner_name, items] = await Promise.all([
+          fetch(base + "shop_name.json").then(function(r){ return r.json(); }).catch(function(){ return null; }),
+          fetch(base + "status.json").then(function(r){ return r.json(); }).catch(function(){ return "approved"; }),
+          fetch(base + "blocked.json").then(function(r){ return r.json(); }).catch(function(){ return false; }),
+          fetch(base + "city.json").then(function(r){ return r.json(); }).catch(function(){ return "Mingora"; }),
+          fetch(base + "phone.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "whatsapp.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "pay_number.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "owner_name.json").then(function(r){ return r.json(); }).catch(function(){ return ""; }),
+          fetch(base + "items.json").then(function(r){ return r.json(); }).catch(function(){ return null; })
+        ]);
+        // cover الگ — صرف URL ہو تو
+        let cover_image = "";
+        try{
+          const c = await fetch(base + "cover_image.json").then(function(r){ return r.json(); });
+          if(c && String(c).indexOf("data:image") !== 0) cover_image = c;
+          else if(id === "v001") cover_image = "cover.png";
+        }catch(e){}
+        data[id] = {
+          shop_name: shop_name || id,
+          status: status || "approved",
+          blocked: blocked === true,
+          city: city || "Mingora",
+          phone: phone || "",
+          whatsapp: whatsapp || "",
+          pay_number: pay_number || "",
+          owner_name: owner_name || "",
+          cover_image: cover_image || (id === "v001" ? "cover.png" : ""),
+          items: items || {}
+        };
+      }catch(e){}
+    }));
     paint(data);
   }catch(e){
-    console.warn("shops fetch", e);
+    console.warn("shops light fetch", e);
     if(grid.innerHTML.indexOf("shop-card") < 0) paint(instant);
   }
 }
+
 
 window.tryEnterShop = function(vendorId){
   let activeShop = getActiveCartShopId();
@@ -1446,9 +1507,15 @@ async function openShopFromHash(){
 
 async function bootApp(){
   try{ initHomeVisuals(); }catch(e){ console.warn(e); }
-  try{ await loadShopsList(); }catch(e){ console.warn(e); }
-  // if URL has #shop-xxx open that shop (refresh / shared link)
-  await openShopFromHash();
+  // URL میں شاپ ہو تو فوراً کھولو — لسٹ کا انتظار نہیں
+  const hashOpen = await openShopFromHash();
+  // پس منظر میں شاپس لسٹ
+  loadShopsList().then(function(){
+    if(!hashOpen && typeof loadFeaturedLite === "function"){
+      // deals already started in initHomeVisuals; refresh after vendors meta
+      try{ loadFeaturedLite(); }catch(e){}
+    }
+  }).catch(function(e){ console.warn(e); });
 }
 bootApp();
 window.addEventListener("hashchange", function(){

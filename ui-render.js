@@ -149,10 +149,11 @@ async function loadData(){
         }catch(e){}
       }
 
-      if(itemsList.length > 0){
-        window.CATEGORIES_DATA[catName] = itemsList;
-        let defaultImg = entry.image || "";
+      // Always add category to meta so all categories show (even if empty)
+      let defaultImg = entry.image || "";
+      window.CATEGORIES_DATA[catName] = itemsList || [];
 
+      if(itemsList && itemsList.length > 0){
         itemsList.forEach((it, ii) => {
           let imgs = it.images || (it.image ? [it.image] : []);
           let img0 = imgs[0] || "";
@@ -173,14 +174,14 @@ async function loadData(){
             qty: 0
           });
         });
-
-        window.CATEGORIES_META.push({
-          name: catName,
-          name_roman: catRoman,
-          icon: icon,
-          image: defaultImg
-        });
       }
+
+      window.CATEGORIES_META.push({
+        name: catName,
+        name_roman: catRoman,
+        icon: icon,
+        image: defaultImg
+      });
     }
 
     paintProductGallery(shuffleArray(gallery).slice(0, 24));

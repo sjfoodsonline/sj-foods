@@ -87,91 +87,88 @@ window.initHomeVisuals = function(){
   loadData();
 };
 
+const ALL_POSSIBLE_JSONS = [
+  { file: "sabzi", name: "سبزی", roman: "Sabzi", icon: "🥦" },
+  { file: "phal", name: "پھل", roman: "Phal", icon: "🍎" },
+  { file: "bakery", name: "بیکری", roman: "Bakery", icon: "🍞" },
+  { file: "dairy", name: "ڈیری", roman: "Dairy", icon: "🥛" },
+  { file: "poultry", name: "پولٹری", roman: "Poultry", icon: "🍗" },
+  { file: "fish", name: "مچھلی", roman: "Fish", icon: "🐟" },
+  { file: "rice", name: "چاول", roman: "Rice", icon: "🍚" },
+  { file: "pulses", name: "دالیں", roman: "Pulses", icon: "🫘" },
+  { file: "oil_ghee", name: "گھی/آئل", roman: "Oil & Ghee", icon: "🛢️" },
+  { file: "spices", name: "مصالحہ جات", roman: "Spices", icon: "🌶️" },
+  { file: "biryani", name: "بریانی", roman: "Biryani", icon: "🍛" },
+  { file: "drinks", name: "مشروبات", roman: "Drinks", icon: "🥤" },
+  { file: "snacks", name: "سنیکس", roman: "Snacks", icon: "🍪" },
+  { file: "cleaning", name: "صفائی", roman: "Cleaning", icon: "🧹" }
+];
+
 async function loadData(){
   try{
     const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
-    let index = [];
-    let productsMap = {};
-    
+    let firebaseProducts = {};
     try{
-      const [catRes, prodRes] = await Promise.all([
-        fetch(RTDB + "/site_categories.json"),
-        fetch(RTDB + "/site_products.json")
-      ]);
-      const catData = await catRes.json();
-      const prodData = await prodRes.json();
-      if(Array.isArray(catData)) index = catData;
-      if(prodData && typeof prodData === "object") productsMap = prodData;
+      const res = await fetch(RTDB + "/site_products.json");
+      firebaseProducts = await res.json() || {};
     }catch(e){}
-
-    // Fallback if categories index is empty in firebase
-    if(!index.length){
-      Object.keys(productsMap).forEach(k => {
-        index.push({ file: k, category: k, category_roman: k, icon: "📦" });
-      });
-    }
-    if(!index.length){
-      index = [
-        { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
-        { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
-        { file: "bakery", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
-        { file: "dairy", category: "ڈیری", category_roman: "Dairy", icon: "🥛" },
-        { file: "grocery", category: "کرانہ", category_roman: "Grocery", icon: "🛒" }
-      ];
-    }
 
     window.CATEGORIES_META = [];
     window.ITEMS = [];
     window.CATEGORIES_DATA = {};
     const gallery = [];
 
-    index.forEach((entry, i) => {
-      let fileKey = String(entry.file || entry.category_roman || entry.category || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
+    for(let entry of ALL_POSSIBLE_JSONS){
+      let fileKey = entry.file;
       let itemsList = [];
-      
-      // Check multiple possible keys in firebase productsMap
-      if(productsMap[fileKey] && Array.isArray(productsMap[fileKey])){
-        itemsList = productsMap[fileKey];
-      } else if(entry.category && productsMap[entry.category] && Array.isArray(productsMap[entry.category])){
-        itemsList = productsMap[entry.category];
+
+      // Check Firebase first
+      if(firebaseProducts[fileKey] && Array.isArray(firebaseProducts[fileKey]) && firebaseProducts[fileKey].length > 0){
+        itemsList = firebaseProducts[fileKey];
       } else {
-        // Search keys case-insensitively
-        let foundKey = Object.keys(productsMap).find(k => k.toLowerCase() === fileKey || k.toLowerCase() === String(entry.category||"").toLowerCase());
-        if(foundKey && Array.isArray(productsMap[foundKey])) itemsList = productsMap[foundKey];
+        // Fallback to local JSON file in repo
+        try{
+          const lRes = await fetch(fileKey + ".json?t=" + Date.now());
+          if(lRes.ok){
+            const lData = await lRes.json();
+            if(Array.isArray(lData)) itemsList = lData;
+          }
+        }catch(e){}
       }
 
-      window.CATEGORIES_DATA[entry.category] = itemsList;
-      let defaultImg = entry.image || "";
-      
-      itemsList.forEach((it, ii) => {
-        let imgs = it.images || (it.image ? [it.image] : []);
-        let img0 = imgs[0] || "";
-        if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
-        if(!defaultImg && img0) defaultImg = img0;
+      if(itemsList.length > 0){
+        window.CATEGORIES_DATA[entry.roman] = itemsList;
+        let defaultImg = "";
+        
+        itemsList.forEach((it, ii) => {
+          let imgs = it.images || (it.image ? [it.image] : []);
+          let img0 = imgs[0] || "";
+          if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+          if(!defaultImg && img0) defaultImg = img0;
 
-        window.ITEMS.push({
-          id: fileKey + "-" + ii,
-          cat: entry.category,
-          icon: entry.icon || "📦",
-          name: it.name || "",
-          name_roman: it.name_roman || it.name || "",
-          units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
-          unitIndex: 0,
-          available: it.available !== false,
-          images: imgs,
-          featured: it.featured === true,
-          qty: 0
+          window.ITEMS.push({
+            id: fileKey + "-" + ii,
+            cat: entry.roman,
+            icon: entry.icon,
+            name: it.name || "",
+            name_roman: it.name_roman || it.name || "",
+            units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
+            unitIndex: 0,
+            available: it.available !== false,
+            images: imgs,
+            featured: it.featured === true,
+            qty: 0
+          });
         });
-      });
 
-      // Only push category if it has items or always show it
-      window.CATEGORIES_META.push({
-        name: entry.category,
-        name_roman: entry.category_roman || entry.category,
-        icon: entry.icon || "📦",
-        image: defaultImg
-      });
-    });
+        window.CATEGORIES_META.push({
+          name: entry.roman,
+          name_roman: entry.roman,
+          icon: entry.icon,
+          image: defaultImg
+        });
+      }
+    }
 
     paintProductGallery(shuffleArray(gallery).slice(0, 24));
     window.HOME_DEALS_POOL = shuffleArray(window.ITEMS.slice());

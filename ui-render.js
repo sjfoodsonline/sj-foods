@@ -90,19 +90,27 @@ window.initHomeVisuals = function(){
 async function loadData(){
   try{
     const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
-    let index = null;
-    let productsMap = null;
+    let index = [];
+    let productsMap = {};
     
     try{
       const [catRes, prodRes] = await Promise.all([
         fetch(RTDB + "/site_categories.json"),
         fetch(RTDB + "/site_products.json")
       ]);
-      index = await catRes.json();
-      productsMap = await prodRes.json();
+      const catData = await catRes.json();
+      const prodData = await prodRes.json();
+      if(Array.isArray(catData)) index = catData;
+      if(prodData && typeof prodData === "object") productsMap = prodData;
     }catch(e){}
 
-    if(!Array.isArray(index) || !index.length){
+    // Fallback if categories index is empty in firebase
+    if(!index.length){
+      Object.keys(productsMap).forEach(k => {
+        index.push({ file: k, category: k, category_roman: k, icon: "📦" });
+      });
+    }
+    if(!index.length){
       index = [
         { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
         { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
@@ -118,10 +126,18 @@ async function loadData(){
     const gallery = [];
 
     index.forEach((entry, i) => {
-      let fileKey = String(entry.file || entry.category_roman || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
+      let fileKey = String(entry.file || entry.category_roman || entry.category || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
       let itemsList = [];
-      if(productsMap && productsMap[fileKey] && Array.isArray(productsMap[fileKey])){
+      
+      // Check multiple possible keys in firebase productsMap
+      if(productsMap[fileKey] && Array.isArray(productsMap[fileKey])){
         itemsList = productsMap[fileKey];
+      } else if(entry.category && productsMap[entry.category] && Array.isArray(productsMap[entry.category])){
+        itemsList = productsMap[entry.category];
+      } else {
+        // Search keys case-insensitively
+        let foundKey = Object.keys(productsMap).find(k => k.toLowerCase() === fileKey || k.toLowerCase() === String(entry.category||"").toLowerCase());
+        if(foundKey && Array.isArray(productsMap[foundKey])) itemsList = productsMap[foundKey];
       }
 
       window.CATEGORIES_DATA[entry.category] = itemsList;
@@ -148,6 +164,7 @@ async function loadData(){
         });
       });
 
+      // Only push category if it has items or always show it
       window.CATEGORIES_META.push({
         name: entry.category,
         name_roman: entry.category_roman || entry.category,

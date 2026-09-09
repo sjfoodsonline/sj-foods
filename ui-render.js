@@ -9,6 +9,77 @@ function initHomeCoverSlider(){
   banner.classList.add("static-cover");
   banner.style.display = "block";
   track.style.transform = "none";
+  if(!track.querySelector("img")){
+    track.innerHTML = '<div class="cover-slide"><img src="cover.png" alt="Cover" onerror="this.src=\'icon-512.png\'"></div>';
+  }
+}
+
+function paintProductGallery(urls){
+  const track = document.getElementById("productStripTrack");
+  const wrap = document.getElementById("productStripWrap");
+  if(!track || !wrap) return;
+  let list = (urls || []).filter(u => u && u.indexOf("data:image") !== 0);
+  const uniq = []; list.forEach(u => { if(uniq.indexOf(u)<0) uniq.push(u); });
+  list = uniq;
+  if(list.length === 0) list = ["cover.png", "icon-512.png"];
+  window.HOME_GALLERY = list.slice(0, 30);
+  track.style.direction = "ltr";
+  track.innerHTML = window.HOME_GALLERY.map(src => `<div class="product-strip-slide"><img src="${src}" loading="lazy" onerror="this.src='icon-192.png'"></div>`).join("");
+  wrap.style.display = "block";
+  _galleryIdx = 0;
+  track.style.transform = "translate3d(0,0,0)";
+  if(window._galleryTimer) clearInterval(window._galleryTimer);
+  window._galleryTimer = setInterval(() => {
+    if(!window.HOME_GALLERY.length) return;
+    _galleryIdx = (_galleryIdx + 1) % window.HOME_GALLERY.length;
+    track.style.transform = `translate3d(${-_galleryIdx * 100}%,0,0)`;
+  }, 3200);
+}
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function paintTopDealsPair(){
+  const homeBox = document.getElementById("dealBox");
+  if(!homeBox) return;
+  let pool = window.HOME_DEALS_POOL && window.HOME_DEALS_POOL.length ? window.HOME_DEALS_POOL : (window.ITEMS || []).filter(i => i.available !== false);
+  if(!pool.length){
+    homeBox.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Deals</div></div><div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Shop</div></div>';
+    return;
+  }
+  const a = pool[_dealsIdx % pool.length];
+  const b = pool[(_dealsIdx + 1) % pool.length];
+  _dealsIdx = (_dealsIdx + 2) % Math.max(pool.length, 2);
+  function card(it){
+    if(!it) return '<div class="deal-card"><div class="deal-icon-box">⭐</div></div>';
+    let fImg = (it.images && it.images[0]) ? it.images[0] : "";
+    const nm = it.name_roman || it.name || "";
+    const rate = (it.units && it.units[0]) ? it.units[0].rate : 0;
+    const cat = it.cat || "";
+    const id = it.id || "";
+    return `<div class="deal-card" onclick="jumpToItem('${String(cat).replace(/'/g,"")}','${String(id).replace(/'/g,"")}')">
+      ${fImg ? `<img src="${fImg}" loading="lazy">` : `<div class="deal-icon-box">${it.icon||"⭐"}</div>`}
+      <div class="d-name">${nm}</div>
+      <div class="d-rate">${typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0))}</div></div>`;
+  }
+  homeBox.innerHTML = card(a) + card(b);
+}
+
+function startTopDealsShuffle(){
+  paintTopDealsPair();
+  if(window._dealsTimer) clearInterval(window._dealsTimer);
+  window._dealsTimer = setInterval(() => {
+    const box = document.getElementById("dealBox");
+    if(!box) return;
+    box.querySelectorAll(".deal-card").forEach(el => el.classList.add("shuffle-out"));
+    setTimeout(() => { paintTopDealsPair(); }, 280);
+  }, 4500);
 }
 
 window.initHomeVisuals = function(){
@@ -26,10 +97,12 @@ async function loadData(){
 
     if(!Array.isArray(index) || !index.length){
       index = [
-        { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
-        { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
-        { file: "spices", category: "مصالحہ جات", category_roman: "Spices", icon: "🌶️" },
-        { file: "snacks", category: "سنیکس", category_roman: "Snacks", icon: "🍪" }
+        { file: "sabzi.json", category: "سبزیاں", category_roman: "Sabziyan", icon: "🥦" },
+        { file: "phal.json", category: "پھل", category_roman: "Phal", icon: "🍎" },
+        { file: "bakery.json", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
+        { file: "dairy.json", category: "دودھ و ڈیری", category_roman: "Doodh o Dairy", icon: "🥛" },
+        { file: "fish.json", category: "عمر فقیر لالا فش", category_roman: "Umar Faqeer Lala Fish", icon: "🐟" },
+        { file: "biryani.json", category: "ملا بابا سپیشل بریانی", category_roman: "Mulla Baba Special Biryani", icon: "🍛" }
       ];
     }
 
@@ -40,11 +113,12 @@ async function loadData(){
 
     for(let i = 0; i < index.length; i++){
       let entry = index[i];
-      let cleanKey = String(entry.file || "").replace(/\.json$/i, "");
+      let fileName = entry.file || "sabzi.json";
+      let cleanKey = fileName.replace(/\.json$/i, "");
       let itemsList = [];
 
       try{
-        const lRes = await fetch(cleanKey + ".json?t=" + Date.now());
+        const lRes = await fetch(fileName + "?t=" + Date.now());
         if(lRes.ok){
           const lData = await lRes.json();
           if(Array.isArray(lData)) itemsList = lData;
@@ -61,11 +135,10 @@ async function loadData(){
           if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
           if(!defaultImg && img0) defaultImg = img0;
 
-          // Normalize units structure
-          let units = it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }];
+          let units = it.units && it.units.length ? it.units : [{ label: it.unit || "KG", rate: it.rate || 0 }];
 
           window.ITEMS.push({
-            id: i + "-" + ii,
+            id: cleanKey + "-" + ii,
             cat: entry.category,
             icon: entry.icon || "📦",
             name: it.name || "",
@@ -87,6 +160,10 @@ async function loadData(){
         });
       }
     }
+
+    paintProductGallery(shuffleArray(gallery).slice(0, 24));
+    window.HOME_DEALS_POOL = shuffleArray(window.ITEMS.slice());
+    startTopDealsShuffle();
 
     renderChips();
     renderMainView();

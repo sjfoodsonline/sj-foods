@@ -9,6 +9,77 @@ function initHomeCoverSlider(){
   banner.classList.add("static-cover");
   banner.style.display = "block";
   track.style.transform = "none";
+  if(!track.querySelector("img")){
+    track.innerHTML = '<div class="cover-slide"><img src="cover.png" alt="Cover" onerror="this.src=\'icon-512.png\'"></div>';
+  }
+}
+
+function paintProductGallery(urls){
+  const track = document.getElementById("productStripTrack");
+  const wrap = document.getElementById("productStripWrap");
+  if(!track || !wrap) return;
+  let list = (urls || []).filter(u => u && u.indexOf("data:image") !== 0);
+  const uniq = []; list.forEach(u => { if(uniq.indexOf(u)<0) uniq.push(u); });
+  list = uniq;
+  if(list.length === 0) list = ["cover.png", "icon-512.png"];
+  window.HOME_GALLERY = list.slice(0, 30);
+  track.style.direction = "ltr";
+  track.innerHTML = window.HOME_GALLERY.map(src => `<div class="product-strip-slide"><img src="${src}" loading="lazy" onerror="this.src='icon-192.png'"></div>`).join("");
+  wrap.style.display = "block";
+  _galleryIdx = 0;
+  track.style.transform = "translate3d(0,0,0)";
+  if(window._galleryTimer) clearInterval(window._galleryTimer);
+  window._galleryTimer = setInterval(() => {
+    if(!window.HOME_GALLERY.length) return;
+    _galleryIdx = (_galleryIdx + 1) % window.HOME_GALLERY.length;
+    track.style.transform = `translate3d(${-_galleryIdx * 100}%,0,0)`;
+  }, 3200);
+}
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function paintTopDealsPair(){
+  const homeBox = document.getElementById("dealBox");
+  if(!homeBox) return;
+  let pool = window.HOME_DEALS_POOL && window.HOME_DEALS_POOL.length ? window.HOME_DEALS_POOL : (window.ITEMS || []).filter(i => i.available !== false);
+  if(!pool.length){
+    homeBox.innerHTML = '<div class="deal-card"><div class="deal-icon-box">🌿</div><div class="d-name">Deals</div></div><div class="deal-card"><div class="deal-icon-box">🛒</div><div class="d-name">Shop</div></div>';
+    return;
+  }
+  const a = pool[_dealsIdx % pool.length];
+  const b = pool[(_dealsIdx + 1) % pool.length];
+  _dealsIdx = (_dealsIdx + 2) % Math.max(pool.length, 2);
+  function card(it){
+    if(!it) return '<div class="deal-card"><div class="deal-icon-box">⭐</div></div>';
+    let fImg = (it.images && it.images[0]) ? it.images[0] : "";
+    const nm = it.name_roman || it.name || "";
+    const rate = (it.units && it.units[0]) ? it.units[0].rate : 0;
+    const cat = it.cat || "";
+    const id = it.id || "";
+    return `<div class="deal-card" onclick="jumpToItem('\( {String(cat).replace(/'/g,"")}',' \){String(id).replace(/'/g,"")}')">
+      \( {fImg ? `<img src=" \){fImg}" loading="lazy">` : `<div class="deal-icon-box">${it.icon||"⭐"}</div>`}
+      <div class="d-name">${nm}</div>
+      <div class="d-rate">${typeof fmt==="function"?fmt(rate):("Rs. "+Math.round(rate||0))}</div></div>`;
+  }
+  homeBox.innerHTML = card(a) + card(b);
+}
+
+function startTopDealsShuffle(){
+  paintTopDealsPair();
+  if(window._dealsTimer) clearInterval(window._dealsTimer);
+  window._dealsTimer = setInterval(() => {
+    const box = document.getElementById("dealBox");
+    if(!box) return;
+    box.querySelectorAll(".deal-card").forEach(el => el.classList.add("shuffle-out"));
+    setTimeout(() => { paintTopDealsPair(); }, 280);
+  }, 4500);
 }
 
 window.initHomeVisuals = function(){
@@ -16,44 +87,71 @@ window.initHomeVisuals = function(){
   loadData();
 };
 
-const MASTER_CATS = [
-  { file: "sabzi", name: "سبزی", roman: "Sabzi", icon: "🥦" },
-  { file: "phal", name: "پھل", roman: "Phal", icon: "🍎" },
-  { file: "spices", name: "مصالحہ جات", roman: "Spices", icon: "🌶️" },
-  { file: "snacks", name: "سنیکس", roman: "Snacks", icon: "🍪" },
-  { file: "bakery", name: "بیکری", roman: "Bakery", icon: "🍞" },
-  { file: "dairy", name: "ڈیری", roman: "Dairy", icon: "🥛" },
-  { file: "biryani", name: "بریانی", roman: "Biryani", icon: "🍛" },
-  { file: "grocery", name: "کرانہ", roman: "Grocery", icon: "🛒" },
-  { file: "oil_ghee", name: "گھی/آئل", roman: "Oil & Ghee", icon: "🛢️" },
-  { file: "rice", name: "چاول", roman: "Rice", icon: "🍚" },
-  { file: "pulses", name: "دالیں", roman: "Pulses", icon: "🫘" },
-  { file: "poultry", name: "پولٹری", roman: "Poultry", icon: "🍗" },
-  { file: "fish", name: "مچھلی", roman: "Fish", icon: "🐟" },
-  { file: "drinks", name: "مشروبات", roman: "Drinks", icon: "🥤" },
-  { file: "cleaning", name: "صفائی", roman: "Cleaning", icon: "🧹" }
-];
-
 async function loadData(){
   try{
     const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
     let firebaseProducts = {};
+    let firebaseCategories = [];
+
     try{
-      const res = await fetch(RTDB + "/site_products.json?t=" + Date.now());
-      firebaseProducts = await res.json() || {};
+      const [prodRes, catRes] = await Promise.all([
+        fetch(RTDB + "/site_products.json?t=" + Date.now()),
+        fetch(RTDB + "/site_categories.json?t=" + Date.now())
+      ]);
+      firebaseProducts = await prodRes.json() || {};
+      firebaseCategories = await catRes.json() || [];
     }catch(e){}
+
+    const CAT_MAP = {
+      sabzi:     { category: "سبزی",     category_roman: "Sabzi",     icon: "🥦" },
+      phal:      { category: "پھل",      category_roman: "Phal",      icon: "🍎" },
+      bakery:    { category: "بیکری",    category_roman: "Bakery",    icon: "🍞" },
+      dairy:     { category: "ڈیری",     category_roman: "Dairy",     icon: "🥛" },
+      poultry:   { category: "پولٹری",   category_roman: "Poultry",   icon: "🍗" },
+      fish:      { category: "مچھلی",    category_roman: "Fish",      icon: "🐟" },
+      rice:      { category: "چاول",     category_roman: "Rice",      icon: "🍚" },
+      pulses:    { category: "دالیں",    category_roman: "Pulses",    icon: "🫘" },
+      oil_ghee:  { category: "گھی/آئل",  category_roman: "Oil & Ghee",icon: "🛢️" },
+      spices:    { category: "مصالحہ جات", category_roman: "Spices",   icon: "🌶️" },
+      biryani:   { category: "بریانی",   category_roman: "Biryani",   icon: "🍛" },
+      drinks:    { category: "مشروبات",  category_roman: "Drinks",    icon: "🥤" },
+      snacks:    { category: "سنیکس",    category_roman: "Snacks",    icon: "🍪" },
+      cleaning:  { category: "صفائی",    category_roman: "Cleaning",  icon: "🧹" }
+    };
+
+    if(!Array.isArray(firebaseCategories) || !firebaseCategories.length){
+      const productKeys = Object.keys(firebaseProducts || {}).filter(k => Array.isArray(firebaseProducts[k]) && firebaseProducts[k].length > 0);
+      firebaseCategories = productKeys.map(key => {
+        const map = CAT_MAP[key] || { category: key, category_roman: key, icon: "📦" };
+        return { file: key, category: map.category, category_roman: map.category_roman, icon: map.icon };
+      });
+    }
+
+    if(!firebaseCategories.length){
+      firebaseCategories = Object.keys(CAT_MAP).map(key => ({
+        file: key,
+        category: CAT_MAP[key].category,
+        category_roman: CAT_MAP[key].category_roman,
+        icon: CAT_MAP[key].icon
+      }));
+    }
 
     window.CATEGORIES_META = [];
     window.ITEMS = [];
     window.CATEGORIES_DATA = {};
     const gallery = [];
 
-    for(let entry of MASTER_CATS){
-      let fileKey = entry.file;
-      let itemsList = [];
+    for(let entry of firebaseCategories){
+      let catName = entry.category || entry.name || "General";
+      let catRoman = entry.category_roman || entry.name_roman || catName;
+      let icon = entry.icon || "📦";
+      let fileKey = String(entry.file || catRoman || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
 
-      if(firebaseProducts[fileKey] && Array.isArray(firebaseProducts[fileKey]) && firebaseProducts[fileKey].length > 0){
+      let itemsList = [];
+      if(firebaseProducts[fileKey] && Array.isArray(firebaseProducts[fileKey])){
         itemsList = firebaseProducts[fileKey];
+      } else if(firebaseProducts[catName] && Array.isArray(firebaseProducts[catName])){
+        itemsList = firebaseProducts[catName];
       } else {
         try{
           const lRes = await fetch(fileKey + ".json?t=" + Date.now());
@@ -64,39 +162,48 @@ async function loadData(){
         }catch(e){}
       }
 
-      if(itemsList.length > 0){
-        window.CATEGORIES_DATA[entry.roman] = itemsList;
-        let defaultImg = "";
-        
-        itemsList.forEach((it, ii) => {
-          let imgs = it.images || (it.image ? [it.image] : []);
-          let img0 = imgs[0] || "";
-          if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
-          if(!defaultImg && img0) defaultImg = img0;
+      if(!itemsList || itemsList.length === 0) continue;
 
-          window.ITEMS.push({
-            id: fileKey + "-" + ii,
-            cat: entry.roman,
-            icon: entry.icon,
-            name: it.name || "",
-            name_roman: it.name_roman || it.name || "",
-            units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
-            unitIndex: 0,
-            available: it.available !== false,
-            images: imgs,
-            featured: it.featured === true,
-            qty: 0
-          });
-        });
+      let defaultImg = entry.image || "";
+      window.CATEGORIES_DATA[catName] = itemsList;
 
-        window.CATEGORIES_META.push({
-          name: entry.roman,
-          name_roman: entry.roman,
-          icon: entry.icon,
-          image: defaultImg
+      itemsList.forEach((it, ii) => {
+        let imgs = it.images || (it.image ? [it.image] : []);
+        imgs = imgs.map(src => {
+          if(!src) return src;
+          if(src.indexOf("http") === 0 || src.indexOf("data:") === 0) return src;
+          return src;
         });
-      }
+        let img0 = imgs[0] || "";
+        if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+        if(!defaultImg && img0) defaultImg = img0;
+
+        window.ITEMS.push({
+          id: fileKey + "-" + ii,
+          cat: catName,
+          icon: icon,
+          name: it.name || "",
+          name_roman: it.name_roman || it.name || "",
+          units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
+          unitIndex: 0,
+          available: it.available !== false,
+          images: imgs,
+          featured: it.featured === true,
+          qty: 0
+        });
+      });
+
+      window.CATEGORIES_META.push({
+        name: catName,
+        name_roman: catRoman,
+        icon: icon,
+        image: defaultImg
+      });
     }
+
+    paintProductGallery(shuffleArray(gallery).slice(0, 24));
+    window.HOME_DEALS_POOL = shuffleArray(window.ITEMS.slice());
+    startTopDealsShuffle();
 
     renderChips();
     renderMainView();
@@ -151,12 +258,12 @@ window.loadShopsList = async function(){
       const n = isOwn ? -1 : countItems(v);
       const isComingSoon = !isOwn && n >= 0 && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
-      let coverHtml = cover ? `<img class="shop-cover" src="${cover}" loading="lazy">` : `<div class="shop-cover ph">${isOwn?"🥬":"🏪"}</div>`;
+      let coverHtml = cover ? `<img class="shop-cover" src="\( {cover}" loading="lazy">` : `<div class="shop-cover ph"> \){isOwn?"🥬":"🏪"}</div>`;
       const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + (n < 0 ? "—" : n));
       return `<div class="shop-card" onclick="tryEnterShop('${id}')">
         ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
         ${coverHtml}
-        <div class="shop-body"><div class="sname">${name}</div><div class="scity">${city}</div>
+        <div class="shop-body"><div class="sname">\( {name}</div><div class="scity"> \){city}</div>
         <div class="stag">${countLabel}</div></div></div>`;
     }).join("");
   }
@@ -276,7 +383,7 @@ function renderChips(){
   const chipsEl = document.getElementById("chips");
   if(chipsEl) {
     chipsEl.innerHTML = window.CATEGORIES_META.map(c => 
-      `<button class="cat-chip ${window.currentSelectedCategory===c.name?'active':''}" onclick="selectCategory('${c.name}')">${c.icon} ${c.name_roman||c.name}</button>`
+      `<button class="cat-chip \( {window.currentSelectedCategory===c.name?'active':''}" onclick="selectCategory(' \){c.name}')">${c.icon} ${c.name_roman||c.name}</button>`
     ).join("");
   }
 }
@@ -311,7 +418,7 @@ function renderMainView(filter=""){
     let grid = document.createElement("div"); grid.className = "home-cats-grid";
     window.CATEGORIES_META.forEach(cat => {
       grid.innerHTML += `<div class="home-cat-card" onclick="selectCategory('${cat.name}')">
-        <div class="home-cat-img-wrap">${cat.image ? `<img src="${cat.image}" loading="lazy">` : `<div style="font-size:32px;">${cat.icon}</div>`}</div>
+        <div class="home-cat-img-wrap">\( {cat.image ? `<img src=" \){cat.image}" loading="lazy">` : `<div style="font-size:32px;">${cat.icon}</div>`}</div>
         <div class="home-cat-name">${cat.name_roman||cat.name}</div>
       </div>`;
     });
@@ -329,19 +436,19 @@ function createItemRow(it){
   row.innerHTML = `
     <div class="item-row-top">
       <div class="item-thumb" onclick="openLightboxItem('${it.id}')">
-        ${mainImg ? `<img src="${mainImg}" loading="lazy">` : it.icon}
+        \( {mainImg ? `<img src=" \){mainImg}" loading="lazy">` : it.icon}
         ${imgCount}
       </div>
-      <div class="info"><div class="name">${it.name_roman||it.name}</div><div class="meta"><b>${fmt(u.rate)}</b> / ${u.label}</div></div>
+      <div class="info"><div class="name">\( {it.name_roman||it.name}</div><div class="meta"><b> \){fmt(u.rate)}</b> / ${u.label}</div></div>
     </div>
     <div class="item-row-bottom">
-      ${it.units.length>1 ? `<div class="unit-wrap"><select class="unit-select" onchange="changeUnit('${it.id}',this.value)">${it.units.map((x,idx)=>`<option value="${idx}" ${idx===it.unitIndex?'selected':''}>${x.label} — ${fmt(x.rate)}</option>`).join("")}</select></div>` : '<span></span>'}
+      \( {it.units.length>1 ? `<div class="unit-wrap"><select class="unit-select" onchange="changeUnit(' \){it.id}',this.value)">\( {it.units.map((x,idx)=>`<option value=" \){idx}" \( {idx===it.unitIndex?'selected':''}> \){x.label} — ${fmt(x.rate)}</option>`).join("")}</select></div>` : '<span></span>'}
       ${(it.premium || it.no_qty) ? `
       <div style="text-align:left;font-size:11px;">
-        <div style="color:${it.available===false?'#B71C1C':'#2E7D32'};font-weight:bold;">${it.available===false?'Sold Out':'Available · شاپ/کال'}</div>
-        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;" onclick="inquirePremium('${it.id}')">${it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
+        <div style="color:\( {it.available===false?'#B71C1C':'#2E7D32'};font-weight:bold;"> \){it.available===false?'Sold Out':'Available · شاپ/کال'}</div>
+        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;" onclick="inquirePremium('\( {it.id}')"> \){it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
       </div>` : `
-      <div class="qty-box"><button type="button" onclick="changeQty('${it.id}',-1)">−</button><input type="number" value="${it.qty}" readonly><button type="button" class="plus" onclick="changeQty('${it.id}',1)">+</button></div>`}
+      <div class="qty-box"><button type="button" onclick="changeQty('\( {it.id}',-1)">−</button><input type="number" value=" \){it.qty}" readonly><button type="button" class="plus" onclick="changeQty('${it.id}',1)">+</button></div>`}
     </div>`;
   return row;
 }
@@ -399,7 +506,7 @@ function renderBill(){
   document.getElementById("billLines").innerHTML = chosen.map(it => {
     const u = it.units[it.unitIndex] || it.units[0];
     const t = it.qty * (u.rate||0); subtotal += t;
-    return `<div class="cart-item-row"><span>• ${it.name} — ${it.qty} ${u.label||''} = <b>${fmt(t)}</b></span>
+    return `<div class="cart-item-row"><span>• ${it.name} — ${it.qty} \( {u.label||''} = <b> \){fmt(t)}</b></span>
       <button type="button" class="cart-item-del" onclick="removeItemFromCart('${it.id}')">✕</button></div>`;
   }).join("");
   document.getElementById("itemCount").textContent = chosen.length;
@@ -491,7 +598,7 @@ window.jumpToItem = function(catName, itemId){
 };
 
 window.openLightboxItem = function(itemId){
-  let it = window.ITEMS.find(x => x.id === itemId);
+  let it = window.ITEMS.get ? null : window.ITEMS.find(x => x.id === itemId);
   if(!it || !it.images || it.images.length === 0) return;
   showLightboxImages(it.images, 0);
 };
@@ -505,7 +612,7 @@ function showLightboxImages(imgs, index){
   box.classList.remove("hidden");
   window.LIGHTBOX_OPEN = true;
   if(imgs.length > 1){
-    thumbsEl.innerHTML = imgs.map((src, i) => `<img src="${src}" class="lightbox-thumb ${i===index?'active':''}" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs,${i})">`).join("");
+    thumbsEl.innerHTML = imgs.map((src, i) => `<img src="${src}" class="lightbox-thumb \( {i===index?'active':''}" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs, \){i})">`).join("");
     thumbsEl.style.display = "flex";
     window._lbImgs = imgs;
   } else {

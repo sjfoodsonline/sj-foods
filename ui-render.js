@@ -87,65 +87,72 @@ window.initHomeVisuals = function(){
   loadData();
 };
 
-const DEFAULT_FALLBACK_CATEGORIES = [
-  { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
-  { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
-  { file: "bakery", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
-  { file: "dairy", category: "ڈیری", category_roman: "Dairy", icon: "🥛" },
-  { file: "grocery", category: "کرانہ", category_roman: "Grocery", icon: "🛒" }
-];
-
 async function loadData(){
   try{
+    const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
     let index = null;
-    try{
-      const fr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/site_categories.json");
-      index = await fr.json();
-    }catch(e){}
+    let productsMap = null;
     
+    try{
+      const [catRes, prodRes] = await Promise.all([
+        fetch(RTDB + "/site_categories.json"),
+        fetch(RTDB + "/site_products.json")
+      ]);
+      index = await catRes.json();
+      productsMap = await prodRes.json();
+    }catch(e){}
+
     if(!Array.isArray(index) || !index.length){
-      index = DEFAULT_FALLBACK_CATEGORIES;
+      index = [
+        { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
+        { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
+        { file: "bakery", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
+        { file: "dairy", category: "ڈیری", category_roman: "Dairy", icon: "🥛" },
+        { file: "grocery", category: "کرانہ", category_roman: "Grocery", icon: "🛒" }
+      ];
     }
 
-    const catResults = await Promise.all(index.map(async e => {
-      let cleanKey = String(e.file||e.category_roman||"general").toLowerCase().replace(/[^a-z0-9_]/g,"");
-      try{
-        const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
-        if(fbRes.ok){
-          const data = await fbRes.json();
-          if(Array.isArray(data) && data.length > 0) return data;
-        }
-      }catch(err){}
-      return [];
-    }));
-
-    window.CATEGORIES_META = index.map((e, i) => {
-      let itemsList = catResults[i] || [];
-      let defaultImg = e.image || "";
-      if(!defaultImg && itemsList.length > 0){
-        let firstWithImg = itemsList.find(it => (it.images && it.images.length > 0) || it.image);
-        if(firstWithImg){
-          defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
-        }
-      }
-      return { name: e.category, name_roman: e.category_roman||e.category, icon: e.icon||"📦", image: defaultImg };
-    });
-
-    window.ITEMS = []; window.CATEGORIES_DATA = {};
+    window.CATEGORIES_META = [];
+    window.ITEMS = [];
+    window.CATEGORIES_DATA = {};
     const gallery = [];
+
     index.forEach((entry, i) => {
-      let itemsList = catResults[i] || [];
+      let fileKey = String(entry.file || entry.category_roman || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
+      let itemsList = [];
+      if(productsMap && productsMap[fileKey] && Array.isArray(productsMap[fileKey])){
+        itemsList = productsMap[fileKey];
+      }
+
       window.CATEGORIES_DATA[entry.category] = itemsList;
+      let defaultImg = entry.image || "";
+      
       itemsList.forEach((it, ii) => {
         let imgs = it.images || (it.image ? [it.image] : []);
         let img0 = imgs[0] || "";
         if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
+        if(!defaultImg && img0) defaultImg = img0;
+
         window.ITEMS.push({
-          id: i+"-"+ii, cat: entry.category, icon: entry.icon||"📦",
-          name: it.name, name_roman: it.name_roman||it.name||"",
-          units: it.units || [{label: it.unit||"KG", rate: it.rate||0}], unitIndex: 0,
-          available: it.available !== false, images: imgs, featured: it.featured === true, qty: 0
+          id: fileKey + "-" + ii,
+          cat: entry.category,
+          icon: entry.icon || "📦",
+          name: it.name || "",
+          name_roman: it.name_roman || it.name || "",
+          units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
+          unitIndex: 0,
+          available: it.available !== false,
+          images: imgs,
+          featured: it.featured === true,
+          qty: 0
         });
+      });
+
+      window.CATEGORIES_META.push({
+        name: entry.category,
+        name_roman: entry.category_roman || entry.category,
+        icon: entry.icon || "📦",
+        image: defaultImg
       });
     });
 
@@ -153,7 +160,8 @@ async function loadData(){
     window.HOME_DEALS_POOL = shuffleArray(window.ITEMS.slice());
     startTopDealsShuffle();
 
-    renderChips(); renderMainView();
+    renderChips();
+    renderMainView();
     const loadingMsg = document.getElementById("loadingMsg");
     if(loadingMsg) loadingMsg.style.display = "none";
   }catch(e){
@@ -481,7 +489,7 @@ if(waBtnEl){
     const phone = document.getElementById("custPhone").value.trim();
     const addr = document.getElementById("custAddr").value.trim();
     if(!name){ alert("براہ کرم نام درج کریں"); document.getElementById("custName").focus(); return; }
-    if(!phone){ alert("براہ کرم فون نمبر درج کریں شہر"); document.getElementById("custPhone").focus(); return; }
+    if(!phone){ alert("براہ کرم فون نمبر درج کریں"); document.getElementById("custPhone").focus(); return; }
     if(!addr){ alert("براہ کرم مکمل پتہ درج کریں"); document.getElementById("custAddr").focus(); return; }
     
     let s = phone.replace(/[\s\-()]/g, "");

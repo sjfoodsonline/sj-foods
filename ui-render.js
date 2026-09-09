@@ -87,46 +87,59 @@ window.initHomeVisuals = function(){
   loadData();
 };
 
-const ALL_POSSIBLE_JSONS = [
-  { file: "sabzi", name: "سبزی", roman: "Sabzi", icon: "🥦" },
-  { file: "phal", name: "پھل", roman: "Phal", icon: "🍎" },
-  { file: "bakery", name: "بیکری", roman: "Bakery", icon: "🍞" },
-  { file: "dairy", name: "ڈیری", roman: "Dairy", icon: "🥛" },
-  { file: "poultry", name: "پولٹری", roman: "Poultry", icon: "🍗" },
-  { file: "fish", name: "مچھلی", roman: "Fish", icon: "🐟" },
-  { file: "rice", name: "چاول", roman: "Rice", icon: "🍚" },
-  { file: "pulses", name: "دالیں", roman: "Pulses", icon: "🫘" },
-  { file: "oil_ghee", name: "گھی/آئل", roman: "Oil & Ghee", icon: "🛢️" },
-  { file: "spices", name: "مصالحہ جات", roman: "Spices", icon: "🌶️" },
-  { file: "biryani", name: "بریانی", roman: "Biryani", icon: "🍛" },
-  { file: "drinks", name: "مشروبات", roman: "Drinks", icon: "🥤" },
-  { file: "snacks", name: "سنیکس", roman: "Snacks", icon: "🍪" },
-  { file: "cleaning", name: "صفائی", roman: "Cleaning", icon: "🧹" }
-];
-
 async function loadData(){
   try{
     const RTDB = "https://sj-foods-default-rtdb.firebaseio.com";
     let firebaseProducts = {};
+    let firebaseCategories = [];
+
     try{
-      const res = await fetch(RTDB + "/site_products.json");
-      firebaseProducts = await res.json() || {};
+      const [prodRes, catRes] = await Promise.all([
+        fetch(RTDB + "/site_products.json?t=" + Date.now()),
+        fetch(RTDB + "/site_categories.json?t=" + Date.now())
+      ]);
+      firebaseProducts = await prodRes.json() || {};
+      firebaseCategories = await catRes.json() || [];
     }catch(e){}
+
+    // Fallback default categories if firebase is empty
+    if(!Array.isArray(firebaseCategories) || !firebaseCategories.length){
+      firebaseCategories = [
+        { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
+        { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
+        { file: "bakery", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
+        { file: "dairy", category: "ڈیری", category_roman: "Dairy", icon: "🥛" },
+        { file: "poultry", category: "پولٹری", category_roman: "Poultry", icon: "🍗" },
+        { file: "fish", category: "مچھلی", category_roman: "Fish", icon: "🐟" },
+        { file: "rice", category: "چاول", category_roman: "Rice", icon: "🍚" },
+        { file: "pulses", category: "دالیں", category_roman: "Pulses", icon: "🫘" },
+        { file: "oil_ghee", category: "گھی/آئل", category_roman: "Oil & Ghee", icon: "🛢️" },
+        { file: "spices", category: "مصالحہ جات", category_roman: "Spices", icon: "🌶️" },
+        { file: "biryani", category: "بریانی", category_roman: "Biryani", icon: "🍛" },
+        { file: "drinks", category: "مشروبات", category_roman: "Drinks", icon: "🥤" },
+        { file: "snacks", category: "سنیکس", category_roman: "Snacks", icon: "🍪" },
+        { file: "cleaning", category: "صفائی", category_roman: "Cleaning", icon: "🧹" }
+      ];
+    }
 
     window.CATEGORIES_META = [];
     window.ITEMS = [];
     window.CATEGORIES_DATA = {};
     const gallery = [];
 
-    for(let entry of ALL_POSSIBLE_JSONS){
-      let fileKey = entry.file;
-      let itemsList = [];
+    for(let entry of firebaseCategories){
+      let catName = entry.category || entry.name || "General";
+      let catRoman = entry.category_roman || entry.name_roman || catName;
+      let icon = entry.icon || "📦";
+      let fileKey = String(entry.file || catRoman || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
 
-      // Check Firebase first
-      if(firebaseProducts[fileKey] && Array.isArray(firebaseProducts[fileKey]) && firebaseProducts[fileKey].length > 0){
+      let itemsList = [];
+      if(firebaseProducts[fileKey] && Array.isArray(firebaseProducts[fileKey])){
         itemsList = firebaseProducts[fileKey];
+      } else if(firebaseProducts[catName] && Array.isArray(firebaseProducts[catName])){
+        itemsList = firebaseProducts[catName];
       } else {
-        // Fallback to local JSON file in repo
+        // Try local JSON file fallback if firebase product is missing for this key
         try{
           const lRes = await fetch(fileKey + ".json?t=" + Date.now());
           if(lRes.ok){
@@ -137,9 +150,9 @@ async function loadData(){
       }
 
       if(itemsList.length > 0){
-        window.CATEGORIES_DATA[entry.roman] = itemsList;
-        let defaultImg = "";
-        
+        window.CATEGORIES_DATA[catName] = itemsList;
+        let defaultImg = entry.image || "";
+
         itemsList.forEach((it, ii) => {
           let imgs = it.images || (it.image ? [it.image] : []);
           let img0 = imgs[0] || "";
@@ -148,8 +161,8 @@ async function loadData(){
 
           window.ITEMS.push({
             id: fileKey + "-" + ii,
-            cat: entry.roman,
-            icon: entry.icon,
+            cat: catName,
+            icon: icon,
             name: it.name || "",
             name_roman: it.name_roman || it.name || "",
             units: it.units || [{label: it.unit || "KG", rate: it.rate || 0}],
@@ -162,9 +175,9 @@ async function loadData(){
         });
 
         window.CATEGORIES_META.push({
-          name: entry.roman,
-          name_roman: entry.roman,
-          icon: entry.icon,
+          name: catName,
+          name_roman: catRoman,
+          icon: icon,
           image: defaultImg
         });
       }
@@ -567,7 +580,7 @@ window.jumpToItem = function(catName, itemId){
 };
 
 window.openLightboxItem = function(itemId){
-  let it = window.ITEMS.find(x => x.id === itemId);
+  let it = window.ITEMS.get ? null : window.ITEMS.find(x => x.id === itemId);
   if(!it || !it.images || it.images.length === 0) return;
   showLightboxImages(it.images, 0);
 };

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "سیب کالا کولا",
+    "units": [{"label": "KG", "rate": 300}, {"label": "آدھا KG", "rate": 150}],
+    "available": true,
+    "name_roman": "Apple Kala Kulu"
+  },
+  {
+    "name": "کیلا",
+    "units": [{"label": "درزن", "rate": 180}],
+    "available": true,
+    "name_roman": "Banana"
+  }
+]

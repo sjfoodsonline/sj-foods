@@ -87,6 +87,14 @@ window.initHomeVisuals = function(){
   loadData();
 };
 
+const DEFAULT_FALLBACK_CATEGORIES = [
+  { file: "sabzi", category: "سبزی", category_roman: "Sabzi", icon: "🥦" },
+  { file: "phal", category: "پھل", category_roman: "Phal", icon: "🍎" },
+  { file: "bakery", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
+  { file: "dairy", category: "ڈیری", category_roman: "Dairy", icon: "🥛" },
+  { file: "grocery", category: "کرانہ", category_roman: "Grocery", icon: "🛒" }
+];
+
 async function loadData(){
   try{
     let index = null;
@@ -94,24 +102,18 @@ async function loadData(){
       const fr = await fetch("https://sj-foods-default-rtdb.firebaseio.com/site_categories.json");
       index = await fr.json();
     }catch(e){}
+    
     if(!Array.isArray(index) || !index.length){
-      index = await fetch("categories_index.json?t=" + Date.now()).then(r => r.json());
+      index = DEFAULT_FALLBACK_CATEGORIES;
     }
 
     const catResults = await Promise.all(index.map(async e => {
-      let cleanKey = String(e.file||"").replace(/\.json$/i,"");
+      let cleanKey = String(e.file||e.category_roman||"general").toLowerCase().replace(/[^a-z0-9_]/g,"");
       try{
         const fbRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products/${cleanKey}.json?t=${Date.now()}`);
         if(fbRes.ok){
           const data = await fbRes.json();
           if(Array.isArray(data) && data.length > 0) return data;
-        }
-      }catch(err){}
-      try{
-        const localRes = await fetch(cleanKey + ".json?t=" + Date.now());
-        if(localRes.ok){
-          const localData = await localRes.json();
-          if(Array.isArray(localData)) return localData;
         }
       }catch(err){}
       return [];
@@ -126,7 +128,7 @@ async function loadData(){
           defaultImg = (firstWithImg.images && firstWithImg.images.length > 0) ? firstWithImg.images[0] : firstWithImg.image;
         }
       }
-      return { name: e.category, name_roman: e.category_roman||"", icon: e.icon, image: defaultImg };
+      return { name: e.category, name_roman: e.category_roman||e.category, icon: e.icon||"📦", image: defaultImg };
     });
 
     window.ITEMS = []; window.CATEGORIES_DATA = {};
@@ -139,9 +141,9 @@ async function loadData(){
         let img0 = imgs[0] || "";
         if(img0 && String(img0).indexOf("data:") !== 0) gallery.push(img0);
         window.ITEMS.push({
-          id: i+"-"+ii, cat: entry.category, icon: entry.icon,
-          name: it.name, name_roman: it.name_roman||"",
-          units: it.units || [{label: it.unit||"KG", rate: it.rate}], unitIndex: 0,
+          id: i+"-"+ii, cat: entry.category, icon: entry.icon||"📦",
+          name: it.name, name_roman: it.name_roman||it.name||"",
+          units: it.units || [{label: it.unit||"KG", rate: it.rate||0}], unitIndex: 0,
           available: it.available !== false, images: imgs, featured: it.featured === true, qty: 0
         });
       });
@@ -156,7 +158,7 @@ async function loadData(){
     if(loadingMsg) loadingMsg.style.display = "none";
   }catch(e){
     const loadingMsg = document.getElementById("loadingMsg");
-    if(loadingMsg) loadingMsg.textContent = "⚠️ کیٹیگریز اور آئٹمز لوڈ کرنے میں خرابی";
+    if(loadingMsg) loadingMsg.textContent = "⚠️ ڈیٹا لوڈ کرنے میں خرابی";
   }
 }
 
@@ -479,10 +481,9 @@ if(waBtnEl){
     const phone = document.getElementById("custPhone").value.trim();
     const addr = document.getElementById("custAddr").value.trim();
     if(!name){ alert("براہ کرم نام درج کریں"); document.getElementById("custName").focus(); return; }
-    if(!phone){ alert("براہ کرم فون نمبر درج کریں"); document.getElementById("custPhone").focus(); return; }
+    if(!phone){ alert("براہ کرم فون نمبر درج کریں شہر"); document.getElementById("custPhone").focus(); return; }
     if(!addr){ alert("براہ کرم مکمل پتہ درج کریں"); document.getElementById("custAddr").focus(); return; }
     
-    // Simple validator
     let s = phone.replace(/[\s\-()]/g, "");
     let digits = s.replace(/[^0-9]/g, "");
     if(!/^03\d{9}$/.test(digits)){

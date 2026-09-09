@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="google" content="notranslate">
+<meta name="theme-color" content="#153A20">
+<title>SJ Online — Shop Catalog & Cart</title>
+<style>
+  :root{
+    --dark:#153A20; --mid:#2E7D32; --leaf:#E8F5E9; --accent:#FF6F00;
+    --paper:#FFFDF8; --ink:#20241F; --muted:#8A8F86; --price:#B71C1C; --line:#E5E4DA;
+  }
+  *{box-sizing:border-box;}
+  html{ background:#EDEAE0; height:100%; scroll-behavior: smooth; }
+  body{
+    margin:0; padding:0 0 140px 0; background:var(--paper); color:var(--ink);
+    font-family: Arial, sans-serif; direction:rtl; text-align:right;
+    min-height:100vh; width:100%; font-weight: bold;
+  }
+  .app-container {
+    width: 100% !important; max-width: 100% !important; margin: 0; background: var(--paper); min-height: 100vh;
+  }
+
+  header{ 
+    background:linear-gradient(160deg, var(--dark), var(--mid)); 
+    color:#fff; padding:20px 40px; display:flex; justify-content:space-between; align-items:center;
+    box-shadow: 0 4px 16px rgba(21,58,32,0.25);
+  }
+  .back-shops-btn{ background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:8px; padding:10px 20px; font-size:15px; cursor:pointer; font-weight:bold; }
+
+  .shop-banner-box { width: 100%; max-height: 480px; background: var(--leaf); display: none; overflow: hidden; position: relative; border-bottom: 2px solid var(--line); }
+  .shop-banner-box img { width: 100%; height: 100%; object-fit: cover; display: block; max-height: 480px; }
+
+  .sticky-top{ position:sticky; top:0; z-index:10; background:var(--paper); box-shadow:0 4px 12px rgba(0,0,0,0.06); border-bottom:1px solid var(--line); }
+  .search-wrap{padding:18px 40px 10px; max-width:700px; margin:0 auto;}
+  #search{ width:100%; padding:14px 18px; font-size:16px; border-radius:10px; border:1px solid var(--line); background:#fff; direction:rtl; outline:none; font-weight:bold; }
+
+  .cat-marquee{ overflow-x:auto; padding:6px 0 16px; scrollbar-width:none; }
+  .cat-marquee::-webkit-scrollbar{display:none;}
+  .cat-track{display:flex; justify-content:center; flex-wrap:wrap; gap:12px; padding:0 40px;}
+  .cat-chip{ background:var(--leaf); color:var(--dark); border:1px solid #cfe8d1; border-radius:20px; padding:10px 20px; font-size:15px; font-weight:bold; cursor:pointer; white-space:nowrap; }
+  .cat-chip.active{ background:var(--dark); color:#fff; border-color:var(--dark); }
+
+  main{padding:35px 50px;}
+  .items-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:22px; }
+  .item{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:18px; display:flex; flex-direction:column; gap:14px; box-shadow:0 3px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
+  .item:hover { transform: translateY(-3px); }
+  .item.active{ border-color:var(--mid); box-shadow:0 6px 18px rgba(46,125,50,0.12); }
+  .item-top{display:flex; gap:16px; align-items:center;}
+  .item-thumb{ width:80px; height:80px; border-radius:12px; background:var(--leaf); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:32px; flex-shrink:0; cursor:pointer; }
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+  .item-info{flex:1; min-width:0;}
+  .item-name{font-size:18px; font-weight:bold; color:var(--ink); line-height:1.3;}
+  .item-meta{font-size:14px; color:var(--muted); margin-top:4px;}
+  .item-meta b{color:var(--price); font-size:15px;}
+
+  .item-bot{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:4px;}
+  .unit-select{ flex:1; border:2px solid var(--mid); border-radius:10px; padding:10px; font-size:15px; font-weight:bold; background:#fff; color:var(--dark); outline:none; cursor:pointer; }
+  .qty-box{display:flex; align-items:center; gap:8px;}
+  .qty-box button{ width:38px; height:38px; border-radius:8px; border:none; background:var(--leaf); color:var(--dark); font-size:18px; font-weight:bold; cursor:pointer; }
+  .qty-box button.plus{background:var(--dark); color:#fff;}
+  .qty-box input{ width:45px; text-align:center; border:1px solid var(--line); border-radius:6px; font-size:16px; font-weight:bold; padding:4px; }
+
+  #billbar{
+    position:fixed; right:0; left:0; bottom:0; background:#fff; border-top:1.5px solid var(--line);
+    border-radius:20px 20px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,0.2); padding:18px 40px; z-index:99; display:flex; flex-direction:column;
+    width:100%; max-width:950px; margin:0 auto; max-height:85vh;
+  }
+  #billbar.collapsed .cart-details{display:none;}
+  .bill-summary{display:flex; justify-content:space-between; align-items:center; cursor:pointer;}
+  .bill-summary .total{font-size:26px; font-weight:bold; color:var(--dark);}
+  .cart-details{overflow-y:auto; max-height:50vh; margin-top:14px; border-top:1px dashed var(--line); padding-top:14px;}
+  .cart-row{display:flex; justify-content:space-between; align-items:center; font-size:15px; margin-bottom:8px; background:var(--paper); padding:12px 16px; border-radius:10px; border:1px solid var(--line);}
+  .cart-del{background:#FFCDD2; color:var(--price); border:none; border-radius:6px; width:26px; height:26px; font-size:14px; cursor:pointer;}
+
+  .checkout-box{background:var(--leaf); border-radius:12px; padding:16px; margin-top:12px;}
+  .checkout-box input{ width:100%; border:1px solid #cfe8d1; border-radius:10px; padding:12px; font-size:15px; margin-bottom:10px; background:#fff; font-weight:bold; outline:none; }
+  .wa-btn{ background:#25D366; color:#fff; border:none; border-radius:10px; padding:16px; font-size:17px; font-weight:bold; width:100%; cursor:pointer; margin-top:12px; }
+  .clear-cart{ background:#FFCDD2; color:var(--price); border:none; border-radius:10px; padding:9px; font-size:14px; font-weight:bold; width:100%; cursor:pointer; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <button class="back-shops-btn" onclick="window.location.href='index.html'">← تمام شاپس (All Shops)</button>
+    <div id="shopTitleHeader" style="font-size:20px; font-weight:bold;">شاپ لوڈ ہو رہی ہے...</div>
+  </header>
+
+  <div class="shop-banner-box" id="shopBannerBox">
+    <img id="shopBannerImg" src="" alt="Shop Cover">
+  </div>
+
+  <div class="sticky-top">
+    <div class="search-wrap">
+      <input id="search" type="text" placeholder="🔍 پروڈکٹ تلاش کریں (Search item)..." oninput="renderItems()">
+    </div>
+    <div class="cat-marquee">
+      <div class="cat-track" id="catChips"></div>
+    </div>
+  </div>
+
+  <main>
+    <div id="itemList" class="items-grid">
+      <div style="text-align:center; color:var(--muted); padding:50px; grid-column:1/-1;">⏳ کیٹلاگ لوڈ ہو رہا ہے...</div>
+    </div>
+  </main>
+
+  <div id="billbar" class="collapsed" style="display:none;">
+    <div style="width:50px; height:4px; background:#ccc; border-radius:4px; margin:0 auto 12px; cursor:pointer;" onclick="toggleCart()"></div>
+    <div class="bill-summary" onclick="toggleCart()">
+      <div>🛒 کارٹ (<span id="cartCount">0</span> آئٹمز)</div>
+      <div class="total" id="cartTotal">Rs. 0</div>
+    </div>
+    <div class="cart-details">
+      <div id="cartLines"></div>
+      <button class="clear-cart" onclick="clearCart()">🗑️ کارٹ خالی کریں (Clear Cart)</button>
+      <div class="checkout-box">
+        <input id="custName" type="text" placeholder="آپ کا نام (Name)">
+        <input id="custPhone" type="tel" placeholder="فون نمبر — 03XXXXXXXXX (Strict 11 digits)">
+        <input id="custAddr" type="text" placeholder="مکمل پتہ (Complete Address)">
+      </div>
+      <div style="background:var(--dark); color:#fff; border-radius:10px; padding:14px; text-align:center; margin-top:12px;">
+        <div style="font-size:14px;">EasyPaisa / JazzCash (<span id="payVendorName">Shop</span>)</div>
+        <div style="font-size:22px; font-weight:bold;" id="payNumDisplay">0334-9353799</div>
+      </div>
+      <button class="wa-btn" onclick="sendOrderWhatsApp()">✅ واٹس ایپ پر آرڈر بھیجیں (WhatsApp Order)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  const app = initializeApp({ databaseURL: "https://sj-foods-default-rtdb.firebaseio.com" });
+  window.dbRef = { ref, set, db: getDatabase(app) };
+</script>
+
+<script>
+function getVendorId() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let id = urlParams.get('id');
+  if(!id) {
+    let hash = window.location.hash;
+    if(hash.includes('shop-')) {
+      id = hash.replace('#shop-', '').replace('#', '');
+    }
+  }
+  return id || 'v001';
+}
+
+const vendorId = getVendorId();
+
+let activeVendor = { shop_name: "SJ Foods", whatsapp: "923349353799", cover_image: "" };
+let categoriesData = [];
+let itemsList = [];
+let selectedCat = null;
+let cart = {};
+
+async function initShop() {
+  try {
+    const vRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/vendors/${vendorId}.json?t=` + Date.now());
+    const vData = await vRes.json();
+    if(vData) {
+      activeVendor.shop_name = vData.shop_name || "Shop";
+      activeVendor.whatsapp = String(vData.whatsapp || "923349353799").replace(/[^0-9]/g, "");
+      activeVendor.cover_image = vData.cover_image || "";
+    }
+    document.getElementById("shopTitleHeader").textContent = activeVendor.shop_name;
+    document.getElementById("payVendorName").textContent = activeVendor.shop_name;
+    document.getElementById("payNumDisplay").textContent = activeVendor.whatsapp;
+
+    if(activeVendor.cover_image) {
+      document.getElementById("shopBannerImg").src = activeVendor.cover_image;
+      document.getElementById("shopBannerBox").style.display = "block";
+    }
+
+    // Fetch products directly from Firebase site_products or vendor items
+    let allItems = [];
+    if(vendorId === 'v001') {
+      const prodRes = await fetch(`https://sj-foods-default-rtdb.firebaseio.com/site_products.json?t=` + Date.now());
+      const prodData = await prodRes.json() || {};
+
+      Object.keys(prodData).forEach(catKey => {
+        let catArr = prodData[catKey];
+        if(Array.isArray(catArr)) {
+          catArr.forEach(it => {
+            if(it && it.name) {
+              let itemImages = it.images || (it.image ? [it.image] : []);
+              let itemUnits = it.units || [{label: it.unit || "KG", rate: it.rate || 0}];
+              allItems.push({
+                cat: catKey,
+                name: it.name,
+                units: itemUnits,
+                image: itemImages[0] || "",
+                available: it.available !== false
+              });
+            }
+          });
+        }
+      });
+    } else {
+      const itObj = vData.items || {};
+      Object.keys(itObj).forEach(cat => {
+        Object.keys(itObj[cat]).forEach(k => {
+          let it = itObj[cat][k];
+          if(it && it.name) {
+            let itemImages = it.images || (it.image ? [it.image] : []);
+            let itemUnits = it.units || [{label: it.unit || "KG", rate: it.rate || 0}];
+            allItems.push({
+              cat: cat,
+              name: it.name,
+              units: itemUnits,
+              image: itemImages[0] || "",
+              available: it.available !== false
+            });
+          }
+        });
+      });
+    }
+
+    itemsList = allItems;
+    let cats = [...new Set(allItems.map(x => x.cat))];
+    categoriesData = cats.map(c => ({ category: c, icon: "🛒" }));
+
+    renderChips();
+    renderItems();
+  } catch(e) {
+    document.getElementById("itemList").innerHTML = `<div style="text-align:center; color:var(--price); padding:50px; grid-column:1/-1;">⚠️ ڈیٹا لوڈ کرنے میں خرابی پیش آئی۔</div>`;
+  }
+}
+
+function renderChips() {
+  const track = document.getElementById("catChips");
+  track.innerHTML = `<button class="cat-chip ${!selectedCat?'active':''}" onclick="selectCat(null)">📋 تمام (All)</button>` +
+    categoriesData.map(c => `<button class="cat-chip ${selectedCat===c.category?'active':''}" onclick="selectCat('${c.category}')">${c.icon || '🛒'} ${c.category}</button>`).join("");
+}
+
+function selectCat(cat) {
+  selectedCat = cat;
+  renderChips();
+  renderItems();
+}
+
+function renderItems() {
+  const main = document.getElementById("itemList");
+  const query = document.getElementById("search").value.toLowerCase();
+
+  let filtered = itemsList.filter(it => {
+    let matchCat = !selectedCat || it.cat === selectedCat;
+    let matchQuery = !query || it.name.toLowerCase().includes(query);
+    return matchCat && matchQuery && it.available;
+  });
+
+  if(filtered.length === 0) {
+    main.innerHTML = `<div style="text-align:center; color:var(--muted); padding:50px; grid-column:1/-1;">کوئی آئٹم نہیں ملا</div>`;
+    return;
+  }
+
+  main.innerHTML = filtered.map((it, idx) => {
+    let cartKey = it.name;
+    let qty = cart[cartKey] ? cart[cartKey].qty : 0;
+    let unitIdx = cart[cartKey] ? cart[cartKey].unitIdx : 0;
+    let u = it.units[unitIdx] || it.units[0];
+
+    return `
+      <div class="item ${qty > 0 ? 'active' : ''}">
+        <div class="item-top">
+          <div class="item-thumb">${it.image ? `<img src="${it.image}">` : '🛒'}</div>
+          <div class="item-info">
+            <div class="item-name">${it.name}</div>
+            <div class="item-meta"><b>Rs. ${u.rate}</b> / ${u.label} (${it.cat})</div>
+          </div>
+        </div>
+        <div class="item-bot">
+          ${it.units.length > 1 ? `
+            <select class="unit-select" onchange="changeUnit('${cartKey}', this.value)">
+              ${it.units.map((un, ui) => `<option value="${ui}" ${ui===unitIdx?'selected':''}>${un.label} — Rs. ${un.rate}</option>`).join("")}
+            </select>
+          ` : `<span><b>${u.label}</b></span>`}
+          <div class="qty-box">
+            <button onclick="updateQty('${cartKey}', -1, '${it.cat}', '${it.image || ''}')">−</button>
+            <input type="number" value="${qty}" readonly>
+            <button class="plus" onclick="updateQty('${cartKey}', 1, '${it.cat}', '${it.image || ''}')">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function changeUnit(name, ui) {
+  if(cart[name]) {
+    cart[name].unitIdx = parseInt(ui);
+    renderItems();
+    renderCart();
+  }
+}
+
+function updateQty(name, delta, cat, img) {
+  let item = itemsList.find(x => x.name === name);
+  if(!item) return;
+
+  if(!cart[name]) {
+    cart[name] = { qty: 0, unitIdx: 0, cat: cat, image: img, units: item.units };
+  }
+  cart[name].qty = Math.max(0, cart[name].qty + delta);
+  if(cart[name].qty === 0) delete cart[name];
+
+  renderItems();
+  renderCart();
+}
+
+function clearCart() {
+  cart = {};
+  renderItems();
+  renderCart();
+}
+
+function toggleCart() {
+  document.getElementById("billbar").classList.toggle("collapsed");
+}
+
+function renderCart() {
+  const linesBox = document.getElementById("cartLines");
+  let keys = Object.keys(cart);
+  let total = 0;
+
+  if(keys.length === 0) {
+    document.getElementById("billbar").style.display = "none";
+    return;
+  }
+  document.getElementById("billbar").style.display = "flex";
+
+  linesBox.innerHTML = keys.map(name => {
+    let c = cart[name];
+    let u = c.units[c.unitIdx];
+    let sub = c.qty * u.rate;
+    total += sub;
+    return `
+      <div class="cart-row">
+        <span>• ${name} (${c.qty} ${u.label}) = <b>Rs. ${sub}</b></span>
+        <button class="cart-del" onclick="deleteCartItem('${name}')">✕</button>
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("cartCount").textContent = keys.length;
+  document.getElementById("cartTotal").textContent = "Rs. " + total;
+}
+
+function deleteCartItem(name) {
+  delete cart[name];
+  renderItems();
+  renderCart();
+}
+
+function sendOrderWhatsApp() {
+  let keys = Object.keys(cart);
+  if(keys.length === 0) return;
+
+  let name = document.getElementById("custName").value.trim();
+  let phone = document.getElementById("custPhone").value.trim();
+  let addr = document.getElementById("custAddr").value.trim();
+
+  if(!name || !phone || !addr) {
+    alert("براہ کرم نام، فون اور مکمل پتہ درج کریں!");
+    return;
+  }
+
+  let cleanPhone = phone.replace(/[^0-9]/g, "");
+  let isValid = false;
+  if(phone.startsWith("+92") || phone.startsWith("0092")) {
+    if(cleanPhone.length === 12) isValid = true;
+  } else {
+    if(cleanPhone.length === 11 && cleanPhone.startsWith("0")) isValid = true;
+  }
+
+  if(!isValid) {
+    alert("❌ غلط فون نمبر! براہ کرم درست 11 ہندسوں کا موبائل نمبر درج کریں (مثلاً 03349353799)");
+    document.getElementById("custPhone").focus();
+    return;
+  }
+
+  let orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let total = 0;
+  let msg = `*SJ ONLINE ORDER*\nShop: ${activeVendor.shop_name}\nCode: ${orderCode}\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n*Items:*\n`;
+
+  keys.forEach(name => {
+    let c = cart[name];
+    let u = c.units[c.unitIdx];
+    let sub = c.qty * u.rate;
+    total += sub;
+    msg += `- ${name} x ${c.qty} ${u.label} = Rs. ${sub}\n`;
+  });
+  msg += `\n*Total: Rs. ${total}*`;
+
+  try {
+    if(window.dbRef) {
+      window.dbRef.set(window.dbRef.ref(window.dbRef.db, 'orders/' + orderCode), {
+        code: orderCode, name, phone, address: addr, items: msg.replace(/\n/g, '<br>'),
+        total: total, otp: orderCode.replace("SJ-", ""),
+        timestamp: new Date().toLocaleString(), status: "pending", vendor_id: vendorId, shop_name: activeVendor.shop_name
+      });
+    }
+  } catch(e){}
+
+  window.open(`https://wa.me/${activeVendor.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+initShop();
+</script>
+</body>
+</html>

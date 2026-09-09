@@ -149,7 +149,7 @@ async function loadData(){
         }catch(e){}
       }
 
-      // Always add category to meta so all categories show (even if empty)
+      // Always add category to meta so ALL categories show (even if empty)
       let defaultImg = entry.image || "";
       window.CATEGORIES_DATA[catName] = itemsList || [];
 

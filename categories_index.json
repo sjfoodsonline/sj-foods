@@ -1,0 +1,6 @@
+[
+  { "file": "sabzi", "category": "سبزی", "category_roman": "Sabzi", "icon": "🥦" },
+  { "file": "phal", "category": "پھل", "category_roman": "Phal", "icon": "🍎" },
+  { "file": "spices", "category": "مصالحہ جات", "category_roman": "Spices", "icon": "🌶️" },
+  { "file": "snacks", "category": "سنیکس", "category_roman": "Snacks", "icon": "🍪" }
+]

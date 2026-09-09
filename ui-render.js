@@ -99,8 +99,12 @@ async function loadData(){
       index = [
         { file: "sabzi.json", category: "سبزیاں", category_roman: "Sabziyan", icon: "🥦" },
         { file: "phal.json", category: "پھل", category_roman: "Phal", icon: "🍎" },
+        { file: "bakery.json", category: "بیکری", category_roman: "Bakery", icon: "🍞" },
+        { file: "dairy.json", category: "دودھ و ڈیری", category_roman: "Doodh o Dairy", icon: "🥛" },
         { file: "spices.json", category: "مصالحہ جات", category_roman: "Spices", icon: "🌶️" },
-        { file: "snacks.json", category: "سنیکس", category_roman: "Snacks", icon: "🍪" }
+        { file: "snacks.json", category: "نمکین و اسنیکس", category_roman: "Snacks", icon: "🍟" },
+        { file: "biryani.json", category: "ملا بابا سپیشل بریانی", category_roman: "Mulla Baba Special Biryani", icon: "🍛" },
+        { file: "fish.json", category: "عمر فقیر لالا فش", category_roman: "Umar Faqeer Lala Fish", icon: "🐟" }
       ];
     }
 

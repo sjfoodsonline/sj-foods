@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ٹماٹر تازہ",
+    "units": [{"label": "KG", "rate": 120}, {"label": "آدھا KG", "rate": 60}],
+    "available": true,
+    "name_roman": "Fresh Tomato"
+  },
+  {
+    "name": "پیاز",
+    "units": [{"label": "KG", "rate": 100}, {"label": "آدھا KG", "rate": 50}],
+    "available": true,
+    "name_roman": "Onion"
+  },
+  {
+    "name": "آلو",
+    "units": [{"label": "KG", "rate": 80}, {"label": "آدھا KG", "rate": 40}],
+    "available": true,
+    "name_roman": "Potato"
+  }
+]

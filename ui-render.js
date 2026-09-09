@@ -259,4 +259,376 @@ window.loadShopsList = async function(){
       const isComingSoon = !isOwn && n >= 0 && n < 5;
       let cover = v.cover_image || (isOwn ? "cover.png" : "");
       let coverHtml = cover ? `<img class="shop-cover" src="\( {cover}" loading="lazy">` : `<div class="shop-cover ph"> \){isOwn?"🥬":"🏪"}</div>`;
-      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز:
+      const countLabel = isOwn ? "SJ Foods" : ("آئٹمز: " + (n < 0 ? "—" : n));
+      return `<div class="shop-card" onclick="tryEnterShop('${id}')">
+        ${isComingSoon ? '<div class="coming-soon-badge">Coming Soon</div>' : ''}
+        ${coverHtml}
+        <div class="shop-body"><div class="sname">\( {name}</div><div class="scity"> \){city}</div>
+        <div class="stag">${countLabel}</div></div></div>`;
+    }).join("");
+  }
+  paint(instant);
+  try{
+    const res = await fetch(RTDB + "/vendors.json");
+    const data = await res.json();
+    if(data) paint(data);
+  }catch(e){}
+};
+
+window.tryEnterShop = function(vendorId){
+  let activeShop = window.getActiveCartShopId();
+  if(activeShop && activeShop !== vendorId){
+    let shopName = (window.ALL_VENDORS[activeShop] && window.ALL_VENDORS[activeShop].shop_name) || "دوسری دکان";
+    let confirmSwitch = confirm(`⚠️ توجہ فرمائیں!\n\nآپ اس وقت "${shopName}" سے خریداری کر رہے ہیں۔ ہر دکاندار اپنی ڈلیوری خود کرتا ہے!\n\nکیا آپ پرانی دکان کا سامان ختم کر کے نئی دکان پر جانا چاہتے ہیں؟`);
+    if(!confirmSwitch) return;
+    clearActiveCart();
+  }
+  enterShop(vendorId);
+};
+
+window.enterShop = async function(vendorId){
+  const ok = await window.loadActiveVendor(vendorId);
+  if(!ok){ alert("شاپ دستیاب نہیں"); return; }
+  window.SHOP_ENTERED = true;
+  window.currentSelectedCategory = null;
+  try{ history.pushState({ page: 'shop', id: vendorId }, "", "#shop-" + vendorId); }catch(e){}
+  
+  document.getElementById("shopPicker").style.display = "none";
+  document.getElementById("homePageWrapper").style.display = "none";
+  document.getElementById("shopWorkspace").classList.remove("hidden");
+  document.getElementById("shopWorkspace").style.display = "block";
+  document.getElementById("billbar").style.display = "flex";
+
+  const coverEl = document.getElementById("shopInnerCover");
+  const nameEl = document.getElementById("shopInnerName");
+  let cover = window.ACTIVE_VENDOR.cover_image || "";
+  if(vendorId === "v001") cover = "cover.png";
+  if(coverEl){
+    if(cover){ coverEl.src = cover; coverEl.style.display = "block"; }
+    else { coverEl.style.display = "none"; }
+  }
+  if(nameEl){
+    nameEl.innerHTML = (window.ACTIVE_VENDOR.shop_name || "Shop") + ' <span style="font-size:11px;opacity:.9;font-weight:bold;">· شاپ کھلی ہوئی ہے</span>';
+  }
+
+  if(vendorId === "v001"){
+    await loadData();
+  } else {
+    await loadVendorCatalog(vendorId);
+  }
+  window.restoreShopCart();
+  renderBill();
+  window.scrollTo(0,0);
+};
+
+async function loadVendorCatalog(vendorId){
+  try{
+    const res = await fetch("https://sj-foods-default-rtdb.firebaseio.com/vendors/" + vendorId + "/items.json");
+    const data = await res.json() || {};
+    window.CATEGORIES_META = []; window.ITEMS = []; window.CATEGORIES_DATA = {};
+    const byCat = {};
+    Object.keys(data).forEach(key => {
+      const val = data[key];
+      if(!val || typeof val !== "object") return;
+      if(val.name || val.units || val.rate != null || val.image){
+        const cat = val.category || val.cat || "General";
+        if(!byCat[cat]) byCat[cat] = {};
+        byCat[cat][key] = val;
+      } else {
+        byCat[key] = val;
+      }
+    });
+    Object.keys(byCat).forEach(cat => {
+      window.CATEGORIES_META.push({ name: cat, name_roman: cat, icon: "🛒", image: "" });
+      window.CATEGORIES_DATA[cat] = [];
+      Object.keys(byCat[cat] || {}).forEach(k => {
+        const it = byCat[cat][k] || {};
+        let units = it.units || [{ label: it.unit || "KG", rate: it.rate || 0 }];
+        let imgs = it.images || (it.image ? [it.image] : []);
+        const row = {
+          id: k, cat: cat, name: it.name, name_roman: it.name_roman,
+          units: units, unitIndex: 0, available: it.available !== false,
+          images: imgs, qty: 0, premium: it.premium === true || it.no_qty === true,
+          no_qty: it.no_qty === true
+        };
+        window.ITEMS.push(row);
+        window.CATEGORIES_DATA[cat].push(it);
+        if(!window.CATEGORIES_META[window.CATEGORIES_META.length-1].image && imgs[0]){
+          window.CATEGORIES_META[window.CATEGORIES_META.length-1].image = imgs[0];
+        }
+      });
+    });
+    renderChips(); renderMainView();
+    document.getElementById("loadingMsg").style.display = "none";
+  }catch(e){
+    document.getElementById("loadingMsg").textContent = "Catalog load failed";
+  }
+}
+
+window.backToShops = function(){
+  window.saveShopCart();
+  window.SHOP_ENTERED = false;
+  window.currentSelectedCategory = null;
+  window.ITEMS.forEach(i => i.qty = 0);
+  document.getElementById("shopPicker").style.display = "";
+  document.getElementById("shopWorkspace").style.display = "none";
+  document.getElementById("billbar").style.display = "none";
+  document.getElementById("homePageWrapper").style.display = "block";
+  try{ history.pushState({ page: 'home' }, '', '#home'); }catch(e){}
+  window.loadShopsList();
+  window.scrollTo(0,0);
+};
+
+function renderChips(){
+  const chipsEl = document.getElementById("chips");
+  if(chipsEl) {
+    chipsEl.innerHTML = window.CATEGORIES_META.map(c => 
+      `<button class="cat-chip \( {window.currentSelectedCategory===c.name?'active':''}" onclick="selectCategory(' \){c.name}')">${c.icon} ${c.name_roman||c.name}</button>`
+    ).join("");
+  }
+}
+
+window.selectCategory = function(catName){
+  window.currentSelectedCategory = catName;
+  renderChips(); renderMainView();
+  window.scrollTo({top:0, behavior:'auto'});
+  if(window.SHOP_ENTERED && catName){
+    try{ history.pushState({ page:'category', cat: catName }, '', '#cat'); }catch(e){}
+  }
+};
+
+window.resetToHome = function(){ if(window.SHOP_ENTERED) window.backToShops(); window.selectCategory(null); };
+
+function renderMainView(filter=""){
+  const main = document.getElementById("list");
+  if(!main) return; main.innerHTML = "";
+  if(filter){
+    let filtered = window.ITEMS.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()) || (i.name_roman && i.name_roman.toLowerCase().includes(filter.toLowerCase())));
+    let div = document.createElement("div"); div.innerHTML = `<div class="cat-title">🔍 تلاش کے نتائج</div>`;
+    filtered.forEach(it => div.appendChild(createItemRow(it)));
+    main.appendChild(div);
+  } else if(window.currentSelectedCategory){
+    let catObj = window.CATEGORIES_META.find(c => c.name === window.currentSelectedCategory) || {icon:"📦", name: window.currentSelectedCategory};
+    let items = window.ITEMS.filter(i => i.cat === window.currentSelectedCategory);
+    let div = document.createElement("div");
+    div.innerHTML = `<div class="cat-title"><span>${catObj.icon} ${catObj.name}</span> <button class="back-cat-btn" onclick="resetToHome()">⬅ Back</button></div>`;
+    items.forEach(it => div.appendChild(createItemRow(it)));
+    main.appendChild(div);
+  } else {
+    let grid = document.createElement("div"); grid.className = "home-cats-grid";
+    window.CATEGORIES_META.forEach(cat => {
+      grid.innerHTML += `<div class="home-cat-card" onclick="selectCategory('${cat.name}')">
+        <div class="home-cat-img-wrap">\( {cat.image ? `<img src=" \){cat.image}" loading="lazy">` : `<div style="font-size:32px;">${cat.icon}</div>`}</div>
+        <div class="home-cat-name">${cat.name_roman||cat.name}</div>
+      </div>`;
+    });
+    main.appendChild(grid);
+  }
+}
+
+function createItemRow(it){
+  const u = it.units[it.unitIndex];
+  const row = document.createElement("div");
+  row.className = "item" + (it.qty>0?" active":"");
+  row.id = "row-"+it.id;
+  let mainImg = (it.images && it.images.length > 0) ? it.images[0] : "";
+  let imgCount = (it.images && it.images.length > 1) ? `<div class="thumb-badge">+${it.images.length-1}</div>` : "";
+  row.innerHTML = `
+    <div class="item-row-top">
+      <div class="item-thumb" onclick="openLightboxItem('${it.id}')">
+        \( {mainImg ? `<img src=" \){mainImg}" loading="lazy">` : it.icon}
+        ${imgCount}
+      </div>
+      <div class="info"><div class="name">\( {it.name_roman||it.name}</div><div class="meta"><b> \){fmt(u.rate)}</b> / ${u.label}</div></div>
+    </div>
+    <div class="item-row-bottom">
+      \( {it.units.length>1 ? `<div class="unit-wrap"><select class="unit-select" onchange="changeUnit(' \){it.id}',this.value)">\( {it.units.map((x,idx)=>`<option value=" \){idx}" \( {idx===it.unitIndex?'selected':''}> \){x.label} — ${fmt(x.rate)}</option>`).join("")}</select></div>` : '<span></span>'}
+      ${(it.premium || it.no_qty) ? `
+      <div style="text-align:left;font-size:11px;">
+        <div style="color:\( {it.available===false?'#B71C1C':'#2E7D32'};font-weight:bold;"> \){it.available===false?'Sold Out':'Available · شاپ/کال'}</div>
+        <button type="button" style="margin-top:4px;background:var(--dark);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:bold;" onclick="inquirePremium('\( {it.id}')"> \){it.qty>0?'✓ کارٹ میں':'💎 استفسار / کارٹ'}</button>
+      </div>` : `
+      <div class="qty-box"><button type="button" onclick="changeQty('\( {it.id}',-1)">−</button><input type="number" value=" \){it.qty}" readonly><button type="button" class="plus" onclick="changeQty('${it.id}',1)">+</button></div>`}
+    </div>`;
+  return row;
+}
+
+window.inquirePremium = function(id){
+  const it = window.ITEMS.find(x => x.id === id);
+  if(!it) return;
+  if(it.available === false){ alert("Sold Out"); return; }
+  it.qty = it.qty > 0 ? 0 : 1;
+  renderMainView(document.getElementById("search").value);
+  renderBill();
+  document.getElementById("billbar").classList.remove("collapsed");
+  window.saveShopCart();
+};
+
+window.changeUnit = function(id, idx){ const it = window.ITEMS.find(x => x.id === id); if(it){ it.unitIndex = parseInt(idx); renderMainView(document.getElementById("search").value); renderBill(); window.saveShopCart(); } };
+
+window.changeQty = function(id, delta){
+  const it = window.ITEMS.find(x => x.id === id);
+  if(!it) return;
+  it.qty = Math.max(0, it.qty + delta);
+  renderMainView(document.getElementById("search").value);
+  renderBill();
+  window.saveShopCart();
+};
+
+window.removeItemFromCart = function(id){ const it = window.ITEMS.find(x => x.id === id); if(it){ it.qty = 0; renderMainView(document.getElementById("search").value); renderBill(); window.saveShopCart(); } };
+window.clearActiveCart = function(){ window.ITEMS.forEach(i => i.qty = 0); renderMainView(document.getElementById("search").value); renderBill(); window.saveShopCart(); };
+function fmt(n){ return "Rs. " + Math.round(n).toLocaleString("en-US"); }
+
+function formatPayDisplay(digits){
+  const d = String(digits||"").replace(/[^0-9]/g,"");
+  if(d.length===11 && d[0]==="0") return d.slice(0,4)+"-"+d.slice(4);
+  if(d.length===12 && d.indexOf("92")===0) return "0"+d.slice(2,5)+"-"+d.slice(5);
+  return d || "—";
+}
+
+function getActivePayNumber(){
+  const v = window.ACTIVE_VENDOR || {};
+  let d = String(v.pay_number || "").replace(/[^0-9]/g,"");
+  if(!d && v.isMaster) d = "03349353799";
+  if(d.indexOf("92")===0 && d.length>=12) d = "0"+d.slice(2);
+  return d;
+}
+
+window.copyPayNumber = function(){
+  const d = getActivePayNumber();
+  if(!d){ alert("ادائیگی نمبر دستیاب نہیں"); return; }
+  navigator.clipboard.writeText(d).then(() => alert("نمبر کاپی: "+d)).catch(() => alert(d));
+};
+
+function renderBill(){
+  const chosen = window.ITEMS.filter(i => i.qty > 0);
+  let subtotal = 0;
+  document.getElementById("billLines").innerHTML = chosen.map(it => {
+    const u = it.units[it.unitIndex] || it.units[0];
+    const t = it.qty * (u.rate||0); subtotal += t;
+    return `<div class="cart-item-row"><span>• ${it.name} — ${it.qty} \( {u.label||''} = <b> \){fmt(t)}</b></span>
+      <button type="button" class="cart-item-del" onclick="removeItemFromCart('${it.id}')">✕</button></div>`;
+  }).join("");
+  document.getElementById("itemCount").textContent = chosen.length;
+  document.getElementById("summaryTotal").textContent = fmt(subtotal);
+  document.getElementById("payAmount").textContent = fmt(subtotal);
+  
+  const pay = getActivePayNumber();
+  const numEl = document.getElementById("payNumberDisplay");
+  if(numEl) numEl.textContent = formatPayDisplay(pay);
+
+  if(chosen.length === 0) document.getElementById("billbar").classList.add("collapsed");
+}
+
+function toggleCartDrawer(){ document.getElementById("billbar").classList.toggle("collapsed"); }
+const summaryEl = document.getElementById("summary");
+if(summaryEl) summaryEl.onclick = toggleCartDrawer;
+const searchEl = document.getElementById("search");
+if(searchEl) searchEl.oninput = (e) => renderMainView(e.target.value);
+
+const waBtnEl = document.getElementById("waBtn");
+if(waBtnEl){
+  waBtnEl.onclick = function(){
+    if(window.ITEMS.filter(i => i.qty > 0).length === 0){ alert("کارٹ خالی ہے"); return; }
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const addr = document.getElementById("custAddr").value.trim();
+    if(!name){ alert("براہ کرم نام درج کریں"); document.getElementById("custName").focus(); return; }
+    if(!phone){ alert("براہ کرم فون نمبر درج کریں"); document.getElementById("custPhone").focus(); return; }
+    if(!addr){ alert("براہ کرم مکمل پتہ درج کریں"); document.getElementById("custAddr").focus(); return; }
+    
+    let s = phone.replace(/[\s\-()]/g, "");
+    let digits = s.replace(/[^0-9]/g, "");
+    if(!/^03\d{9}$/.test(digits)){
+      alert("❌ غلط فون نمبر!\n\nدرست مثال: 03349353799");
+      document.getElementById("custPhone").focus();
+      return;
+    }
+    
+    var chk = document.getElementById("popupTermsCheck");
+    if(chk) chk.checked = false;
+    document.getElementById("confirmPopupOverlay").classList.add("active");
+  };
+}
+
+window.closeConfirmPopup = function(){ document.getElementById("confirmPopupOverlay").classList.remove("active"); };
+
+window.proceedWithOrder = function(){
+  const chk = document.getElementById("popupTermsCheck");
+  if(chk && !chk.checked){ alert("براہ کرم تصدیقی باکس پر ٹک کریں۔"); return; }
+  const name = document.getElementById("custName").value.trim();
+  const phoneRaw = document.getElementById("custPhone").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  window.closeConfirmPopup();
+  
+  const chosen = window.ITEMS.filter(i => i.qty > 0);
+  let targetWa = String((window.ACTIVE_VENDOR && window.ACTIVE_VENDOR.whatsapp) || "").replace(/[^0-9]/g,"");
+  if(!targetWa && window.ACTIVE_VENDOR && window.ACTIVE_VENDOR.id === "v001") targetWa = "923349353799";
+  
+  const orderCode = "SJ-" + Math.floor(1000 + Math.random() * 9000);
+  let subtotal = 0;
+  let msg = "*SJ ONLINE — ORDER*\nShop: " + (window.ACTIVE_VENDOR.shop_name || "Shop") + "\nCode: " + orderCode + "\nName: " + name + "\nPhone: " + phoneRaw + "\nAddress: " + addr + "\n\n*Items:*\n";
+  chosen.forEach(it => {
+    const u = it.units[it.unitIndex];
+    const t = it.qty * u.rate;
+    subtotal += t;
+    msg += "- " + it.name + " x " + it.qty + " " + u.label + " = " + fmt(t) + "\n";
+  });
+  msg += "\n*Total: " + fmt(subtotal) + "*";
+
+  try{
+    if(window.dbRef){
+      window.dbRef.set(window.dbRef.ref(window.dbRef.db, "orders/" + orderCode), {
+        code: orderCode, name: name, phone: phoneRaw, address: addr, items: msg.replace(/\n/g, "<br>"),
+        total: Math.round(subtotal), otp: orderCode.replace("SJ-", ""), timestamp: new Date().toISOString(),
+        status: "pending", vendor_id: window.ACTIVE_VENDOR.id || "v001", shop_name: window.ACTIVE_VENDOR.shop_name || "Shop", target_whatsapp: targetWa
+      });
+    }
+  }catch(e){}
+
+  window.open("https://wa.me/" + targetWa + "?text=" + encodeURIComponent(msg), "_blank");
+};
+
+window.jumpToItem = function(catName, itemId){
+  window.selectCategory(catName);
+  setTimeout(() => {
+    var el = document.getElementById("row-" + itemId);
+    if(el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 100);
+};
+
+window.openLightboxItem = function(itemId){
+  let it = window.ITEMS.get ? null : window.ITEMS.find(x => x.id === itemId);
+  if(!it || !it.images || it.images.length === 0) return;
+  showLightboxImages(it.images, 0);
+};
+
+function showLightboxImages(imgs, index){
+  const box = document.getElementById("lightbox");
+  const imgEl = document.getElementById("lightboxImg");
+  const thumbsEl = document.getElementById("lightboxThumbs");
+  if(!box || !imgEl) return;
+  imgEl.src = imgs[index];
+  box.classList.remove("hidden");
+  window.LIGHTBOX_OPEN = true;
+  if(imgs.length > 1){
+    thumbsEl.innerHTML = imgs.map((src, i) => `<img src="${src}" class="lightbox-thumb \( {i===index?'active':''}" onclick="event.stopPropagation(); showLightboxImages(window._lbImgs, \){i})">`).join("");
+    thumbsEl.style.display = "flex";
+    window._lbImgs = imgs;
+  } else {
+    thumbsEl.innerHTML = "";
+    thumbsEl.style.display = "none";
+  }
+}
+
+window.closeLightbox = function(fromPop){
+  const box = document.getElementById("lightbox");
+  if(box) box.classList.add("hidden");
+  window.LIGHTBOX_OPEN = false;
+};
+
+async function bootApp(){
+  window.initHomeVisuals();
+  window.loadShopsList();
+}
+bootApp();

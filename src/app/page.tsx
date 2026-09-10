@@ -6,7 +6,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // محصولات اور کیٹگریز (جو آپ نے سوات اور منگورہ کے لیے سیٹ کی ہیں)
   const categories = ["All", "Fruits & Veg", "Grocery & Oils", "Shama Ghee", "Local Honey"];
 
   const products = [
@@ -18,14 +17,12 @@ export default function Home() {
     { id: 6, name: "Fresh Swat Walnuts (1kg)", price: "Rs. 900", category: "Grocery & Oils", image: "🌰" },
   ];
 
-  // فلٹرنگ کا نظام
   const filteredProducts = products.filter((item) => {
     const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  // واٹس ایپ آرڈر فنکشن
   const handleWhatsAppOrder = (productName: string, price: string) => {
     const phone = "923000000000"; // یہاں اپنا واٹس ایپ نمبر لکھ لیں
     const message = `Hello SJ Online, I want to order: *${productName}* (${price}). Please confirm my order for Mingora Swat delivery.`;
@@ -35,7 +32,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800">
-      {/* Top Header / Announcement Bar */}
+      {/* Top Announcement Bar */}
       <div className="bg-emerald-800 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
         🚀 Fast Home Delivery Across Mingora & Swat Region | Order via WhatsApp!
       </div>
@@ -75,14 +72,14 @@ export default function Home() {
 
       {/* Categories Filter */}
       <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all shadow-sm ${
                 selectedCategory === cat
-                  ? "bg-emerald-600 text-white shadow-emerald-200 shadow-md"
+                  ? "bg-emerald-600 text-white shadow-md"
                   : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
               }`}
             >

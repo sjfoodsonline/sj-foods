@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "SJ Online",
+      "hasCanvas": false,
+      "bodyTextLen": 1647,
+      "bodyTextHash": "55a46a262fbad58c912022393ec7c701364ac793177b7be1f82f62c5c6397bbd",
+      "bodyTextPrefix": "SJ Online Mingora, Swat Home Market Become vendor Owner Cart Liv",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "SJ Online",
+      "hasCanvas": false,
+      "bodyTextLen": 1393,
+      "bodyTextHash": "43adce0558a330f26c4f1bec62406a39216fc3480a71e7c23ed42fe32e70c406",
+      "bodyTextPrefix": "SJ Online Mingora, Swat Cart Live in Mingora, Swat Swat’s first ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

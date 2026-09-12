@@ -1,0 +1,510 @@
+
+# Browser QA (agent-driven only; the user is not your QA)
+
+`AGENTS.md` § "Execution loop" states the mandatory pass. This is the menu of
+capabilities and the depth judgment around it.
+
+Everything here runs **in the sandbox** against `http://127.0.0.1:8080` — it is
+**not** the user's Grok chat tab. Use whatever browser capability you have
+**yourself**, so quality beats curl-only.
+
+1. **Grok browser / computer-use / MCP browser tools**, if listed — open
+   `http://127.0.0.1:8080`, glance at the UI, screenshot if supported.
+2. **`web_fetch`** on that URL for an HTML-only check.
+3. **Playwright helper (preinstalled)** — one run loads desktop **and** mobile,
+   screenshots both, and prints a JSON verdict.
+
+```bash
+mkdir -p /workspace/screenshots
+node scripts/browser-smoke.mjs http://127.0.0.1:8080/ /workspace/screenshots/app-builder-preview.png
+# Writes app-builder-preview.png (desktop), -mobile.png, and .json (verdict).
+# Then Read BOTH PNGs in one batched read if you have an image tool, and iterate if either looks wrong.
+```
+
+One run audits desktop (1280×800) **and** mobile (390×844): two PNGs (mobile
+gets a `-mobile` suffix) plus a JSON verdict (per-viewport console/page errors,
+body text, horizontal overflow) on stdout and next to the PNG (`.json`). It
+writes under `/workspace/screenshots/` by default; pass an explicit path only
+for a different name **under that directory**.
+
+4. **`agent-browser` (preinstalled)** — the interactive pass: click, type, hold
+   keys, read state back out. § "Interactive QA" below; it is also what the
+   `controls` §5c self-test runs.
+
+## Built output
+
+Serve the build with `npm run preview:restart` (loopback `127.0.0.1:8081`) and
+reuse the dev verdict as a baseline — the JSON reports `divergesFromBaseline`, so
+you only re-read the built screenshots when it flags.
+
+```bash
+npm run preview:restart   # built output on 127.0.0.1:8081 — QA only, never the live preview
+node scripts/browser-smoke.mjs http://127.0.0.1:8081/ /workspace/screenshots/app-builder-built.png --baseline /workspace/screenshots/app-builder-preview.json
+npm run preview:stop      # frees :8081 when the built-output QA is done
+```
+
+`preview:restart` (`scripts/preview.mjs`) kills whatever holds `:8081` — the
+port's owner, whoever started it — then serves the current build in the
+background and returns once it answers. Use it instead of bare
+`npm run preview`: `vite preview` is strictPort, so a preview left running from
+an earlier build both fails a plain start and keeps serving stale output.
+
+## Interactive QA — `agent-browser`
+
+```bash
+agent-browser open http://127.0.0.1:8080/
+agent-browser snapshot -i                        # a11y tree with @e1 refs
+agent-browser click @e1                          # or: find text "Start" click
+agent-browser fill "#email" you@example.com      # type <text> for keystrokes
+agent-browser press Enter                        # a tap; holding: see "Keys"
+agent-browser wait --fn "window.__ready === true"   # or: wait 500 (ms)
+agent-browser eval "document.querySelectorAll('.card').length"
+agent-browser console                            # or: errors (page errors)
+agent-browser screenshot /workspace/screenshots/step.png
+agent-browser close
+```
+
+**Any multi-verb flow goes in one `batch`.** Each invocation is a tool call of
+its own, so a 10-verb flow costs ten round trips; `batch` runs the flow in one.
+Reach for it by default and drop to single commands only for a one-off probe.
+It takes the commands as a JSON array of string arrays on stdin, which also
+sidesteps the shell quoting a flow with quotes in its `eval` would need:
+
+```bash
+agent-browser batch --bail <<'JSON'
+[["open","http://127.0.0.1:8080/"],
+ ["find","text","Add note","click"],
+ ["fill","#title","Grocery list"],
+ ["press","Enter"],
+ ["wait","300"],
+ ["eval","if (![...document.querySelectorAll('li')].some(n => n.textContent.includes('Grocery list'))) throw Error('note did not appear in the list')"],
+ ["screenshot","/workspace/screenshots/note-added.png"]]
+JSON
+```
+
+That is the shape for any app: drive the thing a user would do, then assert the
+result with a throwing `eval`. It exits 0 when the note lands and 1 when it does
+not, so one tool call is the whole verdict. No `close` — the page is still there
+for the next check.
+
+`--bail` stops at the first failing command; without it the later ones still
+run. Either way a failed step exits non-zero, so a batch is a verdict. That is
+how to keep an interactive pass cheap — one tool call instead of one per verb.
+`controls` §5c is the worked example.
+
+**`open` once.** The page outlives the command: a later invocation, batched or
+not, keeps the DOM and any `window` state you set. A second `open` re-navigates
+and **discards that state**, so starting every batch with one both costs a page
+load and throws away the state you just built. Open at the start of a pass and
+again only after a rebuild, or to reset deliberately.
+
+**Match the depth of the pass to the app.** A page that only renders is done
+once the smoke screenshots look right — the interactive verbs are for apps with
+something to drive. Verify each behaviour once; re-run a check after you change
+the code it covers, not otherwise.
+
+**A `✓` from `open` is not "the page loaded".** An HTTP error page reports
+`✓` too (a 404 as `✓ Error response`), so assert on page content — a `find`, a
+throwing `eval` — rather than trusting the tick.
+
+The image build asserts the core verbs stay in the CLI's subcommand list.
+**Their arguments and flags are not checked** — they are upstream's, and
+upstream ships ~17 releases a month, so a manual here would be stale on arrival:
+if a command rejects what you typed, `agent-browser <cmd> --help` decides, not
+this file.
+
+**`@ref`s go stale.** A `@e1` is valid only for the `snapshot` that produced
+it, so re-snapshot after any DOM change — navigation, a click that re-renders,
+a route change — rather than reusing an old ref. It is the most common misuse.
+
+**`find text` is case-sensitive.** It matches a substring of an element's
+trimmed text — `find text "Play" click` hits `Play now` — but `start` will not
+find `Start`. Copy the label from `snapshot -i`; guessing it costs a failed
+command and a re-snapshot.
+
+**Keys.** `press <key>` sends a real `event.code` (`press d` → `KeyD`) and is
+the only single-key command `--help` documents; raw keystrokes at the current
+focus, with no selector, are `keyboard type <text>`. `keydown`/`keyup` exist but
+are undocumented and send **`event.code === ""`**, so a game that tracks
+`event.code` never sees them — do not build a check on either. Hold keys from
+inside the page instead: the game's own probe (`controls`
+§5b), or dispatch the event yourself, on `document.body` with `bubbles: true`
+so listeners on `document` or `window` see it — dispatching on `window` itself
+does not reach a `document` listener:
+
+```bash
+agent-browser eval "document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', key: 'a', bubbles: true }))"
+```
+
+**Falsy is not failure — throw.** `eval "false"` exits **0**; `eval "if (!cond)
+throw Error('why')"` exits **1**. Throwing is what turns a check into a verdict
+instead of a line of output you have to read yourself; `controls` §5c is the
+worked example. Anything past one expression goes in an IIFE —
+`eval "(() => { … })()"`, the form the image build asserts and the only one you
+can re-run (a bare `const x = …` fails the second time with "already
+declared") — or through `eval --stdin` with a heredoc, or `eval -b <base64>`,
+when the quoting gets awkward. `eval` awaits a promise, so an `async` IIFE
+works and its rejection still exits 1: that is how you time something in page
+time rather than across command round-trips.
+
+**Output modes.** Plain output is a line per command (`eval "1+1"` prints `2`)
+and is the default for a reason: `--json` wraps each one in a repeated
+`lifecycle` block, measured at ~1 KB for three commands whichever three, so it
+is worth it only when you are parsing. Same for
+snapshots: prefer `snapshot -i | grep -i "<thing>"` or `snapshot -s "#sel"`,
+and keep a bare `snapshot` for a page you cannot otherwise navigate.
+
+**Operating notes** (conventions, not enforcement): loopback targets and
+screenshots under `/workspace/screenshots/`, the same rules as everywhere else
+here; a `--session <name>` per flow if you ever run two at once; if a command
+hangs, `agent-browser close` and retry.
+
+### Fallback
+
+`agent-browser` is the tool for interactive QA. If it fails **twice on the same
+step** — daemon wedged, a command it does not support — fall back to a short
+Playwright script (still installed) and say so in one line of your summary.
+
+## How deep to go
+
+Depth **beyond the mandatory smoke pass + screenshot read** is your judgment: a
+landing page usually needs nothing more than that pass. For a game with WASD /
+vehicles / flight, still verify control signs (A left / D right from a chase
+cam) per `.grok/skills/controls/SKILL.md` — you don't have to play end-to-end,
+but inverted A/D must not ship.
+
+# Data & auth — implementation
+
+Read this **after** `AGENTS.md` §0.5 has already said the app needs a database
+and/or sign-in. The decision (auth OFF by default, the closed trigger list, "no
+migrations / no `@/lib/db` unless triggered") lives in `AGENTS.md`, not here.
+
+Full guides + snippets: the **`neon` skill** (database) and the **`auth` skill**
+(sign-in), under `.grok/skills/`.
+
+## Database (`@/lib/db`, server-only)
+
+- `const sql = await getSql()` from `@/lib/db`. Use it **only** inside
+  `createServerFn` handlers / server loaders.
+- Dual-mode: a regular Postgres driver (node-postgres, `pg`) when `DATABASE_URL`
+  is set, else a local **PGLite** fallback — so the preview always renders.
+- In preview, PGLite **bootstraps at server start** (`ensureDbReady`) once the
+  app has migrations. Do not remove that.
+- A deployed app is provisioned a real database when it ships `migrations/*.sql`
+  or sign-in. An app that needs one without either says so with
+  `"deploy": {"database": true}` in `.grok/app-env.json` — see the `neon` skill.
+
+## Migrations
+
+- `migrations/*.sql` is the single schema source: applied to **Neon on deploy**
+  (`npm run build` runs `npm run db:migrate`, so Vercel ships with the schema
+  ready) and to the **PGLite** preview automatically on startup.
+- Add the app's tables as ordered files (`migrations/0002_*.sql`), not inline.
+- An app that needs no database adds no `.sql` file, and then no migration runs
+  anywhere.
+- The Better Auth schema sits outside that scope in `migrations/auth/` (neither
+  applier descends into it); the `auth` skill's "Turning sign-in on" copies it
+  up. Do not edit it. Applied files are keyed by **basename**, so a database
+  that already has `0001_auth.sql` will not re-run it.
+
+## Server functions
+
+`createServerFn` with input via `.validator()` — the current API on the
+installed version (`.inputValidator()` is deprecated). Examples in the `neon`
+and `auth` skills.
+
+## Auth wiring (only once §0.5 says accounts)
+
+- The app runs its **own** Better Auth at `/api/auth/*` and federates to the
+  shared Grok auth broker for **Google** and **X**. The only other supported
+  method is this app's own **email/password** (local Better Auth, off by
+  default — enable only via `src/lib/auth/email-password.ts`; **never rewrite**
+  `src/lib/auth/server.ts`). No other social providers, magic links, passkeys,
+  or OTP/phone.
+- Two routes: `src/routes/api/auth/$.ts` (mounts Better Auth at `/api/auth/*`)
+  and `src/routes/login.tsx` (provider buttons via `signIn(providerId)`). Copy
+  the snippets from the `auth` skill.
+- The live-preview popup at `/auth/popup` is served by the template Vite plugin
+  (`vite.config.ts` → `popup.server.ts`); `AGENTS.md` § "First scaffold" states
+  the rule about not adding a React route there.
+- Read the user with `useCurrentUser()` (`@/lib/auth/use-current-user`) and gate
+  UI with `SignedIn` / `SignedOut` / `UserButton` (`@/lib/auth/gates`).
+- Sign-in is **real even in the live preview** — it federates via a baked shared
+  preview client — so a visitor is signed out until they sign in. Build real
+  sign-in; do **NOT** scaffold demo/mock/hardcoded users.
+- **Authorize every server function** with `authMiddleware`
+  (`@/lib/auth/middleware`): `createServerFn().middleware([authMiddleware])`
+  hands the handler a **verified** `context.userId` (resolved from the
+  same-origin session; throws when signed out). Scope **every** query by that
+  `user_id`. Never trust a client-sent id.
+
+## Turning sign-in on (at scaffold or later)
+
+`.grok/app-env.json` (`{"VITE_AUTH_ENABLED": "false"}`) is the switch, read by
+`npm run dev` / `build` / `preview` alike through `scripts/with-app-env.mjs` —
+which is why Vite is never started outside those scripts. Follow the `auth`
+skill's **"Turning sign-in on"** (flag, schema, then routes) in that order: the
+routes alone render the disabled branch. `npm run check:auth`, run against a
+live dev server, fails when that server and the next build disagree about the
+flag (exit 0 agree, 1 diverged, 2 could not observe).
+
+## Env
+
+On deploy the platform injects `DATABASE_URL` + per-app auth creds; live preview
+needs neither (baked preview client, PGLite fallback). Deployed behind the gate,
+signed-in Grok viewers get the app session automatically from `x-grok-identity`
+(see the `auth` skill — `references/grok-identity.md`); the broker federation
+covers anonymous viewers and no-gate contexts.
+
+## HARD RULE — connector / AppData API (backend only)
+
+**Never call connector or AppData APIs from frontend code.**
+
+| Allowed | Forbidden |
+| --- | --- |
+| `createServerFn({ method: "POST" }).handler` that dynamic-imports `@/lib/app-data/client.server` and calls `callTool` | Importing `@/lib/app-data/client.server` from a route component, `useEffect`, event handler, or any client module |
+| UI calling that **server function** only | Browser `fetch("/__gate/app-data/…")`, `fetch` to the connectors host, or any direct CallTool from the client |
+| Types/constants from `@/lib/app-data` (no network) | Putting `x-connector-access-token`, connector JWTs, or gate secrets in client state, props, or `VITE_*` env |
+
+**Flow (required):** browser → **this app's** `createServerFn` → **app backend**
+SDK → public connectors host (`connectors.grok.me`, **auth required**) → gate.
+Unauthenticated hits on the connectors host redirect to gate OIDC sign-in.
+
+If you need Drive / Gmail / calendar / connector data, load the **`app-data`
+skill** (`.grok/skills/app-data/SKILL.md`) and follow it exactly. Do not invent
+a client-side connector client.
+
+# Build & deploy target
+
+You never trigger the deploy yourself, **but the app you build is eventually
+deployed to Vercel** by the platform — so your output must build cleanly under
+Vercel's process. `npm run build` must succeed and emit valid output, and code
+that works under `npm run dev` but breaks a production / SSR build is a bug.
+Watch for dev-only deps, server-only Node APIs run at import time, runtime
+filesystem writes, and hard-coded ports / hosts / secrets.
+
+## A passing `npm run build` does not mean the deployed app renders
+
+The most common blank-deploy failure is
+`Failed to load module script … MIME type "text/html"`: the built `index.html`
+requests JS assets that 404 in prod, so the server returns the HTML fallback
+(wrong MIME) and the page is blank. Fix the asset base path / build output so
+`/assets/*` resolve, and ensure the SPA/SSR fallback doesn't shadow real asset
+requests — then re-verify the served build renders.
+
+If you edited source after kicking off the build, re-run `npm run build` first,
+then `npm run preview:restart` — it frees `:8081` before serving, so you never
+smoke the previous build's output.
+
+## What `vite.config.ts` already does
+
+The workspace ships a ready `vite.config.ts` and `tsconfig.json` — don't
+recreate them, and don't import a vendored `vite-tanstack-config` preset. The
+config:
+
+- binds the dev port `0.0.0.0:8080`;
+- pins `vite preview` to loopback `127.0.0.1:8081`, so the built output can
+  never be picked up as the user's live preview;
+- gates `nitro({ preset: "vercel" })` on `command === "build" || isPreview`, so
+  it never runs in dev — left on in dev, nitro opens a second dev-server port,
+  which breaks the single-port 8080 live preview — but still serves the built
+  output under `vite preview`;
+- mounts `grokPwaPlugin()`.
+
+If you edit it, preserve both port contracts, the build/preview-gated nitro
+plugin **including its `serverDir: "./server"` option** (without it the deployed
+app loses the Home Screen install page), and `grokPwaPlugin()`.
+
+# Generated art (2D only)
+
+`AGENTS.md` § "Skills" states the availability rule: only call `imagine_*` tools
+when they appear in your available tools list, and ship CSS / SVG / emoji /
+canvas / geometric-WebGL art when they don't. This file is the pipeline detail
+for when they are listed.
+
+## Illustration
+
+When the product needs illustration (heroes, empty states, textures, icons),
+generate **2D** assets via the image tools — follow the **`imagine`** skill
+(`imagine_text_to_image` / `imagine_image_to_image` / `imagine_text_to_video` /
+`imagine_image_to_video` path-based stack; show results with `render_file`).
+Image tools do **not** create 3D models; use geometry/glTF for interactive 3D
+(`building-games`).
+
+## Game art
+
+- **Doctrine, not the pipeline:** for any game sprites, sheets, animations,
+  tiles, or UI art, load **`game-asset-core`** plus the matching specialist —
+  **`game-animation-frames`** (motion / loop laws), **`game-tilesets`**
+  (seamless tiles / transitions), **`game-character-consistency`** (turnarounds
+  / variants), **`game-ui-icons`** (HUD / buttons / icon sets). These cover
+  engine-ready defaults, blind verify, and retry discipline — **not** a
+  substitute for the pipeline skills below, and not a substitute for
+  implementing the app.
+- **2D sprites / animation sheets** (characters, walk cycles, attacks,
+  projectiles, FX, props): run **`generate2dsprite`** — solid **`#FF00FF`**
+  magenta sheets + local chroma postprocess scripts. That magenta key is
+  **required** by the processor; do not invent a different "keyable" color on
+  this path. Layer `game-asset-core` (+ `game-animation-frames` /
+  `game-character-consistency`) for QC.
+- **Exception — abstract/geometric games** (tetris, snake, pong, breakout, and
+  the like) are correctly rendered procedurally. Generated sprite sheets there
+  are a quality regression: do **not** invoke image generation for them even
+  when gen tools are listed.
+- **2D maps / levels / prop packs** (top-down RPG, side-scroller stages, layered
+  maps, collision zones): follow **`generate2dmap`**. Default engine target is
+  browser (`raw_canvas` / Phaser), not Godot/Unity. Tileable ground/walls → also
+  `game-tilesets` for seamlessness checks.
+- **Denser motion from video** (optional, Grok-only): **`video2dsprite`** —
+  `imagine_image_to_video` → ffmpeg → magenta chroma scripts. Prefer
+  `generate2dsprite` for crisp production sheets, and use `video2dsprite` rather
+  than ad-hoc ffmpeg for the sandbox execution path.
+
+## Share card / app identity
+
+A custom share card is the default: open the **`og`** skill and produce a custom
+`public/og.jpg` from the app's own art before you finish.
+
+- It covers games of **every** kind and rendering tech (a DOM tic-tac-toe is
+  still a game), whimsical apps, creative tools, and brand-forward pages. Only
+  plain utilities (converters, CRUD trackers, admin dashboards) keep the
+  `og.grok.me` placeholder, and the favicon alone never satisfies this.
+- Custom art is `public/og.jpg` **and** `"card": "custom"` in
+  `src/lib/og/site.json`. Bake infers custom from the file when the flag is
+  missing, but `brand-check` still requires the field.
+- Games also set `"type": "x:game"` (X presents the unfurl as a game card) and
+  ship `public/x-banner.jpg` (50:11, 1200×264). `twitter:card=summary_large_image`
+  is layout, not the game signal.
+- Title defaults to the host slug; `src/lib/og/site.json` is only needed when
+  the display name is not the slug, or the app is a game.
+- The tags come from the PWA injector (`scripts/grok-pwa-shared.mjs`), which
+  overwrites anything in `__root.tsx`. Live preview emits the same tags (via
+  `X-Forwarded-Host`), and identity is baked at `vite build` so published Nitro
+  can inject without reading the workspace filesystem.
+- Applies at build time, publish or not.
+
+# Hibernate, revive, and follow-up turns
+
+`AGENTS.md` § "`/workspace/startup.sh`" holds the rules for the file itself.
+This is the surrounding lifecycle behaviour.
+
+## Session shapes you may land in
+
+- **Fresh `/workspace`** — template + `node_modules` only, no app routes, no
+  `startup.sh`. Scaffold, then write `startup.sh`.
+- **Hibernate / revive (snapshot restore)** — the platform re-runs
+  `/workspace/startup.sh` if it exists. Everything else in the workspace comes
+  back as it was, including the app source. Your job on every turn is to leave
+  that file able to bring the preview back on its own.
+- **Reboot / recreate** — may wipe app files back to the template. Re-scaffold
+  and **restore `startup.sh`** before verifying the preview.
+
+A revive with no `startup.sh` leaves nothing listening on `:8080`, so the user
+sees an empty preview pane.
+
+## A `startup.sh` that satisfies the rules
+
+```sh
+#!/bin/sh
+set -eu
+cd /workspace
+# :8081 is QA-only — a revive must never inherit a stale built-output preview.
+# Called directly, not via npm: no node_modules needed, so nothing to wait for.
+node scripts/preview.mjs stop || true
+if curl -sf -o /dev/null --max-time 2 http://127.0.0.1:8080/; then
+  exit 0
+fi
+npm run dev >>/tmp/app-startup.log 2>&1 &
+```
+
+## Follow-up turns (multi-turn continuity)
+
+- Edit in place. Do not re-scaffold unless files were wiped or the change is too
+  big to patch cleanly.
+- Vite HMR pushes source edits to the preview instantly. Restart the dev server
+  **only** for `vite.config` / dependency changes — and update `startup.sh` in
+  the same turn if the restart command changed.
+- Killing the dev server blanks the user's preview mid-session.
+- After edits, re-run the smoke pass; re-read the screenshots only when the edit
+  touched visible UI.
+
+# First-scaffold snippets
+
+Copy-paste bodies for the four entry files `AGENTS.md` § "First scaffold"
+requires. They match the **installed** TanStack Start: `src/router.tsx` is
+resolved by a **named `getRouter` export**, and older
+`createRouter`-default-export / `app/`-directory conventions are rejected by the
+plugin.
+
+```tsx
+// src/router.tsx
+import { createRouter } from "@tanstack/react-router";
+import { AppErrorComponent } from "@/lib/error-component";
+import { routeTree } from "./routeTree.gen"; // generated on first dev/build
+
+export function getRouter() {
+  return createRouter({ routeTree, defaultErrorComponent: AppErrorComponent });
+}
+```
+
+```tsx
+// src/routes/__root.tsx — the document shell
+import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { AuthProvider } from "@/lib/auth/provider";
+import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import appCss from "../styles.css?url";
+
+const APP_NAME = "My App";
+
+export const Route = createRootRoute({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: APP_NAME },
+      { name: "theme-color", content: "#000000" },
+    ],
+    links: [
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
+    ],
+  }),
+  component: () => (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {/* Keep this bridge — lets the Grok preview chrome drive the app; noops when not embedded. */}
+        <PreviewHostBridge />
+        <AuthProvider>
+          <Outlet />
+        </AuthProvider>
+        <Scripts />
+      </body>
+    </html>
+  ),
+});
+```
+
+```tsx
+// src/routes/index.tsx
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/")({ component: Home });
+
+function Home() {
+  return <main className="p-8">Hello</main>;
+}
+```
+
+```css
+/* src/styles.css */
+@import "tailwindcss";
+
+@layer base {
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+}
+```
